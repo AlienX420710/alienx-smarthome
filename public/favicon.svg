@@ -1,9 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 128 128">
-    <path d="M50.4 78.5a75.1 75.1 0 0 0-28.5 6.9l24.2-65.7c.7-2 1.9-3.2 3.4-3.2h29c1.5 0 2.7 1.2 3.4 3.2l24.2 65.7s-11.6-7-28.5-7L67 45.5c-.4-1.7-1.6-2.8-2.9-2.8-1.3 0-2.5 1.1-2.9 2.7L50.4 78.5Zm-1.1 28.2Zm-4.2-20.2c-2 6.6-.6 15.8 4.2 20.2a17.5 17.5 0 0 1 .2-.7 5.5 5.5 0 0 1 5.7-4.5c2.8.1 4.3 1.5 4.7 4.7.2 1.1.2 2.3.2 3.5v.4c0 2.7.7 5.2 2.2 7.4a13 13 0 0 0 5.7 4.9v-.3l-.2-.3c-1.8-5.6-.5-9.5 4.4-12.8l1.5-1a73 73 0 0 0 3.2-2.2 16 16 0 0 0 6.8-11.4c.3-2 .1-4-.6-6l-.8.6-1.6 1a37 37 0 0 1-22.4 2.7c-5-.7-9.7-2-13.2-6.2Z" />
-    <style>
-        path { fill: #000; }
-        @media (prefers-color-scheme: dark) {
-            path { fill: #FFF; }
-        }
-    </style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1900 1200" width="1900" height="1200">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#3a3a3a"/>
+      <stop offset="60%" stop-color="#0f0f0f"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <linearGradient id="headMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e8e8e8"/>
+      <stop offset="15%" stop-color="#2a2a2a"/>
+      <stop offset="50%" stop-color="#0a0a0a"/>
+      <stop offset="85%" stop-color="#1a1a1a"/>
+      <stop offset="100%" stop-color="#cfcfcf"/>
+    </linearGradient>
+    <radialGradient id="eyeGlow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#c6ff9e"/>
+      <stop offset="40%" stop-color="#5aff3d"/>
+      <stop offset="100%" stop-color="#0f5c0a"/>
+    </radialGradient>
+    <linearGradient id="streak1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00ff2a" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#33ff33" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#00ff2a" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="blur1"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="blur2"><feGaussianBlur stdDeviation="14"/></filter>
+  </defs>
+
+  <!-- background -->
+  <rect x="0" y="0" width="1900" height="1200" fill="#000000"/>
+
+  <!-- green light streaks (upper left) -->
+  <g filter="url(#blur1)" opacity="0.95">
+    <path d="M -50,150 C 150,180 220,400 130,560 C 60,690 90,850 260,1000"
+          fill="none" stroke="url(#streak1)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M -80,60 C 100,120 260,300 200,520 C 150,700 220,850 380,980"
+          fill="none" stroke="url(#streak1)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M -100,20 C 60,40 160,220 120,420 C 80,600 160,780 300,900"
+          fill="none" stroke="url(#streak1)" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- glow behind head -->
+  <ellipse cx="950" cy="560" rx="330" ry="380" fill="url(#glow)"/>
+
+  <!-- alien head -->
+  <g>
+    <path d="M950,220
+             C 1120,220 1200,400 1180,560
+             C 1165,690 1090,760 1030,820
+             C 990,860 970,880 950,880
+             C 930,880 910,860 870,820
+             C 810,760 735,690 720,560
+             C 700,400 780,220 950,220 Z"
+          fill="url(#headMetal)" stroke="#000" stroke-width="2"/>
+
+    <!-- subtle forehead ridge shading -->
+    <path d="M950,260 C 930,380 935,520 950,650" stroke="#000" stroke-width="18"
+          fill="none" opacity="0.35" filter="url(#blur1)"/>
+
+    <!-- eyes -->
+    <path d="M790,560 C 830,530 900,520 940,545 C 900,600 840,625 790,610 C 770,595 775,575 790,560 Z"
+          fill="url(#eyeGlow)"/>
+    <path d="M1110,560 C 1070,530 1000,520 960,545 C 1000,600 1060,625 1110,610 C 1130,595 1125,575 1110,560 Z"
+          fill="url(#eyeGlow)"/>
+
+    <!-- eye glow bloom -->
+    <ellipse cx="865" cy="575" rx="90" ry="45" fill="#33ff33" opacity="0.35" filter="url(#blur2)"/>
+    <ellipse cx="1035" cy="575" rx="90" ry="45" fill="#33ff33" opacity="0.35" filter="url(#blur2)"/>
+
+    <!-- specular highlight -->
+    <path d="M870,260 C 900,240 940,235 970,250 C 940,270 900,275 870,260 Z" fill="#ffffff" opacity="0.7"/>
+  </g>
+
+  <!-- lower grille bars -->
+  <g opacity="0.9">
+    <rect x="150" y="1040" width="480" height="70" rx="10" fill="#0a0a0a" stroke="#1a1a1a"/>
+    <rect x="1270" y="1040" width="480" height="70" rx="10" fill="#0a0a0a" stroke="#1a1a1a"/>
+    <rect x="650" y="1060" width="600" height="20" fill="#0a0a0a"/>
+
+    <!-- dotted lights left -->
+    <g fill="#33ff33">
+      <circle cx="190" cy="1058" r="4"/><circle cx="210" cy="1058" r="4"/><circle cx="230" cy="1058" r="4"/>
+      <circle cx="250" cy="1058" r="4"/><circle cx="270" cy="1058" r="4"/><circle cx="290" cy="1058" r="4"/>
+      <circle cx="190" cy="1078" r="4"/><circle cx="210" cy="1078" r="4"/><circle cx="230" cy="1078" r="4"/>
+      <circle cx="250" cy="1078" r="4"/><circle cx="270" cy="1078" r="4"/><circle cx="290" cy="1078" r="4"/>
+    </g>
+    <!-- dotted lights right -->
+    <g fill="#33ff33">
+      <circle cx="1610" cy="1058" r="4"/><circle cx="1590" cy="1058" r="4"/><circle cx="1570" cy="1058" r="4"/>
+      <circle cx="1550" cy="1058" r="4"/><circle cx="1530" cy="1058" r="4"/><circle cx="1510" cy="1058" r="4"/>
+      <circle cx="1610" cy="1078" r="4"/><circle cx="1590" cy="1078" r="4"/><circle cx="1570" cy="1078" r="4"/>
+      <circle cx="1550" cy="1078" r="4"/><circle cx="1530" cy="1078" r="4"/><circle cx="1510" cy="1078" r="4"/>
+    </g>
+  </g>
 </svg>
