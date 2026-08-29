@@ -51,8 +51,5 @@
     <!-- eye glow bloom -->
     <ellipse cx="212" cy="293" rx="48" ry="24" fill="#33ff33" opacity="0.35" filter="url(#blur2)"/>
     <ellipse cx="300" cy="293" rx="48" ry="24" fill="#33ff33" opacity="0.35" filter="url(#blur2)"/>
-
-    <!-- specular highlight -->
-    <path d="M226,132 C 242,121 264,118 280,126 C 264,137 242,140 226,132 Z" fill="#ffffff" opacity="0.7"/>
   </g>
 </svg>
