@@ -42,14 +42,14 @@
     <path d="M256,112 C 245,180 248,258 256,330" stroke="#000" stroke-width="10"
           fill="none" opacity="0.35" filter="url(#blur1)"/>
 
-    <!-- eyes -->
-    <path d="M170,285 C 192,268 232,262 254,276 C 232,306 198,320 170,312 C 159,304 162,293 170,285 Z"
+    <!-- eyes: outer corners angled up, inner corners angled down toward nose bridge -->
+    <path d="M150,272 C 175,250 222,258 256,296 C 226,320 180,314 152,300 C 143,292 144,280 150,272 Z"
           fill="url(#eyeGlow)"/>
-    <path d="M342,285 C 320,268 280,262 258,276 C 280,306 314,320 342,312 C 353,304 350,293 342,285 Z"
+    <path d="M362,272 C 337,250 290,258 256,296 C 286,320 332,314 360,300 C 369,292 368,280 362,272 Z"
           fill="url(#eyeGlow)"/>
 
     <!-- eye glow bloom -->
-    <ellipse cx="212" cy="293" rx="48" ry="24" fill="#33ff33" opacity="0.35" filter="url(#blur2)"/>
-    <ellipse cx="300" cy="293" rx="48" ry="24" fill="#33ff33" opacity="0.35" filter="url(#blur2)"/>
+    <ellipse cx="200" cy="282" rx="50" ry="22" fill="#33ff33" opacity="0.35" filter="url(#blur2)" transform="rotate(-18 200 282)"/>
+    <ellipse cx="312" cy="282" rx="50" ry="22" fill="#33ff33" opacity="0.35" filter="url(#blur2)" transform="rotate(18 312 282)"/>
   </g>
 </svg>
