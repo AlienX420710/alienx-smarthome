@@ -1,55 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <defs>
-    <radialGradient id="glow" cx="50%" cy="45%" r="60%">
-      <stop offset="0%" stop-color="#3a3a3a"/>
-      <stop offset="60%" stop-color="#0f0f0f"/>
-      <stop offset="100%" stop-color="#000000"/>
-    </radialGradient>
-    <linearGradient id="headMetal" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#e8e8e8"/>
-      <stop offset="15%" stop-color="#2a2a2a"/>
-      <stop offset="50%" stop-color="#0a0a0a"/>
-      <stop offset="85%" stop-color="#1a1a1a"/>
-      <stop offset="100%" stop-color="#cfcfcf"/>
-    </linearGradient>
-    <radialGradient id="eyeGlow" cx="50%" cy="50%" r="65%">
-      <stop offset="0%" stop-color="#c6ff9e"/>
-      <stop offset="45%" stop-color="#5aff3d"/>
-      <stop offset="100%" stop-color="#0f5c0a"/>
-    </radialGradient>
-    <filter id="blur1"><feGaussianBlur stdDeviation="3"/></filter>
-    <filter id="blur2"><feGaussianBlur stdDeviation="8"/></filter>
-  </defs>
-
-  <!-- square black background -->
-  <rect x="0" y="0" width="512" height="512" fill="#000000"/>
-
-  <!-- glow behind head -->
-  <ellipse cx="256" cy="270" rx="180" ry="205" fill="url(#glow)"/>
-
-  <!-- alien head -->
-  <g>
-    <path d="M256,90
-             C 350,90 395,195 385,285
-             C 377,360 335,400 302,435
-             C 280,458 269,470 256,470
-             C 243,470 232,458 210,435
-             C 177,400 135,360 127,285
-             C 117,195 162,90 256,90 Z"
-          fill="url(#headMetal)" stroke="#000" stroke-width="1"/>
-
-    <!-- forehead ridge shading -->
-    <path d="M256,112 C 245,180 248,258 256,330" stroke="#000" stroke-width="10"
-          fill="none" opacity="0.35" filter="url(#blur1)"/>
-
-    <!-- eye glow bloom (behind eye shapes) -->
-    <ellipse cx="180" cy="255" rx="58" ry="17" fill="#33ff33" opacity="0.35" filter="url(#blur2)" transform="rotate(-16 180 255)"/>
-    <ellipse cx="332" cy="255" rx="58" ry="17" fill="#33ff33" opacity="0.35" filter="url(#blur2)" transform="rotate(16 332 255)"/>
-
-    <!-- eyes: classic symmetric almond, pointed corners, outer edge angled up -->
-    <path d="M -55,0 C -22,-16 22,-16 55,0 C 22,12 -22,12 -55,0 Z"
-          fill="url(#eyeGlow)" transform="translate(180,255) rotate(-16)"/>
-    <path d="M -55,0 C -22,-16 22,-16 55,0 C 22,12 -22,12 -55,0 Z"
-          fill="url(#eyeGlow)" transform="translate(332,255) rotate(16)"/>
-  </g>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	 viewBox="0 0 496.159 496.159" xml:space="preserve">
+<path style="fill:#334D5C;" d="M248.083,0.003C111.071,0.003,0,111.063,0,248.085c0,137.001,111.07,248.07,248.083,248.07
+	c137.006,0,248.076-111.069,248.076-248.07C496.159,111.062,385.089,0.003,248.083,0.003z"/>
+<path style="fill:#41AF87;" d="M284.971,444.412c-3.417-23.666,10.749-74.333,10.749-74.333h-91.333c0,0,15,50,10.747,74.306
+	c-2.053,11.734-30.589,26.045-49.518,37.715c25.803,9.092,53.553,14.056,82.467,14.056c29.975,0,58.708-5.316,85.308-15.058
+	C314.494,469.512,286.584,455.591,284.971,444.412z"/>
+<path style="fill:#4ABC96;" d="M248.087,60.075c-84.163,0-185.138,83.602-152.155,180.694
+	c28.98,85.31,106.067,156.643,152.155,156.643s124.239-72,152.155-156.643C432.351,143.414,332.25,60.075,248.087,60.075z"/>
+<path style="fill:#3FAA83;" d="M233.127,248.717c-0.198-0.611-4.971-15.14-14.987-29.905
+	c-13.437-19.808-29.903-30.277-47.619-30.277c-17.508,0-36.405,10.02-56.166,29.781c-0.668,0.668-0.778,1.712-0.263,2.504
+	c0.252,0.388,25.799,38.802,75.568,38.803c0.002,0,0.001,0,0.003,0c13.523,0,27.749-2.833,42.278-8.422
+	C232.935,250.82,233.455,249.728,233.127,248.717z"/>
+<path style="fill:#22343D;" d="M125.315,220.449c0,0,32.122,49.417,96.364,24.709C221.679,245.158,192.029,153.735,125.315,220.449z
+	"/>
+<path style="fill:#CBEFE1;" d="M163.072,206.517c-0.974,6.372,20.328,9.628,21.301,3.256
+	C185.348,203.401,164.045,200.144,163.072,206.517z"/>
+<path style="fill:#3FAA83;" d="M381.804,218.316c-19.761-19.761-38.658-29.781-56.166-29.781c-17.716,0-34.182,10.469-47.619,30.277
+	c-10.016,14.765-14.789,29.294-14.987,29.905c-0.328,1.011,0.192,2.103,1.185,2.484c14.53,5.588,28.756,8.422,42.281,8.422
+	c49.769,0,75.316-38.415,75.568-38.803C382.582,220.028,382.472,218.984,381.804,218.316z"/>
+<path style="fill:#22343D;" d="M274.481,245.158c64.242,24.708,96.364-24.709,96.364-24.709
+	C304.131,153.735,274.481,245.158,274.481,245.158z"/>
+<path style="fill:#CBEFE1;" d="M333.088,206.517c-0.974-6.373-22.276-3.117-21.301,3.256
+	C312.76,216.145,334.062,212.889,333.088,206.517z"/>
+<g>
+	<path style="fill:#329670;" d="M239.413,298.983c-3.866,0-7,2.91-7,6.5s14,3.59,14,0S243.28,298.983,239.413,298.983z"/>
+	<path style="fill:#329670;" d="M256.747,298.983c-3.866,0-7,2.91-7,6.5s14,3.59,14,0S260.613,298.983,256.747,298.983z"/>
+	<path style="fill:#329670;" d="M280.387,347.579c0,3.038-14.999,3.5-33.5,3.5s-33.5-0.462-33.5-3.5s14.999-3.5,33.5-3.5
+		S280.387,344.541,280.387,347.579z"/>
+</g>
 </svg>
