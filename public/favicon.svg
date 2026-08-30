@@ -1,2 +1,77 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--twemoji" preserveAspectRatio="xMidYMid meet"><path fill="#CCD6DD" d="M35 17c0 9.389-13.223 19-17 19c-3.778 0-17-9.611-17-19S8.611 0 18 0s17 7.611 17 17z"></path><path fill="#292F33" d="M13.503 14.845c3.124 3.124 4.39 6.923 2.828 8.485c-1.562 1.562-5.361.297-8.485-2.828c-3.125-3.124-4.391-6.923-2.828-8.485s5.361-.296 8.485 2.828zm8.994 0c-3.124 3.124-4.39 6.923-2.828 8.485c1.562 1.562 5.361.297 8.485-2.828c3.125-3.125 4.391-6.923 2.828-8.485c-1.562-1.562-5.361-.297-8.485 2.828zM18 31c-2.347 0-3.575-1.16-3.707-1.293a.999.999 0 0 1 1.404-1.424c.051.047.806.717 2.303.717c1.519 0 2.273-.689 2.305-.719a1.007 1.007 0 0 1 1.408.029a.993.993 0 0 1-.006 1.396C21.575 29.84 20.347 31 18 31z"></path></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#3a3a3a"/>
+      <stop offset="60%" stop-color="#0f0f0f"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <linearGradient id="headMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e8e8e8"/>
+      <stop offset="15%" stop-color="#2a2a2a"/>
+      <stop offset="50%" stop-color="#0a0a0a"/>
+      <stop offset="85%" stop-color="#1a1a1a"/>
+      <stop offset="100%" stop-color="#cfcfcf"/>
+    </linearGradient>
+    <radialGradient id="eyeGlow" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#c6ff9e"/>
+      <stop offset="45%" stop-color="#5aff3d"/>
+      <stop offset="100%" stop-color="#0f5c0a"/>
+    </radialGradient>
+    <linearGradient id="paper" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#d8d8d8"/>
+    </linearGradient>
+    <filter id="blur1"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="blur2"><feGaussianBlur stdDeviation="8"/></filter>
+    <filter id="steamBlur"><feGaussianBlur stdDeviation="2.5"/></filter>
+  </defs>
+
+  <!-- square black background -->
+  <rect x="0" y="0" width="512" height="512" fill="#000000"/>
+
+  <!-- glow behind head -->
+  <ellipse cx="256" cy="270" rx="180" ry="205" fill="url(#glow)"/>
+
+  <!-- alien head -->
+  <g>
+    <path d="M256,90
+             C 350,90 395,195 385,285
+             C 377,360 335,400 302,435
+             C 280,458 269,470 256,470
+             C 243,470 232,458 210,435
+             C 177,400 135,360 127,285
+             C 117,195 162,90 256,90 Z"
+          fill="url(#headMetal)" stroke="#000" stroke-width="1"/>
+
+    <!-- forehead ridge shading -->
+    <path d="M256,112 C 245,180 248,258 256,330" stroke="#000" stroke-width="10"
+          fill="none" opacity="0.35" filter="url(#blur1)"/>
+
+    <!-- eye glow bloom (behind eye shapes) -->
+    <ellipse cx="180" cy="255" rx="58" ry="17" fill="#33ff33" opacity="0.35" filter="url(#blur2)" transform="rotate(-16 180 255)"/>
+    <ellipse cx="332" cy="255" rx="58" ry="17" fill="#33ff33" opacity="0.35" filter="url(#blur2)" transform="rotate(16 332 255)"/>
+
+    <!-- eyes: classic symmetric almond, pointed corners, outer edge angled up -->
+    <path d="M -55,0 C -22,-16 22,-16 55,0 C 22,12 -22,12 -55,0 Z"
+          fill="url(#eyeGlow)" transform="translate(180,255) rotate(-16)"/>
+    <path d="M -55,0 C -22,-16 22,-16 55,0 C 22,12 -22,12 -55,0 Z"
+          fill="url(#eyeGlow)" transform="translate(332,255) rotate(16)"/>
+
+    <!-- open mouth -->
+    <ellipse cx="256" cy="370" rx="42" ry="30" fill="#000000" stroke="#050505" stroke-width="2"/>
+    <ellipse cx="256" cy="384" rx="34" ry="14" fill="#1a1a1a" opacity="0.8"/>
+
+    <!-- paper takeout sleeve hanging out of mouth -->
+    <g>
+      <path d="M242,352 L270,352 L266,300 C 264,292 244,292 242,300 Z" fill="url(#paper)" stroke="#bbbbbb" stroke-width="1"/>
+      <line x1="248" y1="352" x2="245" y2="300" stroke="#aaaaaa" stroke-width="1"/>
+      <line x1="264" y1="352" x2="262" y2="300" stroke="#aaaaaa" stroke-width="1"/>
+    </g>
+
+    <!-- steam wisps rising from the paper -->
+    <g stroke="#e8e8e8" stroke-width="4" fill="none" opacity="0.55" filter="url(#steamBlur)" stroke-linecap="round">
+      <path d="M248,296 C 240,276 262,262 252,240 C 244,222 262,210 256,192"/>
+      <path d="M262,298 C 272,280 254,264 266,244 C 276,226 260,212 268,196"/>
+    </g>
+  </g>
+</svg>
