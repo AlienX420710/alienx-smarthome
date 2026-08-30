@@ -12,13 +12,13 @@
       <stop offset="85%" stop-color="#1a1a1a"/>
       <stop offset="100%" stop-color="#cfcfcf"/>
     </linearGradient>
-    <radialGradient id="eyeGlow" cx="50%" cy="50%" r="65%">
+    <radialGradient id="eyeGlow" cx="50%" cy="50%" r="60%">
       <stop offset="0%" stop-color="#c6ff9e"/>
-      <stop offset="45%" stop-color="#5aff3d"/>
+      <stop offset="40%" stop-color="#5aff3d"/>
       <stop offset="100%" stop-color="#0f5c0a"/>
     </radialGradient>
     <filter id="blur1"><feGaussianBlur stdDeviation="3"/></filter>
-    <filter id="blur2"><feGaussianBlur stdDeviation="8"/></filter>
+    <filter id="blur2"><feGaussianBlur stdDeviation="7"/></filter>
   </defs>
 
   <!-- square black background -->
@@ -42,14 +42,14 @@
     <path d="M256,112 C 245,180 248,258 256,330" stroke="#000" stroke-width="10"
           fill="none" opacity="0.35" filter="url(#blur1)"/>
 
-    <!-- eye glow bloom (behind eye shapes) -->
-    <ellipse cx="180" cy="255" rx="58" ry="17" fill="#33ff33" opacity="0.35" filter="url(#blur2)" transform="rotate(-16 180 255)"/>
-    <ellipse cx="332" cy="255" rx="58" ry="17" fill="#33ff33" opacity="0.35" filter="url(#blur2)" transform="rotate(16 332 255)"/>
+    <!-- eyes: pulled apart, moved up, outer corners angled up -->
+    <path d="M138,255 C 165,232 210,240 240,278 C 210,300 168,296 142,282 C 132,274 132,263 138,255 Z"
+          fill="url(#eyeGlow)"/>
+    <path d="M374,255 C 347,232 302,240 272,278 C 302,300 344,296 370,282 C 380,274 380,263 374,255 Z"
+          fill="url(#eyeGlow)"/>
 
-    <!-- eyes: classic symmetric almond, pointed corners, outer edge angled up -->
-    <path d="M -55,0 C -22,-16 22,-16 55,0 C 22,12 -22,12 -55,0 Z"
-          fill="url(#eyeGlow)" transform="translate(180,255) rotate(-16)"/>
-    <path d="M -55,0 C -22,-16 22,-16 55,0 C 22,12 -22,12 -55,0 Z"
-          fill="url(#eyeGlow)" transform="translate(332,255) rotate(16)"/>
+    <!-- eye glow bloom -->
+    <ellipse cx="185" cy="265" rx="48" ry="22" fill="#33ff33" opacity="0.35" filter="url(#blur2)" transform="rotate(-18 185 265)"/>
+    <ellipse cx="327" cy="265" rx="48" ry="22" fill="#33ff33" opacity="0.35" filter="url(#blur2)" transform="rotate(18 327 265)"/>
   </g>
 </svg>
