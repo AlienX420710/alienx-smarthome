@@ -1,0 +1,116 @@
+---
+// src/components/GlowCard.astro
+//
+// A standalone recreation of a Home Assistant "ha-card" style —
+// pure CSS, no Home Assistant backend or data required.
+//
+// Usage:
+//   <GlowCard title="Welcome">
+//     <p>Any content goes here.</p>
+//   </GlowCard>
+
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="glow-card">
+  {title && <h2 class="glow-card__title">{title}</h2>}
+  <div class="glow-card__body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .glow-card {
+    background: rgba(20, 20, 20, 0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 15px;
+    padding: 16px;
+    color: white;
+    font-size: 1.2em;
+
+    animation: rainbowGlow 5s linear infinite;
+    transition:
+      transform 0.3s ease,
+      background-color 0.5s ease;
+  }
+
+  .glow-card:hover {
+    transform: scale(1.05) rotate3d(1, 1, 0, 5deg);
+    animation:
+      rainbowGlow 5s linear infinite,
+      rainbowBackground 10s linear infinite;
+  }
+
+  .glow-card__title {
+    margin: 0 0 8px;
+    font-size: 1.1em;
+  }
+
+  .glow-card__body {
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #000;
+  }
+
+  @keyframes rainbowGlow {
+    0% {
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
+    }
+    16% {
+      box-shadow: 0 0 30px rgba(255, 165, 0, 0.7);
+    }
+    33% {
+      box-shadow: 0 0 30px rgba(255, 255, 0, 0.7);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(0, 255, 0, 0.7);
+    }
+    66% {
+      box-shadow: 0 0 30px rgba(0, 127, 255, 0.7);
+    }
+    83% {
+      box-shadow: 0 0 30px rgba(139, 0, 255, 0.7);
+    }
+    100% {
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
+    }
+  }
+
+  @keyframes rainbowBackground {
+    0% {
+      background-color: red;
+    }
+    16% {
+      background-color: orange;
+    }
+    33% {
+      background-color: yellow;
+    }
+    50% {
+      background-color: green;
+    }
+    66% {
+      background-color: blue;
+    }
+    83% {
+      background-color: indigo;
+    }
+    100% {
+      background-color: violet;
+    }
+  }
+
+  /* Respect users who've asked for reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .glow-card,
+    .glow-card:hover {
+      animation: none;
+      transition: none;
+    }
+  }
+</style>
