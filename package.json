@@ -17,6 +17,7 @@
 		"@astrojs/rss": "4.0.14",
 		"@astrojs/sitemap": "3.6.1",
 		"astro": "5.16.9",
+		"astro-icon": "^1.2.0",
 		"typescript": "5.9.3"
 	},
 	"devDependencies": {
