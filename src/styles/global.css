@@ -26,6 +26,10 @@
 		--gray-gradient: rgba(var(--gray-light), 50%), rgb(20, 22, 30);
 	}
 
+	html {
+		background-color: rgb(20, 22, 30);
+	}
+
 	body {
 		background-color: rgb(20, 22, 30);
 	}
@@ -34,6 +38,7 @@
 		background-color: rgb(var(--gray-light));
 	}
 }
+
 
 @font-face {
 	font-family: "Atkinson";
