@@ -1,0 +1,105 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`Work — ${SITE_TITLE}`}
+			description="Selected AlienX work across web development, applications, automation, infrastructure, smart technology, and interactive experiences."
+		/>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="intro" aria-labelledby="title">
+				<p class="eyebrow">ALIENX / WORK</p>
+				<h1 id="title">Things built to solve problems.</h1>
+				<p class="lede">
+					AlienX is a hands-on technology practice. This is where projects, experiments,
+					and working systems come together—from websites and applications to automation,
+					infrastructure, and smart technology.
+				</p>
+			</section>
+
+			<section class="projects" aria-labelledby="projects-title">
+				<div class="section-heading">
+					<p class="eyebrow">SELECTED WORK</p>
+					<h2 id="projects-title">Build the idea. Then make it real.</h2>
+				</div>
+
+				<div class="grid">
+					<article>
+						<span>01 / WEB</span>
+						<h3>Web development</h3>
+						<p>Fast, responsive websites and interfaces built around the actual goal—not a template.</p>
+					</article>
+					<article>
+						<span>02 / APPLICATIONS</span>
+						<h3>Web applications</h3>
+						<p>Frontend and backend systems that turn an idea into something people can use.</p>
+					</article>
+					<article>
+						<span>03 / AUTOMATION</span>
+						<h3>Automation & integrations</h3>
+						<p>APIs, workflows, webhooks, and connected services that remove repetitive work.</p>
+					</article>
+					<article>
+						<span>04 / INFRASTRUCTURE</span>
+						<h3>Infrastructure</h3>
+						<p>Servers, networking, deployment, and self-hosted systems that keep technology running.</p>
+					</article>
+					<article>
+						<span>05 / SMART TECHNOLOGY</span>
+						<h3>Smart technology</h3>
+						<p>Home automation and connected technology where software meets the physical world.</p>
+					</article>
+					<article>
+						<span>06 / EXPERIMENTS</span>
+						<h3>Interactive experiments</h3>
+						<p>Browser-native experiments that explore what modern interfaces and engineering can do.</p>
+					</article>
+				</div>
+			</section>
+
+			<section class="note" aria-labelledby="note-title">
+				<p class="eyebrow">STARTING POINT</p>
+				<h2 id="note-title">More projects will live here.</h2>
+				<p>
+					The categories above define the direction. As projects are completed, this page
+					will become a collection of specific builds with the problem, approach, technology,
+					and result behind each one.
+				</p>
+				<a class="button" href="/contact">Start a project <span aria-hidden="true">→</span></a>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	:global(body) { background:#05070c; color:#eef2ff; }
+	main { width:min(1180px,calc(100% - 40px)); max-width:none; padding:6rem 0 8rem; }
+	.eyebrow { margin:0 0 1rem; color:#7784a6; font-size:.7rem; font-weight:700; letter-spacing:.22em; }
+	h1,h2,h3 { color:#f6f8ff; letter-spacing:-.045em; line-height:1; }
+	h1 { max-width:900px; font-size:clamp(3.2rem,7vw,6.8rem); }
+	.lede { max-width:760px; margin-top:2rem; color:#98a4bd; font-size:1.2rem; line-height:1.7; }
+	.projects { margin-top:8rem; padding-top:5rem; border-top:1px solid #151b29; }
+	h2 { max-width:850px; font-size:clamp(2.5rem,5vw,4.5rem); }
+	.grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-top:3rem; }
+	article { min-height:240px; padding:2rem; border:1px solid #192033; border-radius:24px; background:linear-gradient(145deg,rgba(18,23,36,.9),rgba(8,11,18,.9)); transition:transform 180ms ease,border-color 180ms ease; }
+	article:hover { transform:translateY(-4px); border-color:#34405f; }
+	article span { color:#63708f; font-size:.68rem; font-weight:700; letter-spacing:.12em; }
+	article h3 { margin-top:3.5rem; font-size:1.5rem; }
+	article p,.note p { color:#8490aa; line-height:1.65; }
+	.note { margin-top:6rem; padding:clamp(2rem,6vw,5rem); border:1px solid #192033; border-radius:32px; background:radial-gradient(circle at 50% 0%,rgba(105,119,255,.14),transparent 60%),#090d16; }
+	.note p { max-width:680px; margin:1.25rem 0 2rem; }
+	.button { display:inline-flex; align-items:center; gap:.55rem; min-height:48px; padding:0 1.25rem; border-radius:999px; color:#05070c; background:#eef2ff; font-size:.9rem; font-weight:700; text-decoration:none; transition:transform 180ms ease; }
+	.button:hover { transform:translateY(-2px); }
+	@media(max-width:800px){ main{width:min(100% - 28px,680px);padding-top:3rem}.projects{margin-top:5rem}.grid{grid-template-columns:1fr} }
+	@media(prefers-reduced-motion:reduce){article,.button{transition:none}article:hover,.button:hover{transform:none} }
+</style>
