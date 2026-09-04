@@ -9,44 +9,74 @@ import { SITE_TITLE } from '../consts';
 <html lang="en">
 	<head>
 		<BaseHead
-			title={`About — ${SITE_TITLE}`}
-			description="Learn what AlienX SmartHome is: an interactive web showcase exploring modern HTML, CSS, JavaScript, accessibility, performance, and browser engineering."
+			title={`About Me — ${SITE_TITLE}`}
+			description="The technical journey behind AlienX, from Home Assistant and self-hosting to networking and web development."
 		/>
 	</head>
 	<body>
 		<Header />
 		<main>
 			<section class="intro" aria-labelledby="title">
-				<p class="eyebrow">ALIENX / ABOUT</p>
-				<h1 id="title">A smart-home idea built to explore the web.</h1>
+				<p class="eyebrow">ALIENX / ABOUT ME</p>
+				<h1 id="title">From smart home to smart technology.</h1>
 				<p class="lede">
-					AlienX SmartHome is a fictional product used as a creative and technical playground.
-					The website is the demonstration: a place to experiment with interface design,
-					browser-native interaction, responsive systems, accessibility, and performance.
+					AlienX started with a smart home, but the technical curiosity behind it kept expanding.
+					This is the story of that journey: Home Assistant, Unraid, networking, and eventually
+					websites, software, and automation.
 				</p>
 			</section>
 
-			<section class="principles" aria-labelledby="principles-title">
-				<p class="eyebrow">WHAT IT IS</p>
-				<h2 id="principles-title">The product is the excuse. The web is the medium.</h2>
-				<div class="grid">
+			<section class="journey" aria-labelledby="journey-title">
+				<p class="eyebrow">THE JOURNEY</p>
+				<h2 id="journey-title">One chapter led to the next.</h2>
+
+				<div class="timeline">
 					<article>
-						<h3>Interactive by default</h3>
-						<p>Scenes, motion, state, and visual feedback make the interface something to explore rather than a static mockup.</p>
+						<span class="number">01</span>
+						<div>
+							<h3>Home Assistant</h3>
+							<p>Where the experimentation started. Smart-home projects opened the door to a much deeper interest in technology.</p>
+						</div>
 					</article>
+
 					<article>
-						<h3>Built for the browser</h3>
-						<p>AlienX uses HTML, CSS, JavaScript, SVG, and Astro to demonstrate what the modern web platform can do.</p>
+						<span class="number">02</span>
+						<div>
+							<h3>Unraid</h3>
+							<p>The journey moved into servers and self-hosted infrastructure, creating a new layer of things to learn and build.</p>
+						</div>
 					</article>
+
 					<article>
-						<h3>Not a control dashboard</h3>
-						<p>AlienX deliberately avoids recreating an existing smart-home management interface. It is a web experience, not a clone of another platform.</p>
+						<span class="number">03</span>
+						<div>
+							<h3>Networking</h3>
+							<p>Understanding how everything connects became its own part of the journey: networks, infrastructure, and the systems underneath the services.</p>
+						</div>
 					</article>
+
 					<article>
-						<h3>Accessible and fast</h3>
-						<p>Semantic markup, keyboard interaction, responsive layouts, reduced motion, and an Astro-first architecture are part of the design.</p>
+						<span class="number">04</span>
+						<div>
+							<h3>Websites</h3>
+							<p>The focus expanded into building for the web, with frontend, backend, automation, and interactive experiences becoming the next direction.</p>
+						</div>
 					</article>
 				</div>
+			</section>
+
+			<section class="story" aria-labelledby="story-title">
+				<p class="eyebrow">THE STORY</p>
+				<h2 id="story-title">Built one layer at a time.</h2>
+				<p>
+					Each chapter will become a long-form story using the original AlienX blog-post format.
+					The goal is to document the real projects, lessons, mistakes, and decisions that shaped
+					the work instead of turning the page into a generic résumé.
+				</p>
+				<p>
+					The first version establishes the structure. The details will be filled in from the actual
+					story as each chapter is written.
+				</p>
 			</section>
 		</main>
 		<Footer />
@@ -59,12 +89,15 @@ import { SITE_TITLE } from '../consts';
 	.eyebrow { margin:0 0 1rem; color:#7784a6; font-size:.7rem; font-weight:700; letter-spacing:.22em; }
 	h1,h2,h3 { color:#f6f8ff; letter-spacing:-.045em; line-height:1; }
 	h1 { max-width:900px; font-size:clamp(3.2rem,7vw,6.8rem); }
-	.lede { max-width:720px; margin-top:2rem; color:#98a4bd; font-size:1.2rem; line-height:1.7; }
-	.principles { margin-top:8rem; padding-top:5rem; border-top:1px solid #151b29; }
+	.lede { max-width:760px; margin-top:2rem; color:#98a4bd; font-size:1.2rem; line-height:1.7; }
+	.journey { margin-top:8rem; padding-top:5rem; border-top:1px solid #151b29; }
 	h2 { max-width:850px; font-size:clamp(2.5rem,5vw,4.5rem); }
-	.grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-top:3rem; }
-	article { min-height:220px; padding:2rem; border:1px solid #192033; border-radius:24px; background:linear-gradient(145deg,rgba(18,23,36,.9),rgba(8,11,18,.9)); }
-	article h3 { font-size:1.45rem; }
-	article p { color:#8490aa; line-height:1.65; }
-	@media(max-width:800px){ main{width:min(100% - 28px,680px);padding-top:3rem}.principles{margin-top:5rem}.grid{grid-template-columns:1fr} }
+	.timeline { display:grid; gap:1rem; margin-top:3rem; }
+	article { display:grid; grid-template-columns:72px 1fr; gap:1.5rem; align-items:start; padding:2rem; border:1px solid #192033; border-radius:24px; background:linear-gradient(145deg,rgba(18,23,36,.9),rgba(8,11,18,.9)); }
+	.number { color:#64708f; font-size:.75rem; font-weight:700; letter-spacing:.16em; padding-top:.25rem; }
+	article h3 { margin:0; font-size:1.6rem; }
+	article p { margin:.8rem 0 0; color:#8490aa; line-height:1.65; }
+	.story { max-width:760px; margin-top:8rem; padding-top:5rem; border-top:1px solid #151b29; }
+	.story p:not(.eyebrow) { color:#98a4bd; font-size:1.05rem; line-height:1.8; }
+	@media(max-width:800px){ main{width:min(100% - 28px,680px);padding-top:3rem}.journey,.story{margin-top:5rem}.timeline article{grid-template-columns:1fr;gap:.5rem} }
 </style>
