@@ -28,19 +28,19 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 					</div>
 				</div>
 
-				<div class="hero__visual" aria-label="Interactive smart home preview">
+				<div class="hero__visual" aria-label="Live simulated smart home environment">
 					<div class="orb orb--one"></div>
 					<div class="orb orb--two"></div>
-					<div class="home-panel">
+					<div class="home-panel" data-system-pulse>
 						<div class="panel-topline">
 							<span>HOME STATUS</span>
-							<span class="status"><i></i> ALL SYSTEMS NOMINAL</span>
+							<span class="status"><i></i> <span data-status>ALL SYSTEMS NOMINAL</span></span>
 						</div>
-						<div class="temperature">72<span>°</span></div>
-						<div class="panel-label">Living room · Comfortable</div>
+						<div class="temperature"><span data-temperature>72</span><span>°</span></div>
+						<div class="panel-label" data-comfort>Living room · Comfortable</div>
 						<div class="metrics">
-							<div><strong>42%</strong><span>Humidity</span></div>
-							<div><strong>2.4</strong><span>kW Usage</span></div>
+							<div><strong data-humidity>42%</strong><span>Humidity</span></div>
+							<div><strong data-usage>2.4</strong><span>kW Usage</span></div>
 							<div><strong>18</strong><span>Devices</span></div>
 						</div>
 					</div>
@@ -90,6 +90,36 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		</main>
 
 		<Footer />
+
+		<script>
+			const pulse = document.querySelector('[data-system-pulse]');
+
+			if (pulse && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+				const temperature = pulse.querySelector('[data-temperature]');
+				const humidity = pulse.querySelector('[data-humidity]');
+				const usage = pulse.querySelector('[data-usage]');
+				const status = pulse.querySelector('[data-status]');
+				const comfort = pulse.querySelector('[data-comfort]');
+				let tick = 0;
+
+				const updatePulse = () => {
+					tick += 1;
+					const wave = Math.sin(tick / 2.2);
+					const temp = (72 + wave * 0.7).toFixed(1);
+					const humidityValue = Math.round(42 + wave * 2);
+					const usageValue = (2.4 + Math.max(wave, 0) * 0.4).toFixed(1);
+
+					temperature.textContent = temp;
+					humidity.textContent = `${humidityValue}%`;
+					usage.textContent = usageValue;
+					status.textContent = wave > 0.7 ? 'SYSTEMS ADAPTING' : 'ALL SYSTEMS NOMINAL';
+					comfort.textContent = wave > 0.7 ? 'Living room · Optimizing' : 'Living room · Comfortable';
+				};
+
+				updatePulse();
+				window.setInterval(updatePulse, 1800);
+			}
+		</script>
 	</body>
 </html>
 
@@ -172,7 +202,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	.status { color: #aeb8d2; }
 	.status i { display: inline-block; width: 6px; height: 6px; margin-right: 5px; border-radius: 50%; background: #72e0a3; box-shadow: 0 0 12px #72e0a3; }
 	.temperature { margin-top: 4rem; font-size: 8rem; line-height: .8; letter-spacing: -.08em; font-weight: 700; }
-	.temperature span { font-size: 2rem; vertical-align: top; color: #8e9cff; }
+	.temperature span:last-child { font-size: 2rem; vertical-align: top; color: #8e9cff; }
 	.panel-label { margin-top: 1rem; color: #8d99b5; }
 	.metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin-top: 3rem; }
 	.metrics div { padding: 1rem; border: 1px solid rgba(255,255,255,.06); border-radius: 16px; background: rgba(255,255,255,.025); }
