@@ -1,0 +1,161 @@
+---
+import Header from '../components/Header.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const title = `Technology | ${SITE_TITLE}`;
+const description = 'A practical look at the browser technologies behind AlienX SmartHome: Astro, CSS, JavaScript, accessibility, performance, and progressive enhancement.';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <Header />
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">UNDER THE INTERFACE</p>
+        <h1>The technology is part of the experience.</h1>
+        <p class="lede">AlienX uses the browser as a creative medium. The goal is not to imitate a native control panel, but to make a fast, accessible web interface feel alive.</p>
+      </section>
+
+      <section class="architecture" aria-labelledby="architecture-title">
+        <div class="section-heading">
+          <p class="eyebrow">01 / ARCHITECTURE</p>
+          <h2 id="architecture-title">Small client. Strong foundation.</h2>
+        </div>
+        <div class="stack">
+          <article>
+            <span>01</span>
+            <h3>Astro</h3>
+            <p>Content and structure are rendered server-first, keeping the initial page lightweight while allowing focused islands of interaction where they actually add value.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>CSS</h3>
+            <p>Gradients, transforms, transitions, responsive layout, and state-driven styling create the visual system without shipping a heavyweight UI framework.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>JavaScript</h3>
+            <p>Interaction is deliberately local. Controls update the interface in the browser instead of requiring a remote service for every visual change.</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3>Cloudflare</h3>
+            <p>The project is built for edge deployment, giving the finished experience a straightforward path from source code to a globally distributed runtime.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="demo" aria-labelledby="demo-title">
+        <div class="demo-copy">
+          <p class="eyebrow">02 / BROWSER STATE</p>
+          <h2 id="demo-title">A tiny state machine.</h2>
+          <p>Click the controls. Nothing is fetched, nothing is authenticated, and nothing leaves the browser. The interface is responding to local state.</p>
+        </div>
+
+        <div class="state-panel" data-state-panel>
+          <div class="state-topline">
+            <span>AMBIENT CORE</span>
+            <span data-state-label>CALM</span>
+          </div>
+          <div class="orb" data-orb aria-hidden="true"></div>
+          <output class="state-value" data-state-value>72%</output>
+          <div class="state-controls" aria-label="Ambient state controls">
+            <button type="button" data-state="calm" aria-pressed="true">Calm</button>
+            <button type="button" data-state="focus" aria-pressed="false">Focus</button>
+            <button type="button" data-state="pulse" aria-pressed="false">Pulse</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="principles" aria-labelledby="principles-title">
+        <div class="section-heading">
+          <p class="eyebrow">03 / ENGINEERING PRINCIPLES</p>
+          <h2 id="principles-title">The invisible features matter.</h2>
+        </div>
+        <div class="principle-grid">
+          <article><h3>Accessible by default</h3><p>Semantic HTML, visible focus states, meaningful labels, keyboard-friendly controls, and reduced-motion support are treated as product features.</p></article>
+          <article><h3>Progressive enhancement</h3><p>The document remains useful before JavaScript executes. Interactivity enhances the experience instead of becoming the only way to access it.</p></article>
+          <article><h3>Performance conscious</h3><p>Less JavaScript, fewer dependencies, optimized assets, and server-first rendering keep the critical path small.</p></article>
+          <article><h3>Inspectable</h3><p>The interface is intentionally built from understandable web primitives. View source, inspect the DOM, and see how the effect works.</p></article>
+        </div>
+      </section>
+
+      <section class="closing">
+        <p class="eyebrow">04 / THE POINT</p>
+        <h2>Smart-home software can be a web experiment, too.</h2>
+        <p>{SITE_TITLE} is fictional. The engineering is real. Every interaction on this site is an opportunity to explore what modern HTML, CSS, JavaScript, and the browser can do.</p>
+      </section>
+    </main>
+
+    <Footer />
+
+    <script>
+      const panel = document.querySelector('[data-state-panel]');
+      const orb = document.querySelector('[data-orb]');
+      const label = document.querySelector('[data-state-label]');
+      const value = document.querySelector('[data-state-value]');
+      const buttons = document.querySelectorAll('[data-state]');
+
+      const states = {
+        calm: { label: 'CALM', value: '72%', className: 'is-calm' },
+        focus: { label: 'FOCUS', value: '86%', className: 'is-focus' },
+        pulse: { label: 'PULSE', value: '94%', className: 'is-pulse' },
+      };
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const state = states[button.dataset.state];
+          if (!state || !panel || !orb || !label || !value) return;
+          panel.classList.remove('is-calm', 'is-focus', 'is-pulse');
+          panel.classList.add(state.className);
+          label.textContent = state.label;
+          value.textContent = state.value;
+          buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        });
+      });
+    </script>
+
+    <style>
+      :global(html) { background:#05070c; color:#edf1fb; }
+      :global(body) { margin:0; background:radial-gradient(circle at 75% 10%, rgba(92,110,255,.12), transparent 34rem), #05070c; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+      main { overflow:hidden; }
+      .hero,.architecture,.demo,.principles,.closing { width:min(1120px,calc(100% - 40px)); margin:auto; }
+      .hero { padding:clamp(90px,14vw,170px) 0 110px; }
+      .eyebrow { margin:0 0 18px; color:#78849f; font-size:.68rem; font-weight:800; letter-spacing:.18em; }
+      h1,h2,h3,p { margin-top:0; }
+      h1 { max-width:850px; margin-bottom:28px; font-size:clamp(3rem,8vw,6.7rem); line-height:.92; letter-spacing:-.065em; }
+      .lede { max-width:690px; color:#aab3c7; font-size:clamp(1rem,2vw,1.25rem); line-height:1.7; }
+      .section-heading { margin-bottom:42px; }
+      h2 { max-width:720px; margin-bottom:0; font-size:clamp(2rem,5vw,4rem); line-height:1; letter-spacing:-.045em; }
+      .stack,.principle-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:#20283a; border:1px solid #20283a; }
+      .stack article,.principle-grid article { padding:34px; background:#080b12; min-height:190px; }
+      .stack span { color:#59647b; font-size:.72rem; font-weight:800; }
+      h3 { margin:18px 0 12px; font-size:1.15rem; }
+      .stack p,.principle-grid p,.closing p,.demo-copy p { color:#8994aa; line-height:1.7; }
+      .demo { display:grid; grid-template-columns:.8fr 1.2fr; gap:70px; align-items:center; padding:150px 0; }
+      .state-panel { position:relative; min-height:390px; padding:28px; overflow:hidden; border:1px solid #252e43; border-radius:28px; background:linear-gradient(145deg,#0d1220,#070910); box-shadow:0 30px 100px rgba(0,0,0,.4); }
+      .state-topline { display:flex; justify-content:space-between; color:#707c96; font-size:.68rem; font-weight:800; letter-spacing:.14em; }
+      .orb { width:210px; height:210px; margin:55px auto 25px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#fff 0 2%,rgba(255,255,255,.65) 4%,rgba(125,145,255,.35) 23%,rgba(76,92,255,.14) 47%,transparent 70%); filter:blur(.2px); transition:transform 500ms ease,filter 500ms ease; }
+      .state-value { display:block; text-align:center; font-size:2.5rem; font-weight:800; letter-spacing:-.05em; }
+      .state-controls { display:flex; justify-content:center; gap:8px; margin-top:22px; }
+      button { cursor:pointer; border:1px solid #283248; border-radius:999px; padding:9px 14px; background:#0c111b; color:#8f9ab0; font:inherit; font-size:.72rem; font-weight:800; }
+      button:hover,button:focus-visible { color:#f0f3fb; border-color:#5c6882; outline:none; }
+      button[aria-pressed="true"] { color:#f0f3fb; background:#161d2b; }
+      .is-focus .orb { transform:scale(.82); filter:saturate(.75); }
+      .is-pulse .orb { transform:scale(1.18); filter:saturate(1.35); }
+      .principles { padding-bottom:150px; }
+      .closing { padding:80px 0 150px; border-top:1px solid #1b2232; }
+      .closing h2 { margin-bottom:25px; }
+      .closing p:last-child { max-width:650px; }
+      @media (max-width:760px) { .hero,.architecture,.demo,.principles,.closing { width:min(100% - 28px,1120px); } .stack,.principle-grid,.demo { grid-template-columns:1fr; } .demo { padding:100px 0; gap:45px; } .stack article,.principle-grid article { padding:25px; } .state-panel { min-height:340px; } .orb { width:175px; height:175px; margin-top:45px; } }
+      @media (prefers-reduced-motion:reduce) { .orb { transition:none; } }
+    </style>
+  </body>
+</html>
