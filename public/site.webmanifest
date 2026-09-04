@@ -1,6 +1,9 @@
 {
   "name": "AlienX SmartHome",
   "short_name": "AlienX",
+  "description": "Interactive smart home concepts built for the modern web.",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -13,7 +16,7 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#0e0a1c",
-  "background_color": "#0e0a1c",
+  "theme_color": "#070b14",
+  "background_color": "#070b14",
   "display": "standalone"
 }
