@@ -40,6 +40,7 @@ interface InquiryPayload {
   budget?: unknown;
   source?: unknown;
   message?: unknown;
+  consent?: unknown;
   website?: unknown;
 }
 
@@ -92,6 +93,10 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (typeof payload.website === 'string' && payload.website.trim() !== '') {
     return json({ ok: true });
+  }
+
+  if (payload.consent !== true) {
+    return json({ error: 'Please confirm that we may contact you about this inquiry.' }, 400);
   }
 
   const name = typeof payload.name === 'string' ? cleanSingleLine(payload.name) : '';
