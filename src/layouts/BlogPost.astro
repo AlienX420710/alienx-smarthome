@@ -8,72 +8,46 @@ import FormattedDate from '../components/FormattedDate.astro';
 type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImage = heroImage ? new URL(heroImage, Astro.site) : new URL('/blog-placeholder-1.jpg', Astro.site);
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
+		<BaseHead title={title} description={description} image={heroImage} />
+		<script type="application/ld+json" set:html={JSON.stringify({
+			'@context': 'https://schema.org',
+			'@type': 'BlogPosting',
+			headline: title,
+			description,
+			datePublished: pubDate.toISOString(),
+			...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+			mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalURL.toString() },
+			image: socialImage.toString(),
+			author: { '@type': 'Organization', name: 'AlienX SmartHome', url: 'https://alienxsmarthome.com/' },
+			publisher: { '@type': 'Organization', name: 'AlienX SmartHome', url: 'https://alienxsmarthome.com/' }
+		})} />
 	</head>
 
 	<body>
 		<Header />
 		<main>
 			<article>
-				<div class="hero-image">
-					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
-				</div>
+				{heroImage && (
+					<div class="hero-image">
+						<img width={1020} height={510} src={heroImage} alt="" />
+					</div>
+				)}
 				<div class="prose">
 					<div class="title">
 						<div class="date">
 							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
+							{updatedDate && (
+								<div class="last-updated-on">Last updated on <FormattedDate date={updatedDate} /></div>
+							)}
 						</div>
 						<h1>{title}</h1>
+						<p class="description">{description}</p>
 						<hr />
 					</div>
 					<slot />
@@ -83,3 +57,12 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<Footer />
 	</body>
 </html>
+
+<style>
+	:global(body){background:#05070c;color:#eef2ff}
+	main{width:min(1180px,calc(100% - 40px));max-width:none;padding:4rem 0 7rem}
+	.hero-image{width:100%}.hero-image img{display:block;width:100%;height:auto;margin:0 auto;border-radius:20px;box-shadow:var(--box-shadow)}
+	.prose{width:min(720px,calc(100% - 2em));margin:auto;padding:1em;color:#c2cadb;line-height:1.75}
+	.title{margin-bottom:3em;padding:2em 0;text-align:center;line-height:1}.title h1{margin:0 0 .6em;color:#f6f8ff;font-size:clamp(2.4rem,6vw,4.8rem);letter-spacing:-.045em}.date{margin-bottom:.75em;color:#7784a6}.last-updated-on{font-style:italic}.description{color:#98a4bd;line-height:1.6}hr{border:0;border-top:1px solid #192033}
+	@media(max-width:720px){main{width:min(100% - 28px);padding-top:2rem}.prose{width:100%;padding:.5em}}
+</style>
