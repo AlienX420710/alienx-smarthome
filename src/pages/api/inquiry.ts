@@ -3,18 +3,42 @@ import { env } from 'cloudflare:workers';
 
 export const prerender = false;
 
+const MAX_REQUEST_BYTES = 16_384;
 const MAX_NAME_LENGTH = 100;
 const MIN_NAME_LENGTH = 2;
 const MAX_EMAIL_LENGTH = 254;
+const MAX_PHONE_LENGTH = 30;
+const MAX_COMPANY_LENGTH = 120;
+const MAX_URL_LENGTH = 2048;
+const MAX_TIMEZONE_LENGTH = 80;
 const MAX_MESSAGE_LENGTH = 4000;
 const MIN_MESSAGE_LENGTH = 10;
-const MAX_REQUEST_BYTES = 8_192;
+
 const TO_ADDRESS = 'alienx@alienxsmarthome.com';
 const FROM_ADDRESS = 'AlienX SmartHome <alienx@alienxsmarthome.com>';
+
+const CONTACT_METHODS = new Set(['email', 'phone', 'text', 'either']);
+const CONTACT_TIMES = new Set(['morning', 'afternoon', 'evening', 'anytime']);
+const PROJECT_TYPES = new Set(['website-design', 'website-redesign', 'ecommerce', 'smart-home', 'interactive-web', 'web-app', 'seo-performance', 'other']);
+const CURRENT_WEBSITES = new Set(['none', 'existing', 'redesign', 'other']);
+const TIMELINES = new Set(['asap', 'under-30-days', '1-3-months', '3-6-months', 'exploring']);
+const BUDGETS = new Set(['under-1000', '1000-2500', '2500-5000', '5000-10000', '10000-plus', 'not-sure']);
+const SOURCES = new Set(['google', 'social', 'referral', 'experience', 'other']);
 
 interface InquiryPayload {
   name?: unknown;
   email?: unknown;
+  phone?: unknown;
+  company?: unknown;
+  websiteUrl?: unknown;
+  contactMethod?: unknown;
+  contactTime?: unknown;
+  timezone?: unknown;
+  projectType?: unknown;
+  currentWebsite?: unknown;
+  timeline?: unknown;
+  budget?: unknown;
+  source?: unknown;
   message?: unknown;
   website?: unknown;
 }
@@ -28,21 +52,21 @@ const json = (body: Record<string, unknown>, status = 200) =>
     },
   });
 
-const escapeHtml = (value: string) =>
-  value.replace(
-    /[&<>"']/g,
-    (character) =>
-      ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;',
-      })[character] ?? character,
-  );
-
-const cleanName = (value: string) => value.replace(/[\u0000-\u001F\u007F]/g, '').trim();
+const text = (value: unknown) => (typeof value === 'string' ? value.trim() : '');
+const allowed = (value: string, values: Set<string>) => values.has(value);
+const cleanSingleLine = (value: string) => value.replace(/[\u0000-\u001F\u007F]/g, '').trim();
 const cleanMessage = (value: string) => value.replace(/[\u0000\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').trim();
+
+const escapeHtml = (value: string) =>
+  value.replace(/[&<>"']/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  })[character] ?? character);
+
+const label = (value: string) => value.replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
 
 export const POST: APIRoute = async ({ request }) => {
   if (request.headers.get('content-type')?.split(';')[0].trim() !== 'application/json') {
@@ -66,13 +90,23 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: 'Invalid request.' }, 400);
   }
 
-  // Honeypot: automated submissions should fill this hidden field; real users leave it empty.
   if (typeof payload.website === 'string' && payload.website.trim() !== '') {
     return json({ ok: true });
   }
 
-  const name = typeof payload.name === 'string' ? cleanName(payload.name) : '';
-  const email = typeof payload.email === 'string' ? payload.email.trim().toLowerCase() : '';
+  const name = typeof payload.name === 'string' ? cleanSingleLine(payload.name) : '';
+  const email = typeof payload.email === 'string' ? cleanSingleLine(payload.email).toLowerCase() : '';
+  const phone = typeof payload.phone === 'string' ? cleanSingleLine(payload.phone) : '';
+  const company = typeof payload.company === 'string' ? cleanSingleLine(payload.company) : '';
+  const websiteUrl = typeof payload.websiteUrl === 'string' ? cleanSingleLine(payload.websiteUrl) : '';
+  const contactMethod = text(payload.contactMethod);
+  const contactTime = text(payload.contactTime);
+  const timezone = typeof payload.timezone === 'string' ? cleanSingleLine(payload.timezone) : '';
+  const projectType = text(payload.projectType);
+  const currentWebsite = text(payload.currentWebsite);
+  const timeline = text(payload.timeline);
+  const budget = text(payload.budget);
+  const source = text(payload.source);
   const message = typeof payload.message === 'string' ? cleanMessage(payload.message) : '';
 
   if (name.length < MIN_NAME_LENGTH || name.length > MAX_NAME_LENGTH) {
@@ -83,21 +117,103 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: 'Please provide a valid email address.' }, 400);
   }
 
+  if (phone && (phone.length > MAX_PHONE_LENGTH || !/^[+()\d\s.-]+$/.test(phone))) {
+    return json({ error: 'Please provide a valid phone number.' }, 400);
+  }
+
+  if (company.length > MAX_COMPANY_LENGTH) {
+    return json({ error: 'Please provide a valid company name.' }, 400);
+  }
+
+  if (websiteUrl) {
+    if (websiteUrl.length > MAX_URL_LENGTH) return json({ error: 'Please provide a valid website URL.' }, 400);
+    try {
+      const url = new URL(websiteUrl);
+      if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Unsupported protocol.');
+    } catch {
+      return json({ error: 'Please provide a valid website URL.' }, 400);
+    }
+  }
+
+  if (!allowed(contactMethod, CONTACT_METHODS)) {
+    return json({ error: 'Please choose a contact method.' }, 400);
+  }
+
+  if ((contactMethod === 'phone' || contactMethod === 'text') && !phone) {
+    return json({ error: 'A phone number is required for phone or text contact.' }, 400);
+  }
+
+  if (contactTime && !allowed(contactTime, CONTACT_TIMES)) {
+    return json({ error: 'Please choose a valid contact time.' }, 400);
+  }
+
+  if (timezone.length > MAX_TIMEZONE_LENGTH) {
+    return json({ error: 'Please provide a valid time zone.' }, 400);
+  }
+
+  if (!allowed(projectType, PROJECT_TYPES)) {
+    return json({ error: 'Please choose what you are interested in.' }, 400);
+  }
+
+  if (currentWebsite && !allowed(currentWebsite, CURRENT_WEBSITES)) {
+    return json({ error: 'Please choose a valid website status.' }, 400);
+  }
+
+  if (timeline && !allowed(timeline, TIMELINES)) {
+    return json({ error: 'Please choose a valid timeline.' }, 400);
+  }
+
+  if (budget && !allowed(budget, BUDGETS)) {
+    return json({ error: 'Please choose a valid budget range.' }, 400);
+  }
+
+  if (source && !allowed(source, SOURCES)) {
+    return json({ error: 'Please choose a valid referral source.' }, 400);
+  }
+
   if (message.length < MIN_MESSAGE_LENGTH || message.length > MAX_MESSAGE_LENGTH) {
     return json({ error: 'Please provide a little more detail about your inquiry.' }, 400);
   }
 
   const resendApiKey = (env as unknown as { RESEND_API_KEY?: string }).RESEND_API_KEY;
-
   if (!resendApiKey) {
     console.error('RESEND_API_KEY is not configured.');
     return json({ error: 'Email service is not configured.' }, 503);
   }
 
-  const safeName = escapeHtml(name);
+  const details = [
+    ['Name', name],
+    ['Email', email],
+    ['Phone', phone || 'Not provided'],
+    ['Company', company || 'Not provided'],
+    ['Website', websiteUrl || 'Not provided'],
+    ['Best contact method', label(contactMethod)],
+    ['Best time', contactTime ? label(contactTime) : 'Not provided'],
+    ['Time zone', timezone || 'Not provided'],
+    ['Project', label(projectType)],
+    ['Current website', currentWebsite ? label(currentWebsite) : 'Not provided'],
+    ['Timeline', timeline ? label(timeline) : 'Not provided'],
+    ['Budget', budget ? label(budget) : 'Not sure / not provided'],
+    ['Source', source ? label(source) : 'Not provided'],
+  ] as const;
+
+  const plainText = [
+    'ALIENX SMARTHOME — NEW INQUIRY',
+    '',
+    ...details.map(([key, value]) => `${key}: ${value}`),
+    '',
+    'PROJECT DETAILS',
+    message,
+  ].join('\n');
+
+  const htmlDetails = details.map(([key, value]) =>
+    `<tr><td style="padding:9px 0;color:#667085;width:180px;vertical-align:top;">${escapeHtml(key)}</td><td style="padding:9px 0;color:#101828;vertical-align:top;font-weight:600;">${escapeHtml(value)}</td></tr>`,
+  ).join('');
+
+  const safeMessage = escapeHtml(message).replaceAll('\n', '<br />');
   const safeEmail = escapeHtml(email);
-  const safeMessage = escapeHtml(message).replace(/\n/g, '<br />');
-  const submittedAt = new Date().toISOString();
+  const safeName = escapeHtml(name);
+  const safeWebsite = websiteUrl ? escapeHtml(websiteUrl) : '';
 
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -109,46 +225,9 @@ export const POST: APIRoute = async ({ request }) => {
       from: FROM_ADDRESS,
       to: [TO_ADDRESS],
       reply_to: email,
-      subject: `New AlienX inquiry — ${name}`,
-      html: `
-        <div style="margin:0;padding:32px;background:#f4f6fa;font-family:Arial,Helvetica,sans-serif;color:#172033;">
-          <div style="max-width:680px;margin:0 auto;background:#ffffff;border:1px solid #dfe4ec;border-radius:16px;overflow:hidden;">
-            <div style="padding:24px 28px;background:#080d18;color:#ffffff;">
-              <div style="font-size:12px;letter-spacing:2px;font-weight:700;color:#9eabc4;">ALIENX / INQUIRY</div>
-              <h1 style="margin:10px 0 0;font-size:26px;line-height:1.2;color:#ffffff;">New conversation started</h1>
-            </div>
-            <div style="padding:28px;">
-              <table role="presentation" style="width:100%;border-collapse:collapse;">
-                <tr>
-                  <td style="padding:0 0 18px;width:110px;font-size:12px;font-weight:700;letter-spacing:1px;color:#6d7890;vertical-align:top;">NAME</td>
-                  <td style="padding:0 0 18px;font-size:16px;color:#172033;vertical-align:top;">${safeName}</td>
-                </tr>
-                <tr>
-                  <td style="padding:0 0 18px;font-size:12px;font-weight:700;letter-spacing:1px;color:#6d7890;vertical-align:top;">EMAIL</td>
-                  <td style="padding:0 0 18px;font-size:16px;vertical-align:top;"><a href="mailto:${safeEmail}" style="color:#315bdc;text-decoration:none;">${safeEmail}</a></td>
-                </tr>
-                <tr>
-                  <td style="padding:0;font-size:12px;font-weight:700;letter-spacing:1px;color:#6d7890;vertical-align:top;">MESSAGE</td>
-                  <td style="padding:0;font-size:16px;line-height:1.7;color:#172033;vertical-align:top;">${safeMessage}</td>
-                </tr>
-              </table>
-              <div style="margin-top:28px;padding-top:18px;border-top:1px solid #e7eaf0;font-size:12px;color:#7b8496;">Received ${submittedAt}</div>
-            </div>
-          </div>
-        </div>
-      `,
-      text: [
-        'ALIENX / INQUIRY',
-        'New conversation started',
-        '',
-        `Name: ${name}`,
-        `Email: ${email}`,
-        '',
-        'Message:',
-        message,
-        '',
-        `Received: ${submittedAt}`,
-      ].join('\n'),
+      subject: `New AlienX inquiry — ${name}${company ? ` / ${company}` : ''}`,
+      html: `<!doctype html><html><body style="margin:0;background:#f4f6fa;font-family:Arial,Helvetica,sans-serif;color:#172033;"><div style="max-width:700px;margin:32px auto;padding:0 16px;"><div style="overflow:hidden;border:1px solid #dfe4ec;border-radius:18px;background:#fff;box-shadow:0 8px 30px rgba(16,24,40,.08);"><div style="padding:24px 28px;background:#080d18;color:#fff;"><div style="font-size:12px;letter-spacing:2px;font-weight:700;color:#9eabc4;">ALIENX / INQUIRY</div><h1 style="margin:10px 0 0;font-size:26px;line-height:1.2;color:#fff;">New conversation started</h1></div><div style="padding:26px 28px;"><table role="presentation" style="width:100%;border-collapse:collapse;">${htmlDetails}</table><div style="margin:18px 0 22px;border-top:1px solid #e7eaf0;"></div><div style="font-size:12px;letter-spacing:1.5px;font-weight:700;color:#667085;margin-bottom:10px;">PROJECT DETAILS</div><div style="font-size:16px;line-height:1.7;color:#344054;">${safeMessage}</div>${safeWebsite ? `<div style="margin-top:20px;font-size:13px;"><a href="${safeWebsite}" style="color:#315bdc;text-decoration:none;">Open submitted website →</a></div>` : ''}</div></div><p style="margin:16px 0;text-align:center;font-size:12px;color:#98a2b3;">Submitted through alienxsmarthome.com</p></div></body></html>`,
+      text: plainText,
     }),
   });
 
