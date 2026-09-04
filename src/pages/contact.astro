@@ -39,14 +39,12 @@ import { SITE_TITLE } from '../consts';
 								<input id="name" name="name" type="text" autocomplete="name" minlength="2" maxlength="100" required />
 								<p class="error" data-error="name" role="alert"></p>
 							</div>
-
 							<div class="field">
 								<label for="email">Email <span aria-hidden="true">*</span></label>
 								<input id="email" name="email" type="email" autocomplete="email" maxlength="254" required />
 								<p class="error" data-error="email" role="alert"></p>
 							</div>
 						</div>
-
 						<div class="field-grid">
 							<div class="field">
 								<label for="phone">Phone</label>
@@ -54,51 +52,32 @@ import { SITE_TITLE } from '../consts';
 								<p class="hint">Required if you prefer phone or text.</p>
 								<p class="error" data-error="phone" role="alert"></p>
 							</div>
-
 							<div class="field">
 								<label for="company">Company / business</label>
 								<input id="company" name="company" type="text" autocomplete="organization" maxlength="120" />
 								<p class="error" data-error="company" role="alert"></p>
 							</div>
 						</div>
-
 						<div class="field-grid">
 							<div class="field">
 								<label for="contact-method">Best way to contact you <span aria-hidden="true">*</span></label>
 								<select id="contact-method" name="contactMethod" required>
-									<option value="">Choose one</option>
-									<option value="email">Email</option>
-									<option value="phone">Phone call</option>
-									<option value="text">Text message</option>
-									<option value="either">Email or phone</option>
+									<option value="">Choose one</option><option value="email">Email</option><option value="phone">Phone call</option><option value="text">Text message</option><option value="either">Email or phone</option>
 								</select>
 								<p class="error" data-error="contactMethod" role="alert"></p>
 							</div>
-
 							<div class="field">
 								<label for="contact-time">Best time to contact you</label>
 								<select id="contact-time" name="contactTime">
-									<option value="">No preference</option>
-									<option value="morning">Morning</option>
-									<option value="afternoon">Afternoon</option>
-									<option value="evening">Evening</option>
-									<option value="anytime">Anytime</option>
+									<option value="">No preference</option><option value="morning">Morning</option><option value="afternoon">Afternoon</option><option value="evening">Evening</option><option value="anytime">Anytime</option>
 								</select>
 								<p class="error" data-error="contactTime" role="alert"></p>
 							</div>
 						</div>
-
 						<div class="field">
 							<label for="timezone">Time zone</label>
 							<select id="timezone" name="timezone">
-								<option value="">No preference</option>
-								<option value="Eastern">Eastern</option>
-								<option value="Central">Central</option>
-								<option value="Mountain">Mountain</option>
-								<option value="Pacific">Pacific</option>
-								<option value="Alaska">Alaska</option>
-								<option value="Hawaii">Hawaii</option>
-								<option value="Other">Other / outside the U.S.</option>
+								<option value="">No preference</option><option value="Eastern">Eastern</option><option value="Central">Central</option><option value="Mountain">Mountain</option><option value="Pacific">Pacific</option><option value="Alaska">Alaska</option><option value="Hawaii">Hawaii</option><option value="Other">Other / outside the U.S.</option>
 							</select>
 						</div>
 					</fieldset>
@@ -108,77 +87,28 @@ import { SITE_TITLE } from '../consts';
 						<div class="field">
 							<label for="project-type">What are you interested in? <span aria-hidden="true">*</span></label>
 							<select id="project-type" name="projectType" required>
-								<option value="">Choose one</option>
-								<option value="website-design">Website design</option>
-								<option value="website-redesign">Website redesign</option>
-								<option value="ecommerce">E-commerce website</option>
-								<option value="smart-home">Smart-home / technology experience</option>
-								<option value="interactive-web">Interactive website</option>
-								<option value="web-app">Web application</option>
-								<option value="seo-performance">SEO / performance</option>
-								<option value="other">Something else</option>
+								<option value="">Choose one</option><option value="website-design">Website design</option><option value="website-redesign">Website redesign</option><option value="ecommerce">E-commerce website</option><option value="smart-home">Smart-home / technology experience</option><option value="interactive-web">Interactive website</option><option value="web-app">Web application</option><option value="seo-performance">SEO / performance</option><option value="other">Something else</option>
 							</select>
 							<p class="error" data-error="projectType" role="alert"></p>
 						</div>
-
 						<div class="field-grid">
 							<div class="field">
 								<label for="current-website">What do you have today?</label>
 								<select id="current-website" name="currentWebsite">
-									<option value="">Choose one</option>
-									<option value="none">No website yet</option>
-									<option value="existing">Existing website</option>
-									<option value="redesign">Existing site that needs a redesign</option>
-									<option value="other">Other</option>
+									<option value="">Choose one</option><option value="none">No website yet</option><option value="existing">Existing website</option><option value="redesign">Existing site that needs a redesign</option><option value="other">Other</option>
 								</select>
 							</div>
-
 							<div class="field">
 								<label for="website-url">Current website URL</label>
 								<input id="website-url" name="websiteUrl" type="url" inputmode="url" maxlength="2048" placeholder="https://example.com" />
 								<p class="error" data-error="websiteUrl" role="alert"></p>
 							</div>
 						</div>
-
 						<div class="field-grid three">
-							<div class="field">
-								<label for="timeline">Target timeline</label>
-								<select id="timeline" name="timeline">
-									<option value="">Choose one</option>
-									<option value="asap">ASAP</option>
-									<option value="under-30-days">Within 30 days</option>
-									<option value="1-3-months">1–3 months</option>
-									<option value="3-6-months">3–6 months</option>
-									<option value="exploring">Just exploring</option>
-								</select>
-							</div>
-
-							<div class="field">
-								<label for="budget">Approximate budget</label>
-								<select id="budget" name="budget">
-									<option value="">Choose one</option>
-									<option value="under-1000">Under $1,000</option>
-									<option value="1000-2500">$1,000–$2,500</option>
-									<option value="2500-5000">$2,500–$5,000</option>
-									<option value="5000-10000">$5,000–$10,000</option>
-									<option value="10000-plus">$10,000+</option>
-									<option value="not-sure">Not sure yet</option>
-								</select>
-							</div>
-
-							<div class="field">
-								<label for="source">How did you find us?</label>
-								<select id="source" name="source">
-									<option value="">Choose one</option>
-									<option value="google">Google</option>
-									<option value="social">Social media</option>
-									<option value="referral">Referral</option>
-									<option value="experience">Saw the AlienX experience</option>
-									<option value="other">Other</option>
-								</select>
-							</div>
+							<div class="field"><label for="timeline">Target timeline</label><select id="timeline" name="timeline"><option value="">Choose one</option><option value="asap">ASAP</option><option value="under-30-days">Within 30 days</option><option value="1-3-months">1–3 months</option><option value="3-6-months">3–6 months</option><option value="exploring">Just exploring</option></select></div>
+							<div class="field"><label for="budget">Approximate budget</label><select id="budget" name="budget"><option value="">Choose one</option><option value="under-1000">Under $1,000</option><option value="1000-2500">$1,000–$2,500</option><option value="2500-5000">$2,500–$5,000</option><option value="5000-10000">$5,000–$10,000</option><option value="10000-plus">$10,000+</option><option value="not-sure">Not sure yet</option></select></div>
+							<div class="field"><label for="source">How did you find us?</label><select id="source" name="source"><option value="">Choose one</option><option value="google">Google</option><option value="social">Social media</option><option value="referral">Referral</option><option value="experience">Saw the AlienX experience</option><option value="other">Other</option></select></div>
 						</div>
-
 						<div class="field">
 							<label for="message">Tell us about the project <span aria-hidden="true">*</span></label>
 							<textarea id="message" name="message" rows="7" minlength="10" maxlength="4000" required placeholder="What are you trying to build, improve, or accomplish?"></textarea>
@@ -188,20 +118,12 @@ import { SITE_TITLE } from '../consts';
 					</fieldset>
 
 					<HoneypotField />
-
 					<div class="consent">
-						<label class="checkbox-label">
-							<input id="consent" name="consent" type="checkbox" value="yes" required />
-							<span>I agree that AlienX may contact me about this inquiry.</span>
-						</label>
+						<label class="checkbox-label"><input id="consent" name="consent" type="checkbox" value="yes" required /><span>I agree that AlienX may contact me about this inquiry.</span></label>
 						<p class="error" data-error="consent" role="alert"></p>
 					</div>
-
 					<div class="actions">
-						<button type="submit" id="submit-button">
-							<span data-button-label>Start the conversation</span>
-							<span class="arrow" aria-hidden="true">→</span>
-						</button>
+						<button type="submit" id="submit-button"><span data-button-label>Start the conversation</span><span class="arrow" aria-hidden="true">→</span></button>
 						<p class="form-status" id="form-status" role="status" aria-live="polite"></p>
 					</div>
 				</form>
@@ -256,51 +178,17 @@ import { SITE_TITLE } from '../consts';
 			const message = value('message');
 			let firstInvalid: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null = null;
 
-			if (name.length < 2 || name.length > 100) {
-				setError('name', 'Please enter your name.');
-				firstInvalid = form.elements.namedItem('name') as HTMLInputElement;
-			}
-			if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-				setError('email', 'Please enter a valid email address.');
-				firstInvalid ??= form.elements.namedItem('email') as HTMLInputElement;
-			}
-			if ((contactMethod.value === 'phone' || contactMethod.value === 'text') && (!phone || !/^[+()\d\s.-]+$/.test(phone))) {
-				setError('phone', 'A valid phone number is required for this contact method.');
-				firstInvalid ??= phoneInput;
-			} else if (phone && (phone.length > 30 || !/^[+()\d\s.-]+$/.test(phone))) {
-				setError('phone', 'Please enter a valid phone number.');
-				firstInvalid ??= phoneInput;
-			}
-			if (websiteUrl) {
-				try {
-					const url = new URL(websiteUrl);
-					if (!['http:', 'https:'].includes(url.protocol)) throw new Error();
-				} catch {
-					setError('websiteUrl', 'Please enter a valid website URL.');
-					firstInvalid ??= form.elements.namedItem('websiteUrl') as HTMLInputElement;
-				}
-			}
-			if (!contactMethod.value) {
-				setError('contactMethod', 'Please choose how you would like us to contact you.');
-				firstInvalid ??= contactMethod;
-			}
-			if (!formData.get('projectType')) {
-				setError('projectType', 'Please choose what you are interested in.');
-				firstInvalid ??= form.elements.namedItem('projectType') as HTMLSelectElement;
-			}
-			if (message.length < 10 || message.length > 4000) {
-				setError('message', 'Please provide at least a few sentences about the project.');
-				firstInvalid ??= form.elements.namedItem('message') as HTMLTextAreaElement;
-			}
-			if (!consent.checked) {
-				setError('consent', 'Please confirm that we may contact you about this inquiry.');
-				firstInvalid ??= consent;
-			}
+			if (name.length < 2 || name.length > 100) { setError('name', 'Please enter your name.'); firstInvalid = form.elements.namedItem('name') as HTMLInputElement; }
+			if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('email', 'Please enter a valid email address.'); firstInvalid ??= form.elements.namedItem('email') as HTMLInputElement; }
+			if ((contactMethod.value === 'phone' || contactMethod.value === 'text') && (!phone || !/^[+()\d\s.-]+$/.test(phone))) { setError('phone', 'A valid phone number is required for this contact method.'); firstInvalid ??= phoneInput; }
+			else if (phone && (phone.length > 30 || !/^[+()\d\s.-]+$/.test(phone))) { setError('phone', 'Please enter a valid phone number.'); firstInvalid ??= phoneInput; }
+			if (websiteUrl) { try { const url = new URL(websiteUrl); if (!['http:', 'https:'].includes(url.protocol)) throw new Error(); } catch { setError('websiteUrl', 'Please enter a valid website URL.'); firstInvalid ??= form.elements.namedItem('websiteUrl') as HTMLInputElement; } }
+			if (!contactMethod.value) { setError('contactMethod', 'Please choose how you would like us to contact you.'); firstInvalid ??= contactMethod; }
+			if (!formData.get('projectType')) { setError('projectType', 'Please choose what you are interested in.'); firstInvalid ??= form.elements.namedItem('projectType') as HTMLSelectElement; }
+			if (message.length < 10 || message.length > 4000) { setError('message', 'Please provide at least a few sentences about the project.'); firstInvalid ??= form.elements.namedItem('message') as HTMLTextAreaElement; }
+			if (!consent.checked) { setError('consent', 'Please confirm that we may contact you about this inquiry.'); firstInvalid ??= consent; }
 
-			if (firstInvalid) {
-				firstInvalid.focus();
-				return;
-			}
+			if (firstInvalid) { firstInvalid.focus(); return; }
 
 			button.disabled = true;
 			buttonLabel.textContent = 'Sending…';
@@ -310,26 +198,14 @@ import { SITE_TITLE } from '../consts';
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({
-						name,
-						email,
-						phone,
-						company: value('company'),
-						websiteUrl,
-						contactMethod: value('contactMethod'),
-						contactTime: value('contactTime'),
-						timezone: value('timezone'),
-						projectType: value('projectType'),
-						currentWebsite: value('currentWebsite'),
-						timeline: value('timeline'),
-						budget: value('budget'),
-						source: value('source'),
-						message,
-						website: String(formData.get('website') ?? ''),
+						name, email, phone, company: value('company'), websiteUrl,
+						contactMethod: value('contactMethod'), contactTime: value('contactTime'), timezone: value('timezone'),
+						projectType: value('projectType'), currentWebsite: value('currentWebsite'), timeline: value('timeline'), budget: value('budget'), source: value('source'),
+						message, consent: consent.checked, website: String(formData.get('website') ?? ''),
 					}),
 				});
 
 				if (!response.ok) throw new Error('Inquiry request failed.');
-
 				form.reset();
 				updatePhoneRequirement();
 				status.textContent = 'Message received. We’ll be in touch.';
