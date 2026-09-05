@@ -7,7 +7,7 @@ import { SITE_TITLE } from '../consts';
 	<nav aria-label="Primary navigation">
 		<a href="/" class="title-link" aria-label={`${SITE_TITLE} home`}>
 			<img src="/favicon.svg" alt="" class="site-logo" width="28" height="28" />
-			<span>{SITE_TITLE}</span>
+			<span class="brand-name"><span class="brand-alienx">AlienX</span><span class="brand-smarthome">SmartHome</span></span>
 		</a>
 
 		<div class="internal-links">
@@ -62,6 +62,19 @@ nav {
 	font-weight: 700;
 	text-decoration: none;
 	white-space: nowrap;
+}
+
+.brand-name {
+	display: inline-flex;
+	align-items: baseline;
+}
+
+.brand-alienx {
+	color: #39ff5a;
+}
+
+.brand-smarthome {
+	color: #2563eb;
 }
 
 .site-logo {
