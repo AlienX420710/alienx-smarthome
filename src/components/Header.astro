@@ -7,7 +7,7 @@ import { SITE_TITLE } from '../consts';
 	<nav aria-label="Primary navigation">
 		<a href="/" class="title-link" aria-label={`${SITE_TITLE} home`}>
 			<img src="/favicon.svg" alt="" class="site-logo" width="28" height="28" />
-			<span class="brand-name"><span class="brand-alienx">AlienX</span><span class="brand-smarthome">SmartHome</span></span>
+			<span><strong>AlienX</strong> <em>SmartHome</em></span>
 		</a>
 
 		<div class="internal-links">
@@ -21,20 +21,19 @@ import { SITE_TITLE } from '../consts';
 
 		<div class="external-links">
 			<a class="ha-link" href="https://alienxhomeassistant.alienxsmarthome.com" target="_blank" rel="noreferrer">
-				<span>Home Assistant</span>
 				<svg viewBox="0 0 24 24" aria-hidden="true">
-					<path d="M14 5h5v5" />
-					<path d="M10 14 19 5" />
-					<path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" />
+					<path d="m3 11 9-7 9 7" />
+					<path d="M5.5 10.5V20h13v-9.5" />
+					<path d="M9 20v-6h6v6" />
 				</svg>
+				<span>Home Assistant</span>
 			</a>
 			<a class="source-link" href="https://github.com/AlienX420710/alienx-smarthome" target="_blank" rel="noreferrer" aria-label="AlienX SmartHome source code on GitHub">
-				<span>Source</span>
 				<svg viewBox="0 0 24 24" aria-hidden="true">
-					<path d="M14 5h5v5" />
-					<path d="M10 14 19 5" />
-					<path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" />
+					<path d="M15 22v-4.2c0-1.1-.4-1.8-1-2.2 3.3-.4 6.7-1.6 6.7-7.1 0-1.6-.6-2.9-1.6-3.9.2-.4.7-1.9-.2-3.9 0 0-1.3-.4-4.2 1.5-1.2-.3-2.5-.4-3.7-.4s-2.5.1-3.7.4C4.4.3 3.1.7 3.1.7c-.9 2-.4 3.5-.2 3.9-1 1-1.6 2.3-1.6 3.9 0 5.5 3.4 6.7 6.7 7.1-.6.4-1 .9-1 1.8V22" />
+					<path d="M7 18c-3 .9-3-1.5-4.2-1.8" />
 				</svg>
+				<span>Source</span>
 			</a>
 		</div>
 	</nav>
@@ -64,17 +63,13 @@ nav {
 	white-space: nowrap;
 }
 
-.brand-name {
-	display: inline-flex;
-	align-items: baseline;
-}
-
-.brand-alienx {
+.title-link strong {
 	color: #39ff5a;
 }
 
-.brand-smarthome {
-	color: #2563eb;
+.title-link em {
+	color: var(--accent);
+	font-style: normal;
 }
 
 .site-logo {
@@ -106,25 +101,40 @@ nav {
 	font-size: 0.9rem;
 	text-decoration: none;
 	opacity: 0.75;
-	transition: opacity 180ms ease;
+	transition: opacity 180ms ease, color 180ms ease;
 }
 
 .ha-link:hover,
+.ha-link:focus-visible {
+	color: #39ff5a;
+	opacity: 1;
+}
+
 .source-link:hover,
-.ha-link:focus-visible,
 .source-link:focus-visible {
+	color: var(--accent);
 	opacity: 1;
 }
 
 .ha-link svg,
 .source-link svg {
-	width: 0.9rem;
-	height: 0.9rem;
+	width: 1rem;
+	height: 1rem;
 	fill: none;
 	stroke: currentColor;
 	stroke-width: 1.8;
 	stroke-linecap: round;
 	stroke-linejoin: round;
+	flex: 0 0 auto;
+}
+
+.source-link svg path:first-child {
+	fill: currentColor;
+	stroke: none;
+}
+
+.source-link svg path:last-child {
+	stroke: currentColor;
 }
 
 @media (max-width: 1100px) {
