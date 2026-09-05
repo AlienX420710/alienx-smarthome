@@ -90,7 +90,35 @@ blockquote { border-left: 4px solid var(--accent); padding: 0 0 0 20px; margin: 
 hr { border: none; border-top: 1px solid rgb(var(--gray-light)); }
 ::selection { background: rgb(var(--gray-dark)); color: rgb(var(--gray-light)); }
 
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 220ms;
+	animation-timing-function: ease-out;
+}
+
+::view-transition-old(root) {
+	animation-name: alienx-page-out;
+}
+
+::view-transition-new(root) {
+	animation-name: alienx-page-in;
+}
+
+@keyframes alienx-page-out {
+	to { opacity: 0; transform: translateY(-4px); }
+}
+
+@keyframes alienx-page-in {
+	from { opacity: 0; transform: translateY(4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html { scroll-behavior: auto; }
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation-duration: 1ms;
+	}
+}
 @media (max-width: 720px) {
 	body { font-size: 18px; }
 	main { width: calc(100% - 1em); padding: 1em 0.5em; }
