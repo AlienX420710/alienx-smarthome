@@ -157,13 +157,11 @@ import { SITE_TITLE } from '../consts';
 		const formatPhone = () => {
 			const original = phoneInput.value;
 			if (original.trimStart().startsWith('+')) return;
-
 			const digits = original.replace(/\D/g, '').slice(0, 10);
 			let formatted = digits;
 			if (digits.length > 6) formatted = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
 			else if (digits.length > 3) formatted = `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
 			else if (digits.length > 0) formatted = `(${digits}`;
-
 			phoneInput.value = formatted;
 		};
 
@@ -183,7 +181,6 @@ import { SITE_TITLE } from '../consts';
 			status.textContent = '';
 			status.className = 'form-status';
 			[...requiredFields, 'phone', 'company', 'websiteUrl', 'contactTime', 'projectType', 'consent'].forEach((field) => setError(field, ''));
-
 			const formData = new FormData(form);
 			const value = (field: string) => String(formData.get(field) ?? '').trim();
 			const name = value('name');
@@ -192,7 +189,6 @@ import { SITE_TITLE } from '../consts';
 			const websiteUrl = value('websiteUrl');
 			const message = value('message');
 			let firstInvalid: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null = null;
-
 			if (name.length < 2 || name.length > 100) { setError('name', 'Please enter your name.'); firstInvalid = form.elements.namedItem('name') as HTMLInputElement; }
 			if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('email', 'Please enter a valid email address.'); firstInvalid ??= form.elements.namedItem('email') as HTMLInputElement; }
 			if ((contactMethod.value === 'phone' || contactMethod.value === 'text') && (!phone || !/^[+()\d\s.-]+$/.test(phone))) { setError('phone', 'A valid phone number is required for this contact method.'); firstInvalid ??= phoneInput; }
@@ -202,24 +198,11 @@ import { SITE_TITLE } from '../consts';
 			if (!formData.get('projectType')) { setError('projectType', 'Please choose what you are interested in.'); firstInvalid ??= form.elements.namedItem('projectType') as HTMLSelectElement; }
 			if (message.length < 10 || message.length > 4000) { setError('message', 'Please provide at least a few sentences about the project.'); firstInvalid ??= form.elements.namedItem('message') as HTMLTextAreaElement; }
 			if (!consent.checked) { setError('consent', 'Please confirm that we may contact you about this inquiry.'); firstInvalid ??= consent; }
-
 			if (firstInvalid) { firstInvalid.focus(); return; }
-
 			button.disabled = true;
 			buttonLabel.textContent = 'Sending…';
-
 			try {
-				const response = await fetch('/api/inquiry', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						name, email, phone, company: value('company'), websiteUrl,
-						contactMethod: value('contactMethod'), contactTime: value('contactTime'), timezone: value('timezone'),
-						projectType: value('projectType'), currentWebsite: value('currentWebsite'), timeline: value('timeline'), budget: value('budget'), source: value('source'),
-						message, consent: consent.checked, website: String(formData.get('website') ?? ''),
-					}),
-				});
-
+				const response = await fetch('/api/inquiry', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, phone, company: value('company'), websiteUrl, contactMethod: value('contactMethod'), contactTime: value('contactTime'), timezone: value('timezone'), projectType: value('projectType'), currentWebsite: value('currentWebsite'), timeline: value('timeline'), budget: value('budget'), source: value('source'), message, consent: consent.checked, website: String(formData.get('website') ?? '') }) });
 				if (!response.ok) throw new Error('Inquiry request failed.');
 				window.location.assign('/contact/success');
 			} catch {
@@ -234,44 +217,84 @@ import { SITE_TITLE } from '../consts';
 </script>
 
 <style>
-	:global(body) { background:#05070c; color:#eef2ff; }
+	:global(body) {
+		--contact-background:#05070c;
+		--contact-surface:rgba(18,23,36,.92);
+		--contact-surface-alt:rgba(8,11,18,.94);
+		--contact-text:#eef2ff;
+		--contact-heading:#f6f8ff;
+		--contact-muted:#98a4bd;
+		--contact-soft:#7784a6;
+		--contact-label:#dfe5f4;
+		--contact-input:#090d16;
+		--contact-input-focus:#0b101b;
+		--contact-border:#192033;
+		--contact-input-border:#263149;
+		--contact-divider:#1a2232;
+		--contact-placeholder:#58647e;
+		--contact-checkbox:#eef2ff;
+		background:var(--contact-background);color:var(--contact-text)
+	}
 	main { width:min(1180px, calc(100% - 40px)); max-width:none; padding:5rem 0 8rem; }
 	.intro { display:grid; grid-template-columns:minmax(0,1fr) minmax(420px,560px); gap:6rem; align-items:start; }
-	.eyebrow { margin:0 0 1rem; color:#7784a6; font-size:.7rem; font-weight:700; letter-spacing:.22em; }
-	h1 { margin:0; max-width:800px; color:#f6f8ff; font-size:clamp(4.2rem,9vw,8rem); letter-spacing:-.065em; line-height:.9; }
-	.lede { max-width:620px; margin:2rem 0 0; color:#98a4bd; font-size:1.2rem; line-height:1.7; }
-	.signal { display:grid; grid-template-columns:auto auto 1fr auto auto 1fr auto; gap:.75rem; align-items:center; margin-top:4rem; color:#7784a6; font-size:.7rem; letter-spacing:.12em; }
+	.eyebrow { margin:0 0 1rem; color:var(--contact-soft); font-size:.7rem; font-weight:700; letter-spacing:.22em; }
+	h1 { margin:0; max-width:800px; color:var(--contact-heading); font-size:clamp(4.2rem,9vw,8rem); letter-spacing:-.065em; line-height:.9; }
+	.lede { max-width:620px; margin:2rem 0 0; color:var(--contact-muted); font-size:1.2rem; line-height:1.7; }
+	.signal { display:grid; grid-template-columns:auto auto 1fr auto auto 1fr auto; gap:.75rem; align-items:center; margin-top:4rem; color:var(--contact-soft); font-size:.7rem; letter-spacing:.12em; }
 	.signal b { color:#cbd3e7; font-size:.68rem; white-space:nowrap; }
-	.signal i { height:1px; background:#1a2232; }
-	form { padding:2rem; border:1px solid #192033; border-radius:28px; background:linear-gradient(145deg,rgba(18,23,36,.92),rgba(8,11,18,.94)); box-shadow:0 30px 80px rgba(0,0,0,.24); }
+	.signal i { height:1px; background:var(--contact-divider); }
+	form { padding:2rem; border:1px solid var(--contact-border); border-radius:28px; background:linear-gradient(145deg,var(--contact-surface),var(--contact-surface-alt)); box-shadow:0 30px 80px rgba(0,0,0,.24); }
 	fieldset { margin:0; padding:0; border:0; }
-	fieldset + fieldset { margin-top:2rem; padding-top:2rem; border-top:1px solid #192033; }
-	legend { margin-bottom:1.25rem; color:#f2f5ff; font-size:1rem; font-weight:700; }
+	fieldset + fieldset { margin-top:2rem; padding-top:2rem; border-top:1px solid var(--contact-border); }
+	legend { margin-bottom:1.25rem; color:var(--contact-heading); font-size:1rem; font-weight:700; }
 	.field-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.1rem; }
 	.field-grid.three { grid-template-columns:repeat(3,1fr); }
 	.field + .field, .field-grid + .field, .field + .field-grid { margin-top:1.1rem; }
-	label { display:block; margin-bottom:.55rem; color:#dfe5f4; font-size:.78rem; font-weight:700; letter-spacing:.06em; }
+	label { display:block; margin-bottom:.55rem; color:var(--contact-label); font-size:.78rem; font-weight:700; letter-spacing:.06em; }
 	label span { color:#9eabc4; }
-	input, textarea, select { width:100%; box-sizing:border-box; border:1px solid #263149; border-radius:14px; background:#090d16; color:#f2f5ff; padding:.9rem 1rem; outline:none; font:inherit; line-height:1.5; transition:border-color .2s, box-shadow .2s, background .2s; }
+	input, textarea, select { width:100%; box-sizing:border-box; border:1px solid var(--contact-input-border); border-radius:14px; background:var(--contact-input); color:var(--contact-heading); padding:.9rem 1rem; outline:none; font:inherit; line-height:1.5; transition:border-color .2s,box-shadow .2s,background .2s; }
 	select { appearance:auto; }
-	input:focus, textarea:focus, select:focus { border-color:#6678a8; background:#0b101b; box-shadow:0 0 0 3px rgba(100,120,168,.14); }
+	input:focus, textarea:focus, select:focus { border-color:#6678a8; background:var(--contact-input-focus); box-shadow:0 0 0 3px rgba(100,120,168,.14); }
 	input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="true"] { border-color:#a66b74; }
 	textarea { resize:vertical; min-height:150px; }
-	::placeholder { color:#58647e; }
+	::placeholder { color:var(--contact-placeholder); }
 	.hint { margin:.35rem 0 0; color:#69758e; font-size:.72rem; line-height:1.5; }
 	.error { min-height:1.1rem; margin:.35rem 0 0; color:#d998a1; font-size:.75rem; }
 	.consent { margin-top:1.5rem; }
 	.checkbox-label { display:flex; align-items:flex-start; gap:.7rem; margin:0; color:#aeb8cc; font-size:.8rem; font-weight:400; line-height:1.5; letter-spacing:0; cursor:pointer; }
-	.checkbox-label input { width:1rem; height:1rem; flex:0 0 auto; margin:.15rem 0 0; padding:0; accent-color:#eef2ff; }
+	.checkbox-label input { width:1rem; height:1rem; flex:0 0 auto; margin:.15rem 0 0; padding:0; accent-color:var(--contact-checkbox); }
 	.actions { margin-top:1.25rem; }
-	button { display:flex; width:100%; align-items:center; justify-content:space-between; gap:1rem; border:1px solid #68789f; border-radius:15px; padding:1rem 1.1rem; background:#eef2ff; color:#080b12; font:inherit; font-weight:700; cursor:pointer; transition:transform .2s, opacity .2s, box-shadow .2s; }
+	button { display:flex; width:100%; align-items:center; justify-content:space-between; gap:1rem; border:1px solid #68789f; border-radius:15px; padding:1rem 1.1rem; background:var(--contact-checkbox); color:#080b12; font:inherit; font-weight:700; cursor:pointer; transition:transform .2s,opacity .2s,box-shadow .2s; }
 	button:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 12px 30px rgba(0,0,0,.25); }
 	button:disabled { opacity:.6; cursor:wait; }
 	.arrow { font-size:1.25rem; }
 	.form-status { min-height:1.5rem; margin:.9rem 0 0; font-size:.82rem; line-height:1.5; }
 	.form-status.success { color:#a8cbb9; }
 	.form-status.failure { color:#d998a1; }
+	@media(prefers-color-scheme:light){
+		:global(body){
+			--contact-background:#fff;
+			--contact-surface:#f5f7fb;
+			--contact-surface-alt:#fff;
+			--contact-text:#1d2433;
+			--contact-heading:#0f1219;
+			--contact-muted:#60739f;
+			--contact-soft:#64708f;
+			--contact-label:#30394c;
+			--contact-input:#fff;
+			--contact-input-focus:#f8faff;
+			--contact-border:#e1e6ef;
+			--contact-input-border:#cfd6e3;
+			--contact-divider:#d7deea;
+			--contact-placeholder:#7a879f;
+			--contact-checkbox:#0f1219
+		}
+		.signal b{color:#47536c}
+		.hint{color:#687797}
+		.checkbox-label{color:#596780}
+		button{color:#fff;background:#0f1219;border-color:#30394c}
+	}
 	@media(max-width:900px){ .intro{grid-template-columns:1fr;gap:3.5rem}.signal{margin-top:3rem} }
-	@media(max-width:680px){ main{width:min(100% - 28px,680px);padding-top:3rem} form{padding:1.25rem;border-radius:22px}.field-grid,.field-grid.three{grid-template-columns:1fr}.signal{grid-template-columns:auto auto 1fr auto auto;}.signal i:last-of-type{display:none}.signal b:last-of-type{display:none} }
+	@media(max-width:680px){ main{width:min(100% - 28px,680px);padding-top:3rem} form{padding:1.25rem;border-radius:22px}.field-grid,.field-grid.three{grid-template-columns:1fr}.signal{grid-template-columns:auto auto 1fr auto auto}.signal i:last-of-type{display:none}.signal b:last-of-type{display:none} }
 	@media(prefers-reduced-motion:reduce){ input,textarea,select,button{transition:none} button:hover:not(:disabled){transform:none} }
 </style>
