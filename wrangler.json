@@ -7,6 +7,9 @@
 		"directory": "./dist",
 		"binding": "ASSETS"
 	},
+	"vars": {
+		"TURNSTILE_HOSTNAMES": "alienxsmarthome.com,www.alienxsmarthome.com"
+	},
 	"observability": {
 		"enabled": true
 	},
