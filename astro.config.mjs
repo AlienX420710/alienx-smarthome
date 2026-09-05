@@ -10,7 +10,7 @@ const experienceLifecyclePlugin = {
 	name: "alienx-experience-lifecycle",
 	enforce: "pre",
 	transform(code, id) {
-		if (!id.endsWith("/src/pages/experience.astro")) return;
+		if (!id.includes("/src/pages/experience.astro")) return;
 
 		const opening = "    <script>\n";
 		const closing = "\n    </script>";
