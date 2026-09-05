@@ -1,5 +1,7 @@
 # AlienX SmartHome
 
+![AlienX SmartHome](./public/alienx-social-preview.jpg)
+
 AlienX SmartHome is the public-facing technology site for AlienX — a modern web engineering and interactive technology project.
 
 The site started around smart-home technology and has evolved into a broader demonstration of what can be built with modern frontend, backend, automation, infrastructure, and browser engineering.
