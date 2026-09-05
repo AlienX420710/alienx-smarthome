@@ -17,7 +17,15 @@
 	--page-border: rgb(var(--gray-light));
 	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
 	--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%);
+	--page-gradient-x: 8%;
+	--page-gradient-color: rgba(37, 99, 235, .13);
 }
+
+html[data-alienx-page="home"] { --page-gradient-x: 8%; }
+html[data-alienx-page="work"] { --page-gradient-x: 28%; }
+html[data-alienx-page="experience"] { --page-gradient-x: 50%; }
+html[data-alienx-page="technology"] { --page-gradient-x: 72%; }
+html[data-alienx-page="about"] { --page-gradient-x: 92%; }
 
 @media (prefers-color-scheme: dark) {
 	:root {
@@ -35,6 +43,7 @@
 		--page-muted: rgb(var(--gray));
 		--page-border: rgb(var(--gray-light));
 		--gray-gradient: rgba(var(--gray-light), 50%), #14161e;
+		--page-gradient-color: rgba(111, 130, 255, .12);
 	}
 }
 
@@ -60,8 +69,11 @@ body {
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat var(--page-background);
-	background-size: 100% 600px;
+	background:
+		radial-gradient(circle at var(--page-gradient-x) 8%, var(--page-gradient-color), transparent 34rem),
+		linear-gradient(var(--gray-gradient)) no-repeat var(--page-background);
+	background-size: auto, 100% 600px;
+	background-attachment: scroll;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	color: var(--page-text);
