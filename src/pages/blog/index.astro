@@ -6,18 +6,14 @@ import { SITE_TITLE } from '../../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const title = `Journal — ${SITE_TITLE}`;
 const description = 'Notes on interactive web design, browser engineering, accessibility, performance, and the ideas behind AlienX SmartHome.';
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-	</head>
+	<head><BaseHead title={title} description={description} /></head>
 	<body>
 		<Header />
 		<main>
@@ -49,9 +45,9 @@ const description = 'Notes on interactive web design, browser engineering, acces
 <style>
 	:global(body){background:#05070c;color:#eef2ff}
 	main{width:min(1180px,calc(100% - 40px));max-width:none;padding:5rem 0 7rem}
-	.eyebrow{margin:0 0 1rem;color:#7784a6;font-size:.7rem;font-weight:700;letter-spacing:.22em}
+	.eyebrow{margin:0 0 1rem;color:#8f9ab2;font-size:.7rem;font-weight:700;letter-spacing:.22em}
 	h1{max-width:850px;color:#f6f8ff;font-size:clamp(3.2rem,7vw,6rem);letter-spacing:-.055em;line-height:.95}
-	.lede{max-width:700px;color:#98a4bd;font-size:1.15rem;line-height:1.65}
+	.lede{max-width:700px;color:#a5afc3;font-size:1.15rem;line-height:1.65}
 	ul{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:5rem 0 0;padding:0;list-style:none}
 	li{border:1px solid #192033;border-radius:24px;overflow:hidden;background:#090d16;transition:transform 180ms ease,border-color 180ms ease}
 	li:first-child{grid-column:span 2}
@@ -60,8 +56,8 @@ const description = 'Notes on interactive web design, browser engineering, acces
 	li img{display:block;width:100%;height:auto;aspect-ratio:2/1;object-fit:cover}
 	.title,.description,.date{margin-left:1.5rem;margin-right:1.5rem}
 	.title{margin-top:1.5rem;margin-bottom:.5rem;color:#f6f8ff;font-size:1.4rem}
-	.description{color:#8490aa;line-height:1.6}
-	.date{color:#63708f;font-size:.8rem}
+	.description{color:#9aa6bb;line-height:1.6}
+	.date{color:#8b97ad;font-size:.8rem}
 	.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 	@media(max-width:720px){main{width:min(100% - 28px,680px);padding-top:3rem}ul{grid-template-columns:1fr;margin-top:3rem}li:first-child{grid-column:auto}}
 	@media(prefers-reduced-motion:reduce){li{transition:none}}
