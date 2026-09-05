@@ -1,64 +1,140 @@
-# Astro Starter Kit: Blog
+# AlienX SmartHome
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/astro-blog-starter-template)
+AlienX SmartHome is the public-facing technology site for AlienX — a modern web engineering and interactive technology project.
 
-![Astro Template Preview](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+The site started around smart-home technology and has evolved into a broader demonstration of what can be built with modern frontend, backend, automation, infrastructure, and browser engineering.
 
-<!-- dash-content-start -->
+**Production:** https://alienxsmarthome.com
 
-Create a blog with Astro and deploy it on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
+## What AlienX demonstrates
 
-Features:
+- **Web development** — responsive websites and polished interfaces
+- **Web applications** — interactive, stateful browser experiences
+- **Automation & integrations** — connecting systems and reducing manual work
+- **Infrastructure** — deployment, networking, hosting, and operational tooling
+- **Smart technology** — connected technology and home-automation experimentation
+- **Interactive experiments** — browser-native interfaces designed to be explored rather than simply viewed
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-- ✅ Built-in Observability logging
+The website itself is the demonstration. It intentionally does not recreate a conventional smart-home dashboard or home-automation management interface.
 
-<!-- dash-content-end -->
+## Technology
 
-## Getting Started
+The project is built with:
 
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+- [Astro](https://astro.build/) — server-first web framework
+- TypeScript — application logic and type safety
+- CSS — responsive layout, visual effects, transitions, and interaction states
+- Cloudflare Workers — production deployment and server-side functionality
+- MDX — long-form content and technical stories
+- Resend — transactional inquiry email delivery
+- Cloudflare Turnstile — server-validated protection for the project inquiry form
 
-```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/astro-blog-starter-template
+## Architecture
+
+The project uses Astro's page and component model with focused browser-side JavaScript for interactions that benefit from client-side state.
+
+Server-side inquiry handling lives at `/api/inquiry` and includes validation, honeypot protection, Turnstile verification, and email delivery through Resend.
+
+Sensitive credentials are kept outside the repository as Cloudflare Worker secrets. They should never be committed to source control.
+
+## Project structure
+
+```text
+src/
+├── components/       Shared interface components
+├── content/blog/     Markdown and MDX content
+├── layouts/          Page and article layouts
+├── pages/            Routes and server endpoints
+├── styles/           Global styling and design tokens
+└── consts.ts         Site-wide metadata and content constants
+
+public/               Static assets and site metadata
+wrangler.json         Cloudflare Workers configuration
+astro.config.mjs      Astro configuration
+package.json          Dependencies and development commands
 ```
 
-A live public deployment of this template is available at [https://astro-blog-starter-template.templates.workers.dev](https://astro-blog-starter-template.templates.workers.dev)
+## Local development
 
-## 🚀 Project Structure
+Requirements:
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+- Node.js 22 or newer
+- npm
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Install dependencies:
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+```bash
+npm install
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+Start the Astro development server:
 
-## 🧞 Commands
+```bash
+npm run dev
+```
 
-All commands are run from the root of the project, from a terminal:
+Build the production site:
 
-| Command                           | Action                                           |
-| :-------------------------------- | :----------------------------------------------- |
-| `npm install`                     | Installs dependencies                            |
-| `npm run dev`                     | Starts local dev server at `localhost:4321`      |
-| `npm run build`                   | Build your production site to `./dist/`          |
-| `npm run preview`                 | Preview your build locally, before deploying     |
-| `npm run astro ...`               | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help`         | Get help using the Astro CLI                     |
-| `npm run build && npm run deploy` | Deploy your production site to Cloudflare        |
-| `npm wrangler tail`               | View real-time logs for all Workers              |
+```bash
+npm run build
+```
 
-## 👀 Want to learn more?
+Run the full project check:
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```bash
+npm run check
+```
 
-## Credit
+Preview the Cloudflare Workers build locally:
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+```bash
+npm run preview
+```
+
+Deploy to Cloudflare Workers:
+
+```bash
+npm run deploy
+```
+
+## Contact protection
+
+The project inquiry form uses Cloudflare Turnstile in addition to server-side validation and a honeypot field.
+
+The public Turnstile site key may be present in the frontend source. The corresponding secret must remain a Cloudflare Worker secret under the name:
+
+```text
+TURNSTILE_SECRET
+```
+
+The Worker also uses the `TURNSTILE_HOSTNAMES` environment variable to restrict successful verification to the site's approved production hostnames.
+
+## SEO and social metadata
+
+The site includes:
+
+- Canonical URLs
+- Open Graph metadata
+- Twitter/X large-image metadata
+- Structured data for the site and articles
+- XML sitemap support
+- `robots.txt`
+- A branded 1200×630 social preview image
+
+## Design direction
+
+AlienX uses a mixed visual system rather than a single-color interface:
+
+- **Blue** provides the primary interface and structural accent
+- **Green** identifies AlienX branding, active states, system/core visuals, and important calls to action
+- **Neutral dark and light surfaces** provide hierarchy and readable content
+
+The design favors interaction, motion, browser-native effects, and inspectable frontend techniques while retaining responsive and reduced-motion behavior.
+
+## Status
+
+This is an actively evolving project. Some work and portfolio content currently serves as demonstration material and will be replaced or expanded with real projects and technical stories over time.
+
+## License
+
+No open-source license is currently declared. Unless otherwise stated, the source and original project assets remain the property of AlienX.
