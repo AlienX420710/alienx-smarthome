@@ -19,6 +19,8 @@
 
 @media (prefers-color-scheme: dark) {
 	:root {
+		--accent: #9aa6ff;
+		--accent-dark: #c0c7ff;
 		--black: 234, 237, 243;
 		--gray: 150, 160, 180;
 		--gray-light: 45, 50, 65;
@@ -62,12 +64,7 @@ body {
 	font-size: 20px;
 	line-height: 1.7;
 }
-main {
-	width: min(1200px, calc(100% - 2em));
-	margin: auto;
-	padding: 3em 1em;
-}
-
+main { width: min(1200px, calc(100% - 2em)); margin: auto; padding: 3em 1em; }
 h1, h2, h3, h4, h5, h6 { margin: 0 0 0.5rem; color: var(--page-heading); line-height: 1.2; }
 h1 { font-size: 3.052em; }
 h2 { font-size: 2.441em; }
@@ -76,11 +73,8 @@ h4 { font-size: 1.563em; }
 h5 { font-size: 1.25em; }
 strong, b { font-weight: 700; }
 a { color: var(--accent); }
-a:hover { color: var(--accent); }
-a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
-	outline: 3px solid currentColor;
-	outline-offset: 3px;
-}
+a:hover { color: var(--accent-dark); }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
 button, input, textarea, select { font: inherit; }
 button { cursor: pointer; }
 p { margin-bottom: 1em; }
