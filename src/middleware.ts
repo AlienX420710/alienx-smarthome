@@ -83,7 +83,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // Remove the Turnstile token before handing the request to that handler.
   const sanitizedPayload = { ...payload, website: '' };
   const headers = new Headers(request.headers);
-  headers.set('content-length', String(new TextEncoder().encode(JSON.stringify(sanitizedPayload)).length));
 
   return next(
     new Request(request.url, {
