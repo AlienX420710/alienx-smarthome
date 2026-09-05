@@ -21,11 +21,21 @@
 	--page-gradient-color: rgba(37, 99, 235, .13);
 }
 
+@property --page-gradient-x {
+	syntax: '<percentage>';
+	inherits: true;
+	initial-value: 8%;
+}
+
 html[data-alienx-page="home"] { --page-gradient-x: 8%; }
 html[data-alienx-page="work"] { --page-gradient-x: 28%; }
 html[data-alienx-page="experience"] { --page-gradient-x: 50%; }
 html[data-alienx-page="technology"] { --page-gradient-x: 72%; }
 html[data-alienx-page="about"] { --page-gradient-x: 92%; }
+
+html {
+	transition: --page-gradient-x 700ms cubic-bezier(.22, .61, .36, 1);
+}
 
 @media (prefers-color-scheme: dark) {
 	:root {
@@ -106,6 +116,134 @@ blockquote { border-left: 4px solid var(--accent); padding: 0 0 0 20px; margin: 
 hr { border: none; border-top: 1px solid rgb(var(--gray-light)); }
 ::selection { background: rgb(var(--gray-dark)); color: rgb(var(--gray-light)); }
 
+/* Shared Technology visual language across the five primary pages. */
+html[data-alienx-page="home"] body,
+html[data-alienx-page="work"] body,
+html[data-alienx-page="experience"] body,
+html[data-alienx-page="technology"] body,
+html[data-alienx-page="about"] body {
+	background:
+		radial-gradient(circle at var(--page-gradient-x) 0, var(--page-gradient-color), transparent 34rem),
+		#05070c !important;
+	color: #e8edf7;
+}
+
+html[data-alienx-page="home"] h1,
+html[data-alienx-page="home"] h2,
+html[data-alienx-page="home"] h3,
+html[data-alienx-page="work"] h1,
+html[data-alienx-page="work"] h2,
+html[data-alienx-page="work"] h3,
+html[data-alienx-page="experience"] h1,
+html[data-alienx-page="experience"] h2,
+html[data-alienx-page="experience"] h3,
+html[data-alienx-page="technology"] h1,
+html[data-alienx-page="technology"] h2,
+html[data-alienx-page="technology"] h3,
+html[data-alienx-page="about"] h1,
+html[data-alienx-page="about"] h2,
+html[data-alienx-page="about"] h3 {
+	color: #f8faff;
+	letter-spacing: -.06em;
+}
+
+html[data-alienx-page="home"] .eyebrow,
+html[data-alienx-page="work"] .eyebrow,
+html[data-alienx-page="experience"] .eyebrow,
+html[data-alienx-page="technology"] .eyebrow,
+html[data-alienx-page="about"] .eyebrow {
+	color: #6f7b91;
+}
+
+html[data-alienx-page="home"] .hero__lede,
+html[data-alienx-page="work"] .lede,
+html[data-alienx-page="experience"] .lede,
+html[data-alienx-page="technology"] .lede,
+html[data-alienx-page="about"] .lede {
+	color: #9ca8bd;
+}
+
+html[data-alienx-page="work"] article,
+html[data-alienx-page="about"] article {
+	border-color: #1b2332;
+	background: linear-gradient(145deg, #090d16, #060910);
+}
+
+html[data-alienx-page="work"] .work-section,
+html[data-alienx-page="about"] .journey,
+html[data-alienx-page="about"] .story {
+	border-top-color: #1b2332;
+}
+
+html[data-alienx-page="work"] article:hover,
+html[data-alienx-page="about"] article:hover {
+	border-color: #2b374c;
+	background: linear-gradient(145deg, #0d1320, #070a11);
+}
+
+@media (prefers-color-scheme: light) {
+	html {
+		transition: --page-gradient-x 700ms cubic-bezier(.22, .61, .36, 1);
+	}
+
+	html[data-alienx-page="home"] body,
+	html[data-alienx-page="work"] body,
+	html[data-alienx-page="experience"] body,
+	html[data-alienx-page="technology"] body,
+	html[data-alienx-page="about"] body {
+		background:
+			radial-gradient(circle at var(--page-gradient-x) 0, rgba(83, 101, 219, .07), transparent 34rem),
+			#fff !important;
+		color: #253047;
+	}
+
+	html[data-alienx-page="home"] h1,
+	html[data-alienx-page="home"] h2,
+	html[data-alienx-page="home"] h3,
+	html[data-alienx-page="work"] h1,
+	html[data-alienx-page="work"] h2,
+	html[data-alienx-page="work"] h3,
+	html[data-alienx-page="experience"] h1,
+	html[data-alienx-page="experience"] h2,
+	html[data-alienx-page="experience"] h3,
+	html[data-alienx-page="technology"] h1,
+	html[data-alienx-page="technology"] h2,
+	html[data-alienx-page="technology"] h3,
+	html[data-alienx-page="about"] h1,
+	html[data-alienx-page="about"] h2,
+	html[data-alienx-page="about"] h3 {
+		color: #0d1420;
+	}
+
+	html[data-alienx-page="home"] .eyebrow,
+	html[data-alienx-page="work"] .eyebrow,
+	html[data-alienx-page="experience"] .eyebrow,
+	html[data-alienx-page="technology"] .eyebrow,
+	html[data-alienx-page="about"] .eyebrow {
+		color: #71809a;
+	}
+
+	html[data-alienx-page="home"] .hero__lede,
+	html[data-alienx-page="work"] .lede,
+	html[data-alienx-page="experience"] .lede,
+	html[data-alienx-page="technology"] .lede,
+	html[data-alienx-page="about"] .lede {
+		color: #61718c;
+	}
+
+	html[data-alienx-page="work"] article,
+	html[data-alienx-page="about"] article {
+		border-color: #dfe5ee;
+		background: linear-gradient(145deg, #f8fafc, #f1f4f8);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html { scroll-behavior: auto; transition: none; }
+	::view-transition-old(root),
+	::view-transition-new(root) { animation-duration: 1ms; }
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
 	animation-duration: 180ms;
@@ -123,11 +261,6 @@ hr { border: none; border-top: 1px solid rgb(var(--gray-light)); }
 	from { opacity: 0; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-	html { scroll-behavior: auto; }
-	::view-transition-old(root),
-	::view-transition-new(root) { animation-duration: 1ms; }
-}
 @media (max-width: 720px) {
 	body { font-size: 18px; }
 	main { width: calc(100% - 1em); padding: 1em 0.5em; }
