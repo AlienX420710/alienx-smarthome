@@ -96,15 +96,21 @@ hr { border: none; border-top: 1px solid rgb(var(--gray-light)); }
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-	animation-duration: 180ms;
-	animation-timing-function: ease-in-out;
+	animation-duration: 360ms;
+	animation-timing-function: cubic-bezier(.22, .61, .36, 1);
 }
 
 ::view-transition-old(root) { animation-name: alienx-page-out; }
 ::view-transition-new(root) { animation-name: alienx-page-in; }
 
-@keyframes alienx-page-out { to { opacity: 0; } }
-@keyframes alienx-page-in { from { opacity: 0; } }
+@keyframes alienx-page-out {
+	to { transform: translateX(-7%); opacity: .82; }
+}
+
+@keyframes alienx-page-in {
+	from { transform: translateX(7%); opacity: .82; }
+	to { transform: translateX(0); opacity: 1; }
+}
 
 @media (prefers-reduced-motion: reduce) {
 	html { scroll-behavior: auto; }
