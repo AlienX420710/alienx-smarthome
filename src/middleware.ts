@@ -1,5 +1,4 @@
 import { defineMiddleware } from 'astro:middleware';
-import { env } from 'cloudflare:workers';
 
 const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const EXPECTED_ACTION = 'contact';
@@ -20,6 +19,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
 
+  const { env } = await import('cloudflare:workers');
   const secret = (env as unknown as { TURNSTILE_SECRET?: string }).TURNSTILE_SECRET;
   const expectedHostnames = new Set(
     ((env as unknown as { TURNSTILE_HOSTNAMES?: string }).TURNSTILE_HOSTNAMES ?? '')
