@@ -26,10 +26,14 @@ import { SITE_TITLE } from '../consts';
 				</p>
 			</section>
 
-			<section class="projects" aria-labelledby="projects-title">
+			<section class="work-section" aria-labelledby="build-title">
 				<div class="section-heading">
-					<p class="eyebrow">SELECTED WORK</p>
-					<h2 id="projects-title">Build the idea. Then make it real.</h2>
+					<p class="eyebrow">WHAT ALIENX BUILDS</p>
+					<h2 id="build-title">From the interface to the infrastructure underneath it.</h2>
+					<p class="section-copy">
+						The work spans the layers that make a useful digital system possible. These are
+						the areas where real projects will be presented as they are completed.
+					</p>
 				</div>
 
 				<div class="grid">
@@ -66,13 +70,37 @@ import { SITE_TITLE } from '../consts';
 				</div>
 			</section>
 
+			<section class="work-section distinction" aria-labelledby="experience-title">
+				<div class="section-heading">
+					<p class="eyebrow">WHAT THIS WEBSITE DEMONSTRATES</p>
+					<h2 id="experience-title">The site is part of the portfolio.</h2>
+				</div>
+
+				<div class="principles">
+					<div>
+						<span>01</span>
+						<h3>Frontend engineering</h3>
+						<p>Responsive layouts, interaction, animation, accessibility, and browser-native behavior.</p>
+					</div>
+					<div>
+						<span>02</span>
+						<h3>Modern web architecture</h3>
+						<p>Server-first rendering, focused client-side JavaScript, and a deliberately small runtime footprint.</p>
+					</div>
+					<div>
+						<span>03</span>
+						<h3>Engineering discipline</h3>
+						<p>Performance, progressive enhancement, semantic HTML, and interfaces that remain usable without unnecessary complexity.</p>
+					</div>
+				</div>
+			</section>
+
 			<section class="note" aria-labelledby="note-title">
-				<p class="eyebrow">STARTING POINT</p>
-				<h2 id="note-title">More projects will live here.</h2>
+				<p class="eyebrow">THE PORTFOLIO GROWS WITH THE WORK</p>
+				<h2 id="note-title">Real builds will replace the placeholders.</h2>
 				<p>
-					The categories above define the direction. As projects are completed, this page
-					will become a collection of specific builds with the problem, approach, technology,
-					and result behind each one.
+					No invented client list. No fake case studies. As projects are completed, each one
+					can be documented here with the problem, approach, technology, and result.
 				</p>
 				<a class="button" href="/contact">Start a project <span aria-hidden="true">→</span></a>
 			</section>
@@ -88,18 +116,23 @@ import { SITE_TITLE } from '../consts';
 	h1,h2,h3 { color:#f6f8ff; letter-spacing:-.045em; line-height:1; }
 	h1 { max-width:900px; font-size:clamp(3.2rem,7vw,6.8rem); }
 	.lede { max-width:760px; margin-top:2rem; color:#98a4bd; font-size:1.2rem; line-height:1.7; }
-	.projects { margin-top:8rem; padding-top:5rem; border-top:1px solid #151b29; }
+	.work-section { margin-top:8rem; padding-top:5rem; border-top:1px solid #151b29; }
 	h2 { max-width:850px; font-size:clamp(2.5rem,5vw,4.5rem); }
+	.section-copy { max-width:700px; margin-top:1.5rem; color:#8490aa; line-height:1.7; }
 	.grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-top:3rem; }
 	article { min-height:240px; padding:2rem; border:1px solid #192033; border-radius:24px; background:linear-gradient(145deg,rgba(18,23,36,.9),rgba(8,11,18,.9)); transition:transform 180ms ease,border-color 180ms ease; }
 	article:hover { transform:translateY(-4px); border-color:#34405f; }
-	article span { color:#63708f; font-size:.68rem; font-weight:700; letter-spacing:.12em; }
+	article span,.principles span { color:#63708f; font-size:.68rem; font-weight:700; letter-spacing:.12em; }
 	article h3 { margin-top:3.5rem; font-size:1.5rem; }
-	article p,.note p { color:#8490aa; line-height:1.65; }
+	article p,.principles p,.note p { color:#8490aa; line-height:1.65; }
+	.distinction { margin-top:5rem; }
+	.principles { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; margin-top:3rem; }
+	.principles div { padding-top:1.5rem; border-top:1px solid #192033; }
+	.principles h3 { margin:.9rem 0 .75rem; font-size:1.25rem; }
 	.note { margin-top:6rem; padding:clamp(2rem,6vw,5rem); border:1px solid #192033; border-radius:32px; background:radial-gradient(circle at 50% 0%,rgba(105,119,255,.14),transparent 60%),#090d16; }
 	.note p { max-width:680px; margin:1.25rem 0 2rem; }
 	.button { display:inline-flex; align-items:center; gap:.55rem; min-height:48px; padding:0 1.25rem; border-radius:999px; color:#05070c; background:#eef2ff; font-size:.9rem; font-weight:700; text-decoration:none; transition:transform 180ms ease; }
 	.button:hover { transform:translateY(-2px); }
-	@media(max-width:800px){ main{width:min(100% - 28px,680px);padding-top:3rem}.projects{margin-top:5rem}.grid{grid-template-columns:1fr} }
+	@media(max-width:800px){ main{width:min(100% - 28px,680px);padding-top:3rem}.work-section{margin-top:5rem}.grid,.principles{grid-template-columns:1fr} }
 	@media(prefers-reduced-motion:reduce){article,.button{transition:none}article:hover,.button:hover{transform:none} }
 </style>
