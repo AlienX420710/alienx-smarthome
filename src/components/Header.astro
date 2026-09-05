@@ -33,7 +33,7 @@ import { SITE_TITLE } from '../consts';
 				<svg viewBox="0 0 24 24" aria-hidden="true">
 					<path d="M14 5h5v5" />
 					<path d="M10 14 19 5" />
-					<path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" />
+					<path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1 1h5" />
 				</svg>
 			</a>
 		</div>
@@ -58,7 +58,7 @@ nav {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.65rem;
-	color: inherit;
+	color: rgb(var(--black));
 	font-weight: 700;
 	text-decoration: none;
 	white-space: nowrap;
@@ -89,7 +89,7 @@ nav {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.35rem;
-	color: inherit;
+	color: rgb(var(--gray-dark));
 	font-size: 0.9rem;
 	text-decoration: none;
 	opacity: 0.75;
@@ -114,6 +114,17 @@ nav {
 	stroke-linejoin: round;
 }
 
+@media (max-width: 1100px) {
+	nav {
+		gap: 1rem;
+	}
+
+	.internal-links,
+	.external-links {
+		gap: 0.7rem;
+	}
+}
+
 @media (max-width: 900px) {
 	nav {
 		flex-wrap: wrap;
@@ -125,6 +136,7 @@ nav {
 		justify-content: center;
 		margin-left: 0;
 		flex-wrap: wrap;
+		padding-top: 0.25rem;
 	}
 
 	.external-links {
@@ -134,7 +146,20 @@ nav {
 
 @media (max-width: 600px) {
 	header {
-		padding-inline: 1rem;
+		padding: 1rem;
+	}
+
+	.title-link span {
+		font-size: 0.95rem;
+	}
+
+	.internal-links {
+		justify-content: flex-start;
+		gap: 0.45rem 0.85rem;
+	}
+
+	.internal-links :global(a) {
+		font-size: 0.9rem;
 	}
 
 	.external-links {
