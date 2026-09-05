@@ -22,6 +22,22 @@ const socialImage = new URL(image, Astro.site);
 
 <ClientRouter />
 
+<script is:inline>
+	const setAlienXPageGradient = () => {
+		const path = window.location.pathname.replace(/\/$/, '') || '/';
+		const page =
+			path === '/' ? 'home' :
+			path === '/work' ? 'work' :
+			path === '/experience' ? 'experience' :
+			path === '/technology' ? 'technology' :
+			path === '/about' ? 'about' : 'default';
+		document.documentElement.dataset.alienxPage = page;
+	};
+
+	setAlienXPageGradient();
+	document.addEventListener('astro:page-load', setAlienXPageGradient);
+</script>
+
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
