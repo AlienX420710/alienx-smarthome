@@ -98,10 +98,18 @@ const today = new Date();
 		font-size: 0.75rem;
 	}
 
+	@media (max-width: 900px) {
+		.footer-inner {
+			grid-template-columns: 1.25fr 1fr 1fr;
+			gap: 2rem;
+		}
+	}
+
 	@media (max-width: 720px) {
 		.footer-inner {
 			grid-template-columns: 1fr 1fr;
-			gap: 2rem;
+			gap: 2rem 1.5rem;
+			padding: 2.5rem 0.75rem;
 		}
 
 		.footer-brand {
@@ -110,6 +118,20 @@ const today = new Date();
 
 		.footer-bottom {
 			flex-direction: column;
+			padding-inline: 0.75rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.footer-inner {
+			grid-template-columns: 1fr;
+			gap: 1.75rem;
+		}
+
+		.footer-brand,
+		.footer-links,
+		.footer-external {
+			grid-column: auto;
 		}
 	}
 
