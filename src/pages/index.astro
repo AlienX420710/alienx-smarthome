@@ -23,7 +23,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				<a class="capability-card capability-card--large" href="/technology"><span class="capability-number">01</span><h3>Web development</h3><p>Websites and applications with thoughtful frontend, backend, performance, and accessibility engineering.</p><span class="card-arrow" aria-hidden="true">↗</span></a>
 				<a class="capability-card" href="/technology"><span class="capability-number">02</span><h3>Automation</h3><p>Connect services, APIs, workflows, and systems so repetitive work happens automatically.</p><span class="card-arrow" aria-hidden="true">↗</span></a>
 				<a class="capability-card" href="/technology"><span class="capability-number">03</span><h3>Infrastructure</h3><p>Servers, networking, deployment, self-hosting, and the systems underneath the interface.</p><span class="card-arrow" aria-hidden="true">↗</span></a>
-				<a class="capability-card capability-card--wide" href="/technology"><span class="capability-number">04</span><h3>Smart technology</h3><p>Home Assistant, connected devices, and automation remain part of the story that started AlienX—but they're one part of a much larger technical direction.</p><span class="card-arrow" aria-hidden="true">↗</span></a>
+				<a class="capability-card" href="/technology"><span class="capability-number">04</span><h3>Smart technology</h3><p>Home Assistant, connected devices, and automation remain part of the story that started AlienX—but they're one part of a much larger technical direction.</p><span class="card-arrow" aria-hidden="true">↗</span></a>
 			</div></section>
 
 			<section class="proof" aria-labelledby="proof-title"><div><p class="eyebrow">THE APPROACH</p><h2 id="proof-title">The website is part of the proof.</h2></div><div class="proof-copy"><p>AlienX isn't presented as a static brochure. The site itself demonstrates browser engineering, interaction design, performance, accessibility, and the ability to turn technical ideas into something people can experience.</p><a class="text-link" href="/experience">See what the browser can do <span aria-hidden="true">→</span></a></div></section>
@@ -72,7 +72,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	.capability-card { position:relative; min-height:250px; padding:2rem; border:1px solid #192033; border-radius:24px; background:linear-gradient(145deg,rgba(18,23,36,.9),rgba(8,11,18,.9)); text-decoration:none; transition:transform 200ms ease,border-color 200ms ease,background 200ms ease; }
 	.capability-card:hover { transform:translateY(-4px); border-color:#2d7040; background:linear-gradient(145deg,rgba(23,36,28,.95),rgba(8,11,18,.95)); }
 	.capability-card--large { min-height:310px; }
-	.capability-card--wide { grid-column:span 2; }
 	.capability-number { color:#8e9ab0; font-size:.72rem; letter-spacing:.15em; }
 	.capability-card h3 { margin-top:3.5rem; font-size:1.5rem; }
 	.capability-card p { max-width:600px; color:#a0abc0; font-size:.95rem; line-height:1.6; }
@@ -86,6 +85,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	.cta>p { margin:0 auto 2rem; }
 	@keyframes spin { to{transform:rotate(360deg)} } @keyframes spin-reverse { to{transform:rotate(-360deg)} } @keyframes drift { 0%,100%{transform:translate3d(0,0,0)} 50%{transform:translate3d(18px,-14px,0)} }
 	@media(prefers-reduced-motion:reduce){ .core-ring,.orb{animation:none}.button,.capability-card{transition:none} }
-	@media(max-width:800px){ main{width:min(100% - 28px,680px)}.hero{grid-template-columns:1fr;gap:2rem;padding-top:3rem}.hero__visual{min-height:400px}.capability-grid,.proof{grid-template-columns:1fr}.capability-card--wide{grid-column:auto}.proof{gap:2rem} }
+	@media(max-width:800px){ main{width:min(100% - 28px,680px)}.hero{grid-template-columns:1fr;gap:2rem;padding-top:3rem}.hero__visual{min-height:400px}.capability-grid,.proof{grid-template-columns:1fr}.proof{gap:2rem} }
 	@media(max-width:520px){ .system-core{width:190px;height:190px}.core-center{width:78px;height:78px}.panel-topline{flex-direction:column}.capability-card--large{min-height:250px} }
 </style>
