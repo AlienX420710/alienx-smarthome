@@ -2,8 +2,8 @@
 
 :root {
 	color-scheme: light dark;
-	--accent: #16a34a;
-	--accent-dark: #0f7a35;
+	--accent: #2563eb;
+	--accent-dark: #1d4ed8;
 	--black: 15, 18, 25;
 	--gray: 96, 115, 159;
 	--gray-light: 229, 233, 240;
@@ -19,8 +19,8 @@
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		--accent: #39ff5a;
-		--accent-dark: #9affaa;
+		--accent: #6f82ff;
+		--accent-dark: #a5b0ff;
 		--black: 234, 237, 243;
 		--gray: 150, 160, 180;
 		--gray-light: 45, 50, 65;
