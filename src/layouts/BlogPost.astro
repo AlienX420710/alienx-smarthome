@@ -59,10 +59,20 @@ const socialImage = heroImage ? new URL(heroImage, Astro.site) : new URL('/blog-
 </html>
 
 <style>
-	:global(body){background:#05070c;color:#eef2ff}
+	:global(body){
+		--post-background:#05070c;
+		--post-text:#c2cadb;
+		--post-heading:#f6f8ff;
+		--post-muted:#98a4bd;
+		--post-date:#7784a6;
+		--post-border:#192033;
+		background:var(--post-background);
+		color:var(--post-text)
+	}
 	main{width:min(1180px,calc(100% - 40px));max-width:none;padding:4rem 0 7rem}
 	.hero-image{width:100%}.hero-image img{display:block;width:100%;height:auto;margin:0 auto;border-radius:20px;box-shadow:var(--box-shadow)}
-	.prose{width:min(720px,calc(100% - 2em));margin:auto;padding:1em;color:#c2cadb;line-height:1.75}
-	.title{margin-bottom:3em;padding:2em 0;text-align:center;line-height:1}.title h1{margin:0 0 .6em;color:#f6f8ff;font-size:clamp(2.4rem,6vw,4.8rem);letter-spacing:-.045em}.date{margin-bottom:.75em;color:#7784a6}.last-updated-on{font-style:italic}.description{color:#98a4bd;line-height:1.6}hr{border:0;border-top:1px solid #192033}
+	.prose{width:min(720px,calc(100% - 2em));margin:auto;padding:1em;color:var(--post-text);line-height:1.75}
+	.title{margin-bottom:3em;padding:2em 0;text-align:center;line-height:1}.title h1{margin:0 0 .6em;color:var(--post-heading);font-size:clamp(2.4rem,6vw,4.8rem);letter-spacing:-.045em}.date{margin-bottom:.75em;color:var(--post-date)}.last-updated-on{font-style:italic}.description{color:var(--post-muted);line-height:1.6}hr{border:0;border-top:1px solid var(--post-border)}
+	@media(prefers-color-scheme:light){:global(body){--post-background:#fff;--post-text:#374151;--post-heading:#0f1219;--post-muted:#60739f;--post-date:#64708f;--post-border:#e1e6ef}}
 	@media(max-width:720px){main{width:min(100% - 28px);padding-top:2rem}.prose{width:100%;padding:.5em}}
 </style>
