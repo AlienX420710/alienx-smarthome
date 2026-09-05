@@ -6,6 +6,8 @@ interface Props {
 const { name = 'website' } = Astro.props;
 ---
 
+<div id="alienx-turnstile" data-sitekey="0x4AAAAAAEpKpAcymsk9J_-A"></div>
+
 <div class="honeypot" aria-hidden="true">
   <label for={`hp-${name}`}>Leave this field empty</label>
   <input
@@ -17,7 +19,39 @@ const { name = 'website' } = Astro.props;
   />
 </div>
 
+<script is:inline>
+  (() => {
+    const renderTurnstile = () => {
+      const container = document.querySelector('#alienx-turnstile');
+      if (!container || !window.turnstile) return;
+
+      container.innerHTML = '';
+      window.turnstile.render(container, {
+        sitekey: container.dataset.sitekey,
+        action: 'contact',
+        theme: 'auto',
+        size: 'flexible',
+        'response-field-name': 'website',
+      });
+    };
+
+    if (!window.__alienxTurnstileBound) {
+      window.__alienxTurnstileBound = true;
+      window.alienxTurnstileLoad = renderTurnstile;
+      document.addEventListener('astro:page-load', renderTurnstile);
+    }
+
+    renderTurnstile();
+  })();
+</script>
+
+<script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=alienxTurnstileLoad"></script>
+
 <style>
+  #alienx-turnstile {
+    margin: 0 0 1.25rem;
+  }
+
   .honeypot {
     position: absolute;
     width: 1px;
