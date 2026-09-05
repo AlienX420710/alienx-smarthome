@@ -4,6 +4,8 @@
 	color-scheme: light dark;
 	--accent: #2563eb;
 	--accent-dark: #1d4ed8;
+	--brand-green: #39ff5a;
+	--brand-green-dark: #16803b;
 	--black: 15, 18, 25;
 	--gray: 96, 115, 159;
 	--gray-light: 229, 233, 240;
@@ -21,6 +23,8 @@
 	:root {
 		--accent: #6f82ff;
 		--accent-dark: #a5b0ff;
+		--brand-green: #39ff5a;
+		--brand-green-dark: #16803b;
 		--black: 234, 237, 243;
 		--gray: 150, 160, 180;
 		--gray-light: 45, 50, 65;
