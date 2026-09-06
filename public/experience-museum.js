@@ -67,7 +67,7 @@
     style.textContent = `
       #alienx-new-exhibits { display:grid; gap:1.5rem; margin-top:1.5rem; }
       .alienx-exhibit { overflow:hidden; }
-      .alienx-light-stage,.alienx-spatial-stage,.alienx-signal-stage { position:relative; min-height:280px; margin-top:1.5rem; overflow:hidden; border:1px solid rgba(110,150,210,.28); border-radius:18px; background:radial-gradient(circle at 50% 50%,rgba(30,55,95,.28),rgba(4,7,13,.96) 70%); }
+      .alienx-light-stage,.alienx-spatial-stage,.alienx-signal-stage { position:relative; min-height:280px; margin-top:1.5rem; overflow:hidden; border:1px solid rgba(110,150,210,.28); border-radius:18px; background:radial-gradient(circle at 50% 50%,rgba(30,55,95,.28),rgba(4,7,13,.96) 70%); touch-action:none; }
       .alienx-light-stage canvas,.alienx-signal-stage canvas { display:block; width:100%; height:280px; touch-action:none; }
       .alienx-light-readout,.alienx-space-readout,.alienx-signal-stage > span { position:absolute; left:1rem; bottom:1rem; font:600 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.16em; color:rgba(180,205,235,.72); pointer-events:none; }
       .alienx-spatial-stage { perspective:900px; display:grid; place-items:center; background:radial-gradient(circle at 50% 50%,rgba(44,73,122,.24),rgba(3,6,12,.98) 72%); }
@@ -85,6 +85,7 @@
       .alienx-signal-stage { margin-top:0; min-height:330px; }
       .alienx-signal-stage canvas { height:330px; }
       .alienx-signal-stage.is-active { border-color:rgba(57,255,90,.5); box-shadow:0 0 35px rgba(57,255,90,.08) inset; }
+      #pointer-field .pointer-lab,#pointer-field .pointer-lab canvas,#physics .physics-stage,#physics .physics-stage canvas,#kinetic-type .type-stage,#kinetic-type [data-kinetic] { touch-action:none; }
       @media (max-width:800px) { .alienx-exhibit-pair { display:grid; } .alienx-signal-stage,.alienx-signal-stage canvas { min-height:260px; height:260px; } }
       @media (prefers-reduced-motion:reduce) { .alienx-space { transition:none; } }
     `;
