@@ -2,93 +2,52 @@ import { defineMiddleware } from 'astro:middleware';
 
 const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const EXPECTED_ACTION = 'contact';
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT = 8;
+const attempts = new Map<string, number[]>();
 
-const json = (body: Record<string, unknown>, status = 403) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'no-store',
-    },
-  });
+const json = (body: Record<string, unknown>, status = 403, requestId?: string) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', ...(requestId ? { 'X-Request-ID': requestId } : {}) } });
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { request } = context;
-
-  if (request.method !== 'POST' || new URL(request.url).pathname !== '/api/inquiry') {
-    return next();
+  if (request.method !== 'POST' || new URL(request.url).pathname !== '/api/inquiry') return next();
+  const requestId = `AX-${crypto.randomUUID().replaceAll('-', '').slice(0, 12).toUpperCase()}`;
+  const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
+  const now = Date.now();
+  const recent = (attempts.get(ip) ?? []).filter((time) => now - time < RATE_WINDOW_MS);
+  if (recent.length >= RATE_LIMIT) {
+    return json({ error: 'Too many inquiries. Please try again later.', requestId }, 429, requestId);
   }
+  recent.push(now);
+  attempts.set(ip, recent);
 
   const { env } = await import('cloudflare:workers');
-  const secret = (env as unknown as { TURNSTILE_SECRET?: string }).TURNSTILE_SECRET;
-  const expectedHostnames = new Set(
-    ((env as unknown as { TURNSTILE_HOSTNAMES?: string }).TURNSTILE_HOSTNAMES ?? '')
-      .split(',')
-      .map((hostname) => hostname.trim())
-      .filter(Boolean),
-  );
-
+  const bindings = env as unknown as { TURNSTILE_SECRET?: string; TURNSTILE_HOSTNAMES?: string };
+  const secret = bindings.TURNSTILE_SECRET;
+  const expectedHostnames = new Set((bindings.TURNSTILE_HOSTNAMES ?? '').split(',').map((hostname) => hostname.trim()).filter(Boolean));
   if (!secret || expectedHostnames.size === 0) {
-    console.error('Turnstile is not configured.');
-    return json({ error: 'Security verification is not configured.' }, 503);
+    console.error('Turnstile is not configured.', { requestId });
+    return json({ error: 'Security verification is not configured.', requestId }, 503, requestId);
   }
 
   let payload: Record<string, unknown>;
-  try {
-    payload = (await request.clone().json()) as Record<string, unknown>;
-  } catch {
-    return json({ error: 'Invalid request.' }, 400);
-  }
-
-  const token = typeof payload.website === 'string' ? payload.website.trim() : '';
-  if (!token || token.length > 2048) {
-    return json({ error: 'Please complete the security verification.' });
-  }
-
-  let result: {
-    success?: boolean;
-    action?: string;
-    hostname?: string;
-  };
+  try { payload = (await request.clone().json()) as Record<string, unknown>; } catch { return json({ error: 'Invalid request.', requestId }, 400, requestId); }
+  const token = typeof payload.turnstileToken === 'string' ? payload.turnstileToken.trim() : '';
+  if (!token || token.length > 2048) return json({ error: 'Please complete the security verification.', requestId }, 403, requestId);
 
   try {
-    const response = await fetch(SITEVERIFY_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        secret,
-        response: token,
-        remoteip: request.headers.get('CF-Connecting-IP') ?? '',
-      }),
-      signal: AbortSignal.timeout(10_000),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Turnstile Siteverify returned ${response.status}.`);
-    }
-
-    result = (await response.json()) as typeof result;
+    const response = await fetch(SITEVERIFY_URL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ secret, response: token, remoteip: ip }), signal: AbortSignal.timeout(10_000) });
+    if (!response.ok) throw new Error(`Turnstile Siteverify returned ${response.status}.`);
+    const result = (await response.json()) as { success?: boolean; action?: string; hostname?: string };
+    if (!result.success || result.action !== EXPECTED_ACTION || !result.hostname || !expectedHostnames.has(result.hostname)) return json({ error: 'Security verification failed. Please try again.', requestId }, 403, requestId);
   } catch (error) {
-    console.error('Turnstile validation failed:', error instanceof Error ? error.message : 'Unknown error');
-    return json({ error: 'Security verification could not be completed.' }, 403);
+    console.error('Turnstile validation failed:', error instanceof Error ? error.message : 'Unknown error', { requestId });
+    return json({ error: 'Security verification could not be completed.', requestId }, 403, requestId);
   }
 
-  if (!result.success || result.action !== EXPECTED_ACTION || !result.hostname || !expectedHostnames.has(result.hostname)) {
-    return json({ error: 'Security verification failed. Please try again.' }, 403);
-  }
-
-  // The existing inquiry endpoint uses `website` as its honeypot field.
-  // Remove the Turnstile token before handing the request to that handler.
-  const sanitizedPayload = { ...payload, website: '' };
+  const sanitizedPayload = { ...payload, turnstileToken: undefined };
   const headers = new Headers(request.headers);
-
-  return next(
-    new Request(request.url, {
-      method: request.method,
-      headers,
-      body: JSON.stringify(sanitizedPayload),
-    }),
-  );
+  headers.set('X-Request-ID', requestId);
+  headers.set('Content-Type', 'application/json');
+  return next(new Request(request.url, { method: request.method, headers, body: JSON.stringify(sanitizedPayload) }));
 });
