@@ -1,0 +1,14 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CommandPalette from '../components/CommandPalette.astro';
+---
+<!doctype html><html lang="en"><head><BaseHead title="System Status — AlienX SmartHome" description="Live operational status for AlienX SmartHome." /></head><body><Header /><main><p class="eyebrow">ALIENX // SYSTEM STATUS</p><h1>Infrastructure, visible.</h1><p class="lede">Live health information from the production Worker.</p><div class="badge" id="overall">CHECKING SYSTEM</div><section class="grid" id="checks" aria-live="polite"></section><p class="meta" id="updated">Awaiting response</p></main><CommandPalette /><Footer /></body></html>
+<script>
+const checks=document.querySelector('#checks'),overall=document.querySelector('#overall'),updated=document.querySelector('#updated');
+const refresh=async()=>{try{const r=await fetch('/api/status',{cache:'no-store'}),d=await r.json();const labels=[['WORKER','worker'],['INQUIRY API','inquiry'],['TURNSTILE','turnstile'],['RESEND','resend']];checks.innerHTML=labels.map(([l,k])=>{const c=d.checks[k];return `<article class="${c.status}"><b>${l}</b><strong>${c.status.toUpperCase()}</strong><small>${c.detail}</small></article>`}).join('');overall.className='badge '+d.status;overall.textContent=d.status==='operational'?'ALL SYSTEMS OPERATIONAL':'SYSTEM DEGRADED';updated.textContent='Last checked '+new Date(d.generatedAt).toLocaleTimeString()}catch{overall.className='badge degraded';overall.textContent='STATUS UNAVAILABLE';updated.textContent='Unable to reach status endpoint'}};refresh();setInterval(refresh,30000);
+</script>
+<style>
+main{width:min(1100px,calc(100% - 40px));margin:auto;padding:5rem 0 7rem}.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.22em;color:#8e9ab0}h1{font-size:clamp(3rem,7vw,6rem);letter-spacing:-.055em;line-height:.92;margin:1rem 0}.lede{color:#9ca7bc;font-size:1.1rem}.badge{display:inline-block;margin-top:1.5rem;padding:.65rem .9rem;border:1px solid #26314a;border-radius:999px;font-size:.7rem;font-weight:700;letter-spacing:.12em}.badge.operational{border-color:#285a36;color:var(--brand-green)}.badge.degraded{border-color:#66502d;color:#d9a34e}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:4rem}.grid article{display:grid;gap:.55rem;padding:1.5rem;border:1px solid #192033;border-radius:18px;background:#0a0f19}.grid b{font-size:.7rem;letter-spacing:.16em;color:#8e9ab0}.grid strong{font-size:1.1rem}.grid small,.meta{color:#7f8aa0}.grid .operational,.grid .configured{border-color:#285a36}.grid .operational strong,.grid .configured strong{color:var(--brand-green)}.grid .degraded{border-color:#66502d}.grid .degraded strong{color:#d9a34e}.meta{margin-top:1rem;font-size:.78rem}@media(max-width:650px){main{width:min(100% - 28px,680px)}.grid{grid-template-columns:1fr}}
+</style>
