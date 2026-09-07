@@ -30,7 +30,10 @@ const socialImage = new URL(image, Astro.site);
 			path === '/work' ? 'work' :
 			path === '/experience' ? 'experience' :
 			path === '/technology' ? 'technology' :
-			path === '/about' ? 'about' : 'default';
+			path === '/about' ? 'about' :
+			path === '/status' ? 'status' :
+			path === '/contact' ? 'contact' :
+			path === '/contact/success' ? 'contact-success' : 'default';
 		document.documentElement.dataset.alienxPage = page;
 	};
 
