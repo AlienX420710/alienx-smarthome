@@ -41,6 +41,44 @@ const socialImage = new URL(image, Astro.site);
 	document.addEventListener('astro:page-load', setAlienXPageGradient);
 </script>
 
+<style is:global>
+	html[data-alienx-page="status"] body,
+	html[data-alienx-page="contact"] body,
+	html[data-alienx-page="contact-success"] body {
+		background:
+			radial-gradient(circle at var(--page-gradient-x) 0, var(--page-gradient-color), transparent 34rem),
+			#05070c !important;
+	}
+
+	html[data-alienx-page="contact"] .copy {
+		position: relative;
+		isolation: isolate;
+	}
+
+	html[data-alienx-page="contact"] .copy::before {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		width: 42rem;
+		height: 30rem;
+		left: -12rem;
+		top: -10rem;
+		pointer-events: none;
+		background: radial-gradient(circle, var(--page-gradient-color), transparent 68%);
+		filter: blur(18px);
+	}
+
+	@media (prefers-color-scheme: light) {
+		html[data-alienx-page="status"] body,
+		html[data-alienx-page="contact"] body,
+		html[data-alienx-page="contact-success"] body {
+			background:
+				radial-gradient(circle at var(--page-gradient-x) 0, rgba(83, 101, 219, .07), transparent 34rem),
+				#fff !important;
+		}
+	}
+</style>
+
 <script is:inline src="/experience-museum.js"></script>
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
