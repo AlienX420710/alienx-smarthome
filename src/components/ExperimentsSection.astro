@@ -7,7 +7,6 @@
 > runtime: browser
 > modules: dom / css / events
 > ready_</pre><form id="experiment-console-form"><span>$</span><input id="experiment-console-input" aria-label="Console command" autocomplete="off" spellcheck="false" placeholder="type help" /></form></article>
-    <article class="play"><div class="play__header"><span>DOM FIELD</span><span id="experiment-coords">X 000 · Y 000</span></div><div id="experiment-field"><div id="experiment-target">X</div></div><p>Move your pointer through the field. The core responds to the browser's live pointer coordinates.</p></article>
   </section>
   <section class="cards">
     <article><span>01</span><h3>DOM / Geometry</h3><p>Measure elements, map coordinates, and turn layout data into interaction.</p></article>
@@ -17,20 +16,9 @@
 </section>
 
 <script data-astro-rerun>
-  const experimentField = document.querySelector('#experiment-field');
-  const experimentTarget = document.querySelector('#experiment-target');
-  const experimentCoords = document.querySelector('#experiment-coords');
   const experimentForm = document.querySelector('#experiment-console-form');
   const experimentInput = document.querySelector('#experiment-console-input');
   const experimentOutput = document.querySelector('#experiment-output');
-
-  experimentField?.addEventListener('pointermove', event => {
-    const rect = experimentField.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    if (experimentTarget instanceof HTMLElement) experimentTarget.style.transform = `translate(${x - 25}px,${y - 25}px)`;
-    if (experimentCoords) experimentCoords.textContent = `X ${String(Math.round(x)).padStart(3, '0')} · Y ${String(Math.round(y)).padStart(3, '0')}`;
-  });
 
   experimentForm?.addEventListener('submit', event => {
     event.preventDefault();
@@ -52,20 +40,16 @@
   .experiments{margin-top:120px;padding:80px 0 120px;border-top:1px solid var(--museum-border)}
   .experiments h2{max-width:900px;margin:0;color:var(--museum-heading);font-size:clamp(2.8rem,5.5vw,5.4rem);letter-spacing:-.065em;line-height:.9}
   .experiments .lede{max-width:720px;color:var(--museum-muted);font-size:1.1rem;line-height:1.6;margin:25px 0 0}
-  .experiments .lab{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:55px}
-  .experiments .console,.experiments .play,.experiments .cards article{border:1px solid var(--museum-border);border-radius:20px;background:var(--museum-surface);overflow:hidden}
-  .experiments .bar,.experiments .play__header{display:flex;justify-content:space-between;padding:.9rem 1rem;border-bottom:1px solid var(--museum-border);font-size:.65rem;letter-spacing:.15em;color:var(--museum-soft)}
+  .experiments .lab{display:grid;grid-template-columns:1fr;gap:16px;margin-top:55px}
+  .experiments .console,.experiments .cards article{border:1px solid var(--museum-border);border-radius:20px;background:var(--museum-surface);overflow:hidden}
+  .experiments .bar{display:flex;justify-content:space-between;padding:.9rem 1rem;border-bottom:1px solid var(--museum-border);font-size:.65rem;letter-spacing:.15em;color:var(--museum-soft)}
   .experiments .console pre{height:260px;overflow:auto;margin:0;padding:1rem;font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--museum-muted);white-space:pre-wrap}
   .experiments .console form{display:flex;gap:.5rem;padding:.9rem 1rem;border-top:1px solid var(--museum-border);font:13px ui-monospace,SFMono-Regular,Menlo,monospace}
   .experiments .console input{min-width:0;flex:1;border:0;outline:0;background:transparent;color:var(--museum-text);font:inherit}
-  .experiments .play #experiment-field{position:relative;height:300px;overflow:hidden;background:radial-gradient(circle at 50% 50%,rgba(57,255,90,.12),transparent 25%),linear-gradient(135deg,#080c14,#0d1420)}
-  .experiments #experiment-target{position:absolute;left:0;top:0;width:50px;height:50px;display:grid;place-items:center;border:1px solid rgba(57,255,90,.7);border-radius:50%;color:#dfffe5;background:rgba(57,255,90,.1);box-shadow:0 0 35px rgba(57,255,90,.2);pointer-events:none}
-  .experiments .play p{padding:0 1rem 1rem;color:var(--museum-soft);font-size:.85rem}
   .experiments .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
   .experiments .cards article{padding:1.5rem}
   .experiments .cards span{color:var(--museum-soft);font-size:.7rem}
   .experiments .cards h3{font-size:1.3rem;margin:2rem 0 0;color:var(--museum-heading)}
   .experiments .cards p{color:var(--museum-soft);line-height:1.6}
-  @media(max-width:750px){.experiments .lab,.experiments .cards{grid-template-columns:1fr}}
-  @media(prefers-color-scheme:light){.experiments .play #experiment-field{background:radial-gradient(circle at 50% 50%,rgba(57,255,90,.08),transparent 25%),linear-gradient(135deg,#eef2f7,#f7f9fb)}}
+  @media(max-width:750px){.experiments .cards{grid-template-columns:1fr}}
 </style>
