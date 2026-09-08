@@ -1,23 +1,44 @@
 name: AlienX Quality
+
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   quality:
+    name: Build, type check, audit
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
-      - name: Install
+
+      - name: Install dependencies
         run: npm ci
-      - name: Build and type check
-        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Cloudflare deploy dry run
+        run: npx wrangler deploy --dry-run
+
       - name: Dependency audit
         run: npm audit --audit-level=high
