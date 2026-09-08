@@ -1,6 +1,8 @@
 {
+  "id": "/",
   "name": "AlienX SmartHome",
   "short_name": "AlienX",
+  "lang": "en-US",
   "description": "Modern web engineering, automation, infrastructure, and interactive technology experiences by AlienX.",
   "start_url": "/",
   "scope": "/",
