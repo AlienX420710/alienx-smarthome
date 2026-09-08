@@ -1,0 +1,74 @@
+name: AlienX Production Smoke
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check production hosts
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          check_html() {
+            local url="$1"
+            local body_file="$(mktemp)"
+            local headers_file="$(mktemp)"
+
+            echo "Checking $url"
+            curl --fail --silent --show-error --location \
+              --connect-timeout 10 --max-time 30 \
+              --dump-header "$headers_file" \
+              --output "$body_file" \
+              "$url"
+
+            grep -qi '^content-type:.*text/html' "$headers_file" || {
+              echo "Expected HTML content type from $url"
+              cat "$headers_file"
+              exit 1
+            }
+
+            grep -q 'AlienX SmartHome' "$body_file" || {
+              echo "Expected AlienX marker missing from $url"
+              head -c 1000 "$body_file"
+              exit 1
+            }
+
+            if grep -q '\[object Object\]' "$body_file"; then
+              echo "Production returned [object Object] from $url"
+              exit 1
+            fi
+          }
+
+          check_html "https://alienxsmarthome.com/"
+          check_html "https://www.alienxsmarthome.com/"
+
+      - name: Check public status endpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          body="$(curl --fail --silent --show-error --connect-timeout 10 --max-time 30 https://www.alienxsmarthome.com/api/status)"
+          printf '%s' "$body" | node -e '
+            let data = "";
+            process.stdin.on("data", chunk => data += chunk);
+            process.stdin.on("end", () => {
+              const value = JSON.parse(data);
+              if (typeof value.ok !== "boolean" || typeof value.status !== "string" || !value.checks || !value.runtime) {
+                throw new Error("Unexpected status payload");
+              }
+              if (value.runtime !== "Cloudflare Workers") {
+                throw new Error(`Unexpected runtime: ${value.runtime}`);
+              }
+              console.log(`Status endpoint: ${value.status}`);
+            });
+          '
