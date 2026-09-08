@@ -11,8 +11,8 @@ export const GET: APIRoute = async ({ request }) => {
   const checks = {
     worker: { status: 'operational', detail: 'Cloudflare Worker responding' },
     inquiry: { status: 'operational', detail: 'Inquiry endpoint available' },
-    turnstile: { status: bindings.TURNSTILE_SECRET && bindings.TURNSTILE_HOSTNAMES ? 'configured' : 'degraded', detail: bindings.TURNSTILE_SECRET && bindings.TURNSTILE_HOSTNAMES ? 'Turnstile protection configured' : 'Turnstile configuration incomplete' },
-    resend: { status: bindings.RESEND_API_KEY ? 'configured' : 'degraded', detail: bindings.RESEND_API_KEY ? 'Resend API configured' : 'Resend API key missing' },
+    protection: { status: bindings.TURNSTILE_SECRET && bindings.TURNSTILE_HOSTNAMES ? 'operational' : 'degraded', detail: bindings.TURNSTILE_SECRET && bindings.TURNSTILE_HOSTNAMES ? 'Security protection active' : 'Security protection unavailable' },
+    delivery: { status: bindings.RESEND_API_KEY ? 'operational' : 'degraded', detail: bindings.RESEND_API_KEY ? 'Email delivery available' : 'Email delivery unavailable' },
   };
   const degraded = Object.values(checks).some((check) => check.status === 'degraded');
   return json({ ok: !degraded, status: degraded ? 'degraded' : 'operational', generatedAt: new Date().toISOString(), requestId: request.headers.get('cf-ray') ?? crypto.randomUUID(), checks, runtime: 'Cloudflare Workers' });
