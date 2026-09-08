@@ -9,7 +9,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<script type="application/ld+json" set:html={JSON.stringify({'@context':'https://schema.org','@type':'WebSite',name:SITE_TITLE,url:'https://alienxsmarthome.com/',description:SITE_DESCRIPTION,publisher:{'@type':'Organization',name:SITE_TITLE,url:'https://alienxsmarthome.com/'}})} />
 	</head>
 	<body>
 		<Header />
