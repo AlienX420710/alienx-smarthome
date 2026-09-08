@@ -25,5 +25,8 @@
     "dev": "astro dev",
     "preview": "astro build && wrangler dev"
   },
+  "overrides": {
+    "sharp": "0.35.4"
+  },
   "type": "module"
 }
