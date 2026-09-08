@@ -4,6 +4,7 @@ const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverif
 const EXPECTED_ACTION = 'contact';
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT = 8;
+const MAX_TRACKED_IPS = 5000;
 const attempts = new Map<string, number[]>();
 
 const securityHeaders = {
@@ -30,13 +31,23 @@ const json = (body: Record<string, unknown>, status = 403, requestId?: string) =
 		},
 	}));
 
+const pruneAttempts = (now: number) => {
+	for (const [ip, timestamps] of attempts) {
+		const recent = timestamps.filter((timestamp) => now - timestamp < RATE_WINDOW_MS);
+		if (recent.length === 0) attempts.delete(ip);
+		else attempts.set(ip, recent);
+	}
+};
+
 export const onRequest = defineMiddleware(async ({ request }, next) => {
 	if (request.method !== 'POST' || new URL(request.url).pathname !== '/api/inquiry') return secure(await next());
 
 	const requestId = `AX-${crypto.randomUUID().replaceAll('-', '').slice(0, 12).toUpperCase()}`;
 	const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
 	const now = Date.now();
-	const recent = (attempts.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+	const recent = (attempts.get(ip) ?? []).filter((timestamp) => now - timestamp < RATE_WINDOW_MS);
+
+	if (attempts.size > MAX_TRACKED_IPS) pruneAttempts(now);
 	if (recent.length >= RATE_LIMIT) return json({ error: 'Too many inquiries. Please try again later.', requestId }, 429, requestId);
 	recent.push(now);
 	attempts.set(ip, recent);
