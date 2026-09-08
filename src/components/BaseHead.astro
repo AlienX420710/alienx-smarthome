@@ -46,8 +46,8 @@ const structuredData = {
 			path === '/work' ? 'work' :
 			path === '/experience' ? 'experience' :
 			path === '/technology' ? 'technology' :
-			path === '/about' ? 'about' :
 			path === '/status' ? 'status' :
+			path === '/about' ? 'about' :
 			path === '/contact' ? 'contact' :
 			path === '/contact/success' ? 'contact-success' : 'default';
 		document.documentElement.dataset.alienxPage = page;
@@ -62,26 +62,8 @@ const structuredData = {
 	html[data-alienx-page="contact"] body,
 	html[data-alienx-page="contact-success"] body {
 		background:
-			radial-gradient(circle at var(--page-gradient-x) 0, var(--page-gradient-color), transparent 34rem),
+			radial-gradient(circle at var(--page-gradient-x) 8%, var(--page-gradient-color), transparent 34rem),
 			#05070c !important;
-	}
-
-	html[data-alienx-page="contact"] .copy {
-		position: relative;
-		isolation: isolate;
-	}
-
-	html[data-alienx-page="contact"] .copy::before {
-		content: '';
-		position: absolute;
-		z-index: -1;
-		width: 42rem;
-		height: 30rem;
-		left: -12rem;
-		top: -10rem;
-		pointer-events: none;
-		background: radial-gradient(circle, var(--page-gradient-color), transparent 68%);
-		filter: blur(18px);
 	}
 
 	@media (prefers-color-scheme: light) {
@@ -89,7 +71,7 @@ const structuredData = {
 		html[data-alienx-page="contact"] body,
 		html[data-alienx-page="contact-success"] body {
 			background:
-				radial-gradient(circle at var(--page-gradient-x) 0, rgba(83, 101, 219, .07), transparent 34rem),
+				radial-gradient(circle at var(--page-gradient-x) 8%, rgba(83, 101, 219, .07), transparent 34rem),
 				#fff !important;
 		}
 	}
