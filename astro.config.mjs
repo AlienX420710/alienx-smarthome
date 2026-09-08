@@ -9,9 +9,5 @@ import cloudflare from "@astrojs/cloudflare";
 export default defineConfig({
 	site: "https://alienxsmarthome.com",
 	integrations: [sitemap(), icon()],
-	adapter: cloudflare({
-		platformProxy: {
-			enabled: true,
-		},
-	}),
+	adapter: cloudflare(),
 });
