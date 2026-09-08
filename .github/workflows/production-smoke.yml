@@ -14,6 +14,11 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
       - name: Check production hosts
         shell: bash
         run: |
@@ -21,32 +26,52 @@ jobs:
 
           check_html() {
             local url="$1"
-            local body_file="$(mktemp)"
-            local headers_file="$(mktemp)"
+            local body_file
+            local headers_file
+            body_file="$(mktemp)"
+            headers_file="$(mktemp)"
+
+            trap 'rm -f "$body_file" "$headers_file"' RETURN
 
             echo "Checking $url"
-            curl --fail --silent --show-error --location \
+
+            if ! curl --fail --silent --show-error --location \
               --connect-timeout 10 --max-time 30 \
+              --retry 3 --retry-delay 2 --retry-connrefused \
               --dump-header "$headers_file" \
               --output "$body_file" \
-              "$url"
+              "$url"; then
+              echo "Request failed for $url"
+              echo "Response headers:"
+              cat "$headers_file" 2>/dev/null || true
+              echo "Response body (first 2000 bytes):"
+              head -c 2000 "$body_file" 2>/dev/null || true
+              exit 1
+            fi
 
             grep -qi '^content-type:.*text/html' "$headers_file" || {
               echo "Expected HTML content type from $url"
               cat "$headers_file"
+              echo "Response body (first 2000 bytes):"
+              head -c 2000 "$body_file"
               exit 1
             }
 
             grep -q 'AlienX SmartHome' "$body_file" || {
               echo "Expected AlienX marker missing from $url"
-              head -c 1000 "$body_file"
+              echo "Response body (first 2000 bytes):"
+              head -c 2000 "$body_file"
               exit 1
             }
 
             if grep -q '\[object Object\]' "$body_file"; then
               echo "Production returned [object Object] from $url"
+              echo "Response body (first 2000 bytes):"
+              head -c 2000 "$body_file"
               exit 1
             fi
+
+            echo "PASS: $url"
           }
 
           check_html "https://alienxsmarthome.com/"
@@ -57,18 +82,42 @@ jobs:
         run: |
           set -euo pipefail
 
-          body="$(curl --fail --silent --show-error --connect-timeout 10 --max-time 30 https://www.alienxsmarthome.com/api/status)"
-          printf '%s' "$body" | node -e '
-            let data = "";
-            process.stdin.on("data", chunk => data += chunk);
-            process.stdin.on("end", () => {
-              const value = JSON.parse(data);
-              if (typeof value.ok !== "boolean" || typeof value.status !== "string" || !value.checks || !value.runtime) {
-                throw new Error("Unexpected status payload");
-              }
-              if (value.runtime !== "Cloudflare Workers") {
-                throw new Error(`Unexpected runtime: ${value.runtime}`);
-              }
-              console.log(`Status endpoint: ${value.status}`);
-            });
-          '
+          status_file="$(mktemp)"
+          trap 'rm -f "$status_file"' EXIT
+
+          curl --fail --silent --show-error --location \
+            --connect-timeout 10 --max-time 30 \
+            --retry 3 --retry-delay 2 --retry-connrefused \
+            --output "$status_file" \
+            https://www.alienxsmarthome.com/api/status
+
+          node "$status_file" <<'NODE'
+          const fs = require('node:fs');
+
+          const raw = fs.readFileSync(process.argv[1], 'utf8');
+          let value;
+          try {
+            value = JSON.parse(raw);
+          } catch (error) {
+            console.error('Status endpoint returned invalid JSON.');
+            console.error(raw.slice(0, 2000));
+            throw error;
+          }
+
+          if (
+            typeof value.ok !== 'boolean' ||
+            typeof value.status !== 'string' ||
+            !value.checks ||
+            typeof value.checks !== 'object' ||
+            !value.runtime ||
+            typeof value.runtime !== 'object' ||
+            value.runtime.platform !== 'Cloudflare Workers'
+          ) {
+            console.error('Unexpected status payload:');
+            console.error(JSON.stringify(value, null, 2).slice(0, 4000));
+            throw new Error('Unexpected status payload');
+          }
+
+          console.log(`Status endpoint: ${value.status}`);
+          console.log(`Runtime: ${value.runtime.platform}`);
+          NODE
