@@ -31,8 +31,6 @@ jobs:
             body_file="$(mktemp)"
             headers_file="$(mktemp)"
 
-            trap 'rm -f "$body_file" "$headers_file"' RETURN
-
             echo "Checking $url"
 
             if ! curl --fail --silent --show-error --location \
@@ -46,6 +44,7 @@ jobs:
               cat "$headers_file" 2>/dev/null || true
               echo "Response body (first 2000 bytes):"
               head -c 2000 "$body_file" 2>/dev/null || true
+              rm -f "$body_file" "$headers_file"
               exit 1
             fi
 
@@ -54,6 +53,7 @@ jobs:
               cat "$headers_file"
               echo "Response body (first 2000 bytes):"
               head -c 2000 "$body_file"
+              rm -f "$body_file" "$headers_file"
               exit 1
             }
 
@@ -61,6 +61,7 @@ jobs:
               echo "Expected AlienX marker missing from $url"
               echo "Response body (first 2000 bytes):"
               head -c 2000 "$body_file"
+              rm -f "$body_file" "$headers_file"
               exit 1
             }
 
@@ -68,10 +69,12 @@ jobs:
               echo "Production returned [object Object] from $url"
               echo "Response body (first 2000 bytes):"
               head -c 2000 "$body_file"
+              rm -f "$body_file" "$headers_file"
               exit 1
             fi
 
             echo "PASS: $url"
+            rm -f "$body_file" "$headers_file"
           }
 
           check_html "https://alienxsmarthome.com/"
@@ -91,11 +94,13 @@ jobs:
             --output "$status_file" \
             https://www.alienxsmarthome.com/api/status
 
-          node "$status_file" <<'NODE'
+          node - "$status_file" <<'NODE'
           const fs = require('node:fs');
 
-          const raw = fs.readFileSync(process.argv[1], 'utf8');
+          const file = process.argv[2];
+          const raw = fs.readFileSync(file, 'utf8');
           let value;
+
           try {
             value = JSON.parse(raw);
           } catch (error) {
@@ -109,9 +114,7 @@ jobs:
             typeof value.status !== 'string' ||
             !value.checks ||
             typeof value.checks !== 'object' ||
-            !value.runtime ||
-            typeof value.runtime !== 'object' ||
-            value.runtime.platform !== 'Cloudflare Workers'
+            value.runtime !== 'Cloudflare Workers'
           ) {
             console.error('Unexpected status payload:');
             console.error(JSON.stringify(value, null, 2).slice(0, 4000));
@@ -119,5 +122,5 @@ jobs:
           }
 
           console.log(`Status endpoint: ${value.status}`);
-          console.log(`Runtime: ${value.runtime.platform}`);
+          console.log(`Runtime: ${value.runtime}`);
           NODE
