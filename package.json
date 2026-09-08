@@ -2,9 +2,9 @@
   "name": "alienx-smarthome",
   "description": "Public-facing technology showcase for AlienX SmartHome.",
   "dependencies": {
-    "@astrojs/cloudflare": "13.1.10",
+    "@astrojs/cloudflare": "14.3.0",
     "@astrojs/sitemap": "3.6.1",
-    "astro": "6.4.8",
+    "astro": "7.3.1",
     "astro-icon": "^1.2.0",
     "typescript": "5.9.3"
   },
