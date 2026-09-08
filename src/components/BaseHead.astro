@@ -12,6 +12,21 @@ const { title, description, image = '/alienx-social-preview.jpg' } = Astro.props
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(image, Astro.site);
 const isExperiencePage = Astro.url.pathname.replace(/\/$/, '') === '/experience';
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://alienxsmarthome.com';
+const isHomePage = Astro.url.pathname === '/';
+const structuredData = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	name: 'AlienX SmartHome',
+	description,
+	url: siteUrl,
+	inLanguage: 'en-US',
+	publisher: {
+		'@type': 'Organization',
+		name: 'AlienX SmartHome',
+		url: siteUrl,
+	},
+};
 ---
 
 <meta charset="utf-8" />
@@ -110,3 +125,5 @@ const isExperiencePage = Astro.url.pathname.replace(/\/$/, '') === '/experience'
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={socialImage} />
 <meta name="twitter:image:alt" content={`${title} — AlienX SmartHome`} />
+
+{isHomePage && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
