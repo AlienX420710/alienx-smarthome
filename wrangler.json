@@ -7,6 +7,16 @@
 		"directory": "./dist",
 		"binding": "ASSETS"
 	},
+	"routes": [
+		{
+			"pattern": "alienxsmarthome.com",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.alienxsmarthome.com",
+			"custom_domain": true
+		}
+	],
 	"vars": {
 		"TURNSTILE_HOSTNAMES": "alienxsmarthome.com,www.alienxsmarthome.com"
 	},
