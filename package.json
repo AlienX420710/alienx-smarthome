@@ -3,7 +3,7 @@
   "description": "Public-facing technology showcase for AlienX SmartHome.",
   "dependencies": {
     "@astrojs/cloudflare": "14.3.0",
-    "@astrojs/sitemap": "3.6.1",
+    "@astrojs/sitemap": "3.7.4",
     "astro": "7.3.1",
     "astro-icon": "^1.2.0",
     "typescript": "5.9.3"
