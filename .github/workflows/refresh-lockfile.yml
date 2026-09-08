@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - package.json
+      - .github/workflows/refresh-lockfile.yml
 
 permissions:
   contents: write
