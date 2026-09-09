@@ -1,0 +1,98 @@
+name: AlienX Accessibility & Theme Compatibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: accessibility-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  accessibility:
+    name: Light, dark, and accessibility checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Start static preview
+        run: npx --yes http-server dist -p 4321 -s > /tmp/alienx-accessibility.log 2>&1 &
+
+      - name: Wait for preview
+        run: npx --yes wait-on http://127.0.0.1:4321/
+
+      - name: Install browser accessibility tooling
+        run: |
+          npm install --no-save --no-package-lock @playwright/test@1.55.0 axe-core@4.10.3
+          npx playwright install --with-deps chromium
+
+      - name: Test light and dark themes with axe
+        run: |
+          cat > tests-accessibility.spec.cjs <<'TEST'
+          const { test, expect } = require('@playwright/test');
+          const AxeBuilder = require('axe-core');
+
+          const baseURL = 'http://127.0.0.1:4321';
+          const routes = ['/', '/work/', '/experience/', '/technology/', '/status/', '/about/', '/contact/'];
+          const themes = ['light', 'dark'];
+
+          for (const theme of themes) {
+            for (const route of routes) {
+              test(`${theme} theme: ${route}`, async ({ page }) => {
+                await page.goto(`${baseURL}${route}`, { waitUntil: 'networkidle' });
+                await page.evaluate((selectedTheme) => {
+                  document.documentElement.dataset.alienxTheme = selectedTheme;
+                }, theme);
+                await page.waitForTimeout(100);
+
+                const axeSource = AxeBuilder.source;
+                await page.addScriptTag({ content: axeSource });
+                const results = await page.evaluate(async () => {
+                  return await window.axe.run(document, {
+                    runOnly: ['wcag2a', 'wcag2aa'],
+                  });
+                });
+
+                const contrastViolations = results.violations.filter((v) =>
+                  v.id === 'color-contrast' || v.id === 'color-contrast-enhanced'
+                );
+
+                expect(contrastViolations, `${theme} contrast violations: ${JSON.stringify(contrastViolations)}`).toEqual([]);
+                expect(results.violations, `${theme} accessibility violations: ${JSON.stringify(results.violations)}`).toEqual([]);
+              });
+            }
+          }
+          TEST
+          npx playwright test tests-accessibility.spec.cjs --reporter=line
+
+      - name: Run Lighthouse accessibility audit
+        run: |
+          npx --yes @lhci/cli@0.15.1 autorun --collect.url=http://127.0.0.1:4321/ --collect.url=http://127.0.0.1:4321/work/ --collect.url=http://127.0.0.1:4321/experience/ --collect.url=http://127.0.0.1:4321/technology/ --collect.url=http://127.0.0.1:4321/status/ --collect.url=http://127.0.0.1:4321/about/ --collect.url=http://127.0.0.1:4321/contact/ --collect.numberOfRuns=1 --assert.assertions.categories:accessibility=error --assert.assertions.categories:accessibility.minScore=0.95 --upload.target=temporary-public-storage
+
+      - name: Upload preview log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-preview-log
+          path: /tmp/alienx-accessibility.log
+          if-no-files-found: ignore
