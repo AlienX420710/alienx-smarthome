@@ -203,7 +203,7 @@ The production Worker serves both the apex and `www` hostnames. GitHub Actions c
 
 <div align="center">
 
-<img src="./public/favicon-512.png" alt="AlienX SmartHome logo" width="120" />
+<img src="./public/android-chrome-192x192.png" alt="AlienX SmartHome logo" width="120" />
 
 ### AlienX SmartHome
 
