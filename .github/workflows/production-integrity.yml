@@ -27,17 +27,36 @@ jobs:
         run: |
           set -euo pipefail
 
+          require_header() {
+            local file="$1"
+            local pattern="$2"
+            local label="$3"
+            if ! grep -Eiq "$pattern" "$file"; then
+              echo "Missing or unexpected $label"
+              cat "$file"
+              exit 1
+            fi
+          }
+
           for host in alienxsmarthome.com www.alienxsmarthome.com; do
             echo "Checking HTTPS response for $host"
             curl --fail --silent --show-error --location --max-redirs 3 \
               -D "/tmp/${host}.headers" -o "/tmp/${host}.html" "https://${host}/"
 
-            grep -iq '^strict-transport-security: max-age=31536000; includeSubDomains' "/tmp/${host}.headers"
-            grep -iq '^x-content-type-options: nosniff' "/tmp/${host}.headers"
-            grep -iq '^x-frame-options: DENY' "/tmp/${host}.headers"
-            grep -iq '^referrer-policy: strict-origin-when-cross-origin' "/tmp/${host}.headers"
-            grep -iq '^permissions-policy:' "/tmp/${host}.headers"
-            grep -iq '^content-security-policy:' "/tmp/${host}.headers"
+            require_header "/tmp/${host}.headers" '^strict-transport-security:.*max-age=31536000.*includeSubDomains' 'HSTS'
+            require_header "/tmp/${host}.headers" '^x-content-type-options:[[:space:]]*nosniff' 'X-Content-Type-Options'
+            require_header "/tmp/${host}.headers" '^x-frame-options:[[:space:]]*DENY' 'X-Frame-Options'
+            require_header "/tmp/${host}.headers" '^referrer-policy:[[:space:]]*strict-origin-when-cross-origin' 'Referrer-Policy'
+            require_header "/tmp/${host}.headers" '^permissions-policy:' 'Permissions-Policy'
+
+            # Astro's CSP integration intentionally emits an http-equiv CSP meta tag
+            # for this Cloudflare adapter, so validate the effective policy rather
+            # than incorrectly requiring a response header the adapter does not emit.
+            if ! grep -Eiq '^content-security-policy:' "/tmp/${host}.headers" && \
+               ! grep -Eiq '<meta[^>]+http-equiv=["'"']content-security-policy["'"']' "/tmp/${host}.html"; then
+              echo "Missing Content-Security-Policy header or meta policy for $host"
+              exit 1
+            fi
 
             if grep -Eiq 'localhost|127\.0\.0\.1|workers\.dev' "/tmp/${host}.html"; then
               echo "Production HTML contains a development hostname: $host"
