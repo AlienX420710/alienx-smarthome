@@ -49,11 +49,11 @@ jobs:
             require_header "/tmp/${host}.headers" '^referrer-policy:[[:space:]]*strict-origin-when-cross-origin' 'Referrer-Policy'
             require_header "/tmp/${host}.headers" '^permissions-policy:' 'Permissions-Policy'
 
-            # Astro's CSP integration intentionally emits an http-equiv CSP meta tag
-            # for this Cloudflare adapter, so validate the effective policy rather
-            # than incorrectly requiring a response header the adapter does not emit.
+            # Astro's CSP integration emits an effective http-equiv CSP meta tag
+            # for this Cloudflare adapter, so validate the policy instead of
+            # incorrectly requiring a response header the adapter does not emit.
             if ! grep -Eiq '^content-security-policy:' "/tmp/${host}.headers" && \
-               ! grep -Eiq '<meta[^>]+http-equiv=["'"']content-security-policy["'"']' "/tmp/${host}.html"; then
+               ! grep -Eiq 'http-equiv=.*content-security-policy' "/tmp/${host}.html"; then
               echo "Missing Content-Security-Policy header or meta policy for $host"
               exit 1
             fi
@@ -66,9 +66,17 @@ jobs:
 
           echo "Checking HTTP to HTTPS redirect"
           for host in alienxsmarthome.com www.alienxsmarthome.com; do
-            headers="$(curl --silent --show-error --max-time 20 -D - -o /dev/null "http://${host}/")"
-            printf '%s\n' "$headers" | head -n 1 | grep -Eq '^HTTP/.* (301|302|307|308) '
-            printf '%s\n' "$headers" | grep -Eiq '^location: https://'
+            redirect="$(curl --silent --show-error --max-time 20 -o /dev/null -w '%{http_code} %{redirect_url}' "http://${host}/")"
+            code="${redirect%% *}"
+            location="${redirect#* }"
+            case "$code" in
+              301|302|307|308) ;;
+              *) echo "Expected HTTP redirect for $host, got: $redirect"; exit 1 ;;
+            esac
+            case "$location" in
+              https://*) ;;
+              *) echo "Expected HTTPS redirect target for $host, got: $location"; exit 1 ;;
+            esac
           done
 
       - name: Verify production SEO contract
