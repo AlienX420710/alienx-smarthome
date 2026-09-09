@@ -22,84 +22,54 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
-
       - name: Install dependencies
         run: npm ci
-
       - name: Build
         run: npm run build
-
       - name: Start static preview
         run: npx --yes http-server dist -p 4321 -s > /tmp/alienx-preview.log 2>&1 &
-
       - name: Wait for preview
         run: npx --yes wait-on http://127.0.0.1:4321/
-
       - name: Install Playwright Chromium
-        run: npx --yes playwright@1.55.0 install --with-deps chromium
-
+        run: npx --yes @playwright/test@1.55.0 install --with-deps chromium
       - name: Run responsive compatibility matrix
         run: |
-          cat > /tmp/responsive.spec.cjs <<'TEST'
+          cat > tests-responsive.spec.cjs <<'TEST'
           const { test, expect } = require('@playwright/test');
-
           const baseURL = 'http://127.0.0.1:4321';
           const routes = ['/', '/work/', '/experience/', '/technology/', '/status/', '/about/', '/contact/'];
           const viewports = [
-            [320, 568], [360, 800], [375, 667], [390, 844], [430, 932],
-            [540, 720], [768, 1024], [820, 1180], [1024, 768],
-            [1280, 800], [1440, 900], [1920, 1080]
+            [320,568],[360,800],[375,667],[390,844],[430,932],
+            [540,720],[768,1024],[820,1180],[1024,768],[1280,800],[1440,900],[1920,1080]
           ];
-
-          test.describe.configure({ mode: 'serial' });
-
-          for (const [width, height] of viewports) {
-            test.describe(`${width}x${height}`, () => {
-              for (const route of routes) {
-                test(`${route} has no horizontal overflow or runtime errors`, async ({ page }) => {
-                  const errors = [];
-                  page.on('pageerror', error => errors.push(`pageerror: ${error.message}`));
-                  page.on('console', message => {
-                    if (message.type() === 'error') errors.push(`console: ${message.text()}`);
-                  });
-
-                  await page.setViewportSize({ width, height });
-                  await page.goto(`${baseURL}${route}`, { waitUntil: 'networkidle' });
-                  await page.waitForTimeout(150);
-
-                  const result = await page.evaluate(() => {
-                    const doc = document.documentElement;
-                    const body = document.body;
-                    const offenders = [];
-                    for (const element of document.querySelectorAll('*')) {
-                      const rect = element.getBoundingClientRect();
-                      if (rect.width > 0 && (rect.right > window.innerWidth + 1 || rect.left < -1)) {
-                        offenders.push({ tag: element.tagName, id: element.id, className: String(element.className).slice(0, 120), left: Math.round(rect.left), right: Math.round(rect.right), width: Math.round(rect.width) });
-                      }
-                    }
-                    return {
-                      viewportWidth: window.innerWidth,
-                      documentWidth: Math.max(doc.scrollWidth, body.scrollWidth),
-                      offenders: offenders.slice(0, 12)
-                    };
-                  });
-
-                  expect(result.documentWidth, `Horizontal overflow at ${route} (${width}x${height}): ${JSON.stringify(result.offenders)}`).toBeLessThanOrEqual(result.viewportWidth + 1);
-                  expect(errors, `${route} emitted runtime errors at ${width}x${height}`).toEqual([]);
-                });
-              }
+          test.describe.configure({ mode:'serial' });
+          for (const [width,height] of viewports) for (const route of routes) {
+            test(`${route} @ ${width}x${height}`, async ({page}) => {
+              const errors=[];
+              page.on('pageerror',e=>errors.push(`pageerror: ${e.message}`));
+              page.on('console',m=>{if(m.type()==='error') errors.push(`console: ${m.text()}`);});
+              await page.setViewportSize({width,height});
+              await page.goto(`${baseURL}${route}`,{waitUntil:'networkidle'});
+              await page.waitForTimeout(150);
+              const result=await page.evaluate(()=>{
+                const offenders=[];
+                for(const el of document.querySelectorAll('*')){
+                  const r=el.getBoundingClientRect();
+                  if(r.width>0&&(r.right>innerWidth+1||r.left<-1)) offenders.push({tag:el.tagName,id:el.id,className:String(el.className).slice(0,120),left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width)});
+                }
+                return {viewportWidth:innerWidth,documentWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),offenders:offenders.slice(0,12)};
+              });
+              expect(result.documentWidth,`Horizontal overflow: ${JSON.stringify(result.offenders)}`).toBeLessThanOrEqual(result.viewportWidth+1);
+              expect(errors,`Runtime errors at ${width}x${height}`).toEqual([]);
             });
           }
           TEST
-
-          npx --yes playwright@1.55.0 test /tmp/responsive.spec.cjs --config=/dev/null --reporter=line
-
+          npx --yes @playwright/test@1.55.0 test tests-responsive.spec.cjs --reporter=line
       - name: Upload preview log on failure
         if: failure()
         uses: actions/upload-artifact@v4
