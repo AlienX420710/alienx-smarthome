@@ -1,9 +1,9 @@
 ---
 interface Props { name?: string; }
-const { name = 'websiteTrap' } = Astro.props;
+const { name = 'faxNumber' } = Astro.props;
 ---
 <div id="alienx-turnstile" data-sitekey="0x4AAAAAAEpKpAcymsk9J_-A"></div>
-<div class="honeypot" aria-hidden="true"><label for={`hp-${name}`}>Leave this field empty</label><input id={`hp-${name}`} name={name} type="text" tabindex="-1" autocomplete="off" /></div>
+<div class="honeypot" aria-hidden="true"><label for={`hp-${name}`}>Leave this field empty</label><input id={`hp-${name}`} name={name} type="text" tabindex="-1" autocomplete="off" inputmode="none" /></div>
 <script is:inline>
 (()=>{
 	const renderTurnstile=()=>{
@@ -20,11 +20,13 @@ const { name = 'websiteTrap' } = Astro.props;
 		document.addEventListener('astro:page-load',renderTurnstile);
 	}
 	renderTurnstile();
-	window.setInterval(()=>{
-		const widgetId=window.__alienxTurnstileWidgetId;
-		if(!widgetId||!window.turnstile)return;
-		try{if(window.turnstile.isExpired(widgetId))window.turnstile.reset(widgetId)}catch{}
-	},240000);
+	if(!window.__alienxTurnstileInterval){
+		window.__alienxTurnstileInterval=window.setInterval(()=>{
+			const widgetId=window.__alienxTurnstileWidgetId;
+			if(!widgetId||!window.turnstile)return;
+			try{if(window.turnstile.isExpired(widgetId))window.turnstile.reset(widgetId)}catch{}
+		},240000);
+	}
 })();
 </script>
 <script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=alienxTurnstileLoad"></script>
