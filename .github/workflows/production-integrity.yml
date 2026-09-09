@@ -1,0 +1,106 @@
+name: AlienX Production Integrity
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-integrity-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  integrity:
+    name: Security headers and SEO integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify production security headers and redirects
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for host in alienxsmarthome.com www.alienxsmarthome.com; do
+            echo "Checking HTTPS response for $host"
+            curl --fail --silent --show-error --location --max-redirs 3 \
+              -D "/tmp/${host}.headers" -o "/tmp/${host}.html" "https://${host}/"
+
+            grep -iq '^strict-transport-security: max-age=31536000; includeSubDomains' "/tmp/${host}.headers"
+            grep -iq '^x-content-type-options: nosniff' "/tmp/${host}.headers"
+            grep -iq '^x-frame-options: DENY' "/tmp/${host}.headers"
+            grep -iq '^referrer-policy: strict-origin-when-cross-origin' "/tmp/${host}.headers"
+            grep -iq '^permissions-policy:' "/tmp/${host}.headers"
+            grep -iq '^content-security-policy:' "/tmp/${host}.headers"
+
+            if grep -Eiq 'localhost|127\.0\.0\.1|workers\.dev' "/tmp/${host}.html"; then
+              echo "Production HTML contains a development hostname: $host"
+              exit 1
+            fi
+          done
+
+          echo "Checking HTTP to HTTPS redirect"
+          for host in alienxsmarthome.com www.alienxsmarthome.com; do
+            headers="$(curl --silent --show-error --max-time 20 -D - -o /dev/null "http://${host}/")"
+            printf '%s\n' "$headers" | head -n 1 | grep -Eq '^HTTP/.* (301|302|307|308) '
+            printf '%s\n' "$headers" | grep -Eiq '^location: https://'
+          done
+
+      - name: Verify production SEO contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const routes = ['/', '/work/', '/experience/', '/technology/', '/status/', '/about/', '/contact/'];
+          const origin = 'https://alienxsmarthome.com';
+
+          const html = async (route) => {
+            const response = await fetch(`${origin}${route}`, { redirect: 'follow' });
+            if (!response.ok) throw new Error(`${route}: HTTP ${response.status}`);
+            return response.text();
+          };
+
+          const meta = (source, name, attr = 'name') => {
+            const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const re = new RegExp(`<meta[^>]+${attr}=["']${escaped}["'][^>]*content=["']([^"']+)["'][^>]*>`, 'i');
+            const reverse = new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+${attr}=["']${escaped}["'][^>]*>`, 'i');
+            return source.match(re)?.[1] ?? source.match(reverse)?.[1] ?? null;
+          };
+
+          const link = (source, rel) => {
+            const re = new RegExp(`<link[^>]+rel=["']${rel}["'][^>]+href=["']([^"']+)["'][^>]*>`, 'i');
+            const reverse = new RegExp(`<link[^>]+href=["']([^"']+)["'][^>]+rel=["']${rel}["'][^>]*>`, 'i');
+            return source.match(re)?.[1] ?? source.match(reverse)?.[1] ?? null;
+          };
+
+          for (const route of routes) {
+            const source = await html(route);
+            const title = source.match(/<title>([^<]+)<\/title>/i)?.[1]?.trim();
+            const description = meta(source, 'description');
+            const canonical = link(source, 'canonical');
+            const robots = meta(source, 'robots');
+            const ogUrl = meta(source, 'og:url', 'property');
+            const ogImage = meta(source, 'og:image', 'property');
+
+            if (!title) throw new Error(`${route}: missing title`);
+            if (!description) throw new Error(`${route}: missing meta description`);
+            if (canonical !== `${origin}${route}`) throw new Error(`${route}: bad canonical ${canonical}`);
+            if (robots !== 'index, follow') throw new Error(`${route}: unexpected robots value ${robots}`);
+            if (ogUrl !== `${origin}${route}`) throw new Error(`${route}: bad og:url ${ogUrl}`);
+            if (!ogImage?.startsWith(`${origin}/`)) throw new Error(`${route}: bad og:image ${ogImage}`);
+            if (/localhost|127\.0\.0\.1|workers\.dev/i.test(source)) throw new Error(`${route}: development URL leaked into HTML`);
+          }
+
+          for (const path of ['/robots.txt', '/sitemap-index.xml']) {
+            const response = await fetch(`${origin}${path}`);
+            if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
+          }
+
+          console.log(`SEO integrity passed for ${routes.length} production routes.`);
+          NODE
