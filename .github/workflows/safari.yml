@@ -1,0 +1,140 @@
+name: AlienX Safari Compatibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: safari-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  safari:
+    name: Safari / WebKit compatibility
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Start Cloudflare preview
+        run: npx wrangler dev --port 4321 > /tmp/alienx-safari.log 2>&1 &
+
+      - name: Wait for preview
+        run: |
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:4321/ > /dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/alienx-safari.log
+          exit 1
+
+      - name: Enable Safari WebDriver
+        run: safaridriver --enable
+
+      - name: Install Safari test runner
+        run: npm install --no-save --package-lock=false selenium-webdriver@4.35.0
+
+      - name: Run Safari compatibility checks
+        run: |
+          cat > tests-safari.cjs <<'TEST'
+          const { Builder, By } = require('selenium-webdriver');
+          const safari = require('selenium-webdriver/safari');
+
+          const baseURL = 'http://127.0.0.1:4321';
+          const routes = ['/', '/work/', '/experience/', '/technology/', '/status/', '/about/', '/contact/'];
+
+          const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+          (async () => {
+            const options = new safari.Options();
+            const driver = await new Builder().forBrowser('safari').setSafariOptions(options).build();
+
+            try {
+              await driver.manage().window().setRect({ width: 1280, height: 800 });
+
+              for (const route of routes) {
+                await driver.get(`${baseURL}${route}`);
+                await sleep(route === '/status/' ? 1500 : 500);
+
+                const result = await driver.executeScript(() => {
+                  const root = document.documentElement;
+                  const body = document.body;
+                  const width = Math.max(root.scrollWidth, body?.scrollWidth ?? 0);
+                  const errors = [];
+                  const originalError = window.__alienXSafariErrors;
+                  return {
+                    title: document.title,
+                    readyState: document.readyState,
+                    viewportWidth: window.innerWidth,
+                    documentWidth: width,
+                    hasBody: Boolean(body),
+                    hasMain: Boolean(document.querySelector('main')),
+                    statusChecks: document.querySelectorAll('#checks .check').length,
+                    originalError,
+                  };
+                });
+
+                if (!result.title) throw new Error(`${route}: missing document title`);
+                if (result.readyState !== 'complete') throw new Error(`${route}: document did not reach complete state`);
+                if (!result.hasBody || !result.hasMain) throw new Error(`${route}: missing body/main`);
+                if (result.documentWidth > result.viewportWidth + 1) {
+                  throw new Error(`${route}: horizontal overflow (${result.documentWidth}px > ${result.viewportWidth}px)`);
+                }
+                if (route === '/status/' && result.statusChecks !== 4) {
+                  throw new Error(`${route}: expected 4 status checks, found ${result.statusChecks}`);
+                }
+
+                for (const theme of ['light', 'dark']) {
+                  await driver.executeScript((selectedTheme) => {
+                    document.documentElement.dataset.alienxTheme = selectedTheme;
+                  }, theme);
+                  const themeState = await driver.executeScript(() => ({
+                    theme: document.documentElement.dataset.alienxTheme,
+                    bodyBackground: getComputedStyle(document.body).backgroundColor,
+                    bodyColor: getComputedStyle(document.body).color,
+                  }));
+                  if (themeState.theme !== theme) throw new Error(`${route}: failed to apply ${theme} theme`);
+                  if (!themeState.bodyBackground || !themeState.bodyColor) {
+                    throw new Error(`${route}: invalid ${theme} computed styles`);
+                  }
+                }
+              }
+            } finally {
+              await driver.quit();
+            }
+          })().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
+          TEST
+
+          node tests-safari.cjs
+
+      - name: Upload Safari diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: safari-preview-log
+          path: /tmp/alienx-safari.log
+          if-no-files-found: ignore
