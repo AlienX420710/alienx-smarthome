@@ -1,0 +1,68 @@
+name: Final audit fix
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor == 'AlienX420710'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Apply final fixes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          contact = Path('src/pages/contact.astro')
+          text = contact.read_text()
+          old = 'background:var(--contact-background);color:var(--contact-text)'
+          new = 'color:var(--contact-text)'
+          if old not in text:
+              raise SystemExit('Expected contact background declaration not found')
+          contact.write_text(text.replace(old, new, 1))
+
+          success = Path('src/pages/contact/success.astro')
+          text = success.read_text()
+          old = 'background:var(--success-background);color:var(--success-text)'
+          new = 'color:var(--success-text)'
+          if old not in text:
+              raise SystemExit('Expected success background declaration not found')
+          success.write_text(text.replace(old, new, 1))
+
+          status = Path('src/pages/status.astro')
+          text = status.read_text()
+          old_import = "import CommandPalette from '../components/CommandPalette.astro';\n"
+          if old_import not in text:
+              raise SystemExit('Expected duplicate CommandPalette import not found')
+          text = text.replace(old_import, '', 1)
+          old_markup = '\n\t\t<CommandPalette />\n\t\t<Footer />'
+          new_markup = '\n\t\t<Footer />'
+          if old_markup not in text:
+              raise SystemExit('Expected duplicate CommandPalette markup not found')
+          status.write_text(text.replace(old_markup, new_markup, 1))
+          PY
+
+      - name: Verify exact changes
+        run: |
+          grep -q 'color:var(--contact-text)' src/pages/contact.astro
+          ! grep -q 'background:var(--contact-background);color:var(--contact-text)' src/pages/contact.astro
+          grep -q 'color:var(--success-text)' src/pages/contact/success.astro
+          ! grep -q 'background:var(--success-background);color:var(--success-text)' src/pages/contact/success.astro
+          ! grep -q "import CommandPalette from '../components/CommandPalette.astro';" src/pages/status.astro
+          ! grep -q $'\t\t<CommandPalette />' src/pages/status.astro
+
+      - name: Commit and remove temporary workflow
+        run: |
+          git config user.name 'AlienX420710'
+          git config user.email '47496458+AlienX420710@users.noreply.github.com'
+          git add src/pages/contact.astro src/pages/contact/success.astro src/pages/status.astro .github/workflows/final-audit-fix.yml
+          git rm .github/workflows/final-audit-fix.yml
+          git commit -m 'fix: preserve shared page visuals and remove duplicate palette'
+          git push origin main
