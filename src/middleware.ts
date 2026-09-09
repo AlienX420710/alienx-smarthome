@@ -48,7 +48,7 @@ export const onRequest = defineMiddleware(async ({ request }, next) => {
 	const recent = (attempts.get(ip) ?? []).filter((timestamp) => now - timestamp < RATE_WINDOW_MS);
 
 	if (attempts.size > MAX_TRACKED_IPS) pruneAttempts(now);
-	if (recent.length >= RATE_LIMIT) return json({ error: 'Too many inquiries. Please try again later.', requestId }, 429, requestId);
+	if (recent.length >= RATE_LIMIT) return json({ error: 'Too many inquiries. Please try again later.', code: 'rate-limited', requestId }, 429, requestId);
 	recent.push(now);
 	attempts.set(ip, recent);
 
@@ -58,14 +58,14 @@ export const onRequest = defineMiddleware(async ({ request }, next) => {
 	const expectedHostnames = new Set((bindings.TURNSTILE_HOSTNAMES ?? '').split(',').map((h) => h.trim()).filter(Boolean));
 	if (!secret || expectedHostnames.size === 0) {
 		console.error('Turnstile is not configured.', { requestId });
-		return json({ error: 'Security verification is not configured.', requestId }, 503, requestId);
+		return json({ error: 'Security verification is not configured.', code: 'turnstile-not-configured', requestId }, 503, requestId);
 	}
 
 	let payload: Record<string, unknown>;
 	try {
 		payload = await request.clone().json() as Record<string, unknown>;
 	} catch {
-		return json({ error: 'Invalid request.', requestId }, 400, requestId);
+		return json({ error: 'Invalid request.', code: 'invalid-request', requestId }, 400, requestId);
 	}
 
 	if (typeof payload.websiteTrap === 'string' && payload.websiteTrap.trim() !== '') {
@@ -73,7 +73,7 @@ export const onRequest = defineMiddleware(async ({ request }, next) => {
 	}
 
 	const token = typeof payload.website === 'string' ? payload.website.trim() : '';
-	if (!token || token.length > 2048) return json({ error: 'Please complete the security verification.', requestId }, 403, requestId);
+	if (!token || token.length > 2048) return json({ error: 'Please complete the security verification.', code: 'turnstile-missing', requestId }, 403, requestId);
 
 	try {
 		const response = await fetch(SITEVERIFY_URL, {
@@ -83,13 +83,18 @@ export const onRequest = defineMiddleware(async ({ request }, next) => {
 			signal: AbortSignal.timeout(10000),
 		});
 		if (!response.ok) throw new Error(`Turnstile Siteverify returned ${response.status}.`);
-		const result = await response.json() as { success?: boolean; action?: string; hostname?: string };
+		const result = await response.json() as { success?: boolean; action?: string; hostname?: string; 'error-codes'?: string[] };
+		const errorCodes = result['error-codes'] ?? [];
 		if (!result.success || result.action !== EXPECTED_ACTION || !result.hostname || !expectedHostnames.has(result.hostname)) {
-			return json({ error: 'Security verification failed. Please try again.', requestId }, 403, requestId);
+			console.warn('Turnstile validation rejected inquiry.', { requestId, action: result.action, hostname: result.hostname, errorCodes });
+			if (errorCodes.includes('timeout-or-duplicate') || errorCodes.includes('invalid-input-response')) {
+				return json({ error: 'The security check expired. Please complete it again and submit the form.', code: 'turnstile-expired', requestId }, 403, requestId);
+			}
+			return json({ error: 'Security verification failed. Please try again.', code: 'turnstile-failed', requestId }, 403, requestId);
 		}
 	} catch (error) {
 		console.error('Turnstile validation failed:', error instanceof Error ? error.message : 'Unknown error', { requestId });
-		return json({ error: 'Security verification could not be completed.', requestId }, 403, requestId);
+		return json({ error: 'Security verification could not be completed.', code: 'turnstile-unavailable', requestId }, 403, requestId);
 	}
 
 	const sanitizedPayload = { ...payload, website: '' };
