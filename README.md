@@ -1,161 +1,216 @@
-# AlienX SmartHome
+<div align="center">
 
-![AlienX SmartHome](./public/alienx-social-preview.jpg)
+<a href="https://alienxsmarthome.com">
+  <img src="./public/alienx-social-preview.jpg" alt="AlienX SmartHome — modern web engineering, automation, infrastructure, and interactive technology" width="100%" />
+</a>
 
-AlienX SmartHome is the public-facing technology site for AlienX — a modern web engineering and interactive technology project.
+<br /><br />
 
-The project started around smart-home technology and expanded into a broader demonstration of frontend, backend, automation, infrastructure, and browser engineering.
+[![Live Website](https://img.shields.io/badge/LIVE_WEBSITE-alienxsmarthome.com-00C853?style=for-the-badge&logo=googlechrome&logoColor=white)](https://alienxsmarthome.com)
+[![Start a Project](https://img.shields.io/badge/START_A-PROJECT-00AEEF?style=for-the-badge&logo=rocket&logoColor=white)](https://alienxsmarthome.com/contact)
 
-**Production:** https://alienxsmarthome.com
+[![Quality](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/quality.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/quality.yml)
+[![Production Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-smoke.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-smoke.yml)
+[![Responsive](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/responsive.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/responsive.yml)
+[![Astro 7](https://img.shields.io/badge/Astro-7.3.1-FF5D01?logo=astro&logoColor=white)](https://astro.build)
+[![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?logo=cloudflare&logoColor=white)](https://workers.cloudflare.com)
 
-## What AlienX demonstrates
+### Technology built to do something.
 
-- **Web development** — responsive websites and polished interfaces
-- **Web applications** — interactive, stateful browser experiences
-- **Automation & integrations** — connecting systems and reducing manual work
-- **Infrastructure** — deployment, networking, hosting, and operational tooling
-- **Smart technology** — connected technology and home-automation experimentation
-- **Interactive experiments** — browser-native interfaces designed to be explored rather than simply viewed
+A public-facing technology showcase for **web engineering, automation, infrastructure, and interactive browser experiences.**
 
-The website itself is part of the demonstration. It intentionally does not recreate a conventional smart-home dashboard or home-automation management interface.
+[Work](https://alienxsmarthome.com/work) · [Experience](https://alienxsmarthome.com/experience) · [Technology](https://alienxsmarthome.com/technology) · [Status](https://alienxsmarthome.com/status) · [About](https://alienxsmarthome.com/about) · [Start a Project](https://alienxsmarthome.com/contact)
+
+</div>
+
+---
+
+## Welcome
+
+AlienX SmartHome is a production web project built to demonstrate what modern frontend engineering, backend services, deployment infrastructure, automation, and browser-native interaction can look like when the website itself is part of the proof.
+
+The project started around smart-home technology and expanded into a broader engineering showcase. It is intentionally **not** a conventional Home Assistant dashboard or home-automation management interface.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### What it showcases
+
+- Responsive web interfaces
+- Interactive browser experiences
+- Automation and system integrations
+- Cloud infrastructure and deployment
+- Secure project inquiry handling
+- Performance, accessibility, and reduced-motion behavior
+
+</td>
+<td width="50%" valign="top">
+
+### Built for production
+
+- Cloudflare Workers deployment
+- Turnstile-protected inquiry API
+- Server-side validation and rate limiting
+- Resend-backed email delivery
+- Production health monitoring
+- Automated responsive compatibility checks
+
+</td>
+</tr>
+</table>
+
+## Website preview
+
+<div align="center">
+  <a href="https://alienxsmarthome.com">
+    <img src="./public/alienx-social-preview.jpg" alt="AlienX SmartHome production website preview" width="820" />
+  </a>
+  <br />
+  <sub>Select the preview to visit the production website.</sub>
+</div>
+
+## What is inside
+
+| Area | Purpose |
+| :--- | :--- |
+| **Work** | Selected engineering work and project outcomes |
+| **Experience** | Interactive browser experiments and visual systems |
+| **Technology** | The stack, engineering disciplines, and implementation approach |
+| **Status** | Public-facing production service health and runtime signals |
+| **About** | The story, principles, and direction behind AlienX |
+| **Start a Project** | Secure project inquiry flow for new work |
+
+> The site favors real implementation over simulated dashboards, fake metrics, or decorative claims.
+
+## Contact flow
+
+```mermaid
+flowchart LR
+    A[Project inquiry] --> B[Turnstile verification]
+    B --> C[Worker validation]
+    C --> D[Rate limit + honeypot]
+    D --> E[Resend acceptance]
+    E --> F[Success page]
+```
+
+The success state is reached only after the production email provider accepts the inquiry. Validation and delivery failures remain on the form instead of reporting a false success.
+
+## Security and reliability
+
+The production application uses multiple independent controls around its public inquiry surface:
+
+- Cloudflare Turnstile token and hostname verification
+- Same-origin submission enforcement
+- Honeypot spam detection
+- Per-IP rate limiting
+- Field allowlists and length limits
+- Actual request-body size enforcement
+- Resend response-ID confirmation
+- Production security headers
+- Dependency auditing
+- Automated production smoke checks
+- Responsive viewport compatibility testing
+
+Security reports should be submitted privately according to the [security policy](./SECURITY.md) or emailed to **alienx@alienxsmarthome.com**.
+
+## Design system
+
+AlienX uses a restrained dark interface with controlled blue and green accents rather than treating every page as a separate visual system.
+
+| Accent | Role |
+| :--- | :--- |
+| **Blue** | Primary interface structure, navigation, and technical emphasis |
+| **Green** | AlienX identity, active states, system/core visuals, and key actions |
+| **Dark neutrals** | Contrast, depth, panels, and content hierarchy |
+| **Motion** | Interaction feedback and browser-native experimentation |
+
+Responsive behavior, keyboard focus states, and reduced-motion preferences are treated as part of the design rather than afterthoughts.
 
 ## Technology
 
-The production stack includes:
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| Framework | [Astro 7.3.1](https://astro.build) | Pages, routing, rendering, and site composition |
+| Language | TypeScript 5.9.3 | Application logic and type safety |
+| Runtime | [Cloudflare Workers](https://workers.cloudflare.com) | Production hosting and server-side functionality |
+| Protection | [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) | Server-validated bot protection |
+| Email | [Resend](https://resend.com) | Project inquiry notification delivery |
+| Validation | GitHub Actions | Build, type, audit, smoke, and responsive quality gates |
 
-- **Astro 7** — server-first web framework
-- **TypeScript** — application logic and type safety
-- **CSS** — responsive layout, visual effects, transitions, and interaction states
-- **Cloudflare Workers** — production deployment and server-side functionality
-- **Cloudflare Turnstile** — server-validated protection for the project inquiry form
-- **Resend** — transactional inquiry email delivery
-- **GitHub Actions** — build, type-check, dependency-audit, and production smoke checks
+The production build also uses Cloudflare Images for image processing, Cloudflare KV for sessions, Astro Sitemap for discovery, and focused client-side JavaScript where browser state or interaction requires it.
 
-## Architecture
+## Automated checks
 
-The project uses Astro's page and component model with focused browser-side JavaScript for interactions that benefit from client-side state.
+| Check | When it runs | What it protects |
+| :--- | :--- | :--- |
+| **Quality** | Every push and pull request to `main` | Install, build, TypeScript, Worker dry run, and dependency audit |
+| **Production Smoke** | Every push to `main` and hourly | Both production hostnames, HTML response, `/api/status`, and known Worker failure regression |
+| **Responsive Compatibility** | Every push and pull request to `main` | 84 viewport/page combinations for overflow and runtime regressions |
 
-Server-side inquiry handling lives at `/api/inquiry` and includes request-size enforcement, field validation, honeypot protection, Turnstile verification, rate limiting, and email delivery through Resend.
+Only **`main`** is maintained and deployed to production.
 
-The public `/api/status` endpoint exposes high-level service health without exposing secret values.
-
-Sensitive credentials are kept outside the repository as Cloudflare Worker secrets. They should never be committed to source control.
-
-## Project structure
+## Project map
 
 ```text
-src/
-├── components/       Shared interface components
-├── layouts/          Shared page layouts
-├── pages/            Routes and server endpoints
-├── styles/           Global styling and design tokens
-├── icons/            Site icon components
-└── consts.ts         Site-wide metadata and content constants
-
-public/               Static assets, fonts, scripts, and site metadata
-.github/workflows/    CI quality and production smoke checks
-wrangler.json         Cloudflare Workers configuration
-astro.config.mjs      Astro configuration
-package.json          Dependencies and development commands
+/
+├── .github/
+│   └── workflows/                Quality, smoke, and responsive checks
+├── public/                       Static assets, fonts, icons, and browser scripts
+├── src/
+│   ├── components/               Shared interface components
+│   ├── layouts/                  Shared page structure and metadata
+│   ├── pages/                    Routes and server endpoints
+│   ├── styles/                   Global styling and design tokens
+│   ├── icons/                    Site icon components
+│   └── consts.ts                 Site-wide metadata and content constants
+├── astro.config.mjs              Astro configuration
+├── wrangler.json                 Cloudflare Workers configuration
+├── package.json                  Dependencies and development commands
+├── package-lock.json             Locked dependency tree
+└── SECURITY.md                   Private vulnerability reporting policy
 ```
 
 ## Local development
 
-Requirements:
-
-- Node.js 22 or newer
-- npm
-
-Install dependencies:
+The project requires **Node.js 22 or newer** and npm.
 
 ```bash
-npm install
-```
-
-Start the Astro development server:
-
-```bash
+npm ci
 npm run dev
 ```
 
-Build the production site:
+Then open `http://localhost:4321`.
 
-```bash
-npm run build
-```
+| Command | Purpose |
+| :--- | :--- |
+| `npm run dev` | Start the Astro development server |
+| `npm run build` | Create the production build |
+| `npm run check` | Build, type-check, and validate a Cloudflare deployment bundle |
+| `npm run audit` | Check dependencies for high-severity vulnerabilities |
+| `npm run preview` | Build and preview through the Cloudflare runtime |
+| `npm run deploy` | Deploy the current release through Wrangler |
 
-Run the full project check:
+## Production
 
-```bash
-npm run check
-```
+The public site is available at:
 
-Preview the Cloudflare Workers build locally:
+**https://alienxsmarthome.com**
 
-```bash
-npm run preview
-```
+The production Worker serves both the apex and `www` hostnames. GitHub Actions continuously verifies the deployed experience rather than treating a successful build as the only definition of a healthy release.
 
-Deploy to Cloudflare Workers:
+---
 
-```bash
-npm run deploy
-```
+<div align="center">
 
-## Contact protection
+<img src="./public/favicon-512.png" alt="AlienX SmartHome logo" width="120" />
 
-The project inquiry form uses Cloudflare Turnstile plus server-side validation, a honeypot field, request-size limits, and rate limiting.
+### AlienX SmartHome
 
-The public Turnstile site key may be present in frontend source. The corresponding secret must remain a Cloudflare Worker secret under the name:
+*The website is part of the proof.*
 
-```text
-TURNSTILE_SECRET
-```
+[Website](https://alienxsmarthome.com) · [Work](https://alienxsmarthome.com/work) · [Technology](https://alienxsmarthome.com/technology) · [Start a Project](https://alienxsmarthome.com/contact)
 
-The Worker also uses the `TURNSTILE_HOSTNAMES` environment variable to restrict successful verification to the approved production hostnames.
+<sub>Modern web engineering · automation · infrastructure · interactive technology</sub>
 
-The Resend API credential must remain a Cloudflare Worker secret under the name:
-
-```text
-RESEND_API_KEY
-```
-
-## SEO and social metadata
-
-The site includes:
-
-- Canonical URLs
-- Open Graph metadata
-- Twitter/X large-image metadata
-- XML sitemap support
-- `robots.txt`
-- A branded 1200×630 social preview image
-- Site and page metadata through the shared head component
-
-## Production verification
-
-GitHub Actions periodically verifies both production hostnames:
-
-- `https://alienxsmarthome.com/`
-- `https://www.alienxsmarthome.com/`
-
-The smoke test checks for a successful HTML response, the AlienX site marker, and the absence of the known `[object Object]` Worker failure. It also validates the public status endpoint.
-
-## Design direction
-
-AlienX uses a mixed visual system rather than a single-color interface:
-
-- **Blue** provides the primary interface and structural accent
-- **Green** identifies AlienX branding, active states, system/core visuals, and important calls to action
-- **Neutral dark and light surfaces** provide hierarchy and readable content
-
-The design favors interaction, motion, browser-native effects, and inspectable frontend techniques while retaining responsive and reduced-motion behavior.
-
-## Status
-
-This is an actively evolving project. Real projects, technical stories, and interactive experiments will continue to replace placeholders as the work develops.
-
-## License
-
-No open-source license is currently declared. Unless otherwise stated, the source and original project assets remain the property of AlienX.
-
+</div>
