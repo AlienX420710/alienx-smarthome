@@ -109,12 +109,20 @@ jobs:
             throw error;
           }
 
+          const requiredChecks = ['worker', 'inquiry', 'turnstile', 'resend'];
+
           if (
             typeof value.ok !== 'boolean' ||
             typeof value.status !== 'string' ||
             !value.checks ||
             typeof value.checks !== 'object' ||
-            value.runtime !== 'Cloudflare Workers'
+            value.runtime !== 'Cloudflare Workers' ||
+            typeof value.generatedAt !== 'string' ||
+            typeof value.summary !== 'string' ||
+            requiredChecks.some((key) => {
+              const check = value.checks[key];
+              return !check || !['operational', 'configured', 'degraded'].includes(check.status) || typeof check.detail !== 'string';
+            })
           ) {
             console.error('Unexpected status payload:');
             console.error(JSON.stringify(value, null, 2).slice(0, 4000));
@@ -122,5 +130,6 @@ jobs:
           }
 
           console.log(`Status endpoint: ${value.status}`);
+          console.log(`Summary: ${value.summary}`);
           console.log(`Runtime: ${value.runtime}`);
           NODE
