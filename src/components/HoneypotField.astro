@@ -13,6 +13,7 @@ const { name = 'websiteTrap' } = Astro.props;
 		container.innerHTML='';
 		window.__alienxTurnstileWidgetId=window.turnstile.render(container,{sitekey:container.dataset.sitekey,action:'contact',theme:'auto',size:'flexible','response-field-name':'website','refresh-expired':'auto','refresh-timeout':'auto','callback':()=>{container.dataset.state='success'},'expired-callback':()=>{container.dataset.state='expired'},'error-callback':()=>{container.dataset.state='error'}});
 	};
+	window.__alienxTurnstileReset=()=>{const widgetId=window.__alienxTurnstileWidgetId;if(widgetId&&window.turnstile){try{window.turnstile.reset(widgetId)}catch{}}};
 	if(!window.__alienxTurnstileBound){
 		window.__alienxTurnstileBound=true;
 		window.alienxTurnstileLoad=renderTurnstile;
