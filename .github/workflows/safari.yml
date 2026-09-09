@@ -50,7 +50,7 @@ jobs:
           exit 1
 
       - name: Enable Safari WebDriver
-        run: safaridriver --enable
+        run: sudo safaridriver --enable
 
       - name: Install Safari test runner
         run: npm install --no-save --package-lock=false selenium-webdriver@4.35.0
@@ -81,8 +81,6 @@ jobs:
                   const root = document.documentElement;
                   const body = document.body;
                   const width = Math.max(root.scrollWidth, body?.scrollWidth ?? 0);
-                  const errors = [];
-                  const originalError = window.__alienXSafariErrors;
                   return {
                     title: document.title,
                     readyState: document.readyState,
@@ -91,7 +89,6 @@ jobs:
                     hasBody: Boolean(body),
                     hasMain: Boolean(document.querySelector('main')),
                     statusChecks: document.querySelectorAll('#checks .check').length,
-                    originalError,
                   };
                 });
 
