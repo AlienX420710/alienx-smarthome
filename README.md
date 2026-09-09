@@ -12,6 +12,7 @@
 [![Quality](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/quality.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/quality.yml)
 [![Production Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-smoke.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-smoke.yml)
 [![Responsive](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/responsive.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/responsive.yml)
+[![Accessibility](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/accessibility.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/accessibility.yml)
 [![Astro 7](https://img.shields.io/badge/Astro-7.3.1-FF5D01?logo=astro&logoColor=white)](https://astro.build)
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?logo=cloudflare&logoColor=white)](https://workers.cloudflare.com)
 
@@ -55,6 +56,7 @@ The project started around smart-home technology and expanded into a broader eng
 - Resend-backed email delivery
 - Production health monitoring
 - Automated responsive compatibility checks
+- Automated light/dark accessibility checks
 
 </td>
 </tr>
@@ -111,8 +113,25 @@ The production application uses multiple independent controls around its public 
 - Dependency auditing
 - Automated production smoke checks
 - Responsive viewport compatibility testing
+- Automated light/dark accessibility and contrast testing
 
 Security reports should be submitted privately according to the [security policy](./SECURITY.md) or emailed to **alienx@alienxsmarthome.com**.
+
+## Accessibility and theme contract
+
+Accessibility is treated as a release requirement, not a visual preference.
+
+The site must maintain readable foreground/background contrast in **system, light, and dark presentation states**. In particular:
+
+- Light text must never be rendered against a light background.
+- Dark text must never be rendered against a dark background.
+- Interactive controls, links, form fields, headings, and body copy must remain distinguishable in both themes.
+- Keyboard focus indicators must remain visible in both themes.
+- Color must not be the only mechanism used to communicate state.
+- User `prefers-reduced-motion` preferences must be respected.
+- Explicit theme selections must not leave stale foreground/background combinations behind.
+
+The GitHub accessibility workflow exercises the production routes in both explicit light and dark themes with axe-based WCAG checks and a Lighthouse accessibility audit. Chrome Lighthouse remains the preferred quick local developer check before pushing visual or interaction changes.
 
 ## Design system
 
@@ -125,7 +144,7 @@ AlienX uses a restrained dark interface with controlled blue and green accents r
 | **Dark neutrals** | Contrast, depth, panels, and content hierarchy |
 | **Motion** | Interaction feedback and browser-native experimentation |
 
-Responsive behavior, keyboard focus states, and reduced-motion preferences are treated as part of the design rather than afterthoughts.
+Responsive behavior, keyboard focus states, theme contrast, and reduced-motion preferences are treated as part of the design rather than afterthoughts.
 
 ## Technology
 
@@ -136,7 +155,7 @@ Responsive behavior, keyboard focus states, and reduced-motion preferences are t
 | Runtime | [Cloudflare Workers](https://workers.cloudflare.com) | Production hosting and server-side functionality |
 | Protection | [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) | Server-validated bot protection |
 | Email | [Resend](https://resend.com) | Project inquiry notification delivery |
-| Validation | GitHub Actions | Build, type, audit, smoke, and responsive quality gates |
+| Validation | GitHub Actions | Build, type, audit, smoke, responsive, and accessibility quality gates |
 
 The production build also uses Cloudflare Images for image processing, Cloudflare KV for sessions, Astro Sitemap for discovery, and focused client-side JavaScript where browser state or interaction requires it.
 
@@ -147,6 +166,7 @@ The production build also uses Cloudflare Images for image processing, Cloudflar
 | **Quality** | Every push and pull request to `main` | Install, build, TypeScript, Worker dry run, and dependency audit |
 | **Production Smoke** | Every push to `main` and hourly | Both production hostnames, HTML response, `/api/status`, and known Worker failure regression |
 | **Responsive Compatibility** | Every push and pull request to `main` | 84 viewport/page combinations for overflow and runtime regressions |
+| **Accessibility & Theme** | Every push and pull request to `main` | Light/dark contrast, WCAG accessibility, and Lighthouse accessibility score |
 
 Only **`main`** is maintained and deployed to production.
 
@@ -155,7 +175,7 @@ Only **`main`** is maintained and deployed to production.
 ```text
 /
 ├── .github/
-│   └── workflows/                Quality, smoke, and responsive checks
+│   └── workflows/                Quality, smoke, responsive, and accessibility checks
 ├── public/                       Static assets, fonts, icons, and browser scripts
 ├── src/
 │   ├── components/               Shared interface components
@@ -190,6 +210,8 @@ Then open `http://localhost:4321`.
 | `npm run audit` | Check dependencies for high-severity vulnerabilities |
 | `npm run preview` | Build and preview through the Cloudflare runtime |
 | `npm run deploy` | Deploy the current release through Wrangler |
+
+For quick developer accessibility validation, use **Chrome DevTools → Lighthouse → Accessibility** and test both light and dark presentation states. The GitHub workflow provides the repeatable release gate.
 
 ## Production
 
