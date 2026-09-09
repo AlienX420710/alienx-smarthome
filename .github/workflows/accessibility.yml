@@ -72,7 +72,16 @@ jobs:
               test(`${theme} theme: ${route}`, async ({ page }) => {
                 await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });
                 await page.goto(`${baseURL}${route}`, { waitUntil: 'domcontentloaded' });
-                await page.waitForTimeout(500);
+
+                // Status renders its checks asynchronously. Do not run axe against the
+                // empty loading state; audit the fully rendered page instead.
+                if (route === '/status/') {
+                  await expect(page.locator('#checks')).toHaveAttribute('aria-busy', 'false', { timeout: 5000 });
+                  await expect(page.locator('#checks .check')).toHaveCount(4, { timeout: 1000 });
+                } else {
+                  await page.waitForTimeout(500);
+                }
+
                 await page.addScriptTag({ content: axe.source });
 
                 const results = await page.evaluate(async () => window.axe.run(document, {
