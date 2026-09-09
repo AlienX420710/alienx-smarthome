@@ -68,8 +68,8 @@ export const onRequest = defineMiddleware(async ({ request }, next) => {
 		return json({ error: 'Invalid request.', code: 'invalid-request', requestId }, 400, requestId);
 	}
 
-	if (typeof payload.websiteTrap === 'string' && payload.websiteTrap.trim() !== '') {
-		return json({ ok: true, requestId }, 200, requestId);
+	if (typeof payload.faxNumber === 'string' && payload.faxNumber.trim() !== '') {
+		return json({ error: 'We could not verify this inquiry. Please try again.', code: 'inquiry-rejected', requestId }, 403, requestId);
 	}
 
 	const token = typeof payload.website === 'string' ? payload.website.trim() : '';
