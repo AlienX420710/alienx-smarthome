@@ -70,12 +70,14 @@ const structuredData = {
 	html[data-alienx-page="contact"],
 	html[data-alienx-page="contact-success"] { --page-gradient-x: 8% !important; }
 
+	/* Status uses the same shared AlienX background treatment as the other primary pages. */
 	html[data-alienx-page="status"] body,
 	html[data-alienx-page="contact"] body,
 	html[data-alienx-page="contact-success"] body {
 		background:
-			radial-gradient(circle at var(--page-gradient-x) 8%, var(--page-gradient-color), transparent 34rem),
+			radial-gradient(circle at var(--page-gradient-x) 0, var(--page-gradient-color), transparent 34rem),
 			#05070c !important;
+		color: #e8edf7;
 	}
 
 	@media (prefers-color-scheme: light) {
@@ -83,8 +85,9 @@ const structuredData = {
 		html[data-alienx-page="contact"] body,
 		html[data-alienx-page="contact-success"] body {
 			background:
-				radial-gradient(circle at var(--page-gradient-x) 8%, rgba(83, 101, 219, .07), transparent 34rem),
+				radial-gradient(circle at var(--page-gradient-x) 0, rgba(83, 101, 219, .07), transparent 34rem),
 				#fff !important;
+			color: #253047;
 		}
 	}
 </style>
