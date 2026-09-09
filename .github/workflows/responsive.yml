@@ -35,11 +35,19 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Start static preview
-        run: npx --yes http-server dist -p 4321 -s > /tmp/alienx-preview.log 2>&1 &
+      - name: Start Cloudflare preview
+        run: npx wrangler dev --port 4321 > /tmp/alienx-preview.log 2>&1 &
 
       - name: Wait for preview
-        run: npx --yes wait-on http://127.0.0.1:4321/
+        run: |
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:4321/ > /dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/alienx-preview.log
+          exit 1
 
       - name: Install Playwright test runner
         run: npm install --no-save --package-lock=false @playwright/test@1.55.0
