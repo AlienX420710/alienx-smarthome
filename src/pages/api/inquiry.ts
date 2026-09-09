@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 export const prerender = false;
 const MAX_REQUEST_BYTES=16_384,MAX_NAME_LENGTH=100,MIN_NAME_LENGTH=2,MAX_EMAIL_LENGTH=254,MAX_PHONE_LENGTH=30,MAX_COMPANY_LENGTH=120,MAX_URL_LENGTH=2048,MAX_TIMEZONE_LENGTH=80,MAX_MESSAGE_LENGTH=4000,MIN_MESSAGE_LENGTH=10;
-const TO_ADDRESS='alienx@alienxsmarthome.com',FROM_ADDRESS='AlienX SmartHome <alienx@alienxsmarthome.com>';
+const TO_ADDRESS='alienx@alienxsmarthome.com',FROM_ADDRESS='AlienX SmartHome <contact@alienxsmarthome.com>';
 const CONTACT_METHODS=new Set(['email','phone','text','either']),CONTACT_TIMES=new Set(['morning','afternoon','evening','anytime']),PROJECT_TYPES=new Set(['website-design','website-redesign','ecommerce','smart-home','interactive-web','web-app','seo-performance','other']),CURRENT_WEBSITES=new Set(['none','existing','redesign','other']),TIMELINES=new Set(['asap','under-30-days','1-3-months','3-6-months','exploring']),BUDGETS=new Set(['under-1000','1000-2500','2500-5000','5000-10000','10000-plus','not-sure']),SOURCES=new Set(['google','social','referral','experience','other']);
 interface InquiryPayload{name?:unknown;email?:unknown;phone?:unknown;company?:unknown;websiteUrl?:unknown;contactMethod?:unknown;contactTime?:unknown;timezone?:unknown;projectType?:unknown;currentWebsite?:unknown;timeline?:unknown;budget?:unknown;source?:unknown;message?:unknown;consent?:unknown;website?:unknown;turnstileToken?:unknown}
 const json=(body:Record<string,unknown>,status=200,requestId?:string)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store',...(requestId?{'X-Request-ID':requestId}:{})}});
