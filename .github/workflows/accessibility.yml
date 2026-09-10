@@ -70,11 +70,20 @@ jobs:
           for (const theme of themes) {
             for (const route of routes) {
               test(`${theme} theme: ${route}`, async ({ page }) => {
+                // Exercise the site's real persisted theme path. Merely emulating the
+                // media query misses regressions that occur when an explicit theme is saved.
+                await page.addInitScript(({ selectedTheme }) => {
+                  document.documentElement.dataset.alienxTheme = selectedTheme;
+                  localStorage.setItem('alienx-theme', selectedTheme);
+                }, { selectedTheme: theme });
+
                 // The production CSP intentionally blocks inline script injection. Install
                 // axe before navigation through Playwright's pre-document hook instead.
                 await page.addInitScript({ content: axe.source });
                 await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });
                 await page.goto(`${baseURL}${route}`, { waitUntil: 'domcontentloaded' });
+
+                await expect(page.locator('html')).toHaveAttribute('data-alienx-theme', theme);
 
                 // Status renders its checks asynchronously. Do not run axe against the
                 // empty loading state; audit the fully rendered page instead.
@@ -84,6 +93,29 @@ jobs:
                 } else {
                   await page.waitForTimeout(500);
                 }
+
+                // Guard against text that is technically present in the DOM but visually
+                // hidden. Axe catches contrast; this catches zero-size/transparent headings.
+                const visualHeadings = await page.evaluate(() => [...document.querySelectorAll('h1,h2,h3')]
+                  .filter((heading) => heading.textContent?.trim())
+                  .map((heading) => {
+                    const rect = heading.getBoundingClientRect();
+                    const style = getComputedStyle(heading);
+                    return {
+                      text: heading.textContent.trim().slice(0, 100),
+                      width: rect.width,
+                      height: rect.height,
+                      visibility: style.visibility,
+                      display: style.display,
+                      opacity: Number(style.opacity),
+                      color: style.color
+                    };
+                  }));
+
+                expect(
+                  visualHeadings.filter((heading) => heading.width <= 0 || heading.height <= 0 || heading.visibility === 'hidden' || heading.display === 'none' || heading.opacity === 0),
+                  `${theme} visually hidden headings on ${route}: ${JSON.stringify(visualHeadings)}`
+                ).toEqual([]);
 
                 const results = await page.evaluate(async () => window.axe.run(document, {
                   runOnly: ['wcag2a', 'wcag2aa']
