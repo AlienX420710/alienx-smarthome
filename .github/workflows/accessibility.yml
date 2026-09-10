@@ -82,7 +82,9 @@ jobs:
                   await page.waitForTimeout(500);
                 }
 
-                await page.addScriptTag({ content: axe.source });
+                // The production CSP intentionally blocks inline script injection. Install
+                // axe through Playwright's pre-document hook instead of weakening the CSP.
+                await page.addInitScript({ content: axe.source });
 
                 const results = await page.evaluate(async () => window.axe.run(document, {
                   runOnly: ['wcag2a', 'wcag2aa']
