@@ -70,27 +70,19 @@ jobs:
           for (const theme of themes) {
             for (const route of routes) {
               test(`${theme} theme: ${route}`, async ({ page }) => {
-                // Persist the selected theme before navigation. addInitScript runs before
-                // documentElement exists, so only touch storage at this stage.
                 await page.addInitScript(({ selectedTheme }) => {
                   try { localStorage.setItem('alienx-theme', selectedTheme); } catch {}
                 }, { selectedTheme: theme });
 
-                // The production CSP intentionally blocks inline script injection. Install
-                // axe before navigation through Playwright's pre-document hook instead.
                 await page.addInitScript({ content: axe.source });
                 await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });
                 await page.goto(`${baseURL}${route}`, { waitUntil: 'domcontentloaded' });
 
-                // Force the final explicit state after the document exists so page-local
-                // theme selectors are exercised without a pre-document DOM race.
                 await page.evaluate((selectedTheme) => {
                   document.documentElement.dataset.alienxTheme = selectedTheme;
                 }, theme);
                 await expect(page.locator('html')).toHaveAttribute('data-alienx-theme', theme);
 
-                // Status renders its checks asynchronously. Do not run axe against the
-                // empty loading state; audit the fully rendered page instead.
                 if (route === '/status/') {
                   await expect(page.locator('#checks')).toHaveAttribute('aria-busy', 'false', { timeout: 5000 });
                   await expect(page.locator('#checks .check')).toHaveCount(4, { timeout: 1000 });
@@ -98,8 +90,6 @@ jobs:
                   await page.waitForTimeout(500);
                 }
 
-                // Guard against text that is technically present in the DOM but visually
-                // hidden. Axe catches contrast; this catches zero-size/transparent headings.
                 const visualHeadings = await page.evaluate(() => [...document.querySelectorAll('h1,h2,h3')]
                   .filter((heading) => heading.textContent?.trim())
                   .map((heading) => {
@@ -119,6 +109,63 @@ jobs:
                 expect(
                   visualHeadings.filter((heading) => heading.width <= 0 || heading.height <= 0 || heading.visibility === 'hidden' || heading.display === 'none' || heading.opacity === 0),
                   `${theme} visually hidden headings on ${route}: ${JSON.stringify(visualHeadings)}`
+                ).toEqual([]);
+
+                // Catch theme-token leaks that can leave an otherwise rendered heading
+                // effectively invisible on a light/dark surface. Axe normally catches
+                // this too, but this explicit contract makes the failure diagnostic and
+                // guarantees the selected theme is actually being audited.
+                const headingContrast = await page.evaluate(() => {
+                  const parse = (value) => {
+                    const match = value.match(/rgba?\(([^)]+)\)/);
+                    if (!match) return null;
+                    const parts = match[1].split(',').map(Number);
+                    return { r: parts[0], g: parts[1], b: parts[2], a: parts[3] ?? 1 };
+                  };
+                  const luminance = ({r,g,b}) => {
+                    const channel = (value) => {
+                      const normalized = value / 255;
+                      return normalized <= 0.03928 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
+                    };
+                    return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+                  };
+                  const contrast = (foreground, background) => {
+                    const a = luminance(foreground);
+                    const b = luminance(background);
+                    return (Math.max(a,b) + 0.05) / (Math.min(a,b) + 0.05);
+                  };
+                  const findBackground = (element) => {
+                    let current = element.parentElement;
+                    while (current) {
+                      const background = parse(getComputedStyle(current).backgroundColor);
+                      if (background && background.a >= 0.99) return background;
+                      current = current.parentElement;
+                    }
+                    return parse(getComputedStyle(document.body).backgroundColor) || {r:255,g:255,b:255,a:1};
+                  };
+                  return [...document.querySelectorAll('h1,h2,h3')]
+                    .filter((heading) => heading.textContent?.trim())
+                    .map((heading) => {
+                      const style = getComputedStyle(heading);
+                      const foreground = parse(style.color);
+                      const background = findBackground(heading);
+                      if (!foreground || !background || foreground.a < 0.99) return null;
+                      const fontSize = parseFloat(style.fontSize);
+                      const fontWeight = Number(style.fontWeight) || 400;
+                      const required = fontSize >= 24 || fontWeight >= 700 ? 3 : 4.5;
+                      return {
+                        text: heading.textContent.trim().slice(0, 100),
+                        foreground: style.color,
+                        background: `rgb(${background.r}, ${background.g}, ${background.b})`,
+                        ratio: Number(contrast(foreground, background).toFixed(2)),
+                        required
+                      };
+                    }).filter(Boolean);
+                });
+
+                expect(
+                  headingContrast.filter((item) => item.ratio < item.required),
+                  `${theme} heading contrast failures on ${route}: ${JSON.stringify(headingContrast)}`
                 ).toEqual([]);
 
                 const results = await page.evaluate(async () => window.axe.run(document, {
