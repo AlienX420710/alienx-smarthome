@@ -73,7 +73,17 @@ jobs:
             test(`${route} @ ${width}x${height}`, async ({page}) => {
               const errors=[];
               page.on('pageerror',e=>errors.push(`pageerror: ${e.message}`));
-              page.on('console',m=>{if(m.type()==='error') errors.push(`console: ${m.text()}`);});
+              page.on('console',m=>{
+                if(m.type()==='error') {
+                  const text=m.text();
+                  // Chromium reports frame-ancestors as a console error when CSP is
+                  // delivered via a meta tag. Keep the CSP policy; ignore only this
+                  // known browser diagnostic rather than masking real runtime errors.
+                  if(!text.includes('frame-ancestors') || !text.includes('meta')) {
+                    errors.push(`console: ${text}`);
+                  }
+                }
+              });
 
               await page.setViewportSize({width,height});
               await page.goto(`${baseURL}${route}`,{waitUntil:'domcontentloaded'});
