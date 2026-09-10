@@ -86,13 +86,13 @@ jobs:
               });
 
               await page.setViewportSize({width,height});
-              // Exercise the light theme explicitly so responsive tests also cover
-              // page-local theme overrides instead of only the browser default.
+              // Persist the theme before navigation so page-local theme CSS is exercised.
+              // Do not touch documentElement here: addInitScript runs before it exists.
               await page.addInitScript(() => {
-                document.documentElement.dataset.alienxTheme = 'light';
-                localStorage.setItem('alienx-theme', 'light');
+                try { localStorage.setItem('alienx-theme', 'light'); } catch {}
               });
               await page.goto(`${baseURL}${route}`,{waitUntil:'domcontentloaded'});
+              await page.evaluate(() => { document.documentElement.dataset.alienxTheme = 'light'; });
               await page.waitForTimeout(500);
 
               const result=await page.evaluate(()=>{
