@@ -65,8 +65,6 @@ jobs:
           const routes = ['/', '/work/', '/experience/', '/technology/', '/status/', '/about/', '/contact/'];
           const themes = ['light', 'dark'];
 
-          test.describe.configure({ mode: 'serial' });
-
           for (const theme of themes) {
             for (const route of routes) {
               test(`${theme} theme: ${route}`, async ({ page }) => {
@@ -111,10 +109,6 @@ jobs:
                   `${theme} visually hidden headings on ${route}: ${JSON.stringify(visualHeadings)}`
                 ).toEqual([]);
 
-                // Catch theme-token leaks that can leave an otherwise rendered heading
-                // effectively invisible on a light/dark surface. Axe normally catches
-                // this too, but this explicit contract makes the failure diagnostic and
-                // guarantees the selected theme is actually being audited.
                 const headingContrast = await page.evaluate(() => {
                   const parse = (value) => {
                     const match = value.match(/rgba?\(([^)]+)\)/);
