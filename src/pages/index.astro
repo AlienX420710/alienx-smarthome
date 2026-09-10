@@ -87,22 +87,23 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	@media(max-width:800px){ main{width:min(100% - 28px,680px)}.hero{grid-template-columns:1fr;gap:2rem;padding-top:3rem}.hero__visual{min-height:400px}.capability-grid,.proof{grid-template-columns:1fr}.proof{gap:2rem} }
 	@media(max-width:520px){ .system-core{width:190px;height:190px}.core-center{width:78px;height:78px}.panel-topline{flex-direction:column}.capability-card--large{min-height:250px} }
 	@media(prefers-color-scheme:light){
-		:global(body){--home-accent:var(--brand-green-dark);background:#fff;color:#222939}
-		.eyebrow{color:#52627a}
-		h1,h2,h3{color:#0f1219}
-		.hero__lede{color:#60739f}
-		.button--ghost{color:#1d2433;border-color:#c8d0df;background:#f4f6fa}
-		.system-panel{border-color:rgba(22,163,74,.24);background:linear-gradient(145deg,rgba(247,251,248,.96),rgba(238,245,240,.94));box-shadow:0 30px 100px rgba(53,94,63,.14),inset 0 1px rgba(255,255,255,.9)}
-		.panel-topline,.system-label{color:#687797}
-		.status{color:#52617d}
-		.core-center{color:#17451f;background:radial-gradient(circle,rgba(22,163,74,.16),rgba(255,255,255,.82));box-shadow:0 0 60px rgba(22,163,74,.14)}
-		.section-heading>p:last-child,.cta>p,.proof-copy p{color:#60739f}
-		.capabilities,.proof{border-top-color:#e1e6ef}
-		.capability-card{border-color:#dfe5ee;background:linear-gradient(145deg,#f8fafc,#f1f4f8);box-shadow:0 12px 35px rgba(42,55,80,.06)}
-		.capability-card:hover{border-color:#75b887;background:linear-gradient(145deg,#f3faf5,#eef5f0)}
-		.capability-number{color:#687797}
-		.capability-card p{color:#60739f}
-		.text-link{color:#1d2433}
-		.cta{border-color:#dfe5ee;background:radial-gradient(circle at 50% 0%,rgba(22,163,74,.10),transparent 55%),#f7f9fb}
+		:global(html:where(:not([data-alienx-theme]))) :global(body){--home-accent:var(--brand-green-dark);background:#fff;color:#222939}
+		:global(html:where(:not([data-alienx-theme]))) .eyebrow{color:#52627a}
+		:global(html:where(:not([data-alienx-theme]))) h1,:global(html:where(:not([data-alienx-theme]))) h2,:global(html:where(:not([data-alienx-theme]))) h3{color:#0f1219}
+		:global(html:where(:not([data-alienx-theme]))) .hero__lede{color:#60739f}
+		:global(html:where(:not([data-alienx-theme]))) .button--ghost{color:#1d2433;border-color:#c8d0df;background:#f4f6fa}
+		:global(html:where(:not([data-alienx-theme]))) .system-panel{border-color:rgba(22,163,74,.24);background:linear-gradient(145deg,rgba(247,251,248,.96),rgba(238,245,240,.94));box-shadow:0 30px 100px rgba(53,94,63,.14),inset 0 1px rgba(255,255,255,.9)}
+		:global(html:where(:not([data-alienx-theme]))) .panel-topline,:global(html:where(:not([data-alienx-theme]))) .system-label{color:#687797}
+		:global(html:where(:not([data-alienx-theme]))) .status{color:#52617d}
+		:global(html:where(:not([data-alienx-theme]))) .core-center{color:#17451f;background:radial-gradient(circle,rgba(22,163,74,.16),rgba(255,255,255,.82));box-shadow:0 0 60px rgba(22,163,74,.14)}
+		:global(html:where(:not([data-alienx-theme]))) .section-heading>p:last-child,:global(html:where(:not([data-alienx-theme]))) .cta>p,:global(html:where(:not([data-alienx-theme]))) .proof-copy p{color:#60739f}
+		:global(html:where(:not([data-alienx-theme]))) .capabilities,:global(html:where(:not([data-alienx-theme]))) .proof{border-top-color:#e1e6ef}
+		:global(html:where(:not([data-alienx-theme]))) .capability-card{border-color:#dfe5ee;background:linear-gradient(145deg,#f8fafc,#f1f4f8);box-shadow:0 12px 35px rgba(42,55,80,.06)}
+		:global(html:where(:not([data-alienx-theme]))) .capability-card:hover{border-color:#75b887;background:linear-gradient(145deg,#f3faf5,#eef5f0)}
+		:global(html:where(:not([data-alienx-theme]))) .capability-number{color:#687797}
+		:global(html:where(:not([data-alienx-theme]))) .capability-card p{color:#60739f}
+		:global(html:where(:not([data-alienx-theme]))) .text-link{color:#1d2433}
+		:global(html:where(:not([data-alienx-theme]))) .cta{border-color:#dfe5ee;background:radial-gradient(circle at 50% 0%,rgba(22,163,74,.10),transparent 55%),#f7f9fb}
 	}
+	:global(html:where([data-alienx-theme="light"])) :global(body){--home-accent:var(--brand-green-dark);background:#fff;color:#222939}
 </style>

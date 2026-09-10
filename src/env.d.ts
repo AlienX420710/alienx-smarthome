@@ -8,6 +8,8 @@ declare namespace App {
 }
 
 interface Window {
+  __alienxSetTheme?: (theme: string) => void;
+  __alienxSetMotion?: (motion: string) => void;
   __alienxTurnstileWidgetId?: string | null;
   __alienxTurnstileReset?: () => void;
 }

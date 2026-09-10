@@ -35,3 +35,14 @@ Implemented in the next main commit:
 - Add four browser interaction regressions to the responsive workflow, covering Technology revisits, the command button and clear, recurring Status refresh/cleanup, and Contact retry after navigation.
 
 Local validation: 20 unit/handler tests pass; Astro and TypeScript report zero errors, warnings, or hints. The build compiles all bundles but local Cloudflare prerendering still stops at the environment's `uv_interface_addresses` restriction. Full build and the new browser tests must be verified by GitHub Actions. Theme consistency, remaining accessibility work, museum lifecycle, distributed rate limiting, idempotency, and release gating remain open.
+
+## Theme precedence and accessibility coverage
+
+- Saved explicit themes now override OS-color CSS throughout the pages, with system-mode CSS retained when no explicit preference is present.
+- A same-origin head script applies preferences and page identity before paint and to the incoming document before client navigation swaps. Theme changes remain usable when storage is unavailable.
+- Technology owns its light stylesheet; its small green/blue labels use darker, contrasting colors while the dark system diagram keeps its own palette. System light mode receives the same styles as explicit light mode.
+- Contact error and placeholder colors have light/dark variants.
+- Accessibility tests now live in a maintained test file and cover eight routes in six preference/OS combinations, including the success page and opposite OS/explicit settings. Explicit-theme colors are checked for invariance when the OS changes. Corrected the large-bold-text contrast threshold and included WCAG 2.1 checks.
+- Browser failure reports retain screenshots/traces, and hidden Lighthouse reports are uploaded.
+
+Local verification: 23 unit tests pass and Astro/TypeScript remain clean. CI validates the expanded accessibility and interaction matrix. Earlier lifecycle/overflow repairs passed all 88 browser checks, Lighthouse, Safari, Quality and production checks at 8599c5c.

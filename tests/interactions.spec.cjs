@@ -81,3 +81,22 @@ test('Contact retries preserve input and submit the honeypot after navigation', 
   expect(submissions[0].phone).toBe('+44 20 7946 0958');
   expect(submissions[1].website).toBe('reset-token');
 });
+
+test('theme commands persist across client navigation and reload', async ({ page }) => {
+  await page.addInitScript(() => { if (!localStorage.getItem('alienx-theme')) localStorage.setItem('alienx-theme', 'dark'); });
+  await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });
+  await page.goto(base + '/contact/');
+  await expect(page.locator('html')).toHaveAttribute('data-alienx-theme', 'dark');
+  await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Technology', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-alienx-theme', 'dark');
+  for (const next of ['system', 'light']) {
+    await page.getByRole('button', { name: 'Open command palette' }).click();
+    const input = page.getByRole('searchbox', { name: 'Search AlienX commands' });
+    await input.fill('/theme');
+    await input.press('Enter');
+    if (next === 'system') await expect(page.locator('html')).not.toHaveAttribute('data-alienx-theme');
+    else await expect(page.locator('html')).toHaveAttribute('data-alienx-theme', next);
+  }
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-alienx-theme', 'light');
+});
