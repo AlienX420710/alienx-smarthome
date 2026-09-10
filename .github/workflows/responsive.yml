@@ -86,6 +86,12 @@ jobs:
               });
 
               await page.setViewportSize({width,height});
+              // Exercise the light theme explicitly so responsive tests also cover
+              // page-local theme overrides instead of only the browser default.
+              await page.addInitScript(() => {
+                document.documentElement.dataset.alienxTheme = 'light';
+                localStorage.setItem('alienx-theme', 'light');
+              });
               await page.goto(`${baseURL}${route}`,{waitUntil:'domcontentloaded'});
               await page.waitForTimeout(500);
 
@@ -95,10 +101,69 @@ jobs:
                   const r=el.getBoundingClientRect();
                   if(r.width>0&&(r.right>innerWidth+1||r.left<-1)) offenders.push({tag:el.tagName,id:el.id,className:String(el.className).slice(0,120),left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width)});
                 }
-                return {viewportWidth:innerWidth,documentWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),offenders:offenders.slice(0,12)};
+
+                const header=document.querySelector('header');
+                const nav=document.querySelector('header nav');
+                const internal=document.querySelector('.internal-links');
+                const heading=document.querySelector('main h1');
+                const headerRect=header?.getBoundingClientRect();
+                const navRect=nav?.getBoundingClientRect();
+                const internalRect=internal?.getBoundingClientRect();
+                const headingRect=heading?.getBoundingClientRect();
+                const internalStyle=internal ? getComputedStyle(internal) : null;
+                const links=internal ? [...internal.querySelectorAll('a')].map((link)=>link.getBoundingClientRect()) : [];
+
+                return {
+                  viewportWidth:innerWidth,
+                  documentWidth:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth),
+                  offenders:offenders.slice(0,12),
+                  header:{left:headerRect?.left??0,right:headerRect?.right??0,height:headerRect?.height??0},
+                  nav:{left:navRect?.left??0,right:navRect?.right??0},
+                  internal:{
+                    left:internalRect?.left??0,
+                    right:internalRect?.right??0,
+                    width:internalRect?.width??0,
+                    scrollWidth:internal?.scrollWidth??0,
+                    flexWrap:internalStyle?.flexWrap??'',
+                    overflowX:internalStyle?.overflowX??'',
+                    linkTops:links.map((rect)=>Math.round(rect.top))
+                  },
+                  heading:heading ? {
+                    text:heading.textContent?.trim()??'',
+                    width:headingRect?.width??0,
+                    height:headingRect?.height??0,
+                    top:headingRect?.top??0,
+                    color:getComputedStyle(heading).color,
+                    visibility:getComputedStyle(heading).visibility,
+                    opacity:Number(getComputedStyle(heading).opacity)
+                  } : null
+                };
               });
 
               expect(result.documentWidth,`Horizontal overflow: ${JSON.stringify(result.offenders)}`).toBeLessThanOrEqual(result.viewportWidth+1);
+              expect(result.header.left,`Header starts outside viewport: ${JSON.stringify(result.header)}`).toBeGreaterThanOrEqual(-1);
+              expect(result.header.right,`Header exceeds viewport: ${JSON.stringify(result.header)}`).toBeLessThanOrEqual(result.viewportWidth+1);
+              expect(result.nav.left,`Navigation starts outside viewport: ${JSON.stringify(result.nav)}`).toBeGreaterThanOrEqual(-1);
+              expect(result.nav.right,`Navigation exceeds viewport: ${JSON.stringify(result.nav)}`).toBeLessThanOrEqual(result.viewportWidth+1);
+
+              if (width <= 600) {
+                expect(result.internal.width,`Mobile navigation width exceeds viewport: ${JSON.stringify(result.internal)}`).toBeLessThanOrEqual(result.viewportWidth+1);
+                expect(result.internal.flexWrap,`Mobile navigation wrapped instead of using its single-row scroller: ${JSON.stringify(result.internal)}`).toBe('nowrap');
+                expect(['auto','scroll']).toContain(result.internal.overflowX);
+                expect(new Set(result.internal.linkTops).size,`Mobile navigation links wrapped to multiple rows: ${JSON.stringify(result.internal)}`).toBeLessThanOrEqual(1);
+              }
+
+              expect(result.heading,`Missing main heading on ${route}`).not.toBeNull();
+              expect(result.heading.width,`Main heading has no rendered width on ${route}`).toBeGreaterThan(0);
+              expect(result.heading.height,`Main heading has no rendered height on ${route}`).toBeGreaterThan(0);
+              expect(result.heading.visibility,`Main heading is hidden on ${route}`).not.toBe('hidden');
+              expect(result.heading.opacity,`Main heading is transparent on ${route}`).toBeGreaterThan(0);
+
+              if (route === '/technology/' && width <= 600) {
+                expect(result.heading.text).toContain('Built from the web outward.');
+                expect(result.heading.top,`Technology hero heading is pushed too far below the header: ${JSON.stringify(result.heading)}`).toBeLessThanOrEqual(result.header.height + 120);
+              }
+
               expect(errors,`Runtime errors at ${width}x${height}`).toEqual([]);
             });
           }
