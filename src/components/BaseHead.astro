@@ -235,6 +235,54 @@ const structuredData = {
 			--museum-soft: #52627a;
 		}
 	}
+
+	/* Technology light theme: its page-local variables otherwise stay on the dark palette. */
+	html[data-alienx-theme="light"][data-alienx-page="technology"] {
+		--tech-bg: #f7f9fc !important;
+		--tech-text: #253047 !important;
+		--tech-heading: #0d1420 !important;
+		--tech-muted: #46566f !important;
+		--tech-soft: #52627a !important;
+		--tech-border: #c8d1df !important;
+		--tech-border-strong: #aeb9c9 !important;
+	}
+	html[data-alienx-theme="light"][data-alienx-page="technology"] body {
+		--tech-bg: #f7f9fc !important;
+		--tech-text: #253047 !important;
+		--tech-heading: #0d1420 !important;
+		--tech-muted: #46566f !important;
+		--tech-soft: #52627a !important;
+		--tech-border: #c8d1df !important;
+		--tech-border-strong: #aeb9c9 !important;
+		background:
+			radial-gradient(circle at var(--page-gradient-x) 0, rgba(83, 101, 219, .07), transparent 34rem),
+			#f7f9fc !important;
+		color: #253047 !important;
+	}
+	@media (prefers-color-scheme: light) {
+		html:not([data-alienx-theme="dark"])[data-alienx-page="technology"] {
+			--tech-bg: #f7f9fc !important;
+			--tech-text: #253047 !important;
+			--tech-heading: #0d1420 !important;
+			--tech-muted: #46566f !important;
+			--tech-soft: #52627a !important;
+			--tech-border: #c8d1df !important;
+			--tech-border-strong: #aeb9c9 !important;
+		}
+		html:not([data-alienx-theme="dark"])[data-alienx-page="technology"] body {
+			--tech-bg: #f7f9fc !important;
+			--tech-text: #253047 !important;
+			--tech-heading: #0d1420 !important;
+			--tech-muted: #46566f !important;
+			--tech-soft: #52627a !important;
+			--tech-border: #c8d1df !important;
+			--tech-border-strong: #aeb9c9 !important;
+			background:
+				radial-gradient(circle at var(--page-gradient-x) 0, rgba(83, 101, 219, .07), transparent 34rem),
+				#f7f9fc !important;
+			color: #253047 !important;
+		}
+	}
 </style>
 
 {isExperiencePage && <script is:inline src="/experience-museum-csp.js" defer></script>}
@@ -268,4 +316,4 @@ const structuredData = {
 <meta name="twitter:image" content={socialImage} />
 <meta name="twitter:image:alt" content={`${title} — AlienX SmartHome`} />
 
-{isHomePage && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
+{isHomePage && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
