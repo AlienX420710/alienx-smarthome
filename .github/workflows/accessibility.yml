@@ -70,6 +70,9 @@ jobs:
           for (const theme of themes) {
             for (const route of routes) {
               test(`${theme} theme: ${route}`, async ({ page }) => {
+                // The production CSP intentionally blocks inline script injection. Install
+                // axe before navigation through Playwright's pre-document hook instead.
+                await page.addInitScript({ content: axe.source });
                 await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });
                 await page.goto(`${baseURL}${route}`, { waitUntil: 'domcontentloaded' });
 
@@ -81,10 +84,6 @@ jobs:
                 } else {
                   await page.waitForTimeout(500);
                 }
-
-                // The production CSP intentionally blocks inline script injection. Install
-                // axe through Playwright's pre-document hook instead of weakening the CSP.
-                await page.addInitScript({ content: axe.source });
 
                 const results = await page.evaluate(async () => window.axe.run(document, {
                   runOnly: ['wcag2a', 'wcag2aa']
