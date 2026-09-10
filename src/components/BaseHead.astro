@@ -197,6 +197,26 @@ const structuredData = {
 			border-color: #c8d1df !important;
 		}
 	}
+
+	/* Experience uses a deliberately dark museum system; make its muted UI text meet WCAG AA. */
+	html[data-alienx-page="experience"] body {
+		--museum-muted: #aeb9ca;
+		--museum-soft: #9aa6b9;
+	}
+	html[data-alienx-theme="light"][data-alienx-page="experience"] body {
+		--museum-muted: #4d5e78;
+		--museum-soft: #52627a;
+	}
+	html[data-alienx-theme="dark"][data-alienx-page="experience"] body {
+		--museum-muted: #aeb9ca;
+		--museum-soft: #9aa6b9;
+	}
+	@media (prefers-color-scheme: light) {
+		html:not([data-alienx-theme="dark"])[data-alienx-page="experience"] body {
+			--museum-muted: #4d5e78;
+			--museum-soft: #52627a;
+		}
+	}
 </style>
 
 {isExperiencePage && <script is:inline src="/experience-museum.js" defer></script>}
