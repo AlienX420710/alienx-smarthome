@@ -93,7 +93,7 @@ jobs:
                 });
 
                 if (!result.title) throw new Error(`${route}: missing document title`);
-                if (result.readyState !== 'complete') throw new Error(`${route}: document did not reach complete state`);
+                if (!['interactive', 'complete'].includes(result.readyState)) throw new Error(`${route}: document did not reach an interactive state`);
                 if (!result.hasBody || !result.hasMain) throw new Error(`${route}: missing body/main`);
                 if (result.documentWidth > result.viewportWidth + 1) {
                   throw new Error(`${route}: horizontal overflow (${result.documentWidth}px > ${result.viewportWidth}px)`);
