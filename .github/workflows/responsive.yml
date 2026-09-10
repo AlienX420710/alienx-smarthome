@@ -132,11 +132,14 @@ jobs:
               expect(result.nav.left,`Navigation starts outside viewport: ${JSON.stringify(result.nav)}`).toBeGreaterThanOrEqual(-1);
               expect(result.nav.right,`Navigation exceeds viewport: ${JSON.stringify(result.nav)}`).toBeLessThanOrEqual(result.viewportWidth+1);
 
-              if (width <= 600) {
-                expect(result.internal.width,`Mobile navigation width exceeds viewport: ${JSON.stringify(result.internal)}`).toBeLessThanOrEqual(result.viewportWidth+1);
-                expect(result.internal.flexWrap,`Mobile navigation wrapped instead of using its single-row scroller: ${JSON.stringify(result.internal)}`).toBe('nowrap');
+              if (width <= 900) {
+                expect(result.internal.width,`Responsive navigation width exceeds viewport: ${JSON.stringify(result.internal)}`).toBeLessThanOrEqual(result.viewportWidth+1);
+                expect(result.internal.flexWrap,`Responsive navigation wrapped instead of using its single-row scroller: ${JSON.stringify(result.internal)}`).toBe('nowrap');
                 expect(['auto','scroll']).toContain(result.internal.overflowX);
-                expect(new Set(result.internal.linkTops).size,`Mobile navigation links wrapped to multiple rows: ${JSON.stringify(result.internal)}`).toBeLessThanOrEqual(1);
+                expect(new Set(result.internal.linkTops).size,`Responsive navigation links wrapped to multiple rows: ${JSON.stringify(result.internal)}`).toBeLessThanOrEqual(1);
+              }
+
+              if (width <= 600) {
                 expect(result.headerControls.filter((control)=>control.width < 44 || control.height < 44),`Mobile header hit targets below 44px: ${JSON.stringify(result.headerControls)}`).toEqual([]);
               }
 
