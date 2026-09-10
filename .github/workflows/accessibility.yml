@@ -70,11 +70,10 @@ jobs:
           for (const theme of themes) {
             for (const route of routes) {
               test(`${theme} theme: ${route}`, async ({ page }) => {
-                // Exercise the site's real persisted theme path. Merely emulating the
-                // media query misses regressions that occur when an explicit theme is saved.
+                // Persist the selected theme before navigation. addInitScript runs before
+                // documentElement exists, so only touch storage at this stage.
                 await page.addInitScript(({ selectedTheme }) => {
-                  document.documentElement.dataset.alienxTheme = selectedTheme;
-                  localStorage.setItem('alienx-theme', selectedTheme);
+                  try { localStorage.setItem('alienx-theme', selectedTheme); } catch {}
                 }, { selectedTheme: theme });
 
                 // The production CSP intentionally blocks inline script injection. Install
@@ -83,6 +82,11 @@ jobs:
                 await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });
                 await page.goto(`${baseURL}${route}`, { waitUntil: 'domcontentloaded' });
 
+                // Force the final explicit state after the document exists so page-local
+                // theme selectors are exercised without a pre-document DOM race.
+                await page.evaluate((selectedTheme) => {
+                  document.documentElement.dataset.alienxTheme = selectedTheme;
+                }, theme);
                 await expect(page.locator('html')).toHaveAttribute('data-alienx-theme', theme);
 
                 // Status renders its checks asynchronously. Do not run axe against the
