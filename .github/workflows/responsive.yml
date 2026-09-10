@@ -67,8 +67,6 @@ jobs:
             [540,720],[768,1024],[820,1180],[1024,768],[1280,800],[1440,900],[1920,1080]
           ];
 
-          test.describe.configure({ mode:'serial' });
-
           for (const [width,height] of viewports) for (const route of routes) {
             test(`${route} @ ${width}x${height}`, async ({page}) => {
               const errors=[];
