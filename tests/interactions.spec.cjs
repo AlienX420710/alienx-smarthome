@@ -10,9 +10,9 @@ test('Technology layers work after leaving and returning', async ({ page }) => {
     await expect(application).toHaveAttribute('aria-pressed', 'true');
     await expect(page.locator('[data-layer=interface]')).toHaveAttribute('aria-pressed', 'false');
     await expect(page.locator('#layer-detail')).toContainText('Request handling');
-    await page.getByRole('link', { name: 'About Me', exact: true }).click();
+    await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'About Me', exact: true }).click();
     await expect(page).toHaveURL(/\/about\/?$/);
-    await page.getByRole('link', { name: 'Technology', exact: true }).first().click();
+    await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Technology', exact: true }).first().click();
     await expect(page.locator('[data-layer=interface]')).toHaveAttribute('aria-pressed', 'true');
   }
 });
@@ -44,12 +44,12 @@ test('Status refresh repeats and stops after navigation', async ({ page }) => {
   const second = requests;
   await page.clock.runFor(31000);
   await expect.poll(() => requests).toBeGreaterThan(second);
-  await page.getByRole('link', { name: 'About Me', exact: true }).click();
+  await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'About Me', exact: true }).click();
   await expect(page).toHaveURL(/\/about\/?$/);
   const stopped = requests;
   await page.clock.runFor(65000);
   expect(requests).toBe(stopped);
-  await page.getByRole('link', { name: 'Status', exact: true }).first().click();
+  await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Status', exact: true }).first().click();
   await expect(page.locator('#overall-label')).toHaveText('Operational');
   expect(requests).toBeGreaterThan(stopped);
 });
@@ -62,8 +62,8 @@ test('Contact retries preserve input and submit the honeypot after navigation', 
     return route.fulfill({ status: 502, json: { error: 'Mock provider unavailable' } });
   });
   await page.goto(base + '/contact/');
-  await page.getByRole('link', { name: 'About Me', exact: true }).click();
-  await page.getByRole('link', { name: 'Start a project', exact: true }).first().click();
+  await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'About Me', exact: true }).click();
+  await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Start a project', exact: true }).first().click();
   await page.locator('#name').fill('Test Person');
   await page.locator('#email').fill('test@example.test');
   await page.locator('#phone').fill('+44 20 7946 0958');
