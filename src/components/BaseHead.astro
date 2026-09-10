@@ -198,6 +198,24 @@ const structuredData = {
 		}
 	}
 
+	/* Experience light theme: preserve the green CTA while meeting WCAG AA. */
+	html[data-alienx-theme="light"][data-alienx-page="experience"] .enter,
+	html[data-alienx-theme="light"][data-alienx-page="experience"] .closing a {
+		color: #fff !important;
+	}
+	html[data-alienx-theme="light"][data-alienx-page="experience"] .eyebrow {
+		color: #52627a !important;
+	}
+	@media (prefers-color-scheme: light) {
+		html:not([data-alienx-theme="dark"])[data-alienx-page="experience"] .enter,
+		html:not([data-alienx-theme="dark"])[data-alienx-page="experience"] .closing a {
+			color: #fff !important;
+		}
+		html:not([data-alienx-theme="dark"])[data-alienx-page="experience"] .eyebrow {
+			color: #52627a !important;
+		}
+	}
+
 	/* Experience uses a deliberately dark museum system; make its muted UI text meet WCAG AA. */
 	html[data-alienx-page="experience"] body {
 		--museum-muted: #aeb9ca;
