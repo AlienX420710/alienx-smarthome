@@ -39,16 +39,52 @@ const pruneAttempts = (now: number) => {
 	}
 };
 
-export const onRequest = defineMiddleware(async ({ request }, next) => {
-	if (request.method !== 'POST' || new URL(request.url).pathname !== '/api/inquiry') return secure(await next());
+export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
+	if (request.method !== 'POST' || !/^\/api\/inquiry\/?$/.test(new URL(request.url).pathname)) return secure(await next());
 
 	const requestId = `AX-${crypto.randomUUID().replaceAll('-', '').slice(0, 12).toUpperCase()}`;
+	// Bound the stream before parsing or calling either external provider.
+	if (request.headers.get('content-type')?.split(';')[0].trim().toLowerCase() !== 'application/json') {
+		return json({ error: 'Unsupported content type.', requestId }, 415, requestId);
+	}
+	const origin = request.headers.get('origin');
+	if (origin && origin !== new URL(request.url).origin) return json({ error: 'Invalid request origin.', requestId }, 403, requestId);
+	const maxBytes = 16_384;
+	if (Number(request.headers.get('content-length')) > maxBytes) return json({ error: 'Request is too large.', requestId }, 413, requestId);
+	let payload: Record<string, unknown>;
+	try {
+		const reader = request.body?.getReader();
+		if (!reader) return json({ error: 'Invalid request.', requestId }, 400, requestId);
+		const chunks: Uint8Array[] = [];
+		let length = 0;
+		while (true) {
+			const { done, value } = await reader.read();
+			if (done) break;
+			length += value.byteLength;
+			if (length > maxBytes) {
+				await reader.cancel();
+				return json({ error: 'Request is too large.', requestId }, 413, requestId);
+			}
+			chunks.push(value);
+		}
+		const bytes = new Uint8Array(length);
+		let offset = 0;
+		for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+		const parsed: unknown = JSON.parse(new TextDecoder().decode(bytes));
+		if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('Expected an object');
+		payload = parsed as Record<string, unknown>;
+	} catch {
+		return json({ error: 'Invalid request.', requestId }, 400, requestId);
+	}
+
 	const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
 	const now = Date.now();
 	const recent = (attempts.get(ip) ?? []).filter((timestamp) => now - timestamp < RATE_WINDOW_MS);
-
-	if (attempts.size > MAX_TRACKED_IPS) pruneAttempts(now);
-	if (recent.length >= RATE_LIMIT) return json({ error: 'Too many inquiries. Please try again later.', code: 'rate-limited', requestId }, 429, requestId);
+	if (attempts.size >= MAX_TRACKED_IPS) pruneAttempts(now);
+	// Fail closed at capacity instead of growing the isolate's map without bound.
+	if (recent.length >= RATE_LIMIT || (!attempts.has(ip) && attempts.size >= MAX_TRACKED_IPS)) {
+		return json({ error: 'Too many inquiries. Please try again later.', code: 'rate-limited', requestId }, 429, requestId);
+	}
 	recent.push(now);
 	attempts.set(ip, recent);
 
@@ -59,13 +95,6 @@ export const onRequest = defineMiddleware(async ({ request }, next) => {
 	if (!secret || expectedHostnames.size === 0) {
 		console.error('Turnstile is not configured.', { requestId });
 		return json({ error: 'Security verification is not configured.', code: 'turnstile-not-configured', requestId }, 503, requestId);
-	}
-
-	let payload: Record<string, unknown>;
-	try {
-		payload = await request.clone().json() as Record<string, unknown>;
-	} catch {
-		return json({ error: 'Invalid request.', code: 'invalid-request', requestId }, 400, requestId);
 	}
 
 	if (typeof payload.faxNumber === 'string' && payload.faxNumber.trim() !== '') {
@@ -97,13 +126,7 @@ export const onRequest = defineMiddleware(async ({ request }, next) => {
 		return json({ error: 'Security verification could not be completed.', code: 'turnstile-unavailable', requestId }, 403, requestId);
 	}
 
-	const sanitizedPayload = { ...payload, website: '' };
-	const headers = new Headers(request.headers);
-	headers.set('X-Request-ID', requestId);
-	headers.set('Content-Type', 'application/json');
-	return secure(await next(new Request(request.url, {
-		method: request.method,
-		headers,
-		body: JSON.stringify(sanitizedPayload),
-	})));
+	// Locals cannot be forged with a client header, and avoid parsing the body twice.
+	locals.verifiedInquiry = { payload: { ...payload, website: '' }, requestId };
+	return secure(await next());
 });

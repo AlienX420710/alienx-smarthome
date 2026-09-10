@@ -23,7 +23,8 @@
     "audit": "npm audit --audit-level=high",
     "deploy": "wrangler deploy",
     "dev": "astro dev",
-    "preview": "astro build && wrangler dev"
+    "preview": "astro build && wrangler dev",
+    "test": "node --test tests/*.test.cjs"
   },
   "overrides": {
     "sharp": "0.35.4"
