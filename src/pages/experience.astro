@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE } from '../consts';
 
-const title = `Experience | ${SITE_TITLE}`;
+
 const description = 'A museum of interactive browser experiments from AlienX: motion, physics, generative interfaces, algorithms, browser APIs, and live DOM exploration.';
 ---
 <!doctype html>
@@ -113,7 +113,7 @@ const description = 'A museum of interactive browser experiments from AlienX: mo
     </main>
     <Footer />
 
-    <script data-astro-rerun>
+    <script is:inline data-astro-rerun>
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       const pointerCanvas = document.querySelector('[data-pointer-canvas]');

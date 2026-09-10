@@ -159,7 +159,7 @@ jobs:
           }
           TEST
 
-          npx playwright test tests-responsive.spec.cjs --reporter=line
+          npx playwright test tests-responsive.spec.cjs tests/interactions.spec.cjs --reporter=line
 
       - name: Upload preview log on failure
         if: failure()

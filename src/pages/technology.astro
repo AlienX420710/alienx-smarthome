@@ -86,12 +86,12 @@ const description = 'Explore how AlienX engineers websites, applications, automa
       <section class="layers" aria-labelledby="layers-title">
         <div class="section-heading"><p class="eyebrow">02 / SYSTEM LAYERS</p><h2 id="layers-title">One product. <span>Many layers.</span></h2><p>Good systems make the boundaries between layers explicit instead of hiding complexity behind a single buzzword.</p></div>
         <div class="layer-table">
-          <button class="layer is-selected" type="button" data-layer="interface"><span>01</span><strong>Interface</strong><small>What the user sees and operates.</small><b>FRONTEND</b></button>
-          <button class="layer" type="button" data-layer="application"><span>02</span><strong>Application</strong><small>What the product actually does.</small><b>BACKEND</b></button>
-          <button class="layer" type="button" data-layer="automation"><span>03</span><strong>Automation</strong><small>What happens without another click.</small><b>WORKFLOWS</b></button>
-          <button class="layer" type="button" data-layer="operations"><span>04</span><strong>Operations</strong><small>Where the system lives and how it is observed.</small><b>INFRA</b></button>
+          <button class="layer is-selected" type="button" aria-pressed="true" aria-controls="layer-detail" data-layer="interface"><span>01</span><strong>Interface</strong><small>What the user sees and operates.</small><b>FRONTEND</b></button>
+          <button class="layer" type="button" aria-pressed="false" aria-controls="layer-detail" data-layer="application"><span>02</span><strong>Application</strong><small>What the product actually does.</small><b>BACKEND</b></button>
+          <button class="layer" type="button" aria-pressed="false" aria-controls="layer-detail" data-layer="automation"><span>03</span><strong>Automation</strong><small>What happens without another click.</small><b>WORKFLOWS</b></button>
+          <button class="layer" type="button" aria-pressed="false" aria-controls="layer-detail" data-layer="operations"><span>04</span><strong>Operations</strong><small>Where the system lives and how it is observed.</small><b>INFRA</b></button>
         </div>
-        <div class="layer-detail" data-layer-detail>Responsive composition, semantic structure, interaction, accessibility, and browser-native capabilities.</div>
+        <div class="layer-detail" id="layer-detail" aria-live="polite" data-layer-detail>Responsive composition, semantic structure, interaction, accessibility, and browser-native capabilities.</div>
       </section>
 
       <section class="toolbox" aria-labelledby="toolbox-title">
@@ -122,9 +122,24 @@ const description = 'Explore how AlienX engineers websites, applications, automa
     </main>
     <Footer />
     <script>
-      const details={interface:'Responsive composition, semantic structure, interaction, accessibility, and browser-native capabilities.',application:'Request handling, validation, business logic, data contracts, integrations, and server-side processing.',automation:'Event-driven workflows, scheduled jobs, service connections, notifications, and AI-assisted actions.',operations:'Deployment, DNS, environments, caching, observability, source control, and runtime concerns.'};
+      const details: Record<string, string>={interface:'Responsive composition, semantic structure, interaction, accessibility, and browser-native capabilities.',application:'Request handling, validation, business logic, data contracts, integrations, and server-side processing.',automation:'Event-driven workflows, scheduled jobs, service connections, notifications, and AI-assisted actions.',operations:'Deployment, DNS, environments, caching, observability, source control, and runtime concerns.'};
+      function initializeLayers() {
       const detail=document.querySelector('[data-layer-detail]');
-      document.querySelectorAll('[data-layer]').forEach((button)=>button.addEventListener('click',()=>{document.querySelectorAll('[data-layer]').forEach((item)=>item.classList.remove('is-selected'));button.classList.add('is-selected');if(detail)detail.textContent=details[button.dataset.layer]??'';}));
+      document.querySelectorAll<HTMLButtonElement>('[data-layer]').forEach((button) => {
+        if (button.dataset.bound) return;
+        button.dataset.bound = 'true';
+        button.addEventListener('click', () => {
+          document.querySelectorAll<HTMLButtonElement>('[data-layer]').forEach((item) => {
+            const selected = item === button;
+            item.classList.toggle('is-selected', selected);
+            item.setAttribute('aria-pressed', String(selected));
+          });
+          if (detail) detail.textContent = details[button.dataset.layer ?? ''] ?? '';
+        });
+      });
+      }
+      document.addEventListener('astro:page-load', initializeLayers);
+      initializeLayers();
     </script>
     <style>
       :global(html){background:var(--tech-bg);color:var(--tech-text)}

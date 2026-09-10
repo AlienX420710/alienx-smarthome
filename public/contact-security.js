@@ -16,7 +16,7 @@
     remove();
     container = next;
     window.__alienxTurnstileWidgetId = window.turnstile.render(next, {
-      sitekey: next.dataset.sitekey, action: 'contact', theme: 'auto', size: 'flexible',
+      sitekey: next.dataset.sitekey, action: 'contact', theme: 'auto', size: 'compact',
       'response-field-name': 'website', 'refresh-expired': 'auto', 'refresh-timeout': 'auto',
       callback: () => { next.dataset.state = 'success'; },
       'expired-callback': () => { next.dataset.state = 'expired'; },

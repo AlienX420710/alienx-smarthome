@@ -68,21 +68,19 @@ import Footer from '../components/Footer.astro';
 </html>
 
 <script>
-	type Check = { status: 'operational' | 'configured' | 'degraded'; detail: string };
-	type StatusResponse = {
-		status: 'operational' | 'degraded';
-		generatedAt: string;
-		checks: Record<string, Check>;
-		runtime: string;
-		summary: string;
-	};
-
-	const checks = document.querySelector('#checks');
-	const overall = document.querySelector('#overall');
-	const overallLabel = document.querySelector('#overall-label');
-	const updated = document.querySelector('#updated');
-	const refreshButton = document.querySelector('#refresh');
-	const progress = document.querySelector('#signal-progress');
+	import { parseStatus, type StatusResponse } from '../lib/status';
+	let cleanup: (() => void) | undefined;
+	function initializeStatus() {
+	cleanup?.();
+	if (!document.querySelector('.status-page')) return;
+	const lifecycle = new AbortController();
+	const { signal } = lifecycle;
+	const checks = document.querySelector<HTMLElement>('#checks');
+	const overall = document.querySelector<HTMLElement>('#overall');
+	const overallLabel = document.querySelector<HTMLElement>('#overall-label');
+	const updated = document.querySelector<HTMLElement>('#updated');
+	const refreshButton = document.querySelector<HTMLButtonElement>('#refresh');
+	const progress = document.querySelector<HTMLElement>('#signal-progress');
 	let refreshTimer: number | undefined;
 	let refreshing = false;
 
@@ -104,7 +102,7 @@ import Footer from '../components/Footer.astro';
 		checks.innerHTML = labels.map(([key, label, fallback]) => {
 			const check = data.checks[key];
 			const state = check?.status ?? 'degraded';
-			const detail = check?.detail ?? fallback;
+			const detail = (check?.detail ?? fallback).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!);
 			const stateLabel = state === 'operational' ? 'OPERATIONAL' : state === 'configured' ? 'CONFIGURED' : 'DEGRADED';
 			return `<article class="check check--${state}">
 				<div class="check-icon" aria-hidden="true"><span></span></div>
@@ -115,7 +113,8 @@ import Footer from '../components/Footer.astro';
 	};
 
 	const refresh = async () => {
-		if (refreshing) return;
+		if (refreshing || signal.aborted || document.hidden) return;
+        window.clearTimeout(refreshTimer);
 		refreshing = true;
 		setOverall('checking');
 		if (checks) checks.setAttribute('aria-busy', 'true');
@@ -123,14 +122,15 @@ import Footer from '../components/Footer.astro';
 		progress?.classList.add('loading');
 
 		try {
-			const response = await fetch('/api/status', { cache: 'no-store' });
+			const response = await fetch('/api/status', { cache: 'no-store', signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]) });
 			if (!response.ok) throw new Error(`Status endpoint returned ${response.status}`);
-			const data = await response.json() as StatusResponse;
-			if (!data?.checks || !data.generatedAt) throw new Error('Invalid status response');
+			const data = parseStatus(await response.json());
+            if (signal.aborted) return;
 			renderChecks(data);
 			setOverall(data.status === 'operational' ? 'operational' : 'degraded');
 			if (updated) updated.textContent = `Last checked ${new Date(data.generatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}`;
 		} catch {
+            if (signal.aborted) return;
 			if (checks) checks.innerHTML = '<article class="check check--degraded check--error"><div class="check-icon" aria-hidden="true"><span></span></div><div class="check-copy"><span class="check-name">STATUS ENDPOINT</span><strong>UNAVAILABLE</strong><small>The live signal could not be reached. Try again in a moment.</small></div></article>';
 			if (checks) checks.setAttribute('aria-busy', 'false');
 			setOverall('degraded');
@@ -139,11 +139,13 @@ import Footer from '../components/Footer.astro';
 			progress?.classList.remove('loading');
 			if (refreshButton) refreshButton.disabled = false;
 			refreshing = false;
+            scheduleRefresh();
 		}
 	};
 
 	const scheduleRefresh = () => {
-		if (refreshTimer) window.clearTimeout(refreshTimer);
+		window.clearTimeout(refreshTimer);
+        if (signal.aborted || document.hidden) return;
 		refreshTimer = window.setTimeout(() => {
 			void refresh();
 		}, 30000);
@@ -151,25 +153,26 @@ import Footer from '../components/Footer.astro';
 
 	refreshButton?.addEventListener('click', () => {
 		void refresh();
-		scheduleRefresh();
-	});
+	}, { signal });
 	document.addEventListener('keydown', (event) => {
-		if (event.key.toLowerCase() === 'r' && !event.metaKey && !event.ctrlKey && !event.altKey && !(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLSelectElement)) {
+		if (event.key.toLowerCase() === 'r' && !event.metaKey && !event.ctrlKey && !event.altKey && !(event.target instanceof HTMLElement && (event.target.isContentEditable || event.target.closest('input, textarea, select, [role=dialog]')))) {
 			event.preventDefault();
 			void refresh();
-			scheduleRefresh();
 		}
-	});
+	}, { signal });
 	document.addEventListener('visibilitychange', () => {
 		if (document.hidden) {
 			if (refreshTimer) window.clearTimeout(refreshTimer);
 		} else {
 			void refresh();
-			scheduleRefresh();
 		}
-	});
+	}, { signal });
+	cleanup = () => { lifecycle.abort(); window.clearTimeout(refreshTimer); };
 	void refresh();
-	scheduleRefresh();
+	}
+	document.addEventListener('astro:before-swap', () => cleanup?.());
+	document.addEventListener('astro:page-load', initializeStatus);
+	initializeStatus();
 </script>
 
 <style>
@@ -250,6 +253,6 @@ import Footer from '../components/Footer.astro';
 	@keyframes signal-pulse { 0%,100% { transform: scale(.92); opacity: .8; } 50% { transform: scale(1.08); opacity: 1; } }
 	@keyframes scan { 0% { transform: scaleX(0); } 55% { transform: scaleX(1); } 100% { transform: scaleX(1); opacity: 0; } }
 	@media (prefers-reduced-motion: reduce) { .core-signal { animation: none; } .check { transition: none; } }
-	@media (max-width: 800px) { .status-page { padding-top: 3rem; } .hero { min-height: 0; grid-template-columns: 1fr; gap: 2rem; padding-bottom: 2rem; } .core { width: 12rem; height: 12rem; justify-self: start; margin-left: 1rem; } .checks { grid-template-columns: 1fr; } .transparency { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 5rem; } .runtime { grid-template-columns: 1fr; } .runtime div { border-right: 0; border-bottom: 1px solid #172033; } .runtime div:last-child { border-bottom: 0; } }
-	@media (max-width: 520px) { .status-page { width: min(100% - 28px, 680px); } .status-panel { padding: 1.1rem; border-radius: 22px; } .panel-head { align-items: flex-start; flex-direction: column; } .hero h1 { font-size: clamp(3.5rem, 17vw, 5.5rem); } .lede { font-size: 1rem; } .check { min-height: 0; } .panel-meta { align-items: flex-start; flex-direction: column; } }
+	@media (max-width: 800px) { .status-page { padding-top: 3rem; } .hero { min-height: 0; grid-template-columns: minmax(0, 1fr); gap: 2rem; padding-bottom: 2rem; } .core { width: 12rem; height: 12rem; justify-self: start; margin-left: 1rem; } .checks { grid-template-columns: 1fr; } .transparency { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 5rem; } .runtime { grid-template-columns: 1fr; } .runtime div { border-right: 0; border-bottom: 1px solid #172033; } .runtime div:last-child { border-bottom: 0; } }
+	@media (max-width: 520px) { .status-page { width: min(100% - 28px, 680px); } .status-panel { padding: 1.1rem; border-radius: 22px; } .panel-head { align-items: flex-start; flex-direction: column; } .hero h1 { font-size: clamp(2.4rem, 10.5vw, 3.5rem); overflow-wrap: anywhere; } .lede { font-size: 1rem; } .check { min-height: 0; } .panel-meta { align-items: flex-start; flex-direction: column; } }
 </style>

@@ -9,6 +9,7 @@
     "typescript": "5.9.3"
   },
   "devDependencies": {
+    "@astrojs/check": "0.9.10",
     "wrangler": "4.129.1"
   },
   "engines": {
@@ -18,13 +19,14 @@
   "scripts": {
     "astro": "astro",
     "build": "astro build",
-    "cf-typegen": "wrangler types",
-    "check": "astro build && tsc && wrangler deploy --dry-run",
+    "cf-typegen": "wrangler types && node scripts/scope-worker-types.mjs",
+    "check": "astro check && astro build && tsc --noEmit && wrangler deploy --dry-run",
     "audit": "npm audit --audit-level=high",
     "deploy": "wrangler deploy",
     "dev": "astro dev",
     "preview": "astro build && wrangler dev",
-    "test": "node --test tests/*.test.cjs"
+    "test": "node --test tests/*.test.cjs",
+    "typecheck": "astro check && tsc --noEmit"
   },
   "overrides": {
     "sharp": "0.35.4"

@@ -13556,3 +13556,5 @@ declare abstract class WorkflowInstance {
         payload: unknown;
     }): Promise<void>;
 }
+
+export type { Env };
