@@ -76,9 +76,6 @@ jobs:
               page.on('console',m=>{
                 if(m.type()==='error') {
                   const text=m.text();
-                  // Chromium reports frame-ancestors as a console error when CSP is
-                  // delivered via a meta tag. Keep the CSP policy; ignore only this
-                  // known browser diagnostic rather than masking real runtime errors.
                   if(!text.includes('frame-ancestors') || !text.includes('meta')) {
                     errors.push(`console: ${text}`);
                   }
@@ -86,8 +83,6 @@ jobs:
               });
 
               await page.setViewportSize({width,height});
-              // Persist the theme before navigation so page-local theme CSS is exercised.
-              // Do not touch documentElement here: addInitScript runs before it exists.
               await page.addInitScript(() => {
                 try { localStorage.setItem('alienx-theme', 'light'); } catch {}
               });
@@ -112,6 +107,14 @@ jobs:
                 const headingRect=heading?.getBoundingClientRect();
                 const internalStyle=internal ? getComputedStyle(internal) : null;
                 const links=internal ? [...internal.querySelectorAll('a')].map((link)=>link.getBoundingClientRect()) : [];
+                const headerControls=header ? [...header.querySelectorAll('a,button')].filter((control)=>{
+                  const rect=control.getBoundingClientRect();
+                  const style=getComputedStyle(control);
+                  return rect.width>0 && rect.height>0 && style.visibility!=='hidden' && style.display!=='none';
+                }).map((control)=>{
+                  const rect=control.getBoundingClientRect();
+                  return {tag:control.tagName,aria:control.getAttribute('aria-label')||'',text:control.textContent?.trim().slice(0,40)||'',width:Math.round(rect.width),height:Math.round(rect.height)};
+                }) : [];
 
                 return {
                   viewportWidth:innerWidth,
@@ -119,24 +122,9 @@ jobs:
                   offenders:offenders.slice(0,12),
                   header:{left:headerRect?.left??0,right:headerRect?.right??0,height:headerRect?.height??0},
                   nav:{left:navRect?.left??0,right:navRect?.right??0},
-                  internal:{
-                    left:internalRect?.left??0,
-                    right:internalRect?.right??0,
-                    width:internalRect?.width??0,
-                    scrollWidth:internal?.scrollWidth??0,
-                    flexWrap:internalStyle?.flexWrap??'',
-                    overflowX:internalStyle?.overflowX??'',
-                    linkTops:links.map((rect)=>Math.round(rect.top))
-                  },
-                  heading:heading ? {
-                    text:heading.textContent?.trim()??'',
-                    width:headingRect?.width??0,
-                    height:headingRect?.height??0,
-                    top:headingRect?.top??0,
-                    color:getComputedStyle(heading).color,
-                    visibility:getComputedStyle(heading).visibility,
-                    opacity:Number(getComputedStyle(heading).opacity)
-                  } : null
+                  internal:{left:internalRect?.left??0,right:internalRect?.right??0,width:internalRect?.width??0,scrollWidth:internal?.scrollWidth??0,flexWrap:internalStyle?.flexWrap??'',overflowX:internalStyle?.overflowX??'',linkTops:links.map((rect)=>Math.round(rect.top))},
+                  headerControls,
+                  heading:heading ? {text:heading.textContent?.trim()??'',width:headingRect?.width??0,height:headingRect?.height??0,top:headingRect?.top??0,color:getComputedStyle(heading).color,visibility:getComputedStyle(heading).visibility,opacity:Number(getComputedStyle(heading).opacity)} : null
                 };
               });
 
@@ -151,6 +139,7 @@ jobs:
                 expect(result.internal.flexWrap,`Mobile navigation wrapped instead of using its single-row scroller: ${JSON.stringify(result.internal)}`).toBe('nowrap');
                 expect(['auto','scroll']).toContain(result.internal.overflowX);
                 expect(new Set(result.internal.linkTops).size,`Mobile navigation links wrapped to multiple rows: ${JSON.stringify(result.internal)}`).toBeLessThanOrEqual(1);
+                expect(result.headerControls.filter((control)=>control.width < 44 || control.height < 44),`Mobile header hit targets below 44px: ${JSON.stringify(result.headerControls)}`).toEqual([]);
               }
 
               expect(result.heading,`Missing main heading on ${route}`).not.toBeNull();
