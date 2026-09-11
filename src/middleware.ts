@@ -8,6 +8,7 @@ const MAX_TRACKED_IPS = 5000;
 const attempts = new Map<string, number[]>();
 
 const securityHeaders = {
+	'Content-Security-Policy': "frame-ancestors 'none'",
 	'X-Content-Type-Options': 'nosniff',
 	'X-Frame-Options': 'DENY',
 	'Referrer-Policy': 'strict-origin-when-cross-origin',
@@ -42,7 +43,9 @@ const pruneAttempts = (now: number) => {
 export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
 	if (request.method !== 'POST' || !/^\/api\/inquiry\/?$/.test(new URL(request.url).pathname)) return secure(await next());
 
-	const requestId = `AX-${crypto.randomUUID().replaceAll('-', '').slice(0, 12).toUpperCase()}`;
+	const retryKey = request.headers.get('Idempotency-Key');
+	if (retryKey && !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(retryKey)) return json({ error: 'Invalid retry key.' }, 400);
+	const requestId = `AX-${(retryKey ?? crypto.randomUUID()).replaceAll('-', '').toUpperCase()}`;
 	// Bound the stream before parsing or calling either external provider.
 	if (request.headers.get('content-type')?.split(';')[0].trim().toLowerCase() !== 'application/json') {
 		return json({ error: 'Unsupported content type.', requestId }, 415, requestId);
@@ -89,7 +92,15 @@ export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
 	attempts.set(ip, recent);
 
 	const { env } = await import('cloudflare:workers');
-	const bindings = env as unknown as { TURNSTILE_SECRET?: string; TURNSTILE_HOSTNAMES?: string };
+	const bindings = env as unknown as { TURNSTILE_SECRET?: string; TURNSTILE_HOSTNAMES?: string; INQUIRY_RATE_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> } };
+	if (bindings.INQUIRY_RATE_LIMITER) {
+		try {
+			const result = await bindings.INQUIRY_RATE_LIMITER.limit({ key: `alienx-inquiry:${ip}` });
+			if (!result.success) return json({ error: 'Too many inquiries. Please try again later.', code: 'rate-limited', requestId }, 429, requestId);
+		} catch {
+			return json({ error: 'Inquiry protection is unavailable. Please try again later.', requestId }, 503, requestId);
+		}
+	}
 	const secret = bindings.TURNSTILE_SECRET;
 	const expectedHostnames = new Set((bindings.TURNSTILE_HOSTNAMES ?? '').split(',').map((h) => h.trim()).filter(Boolean));
 	if (!secret || expectedHostnames.size === 0) {

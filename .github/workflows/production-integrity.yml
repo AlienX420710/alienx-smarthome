@@ -40,7 +40,7 @@ jobs:
 
           for host in alienxsmarthome.com www.alienxsmarthome.com; do
             echo "Checking HTTPS response for $host"
-            curl --fail --silent --show-error --location --max-redirs 3 \
+            curl --fail --silent --show-error --location --max-redirs 3 --connect-timeout 10 --max-time 30 \
               -D "/tmp/${host}.headers" -o "/tmp/${host}.html" "https://${host}/"
 
             require_header "/tmp/${host}.headers" '^strict-transport-security:.*max-age=31536000.*includeSubDomains' 'HSTS'

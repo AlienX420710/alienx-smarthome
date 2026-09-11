@@ -1,4 +1,5 @@
 type Env = import("../worker-configuration").Env;
+declare const __ALIENX_BUILD_SHA__: string;
 type Runtime = import("@astrojs/cloudflare").Runtime<Env>;
 
 declare namespace App {

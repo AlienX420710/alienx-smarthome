@@ -7,11 +7,11 @@ import Footer from '../components/Footer.astro';
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title="System Status — AlienX SmartHome" description="Live operational status for AlienX SmartHome infrastructure." />
+		<BaseHead title="System Status — AlienX SmartHome" description="Worker reachability and integration configuration for AlienX SmartHome." />
 	</head>
 	<body>
 		<Header />
-		<main class="status-page">
+		<main id="main-content" tabindex="-1" class="status-page">
 			<section class="hero" aria-labelledby="status-title">
 				<div class="hero-copy">
 					<p class="eyebrow">ALIENX // SYSTEM STATUS</p>
@@ -52,8 +52,8 @@ import Footer from '../components/Footer.astro';
 			</div>
 			<div class="explanation">
 				<p><strong>Operational</strong> means the production Worker answered the live check.</p>
-				<p><strong>Configured</strong> means a required integration is present and ready to be used.</p>
-				<p>The public check never exposes secrets or sends a test message. Production smoke tests provide the deeper automated verification.</p>
+				<p><strong>Configured</strong> means a required integration is present. It does not prove authentication or delivery succeeds.</p>
+				<p>The public check never exposes secrets or sends a test message. Smoke tests verify HTTP responses and configuration, not end-to-end inquiry delivery.</p>
 			</div>
 			</section>
 
@@ -123,7 +123,7 @@ import Footer from '../components/Footer.astro';
 
 		try {
 			const response = await fetch('/api/status', { cache: 'no-store', signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]) });
-			if (!response.ok) throw new Error(`Status endpoint returned ${response.status}`);
+			if (!response.ok && response.status !== 503) throw new Error(`Status endpoint returned ${response.status}`);
 			const data = parseStatus(await response.json());
             if (signal.aborted) return;
 			renderChecks(data);

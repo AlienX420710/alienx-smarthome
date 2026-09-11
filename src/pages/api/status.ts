@@ -24,7 +24,9 @@ export const GET: APIRoute = async ({ request }) => {
 		TURNSTILE_SECRET?: string;
 		TURNSTILE_HOSTNAMES?: string;
 		RESEND_API_KEY?: string;
+        INQUIRY_RATE_LIMITER?: unknown;
 	};
+	const turnstileConfigured = Boolean(bindings.TURNSTILE_SECRET && bindings.TURNSTILE_HOSTNAMES?.split(',').some(host => host.trim()));
 
 	const checks: Record<string, Check> = {
 		worker: {
@@ -32,12 +34,12 @@ export const GET: APIRoute = async ({ request }) => {
 			detail: 'Production Worker is responding',
 		},
 		inquiry: {
-			status: 'operational',
-			detail: 'Inquiry route is available in production',
+			status: turnstileConfigured && bindings.RESEND_API_KEY ? 'configured' : 'degraded',
+			detail: 'Configuration check only; no inquiry or provider delivery test is performed',
 		},
 		turnstile: {
-			status: bindings.TURNSTILE_SECRET && bindings.TURNSTILE_HOSTNAMES ? 'configured' : 'degraded',
-			detail: bindings.TURNSTILE_SECRET && bindings.TURNSTILE_HOSTNAMES
+			status: turnstileConfigured ? 'configured' : 'degraded',
+			detail: turnstileConfigured
 			? 'Turnstile protection is configured'
 			: 'Turnstile protection is not configured',
 		},
@@ -56,11 +58,13 @@ export const GET: APIRoute = async ({ request }) => {
 
 	return json({
 		ok: !degraded,
+		buildRevision: __ALIENX_BUILD_SHA__,
 		status: degraded ? 'degraded' : 'operational',
 		generatedAt: new Date().toISOString(),
 		requestId: request.headers.get('cf-ray') ?? crypto.randomUUID(),
 		checks,
+        rateLimiting: bindings.INQUIRY_RATE_LIMITER ? 'edge-location' : 'isolate-fallback',
 		summary: `${operational} live · ${configured} configured`,
 		runtime: 'Cloudflare Workers',
-	});
+	}, degraded ? 503 : 200);
 };

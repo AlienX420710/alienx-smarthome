@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
+import { execFileSync } from "node:child_process";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 
@@ -7,15 +8,15 @@ import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
+	vite: { define: { __ALIENX_BUILD_SHA__: JSON.stringify(process.env.GITHUB_SHA || execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim()) } },
 	site: "https://alienxsmarthome.com",
-	integrations: [sitemap(), icon()],
+	integrations: [sitemap({ filter: (page) => !new URL(page).pathname.startsWith("/contact/success") }), icon()],
 	security: {
 		csp: {
 			directives: [
 				"default-src 'self'",
 				"base-uri 'self'",
 				"object-src 'none'",
-				"frame-ancestors 'none'",
 				"form-action 'self'",
 				"img-src 'self' data: blob:",
 				"font-src 'self'",

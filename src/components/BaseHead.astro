@@ -11,7 +11,6 @@ interface Props {
 const { title, description, image = '/alienx-social-preview.jpg' } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(image, Astro.site);
-const isExperiencePage = Astro.url.pathname.replace(/\/$/, '') === '/experience';
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://alienxsmarthome.com';
 const isHomePage = Astro.url.pathname === '/';
 const structuredData = {
@@ -33,7 +32,7 @@ const structuredData = {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
 <meta name="theme-color" content="#070b14" />
-<meta name="robots" content="index, follow" />
+<meta name="robots" content={Astro.url.pathname.startsWith('/contact/success') ? 'noindex, follow' : 'index, follow'} />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
 
 <ClientRouter />
@@ -394,7 +393,6 @@ const structuredData = {
 		}
 </style>
 
-{isExperiencePage && <script is:inline src="/experience-museum-csp.js" defer></script>}
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />

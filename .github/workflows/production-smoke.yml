@@ -13,6 +13,7 @@ permissions:
 jobs:
   smoke:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Setup Node
         uses: actions/setup-node@v5
@@ -112,8 +113,8 @@ jobs:
           const requiredChecks = ['worker', 'inquiry', 'turnstile', 'resend'];
 
           if (
-            typeof value.ok !== 'boolean' ||
-            typeof value.status !== 'string' ||
+            value.ok !== true ||
+            value.status !== 'operational' ||
             !value.checks ||
             typeof value.checks !== 'object' ||
             value.runtime !== 'Cloudflare Workers' ||
@@ -121,7 +122,7 @@ jobs:
             typeof value.summary !== 'string' ||
             requiredChecks.some((key) => {
               const check = value.checks[key];
-              return !check || !['operational', 'configured', 'degraded'].includes(check.status) || typeof check.detail !== 'string';
+              return !check || !['operational', 'configured'].includes(check.status) || typeof check.detail !== 'string';
             })
           ) {
             console.error('Unexpected status payload:');

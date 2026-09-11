@@ -46,3 +46,17 @@ Local validation: 20 unit/handler tests pass; Astro and TypeScript report zero e
 - Browser failure reports retain screenshots/traces, and hidden Lighthouse reports are uploaded.
 
 Local verification: 23 unit tests pass and Astro/TypeScript remain clean. CI validates the expanded accessibility and interaction matrix. Earlier lifecycle/overflow repairs passed all 88 browser checks, Lighthouse, Safari, Quality and production checks at 8599c5c.
+
+## Completed theme correction and remaining runtime repairs
+
+The follow-up theme correction at 0fd34b7 passed every workflow, including the expanded 48-case accessibility matrix and Lighthouse. The previous theme migration had copied only the first rule of each media block; the complete explicit rule sets are now present.
+
+The next runtime repair renders the seven intended museum exhibits on the server, replaces both older museum scripts with one lifecycle-managed controller, pauses offscreen/background/reduced-motion animation, supplies keyboard alternatives, and permits vertical touch scrolling. The old scripts and unused GlowCard component were removed; they remain recoverable in Git history.
+
+Command surfaces now use native modal dialogs; pages include a keyboard skip link. The receipt page is noindex, excluded from the sitemap, and no longer claims that a direct visit proves delivery. Inquiry retries use stable, payload-bound Resend idempotency keys (the provider retains them for 24 hours). A Cloudflare rate-limiter binding shares counters within each edge location; it is eventually consistent, not a strict global quota. The existing bounded isolate limit remains a fallback. Namespace 2107100911 is reserved for this site's inquiry limiter; the key is namespaced to this site.
+
+Status distinguishes reachability from configuration, reports degraded configuration with HTTP 503, exposes the built Git revision, and smoke checks fail on degraded state. It does not claim to verify provider delivery. Frame blocking now also uses a response CSP header. Production curl deadlines and smoke job timeouts are bounded, and Dependabot covers Actions.
+
+Local validation: 26 unit tests pass, including stable retry payloads and edge-limiter rejection/outage handling. Astro/TypeScript remain clean. Browser/CI verification of the runtime repair is required before marking those findings verified.
+
+References: [Resend idempotency](https://resend.com/docs/dashboard/emails/idempotency-keys), [Cloudflare rate-limit locality](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/#locality).

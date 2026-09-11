@@ -75,3 +75,5 @@ html[data-alienx-page="technology"] .cta h2{font-size:clamp(2.25rem,11vw,3.4rem)
 html[data-alienx-page="technology"] .cta p:last-child{font-size:.95rem}
 html[data-alienx-page="technology"] .cta a{display:inline-block;margin-top:12px}
 }
+
+.skip-link{position:fixed;top:8px;left:8px;z-index:2000;padding:12px 18px;color:#fff;background:#172033;transform:translateY(-150%)}.skip-link:focus{transform:none}

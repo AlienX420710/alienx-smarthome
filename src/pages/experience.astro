@@ -5,14 +5,14 @@ import Footer from '../components/Footer.astro';
 import { SITE_TITLE } from '../consts';
 
 
-const description = 'A museum of interactive browser experiments from AlienX: motion, physics, generative interfaces, algorithms, browser APIs, and live DOM exploration.';
+const description = 'Seven interactive browser exhibits: pointer fields, kinetic type, physics, browser capabilities, light, depth, and gesture drawing.';
 ---
 <!doctype html>
 <html lang="en">
-  <head><BaseHead title={`Experience — ${SITE_TITLE}`} description={description} /></head>
+  <head><link rel="stylesheet" href="/experience-museum.css" /><BaseHead title={`Experience — ${SITE_TITLE}`} description={description} /></head>
   <body>
     <Header />
-    <main>
+    <main id="main-content" tabindex="-1">
       <section class="entrance" aria-labelledby="experience-title">
         <div class="entrance-copy">
           <p class="eyebrow">ALIENX / EXPERIENCE MUSEUM</p>
@@ -28,7 +28,7 @@ const description = 'A museum of interactive browser experiments from AlienX: mo
 
       <section class="museum" id="museum" aria-labelledby="museum-title">
         <header class="museum-intro">
-          <div><p class="eyebrow">THE COLLECTION</p><h2 id="museum-title">Eight ways to make a browser <span>do something.</span></h2></div>
+          <div><p class="eyebrow">THE COLLECTION</p><h2 id="museum-title">Seven ways to make a browser <span>do something.</span></h2></div>
           <p>Every exhibit is an actual interaction. No fake metrics. No dashboard to configure. Try them, break them, resize them, and see what happens.</p>
         </header>
 
@@ -41,7 +41,7 @@ const description = 'A museum of interactive browser experiments from AlienX: mo
         <div class="exhibit-pair">
           <article class="exhibit" id="kinetic-type">
             <div class="exhibit-meta"><span>02</span><span>TYPOGRAPHY / TRANSFORM</span></div>
-            <p class="eyebrow">KINETIC TYPE</p><h3>Words have weight.</h3><p>Hover or focus the words. Scale, rotation, and position turn typography into an interface.</p>
+            <p class="eyebrow">KINETIC TYPE</p><h3>Words have weight.</h3><p>Hover or focus the words. Rotation and position turn typography into an interface.</p>
             <div class="type-stage" data-type-stage>
               <button type="button" data-kinetic>MOVE</button><button type="button" data-kinetic>THINK</button><button type="button" data-kinetic>BUILD</button><button type="button" data-kinetic>RESPOND</button>
             </div>
@@ -54,48 +54,20 @@ const description = 'A museum of interactive browser experiments from AlienX: mo
           </article>
         </div>
 
-        <article class="exhibit exhibit--wide" id="generative">
-          <div class="exhibit-meta"><span>04</span><span>PROCEDURAL / DOM / LAYOUT</span></div>
-          <div class="exhibit-split">
-            <div class="exhibit-copy"><p class="eyebrow">GENERATIVE INTERFACE</p><h3>Let the interface invent itself.</h3><p>Generate a new composition. The browser creates a fresh visual system from rules rather than a fixed screenshot.</p><button type="button" class="exhibit-button" data-generate>Generate composition <span>↻</span></button></div>
-            <div class="generation-stage" data-generation-stage aria-live="polite"></div>
-          </div>
-        </article>
+
+
+
 
         <div class="exhibit-pair">
-          <article class="exhibit" id="network">
-            <div class="exhibit-meta"><span>05</span><span>GRAPH / SVG / GEOMETRY</span></div>
-            <p class="eyebrow">NETWORK ILLUSION</p><h3>Walk through a graph.</h3><p>Move your pointer through the network. Nearby nodes connect and influence one another.</p>
-            <div class="network-stage" data-network-stage><svg data-network-svg viewBox="0 0 520 360" role="img" aria-label="Interactive network graph"></svg></div>
-          </article>
 
-          <article class="exhibit" id="algorithms">
-            <div class="exhibit-meta"><span>06</span><span>ALGORITHM / DATA / ANIMATION</span></div>
-            <p class="eyebrow">ALGORITHM VISUALIZER</p><h3>Watch computation happen.</h3><p>Choose an algorithm, shuffle the data, and watch the actual comparisons and swaps happen.</p>
-            <div class="algorithm-stage" data-algorithm-stage>
-              <div class="bars" data-bars aria-label="Sorting visualization"></div>
-              <div class="algorithm-controls"><select data-algorithm aria-label="Sorting algorithm"><option value="bubble">Bubble sort</option><option value="insertion">Insertion sort</option><option value="selection">Selection sort</option></select><button type="button" data-sort>Sort</button><button type="button" data-shuffle>Shuffle</button></div>
-              <div class="algorithm-readout"><span data-comparisons>0 comparisons</span><span data-swaps>0 swaps</span></div>
-            </div>
-          </article>
-        </div>
-
-        <div class="exhibit-pair">
-          <article class="exhibit" id="dom-observatory">
-            <div class="exhibit-meta"><span>07</span><span>DOM / OBSERVER / STRUCTURE</span></div>
-            <p class="eyebrow">DOM OBSERVATORY</p><h3>The page can inspect itself.</h3><p>Click a node to inspect a real element on this page. The tree is generated from the live DOM.</p>
-            <div class="dom-stage" data-dom-stage>
-              <div class="dom-tree" data-dom-tree></div>
-              <div class="dom-inspector"><span>SELECTED NODE</span><strong data-dom-selected>BODY</strong><code data-dom-details>&lt;body&gt;</code></div>
-            </div>
-          </article>
 
           <article class="exhibit" id="browser-lab">
-            <div class="exhibit-meta"><span>08</span><span>NATIVE APIS / PROGRESSIVE ENHANCEMENT</span></div>
+            <div class="exhibit-meta"><span>04</span><span>NATIVE APIS / PROGRESSIVE ENHANCEMENT</span></div>
             <p class="eyebrow">BROWSER CAPABILITY LAB</p><h3>Ask the browser.</h3><p>No claims. These rows query this browser for capabilities it actually exposes.</p>
             <div class="capability-list" data-capabilities></div>
           </article>
         </div>
+<div id="alienx-new-exhibits"><div class="exhibit-pair alienx-exhibit-pair"><article class="exhibit alienx-exhibit" id="light-field"><div class="exhibit-meta"><span>05</span><span>CANVAS / LIGHT / GEOMETRY</span></div><p class="eyebrow">LIGHT FIELD</p><h3>Move the light. Reveal the system.</h3><p>A canvas scene hides its structure until your pointer becomes a moving light source. Click to send a pulse through the field.</p><div class="alienx-light-stage" data-light-stage><canvas data-light-canvas></canvas><span>LIGHT / LIVE</span></div></article><article class="exhibit alienx-exhibit" id="spatial-ui"><div class="exhibit-meta"><span>06</span><span>CSS 3D / POINTER / DEPTH</span></div><p class="eyebrow">SPATIAL UI</p><h3>The interface has depth.</h3><p>Move around the scene and change its perspective. The browser is rendering a layered interface in three dimensions.</p><div class="alienx-spatial-stage" data-spatial-stage><div class="alienx-space" data-space><div class="alienx-space-plane back">SYSTEM / 03</div><div class="alienx-space-plane mid">SIGNAL / 02</div><div class="alienx-space-plane front"><strong>ALIENX</strong><span>DEPTH / 01</span></div></div><span data-space-readout>X +00° / Y +00°</span></div></article></div><article class="exhibit exhibit--wide alienx-exhibit" id="signal-trace"><div class="exhibit-meta"><span>07</span><span>POINTER / CANVAS / GESTURE</span></div><div class="exhibit-split"><div class="exhibit-copy"><p class="eyebrow">SIGNAL TRACE</p><h3>Your movement becomes data.</h3><p>Draw across the field. Pointer velocity changes the trace, leaving a glowing trace until you clear it.</p><button type="button" class="exhibit-button" data-signal-clear>Clear trace <span>×</span></button></div><div class="alienx-signal-stage" data-signal-stage><canvas data-signal-canvas></canvas><span>PRESS / DRAG</span></div></div></article></div>
       </section>
 
       <section class="more-lab" aria-labelledby="more-title">
@@ -113,56 +85,7 @@ const description = 'A museum of interactive browser experiments from AlienX: mo
     </main>
     <Footer />
 
-    <script is:inline data-astro-rerun>
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      const pointerCanvas = document.querySelector('[data-pointer-canvas]');
-      const entranceArt = document.querySelector('[data-entrance-art]');
-      if (pointerCanvas instanceof HTMLCanvasElement && entranceArt instanceof HTMLElement) {
-        const ctx = pointerCanvas.getContext('2d');
-        const resize = () => { const dpr = Math.min(window.devicePixelRatio || 1, 2); pointerCanvas.width = entranceArt.clientWidth * dpr; pointerCanvas.height = entranceArt.clientHeight * dpr; pointerCanvas.style.width = `${entranceArt.clientWidth}px`; pointerCanvas.style.height = `${entranceArt.clientHeight}px`; ctx?.setTransform(dpr, 0, 0, dpr, 0, 0); };
-        const points = Array.from({ length: 90 }, (_, i) => ({ x: (i * 47) % 620, y: (i * 83) % 520, r: 1 + (i % 3) * .5 }));
-        let mouse = { x: -1000, y: -1000 };
-        const draw = () => { if (!ctx) return; const w = entranceArt.clientWidth, h = entranceArt.clientHeight; ctx.clearRect(0, 0, w, h); for (const p of points) { const x = (p.x % w), y = (p.y % h); const dx = x - mouse.x, dy = y - mouse.y, d = Math.hypot(dx, dy), force = Math.max(0, 1 - d / 190); ctx.beginPath(); ctx.arc(x + dx * force * .12, y + dy * force * .12, p.r + force * 2, 0, Math.PI * 2); ctx.fillStyle = `rgba(57,255,90,${.22 + force * .7})`; ctx.fill(); } if (!reducedMotion) requestAnimationFrame(draw); };
-        resize(); window.addEventListener('resize', resize); entranceArt.addEventListener('pointermove', e => { const r = entranceArt.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top }; if (reducedMotion) draw(); }); entranceArt.addEventListener('pointerleave', () => { mouse = { x: -1000, y: -1000 }; if (reducedMotion) draw(); }); draw();
-      }
-
-      const particleCanvas = document.querySelector('[data-particle-canvas]');
-      const pointerLab = document.querySelector('[data-pointer-lab]');
-      if (particleCanvas instanceof HTMLCanvasElement && pointerLab instanceof HTMLElement) {
-        const ctx = particleCanvas.getContext('2d'); let pointer = { x: -1000, y: -1000 }; const particles = Array.from({ length: 150 }, (_, i) => ({ x: (i * 97) % 900, y: (i * 53) % 500, vx: ((i % 5) - 2) * .08, vy: ((i % 7) - 3) * .08 }));
-        const resize = () => { const dpr = Math.min(window.devicePixelRatio || 1, 2); particleCanvas.width = pointerLab.clientWidth * dpr; particleCanvas.height = pointerLab.clientHeight * dpr; particleCanvas.style.width = `${pointerLab.clientWidth}px`; particleCanvas.style.height = `${pointerLab.clientHeight}px`; ctx?.setTransform(dpr, 0, 0, dpr, 0, 0); };
-        const frame = () => { if (!ctx) return; const w = pointerLab.clientWidth, h = pointerLab.clientHeight; ctx.clearRect(0, 0, w, h); for (const p of particles) { p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > w) p.vx *= -1; if (p.y < 0 || p.y > h) p.vy *= -1; const dx = pointer.x - p.x, dy = pointer.y - p.y, d = Math.hypot(dx, dy) || 1, influence = Math.max(0, 1 - d / 220); p.x -= dx / d * influence * 1.7; p.y -= dy / d * influence * 1.7; ctx.beginPath(); ctx.arc(p.x, p.y, 1.3 + influence * 2.5, 0, Math.PI * 2); ctx.fillStyle = `rgba(57,255,90,${.2 + influence * .75})`; ctx.fill(); } if (!reducedMotion) requestAnimationFrame(frame); };
-        resize(); window.addEventListener('resize', resize); pointerLab.addEventListener('pointermove', e => { const r = pointerLab.getBoundingClientRect(); pointer = { x: e.clientX - r.left, y: e.clientY - r.top }; if (reducedMotion) frame(); }); pointerLab.addEventListener('pointerleave', () => { pointer = { x: -1000, y: -1000 }; if (reducedMotion) frame(); }); frame();
-      }
-
-      document.querySelectorAll('[data-kinetic]').forEach((button, index) => { button.addEventListener('pointermove', e => { if (reducedMotion) return; const r = button.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5; const y = (e.clientY - r.top) / r.height - .5; button.style.setProperty('--tx', `${x * 22}px`); button.style.setProperty('--ty', `${y * 18}px`); button.style.setProperty('--rot', `${x * 7 + (index % 2 ? 2 : -2)}deg`); }); button.addEventListener('pointerleave', () => { button.style.removeProperty('--tx'); button.style.removeProperty('--ty'); button.style.removeProperty('--rot'); }); });
-
-      const physicsStage = document.querySelector('[data-physics-stage]'); const physicsCanvas = document.querySelector('[data-physics-canvas]');
-      if (physicsStage instanceof HTMLElement && physicsCanvas instanceof HTMLCanvasElement) {
-        const ctx = physicsCanvas.getContext('2d'); let drag = null; const balls = Array.from({ length: 7 }, (_, i) => ({ x: 55 + i * 45, y: 55 + (i % 3) * 55, vx: (i % 2 ? 1 : -1) * (1 + i * .15), vy: -1 + i * .18, r: 14 + (i % 3) * 5 }));
-        const resize = () => { const dpr = Math.min(window.devicePixelRatio || 1, 2); physicsCanvas.width = physicsStage.clientWidth * dpr; physicsCanvas.height = physicsStage.clientHeight * dpr; physicsCanvas.style.width = `${physicsStage.clientWidth}px`; physicsCanvas.style.height = `${physicsStage.clientHeight}px`; ctx?.setTransform(dpr, 0, 0, dpr, 0, 0); };
-        const reset = () => balls.forEach((b, i) => { b.x = 45 + i * 42; b.y = 55 + (i % 3) * 52; b.vx = (i % 2 ? 1 : -1) * (1 + i * .15); b.vy = -1 + i * .18; });
-        const frame = () => { if (!ctx) return; const w = physicsStage.clientWidth, h = physicsStage.clientHeight; ctx.clearRect(0, 0, w, h); for (const b of balls) { if (drag !== b) { b.vy += .045; b.x += b.vx; b.y += b.vy; if (b.x < b.r) { b.x = b.r; b.vx *= -.86; } if (b.x > w - b.r) { b.x = w - b.r; b.vx *= -.86; } if (b.y < b.r) { b.y = b.r; b.vy *= -.86; } if (b.y > h - b.r) { b.y = h - b.r; b.vy *= -.86; } } ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(57,255,90,.12)'; ctx.fill(); ctx.strokeStyle = 'rgba(57,255,90,.55)'; ctx.stroke(); } if (!reducedMotion) requestAnimationFrame(frame); };
-        const pick = e => { const r = physicsStage.getBoundingClientRect(); const x = e.clientX - r.left, y = e.clientY - r.top; drag = balls.find(b => Math.hypot(b.x - x, b.y - y) < b.r + 10) || null; }; physicsStage.addEventListener('pointerdown', pick); physicsStage.addEventListener('pointermove', e => { if (!drag) return; const r = physicsStage.getBoundingClientRect(); drag.vx = e.movementX; drag.vy = e.movementY; drag.x = e.clientX - r.left; drag.y = e.clientY - r.top; }); window.addEventListener('pointerup', () => { drag = null; }); document.querySelector('[data-physics-reset]')?.addEventListener('click', reset); resize(); window.addEventListener('resize', resize); reset(); frame();
-      }
-
-      const generationStage = document.querySelector('[data-generation-stage]'); const renderGeneration = () => { if (!(generationStage instanceof HTMLElement)) return; generationStage.innerHTML = ''; const count = 18; for (let i = 0; i < count; i++) { const block = document.createElement('span'); block.className = 'generated-block'; block.style.setProperty('--x', `${Math.round(Math.random() * 90)}%`); block.style.setProperty('--y', `${Math.round(Math.random() * 82)}%`); block.style.setProperty('--s', `${.35 + Math.random() * 1.4}`); block.style.setProperty('--r', `${Math.round(Math.random() * 180 - 90)}deg`); block.textContent = i % 3 === 0 ? 'AX' : ''; generationStage.appendChild(block); } }; document.querySelector('[data-generate]')?.addEventListener('click', renderGeneration); renderGeneration();
-
-      const networkSvg = document.querySelector('[data-network-svg]'); const networkStage = document.querySelector('[data-network-stage]');
-      if (networkSvg instanceof SVGSVGElement && networkStage instanceof HTMLElement) { const nodes = Array.from({ length: 18 }, (_, i) => ({ x: 35 + (i * 71) % 450, y: 35 + (i * 113) % 290 })); const ns = 'http://www.w3.org/2000/svg'; nodes.forEach((n, i) => { const c = document.createElementNS(ns, 'circle'); c.setAttribute('cx', String(n.x)); c.setAttribute('cy', String(n.y)); c.setAttribute('r', i % 4 === 0 ? '5' : '3'); c.setAttribute('class', 'network-node'); networkSvg.appendChild(c); }); const lines = []; for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) { if (Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y) < 135) { const line = document.createElementNS(ns, 'line'); line.setAttribute('x1', String(nodes[i].x)); line.setAttribute('y1', String(nodes[i].y)); line.setAttribute('x2', String(nodes[j].x)); line.setAttribute('y2', String(nodes[j].y)); line.setAttribute('class', 'network-line'); networkSvg.insertBefore(line, networkSvg.firstChild); lines.push({ line, a: i, b: j }); } } networkStage.addEventListener('pointermove', e => { const r = networkStage.getBoundingClientRect(); const x = ((e.clientX - r.left) / r.width) * 520, y = ((e.clientY - r.top) / r.height) * 360; nodes.forEach((n, i) => { const d = Math.hypot(n.x - x, n.y - y); networkSvg.querySelectorAll('.network-node')[i]?.setAttribute('r', d < 90 ? '7' : i % 4 === 0 ? '5' : '3'); }); lines.forEach(({ line, a, b }) => { const d = Math.min(Math.hypot(nodes[a].x - x, nodes[a].y - y), Math.hypot(nodes[b].x - x, nodes[b].y - y)); line.classList.toggle('network-hot', d < 90); }); }); }
-
-      const bars = document.querySelector('[data-bars]'); const comparisonReadout = document.querySelector('[data-comparisons]'); const swapReadout = document.querySelector('[data-swaps]'); let values = Array.from({ length: 28 }, () => Math.round(15 + Math.random() * 85)); let sorting = false;
-      const drawBars = active => { if (!(bars instanceof HTMLElement)) return; bars.innerHTML = ''; values.forEach((v, i) => { const bar = document.createElement('i'); bar.style.height = `${v}%`; if (i === active?.[0] || i === active?.[1]) bar.classList.add('is-active'); bars.appendChild(bar); }); };
-      const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-      const sortValues = async () => { if (sorting || reducedMotion) return; sorting = true; let comparisons = 0, swaps = 0; const algorithm = document.querySelector('[data-algorithm]')?.value || 'bubble'; const compare = async (i, j) => { comparisons++; drawBars([i, j]); if (comparisonReadout) comparisonReadout.textContent = `${comparisons} comparisons`; await sleep(35); }; if (algorithm === 'bubble') { for (let end = values.length - 1; end > 0; end--) for (let i = 0; i < end; i++) { await compare(i, i + 1); if (values[i] > values[i + 1]) { [values[i], values[i + 1]] = [values[i + 1], values[i]]; swaps++; if (swapReadout) swapReadout.textContent = `${swaps} swaps`; } } } else if (algorithm === 'selection') { for (let i = 0; i < values.length - 1; i++) { let min = i; for (let j = i + 1; j < values.length; j++) { await compare(min, j); if (values[j] < values[min]) min = j; } if (min !== i) { [values[i], values[min]] = [values[min], values[i]]; swaps++; if (swapReadout) swapReadout.textContent = `${swaps} swaps`; } } } else { for (let i = 1; i < values.length; i++) { let j = i; while (j > 0) { await compare(j - 1, j); if (values[j - 1] <= values[j]) break; [values[j - 1], values[j]] = [values[j], values[j - 1]]; swaps++; if (swapReadout) swapReadout.textContent = `${swaps} swaps`; j--; } } } drawBars(); sorting = false; }; document.querySelector('[data-sort]')?.addEventListener('click', sortValues); document.querySelector('[data-shuffle]')?.addEventListener('click', () => { if (sorting) return; values = values.map(() => Math.round(15 + Math.random() * 85)); if (comparisonReadout) comparisonReadout.textContent = '0 comparisons'; if (swapReadout) swapReadout.textContent = '0 swaps'; drawBars(); }); drawBars();
-
-      const domTree = document.querySelector('[data-dom-tree]'); const domSelected = document.querySelector('[data-dom-selected]'); const domDetails = document.querySelector('[data-dom-details]');
-      if (domTree instanceof HTMLElement) { const nodes = Array.from(document.body.children).filter(el => el.tagName !== 'SCRIPT'); const build = (el, depth = 0) => { const row = document.createElement('button'); row.type = 'button'; row.className = 'dom-node'; row.style.paddingLeft = `${8 + depth * 12}px`; row.textContent = `<${el.tagName.toLowerCase()}>`; row.addEventListener('click', () => { domTree.querySelectorAll('.is-selected').forEach(n => n.classList.remove('is-selected')); row.classList.add('is-selected'); if (domSelected) domSelected.textContent = el.tagName.toLowerCase(); if (domDetails) domDetails.textContent = `<${el.tagName.toLowerCase()}${el.id ? ` id="${el.id}"` : ''}>`; }); domTree.appendChild(row); Array.from(el.children).slice(0, 7).forEach(child => build(child, depth + 1)); }; nodes.slice(0, 4).forEach(el => build(el)); }
-
-      const capabilityList = document.querySelector('[data-capabilities]');
-      if (capabilityList instanceof HTMLElement) { const capabilities = [ ['Canvas 2D', () => !!document.createElement('canvas').getContext('2d')], ['WebGL', () => { try { return !!document.createElement('canvas').getContext('webgl'); } catch { return false; } }], ['Web Workers', () => 'Worker' in window], ['IndexedDB', () => 'indexedDB' in window], ['Web Audio', () => 'AudioContext' in window || 'webkitAudioContext' in window], ['Clipboard API', () => !!navigator.clipboard], ['Touch Input', () => navigator.maxTouchPoints > 0], ['Reduced Motion', () => reducedMotion] ]; capabilities.forEach(([name, test]) => { const row = document.createElement('div'); row.className = 'capability-row'; const supported = test(); row.innerHTML = `<span>${name}</span><strong>${supported ? 'AVAILABLE' : 'UNAVAILABLE'}</strong>`; capabilityList.appendChild(row); }); }
-    </script>
+    <script is:inline src="/experience.js" defer></script>
 
     <style>
       :global(html){background:var(--museum-bg);color:var(--museum-text)}
