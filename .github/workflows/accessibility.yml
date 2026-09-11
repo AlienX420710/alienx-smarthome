@@ -22,10 +22,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
 
       - name: Setup Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
           cache: npm
@@ -52,7 +52,6 @@ jobs:
 
       - name: Install browser accessibility tooling
         run: |
-          npm install --no-save --package-lock=false @playwright/test@1.55.0 axe-core@4.10.3
           npx playwright install --with-deps chromium
 
       - name: Test system and explicit themes with axe
@@ -60,37 +59,12 @@ jobs:
 
       - name: Run Lighthouse accessibility audit
         run: |
-          cat > lighthouserc.cjs <<'LIGHTHOUSE'
-          module.exports = {
-            ci: {
-              collect: {
-                url: [
-                  'http://127.0.0.1:4321/',
-                  'http://127.0.0.1:4321/work/',
-                  'http://127.0.0.1:4321/experience/',
-                  'http://127.0.0.1:4321/technology/',
-                  'http://127.0.0.1:4321/status/',
-                  'http://127.0.0.1:4321/about/',
-                  'http://127.0.0.1:4321/contact/'
-                ],
-                numberOfRuns: 1,
-                settings: { onlyCategories: ['accessibility'] }
-              },
-              assert: {
-                assertions: {
-                  'categories:accessibility': ['error', { minScore: 0.95 }]
-                }
-              },
-              upload: { target: 'filesystem', outputDir: '.lighthouseci' }
-            }
-          };
-          LIGHTHOUSE
 
-          npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.cjs
+          npx --no-install lhci autorun --config=lighthouse-accessibility.config.cjs
 
       - name: Upload diagnostics on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: accessibility-diagnostics
           path: |

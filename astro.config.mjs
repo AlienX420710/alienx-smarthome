@@ -2,7 +2,6 @@
 import { defineConfig } from "astro/config";
 import { execFileSync } from "node:child_process";
 import sitemap from "@astrojs/sitemap";
-import icon from "astro-icon";
 
 import cloudflare from "@astrojs/cloudflare";
 
@@ -10,7 +9,7 @@ import cloudflare from "@astrojs/cloudflare";
 export default defineConfig({
 	vite: { define: { __ALIENX_BUILD_SHA__: JSON.stringify(process.env.GITHUB_SHA || execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim()) } },
 	site: "https://alienxsmarthome.com",
-	integrations: [sitemap({ filter: (page) => !new URL(page).pathname.startsWith("/contact/success") }), icon()],
+	integrations: [sitemap({ filter: (page) => !new URL(page).pathname.startsWith("/contact/success") })],
 	security: {
 		csp: {
 			directives: [

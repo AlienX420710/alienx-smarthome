@@ -5,11 +5,14 @@
     "@astrojs/cloudflare": "14.3.0",
     "@astrojs/sitemap": "3.6.1",
     "astro": "7.3.1",
-    "astro-icon": "^1.2.0",
     "typescript": "5.9.3"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
+    "@lhci/cli": "0.15.1",
+    "@playwright/test": "1.63.0",
+    "axe-core": "4.10.3",
+    "selenium-webdriver": "4.35.0",
     "wrangler": "4.129.1"
   },
   "engines": {
@@ -26,10 +29,22 @@
     "dev": "astro dev",
     "preview": "astro build && wrangler dev",
     "test": "node --test tests/*.test.cjs",
-    "typecheck": "astro check && tsc --noEmit"
+    "typecheck": "astro check && tsc --noEmit",
+    "test:browser": "playwright test tests/responsive.spec.cjs tests/interactions.spec.cjs --reporter=line",
+    "test:a11y": "playwright test tests/accessibility.spec.cjs --reporter=line"
   },
   "overrides": {
-    "sharp": "0.35.4"
+    "sharp": "0.35.4",
+    "@lhci/cli": {
+      "lighthouse": "13.4.1",
+      "tmp": "0.2.7",
+      "uuid": "11.1.1"
+    },
+    "@lhci/utils": {
+      "lighthouse": "13.4.1"
+    },
+    "tmp": "0.2.7",
+    "qs": "6.16.0"
   },
   "type": "module"
 }

@@ -60,3 +60,41 @@ Status distinguishes reachability from configuration, reports degraded configura
 Local validation: 26 unit tests pass, including stable retry payloads and edge-limiter rejection/outage handling. Astro/TypeScript remain clean. Browser/CI verification of the runtime repair is required before marking those findings verified.
 
 References: [Resend idempotency](https://resend.com/docs/dashboard/emails/idempotency-keys), [Cloudflare rate-limit locality](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/#locality).
+
+## Workflow reproducibility and release verification
+
+Runtime commit 2756767 passed Quality, all 48 accessibility/theme cases,
+Lighthouse, Safari and production integrity. The museum keyboard/motion/revisit
+test passed. Responsive CI identified an overlay initial-focus problem and
+expected unconfigured-preview HTTP 503 responses being treated as layout errors;
+the follow-up explicitly focuses the dialog close control, provides a layout
+fixture, and separately tests degraded/malformed status responses.
+
+Production was read back at revision 2756767 with HTTP 200, configured providers,
+and the edge-location limiter present. The first smoke request had received a
+Cloudflare HTTP 409; its cause is not established by repository logs. Do not
+confuse successful CodeQL execution with a successful Cloudflare deployment.
+
+The follow-up locks browser/Lighthouse/Safari tooling in package-lock, pins all
+workflow action references to full SHAs, removes unused astro-icon, extracts
+responsive/Safari tests and Lighthouse configs into maintained files, regenerates
+Worker bindings, adds status-handler regressions, and verifies the exact deployed
+revision on push. See [release-runbook.md](release-runbook.md) for release and
+rollback procedures. The new dependency overrides must pass CI before acceptance.
+
+Local follow-up validation: 28 unit tests pass, Astro/TypeScript diagnostics are
+clean, and npm audit reports zero vulnerabilities including development tooling.
+
+### Explicitly not closed
+
+- Cloudflare promotion gating, required checks, alert recipients and a rollback
+  drill require account-owner configuration; no administrative changes claimed.
+- Real Turnstile and email delivery need an approved end-to-end inquiry and
+  provider dashboard evidence. Configuration presence alone is not delivery.
+- Genuine Work case studies and About biography need owner-supplied content;
+  no fabricated projects, results or personal claims were added.
+- Physical-device and assistive-technology testing, a historical credential
+  scan, remaining source-formatting/dead-CSS cleanup, and social-image asset
+  optimization are not represented as completed by automated browser checks.
+
+The original audit is a baseline, not a claim that every item is now closed.

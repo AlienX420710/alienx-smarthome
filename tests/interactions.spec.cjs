@@ -97,6 +97,21 @@ test('Status refresh repeats and stops after navigation', async ({ page }) => {
   expect(requests).toBeGreaterThan(stopped);
 });
 
+test('Status renders degraded HTTP 503 and malformed responses honestly', async ({ page }) => {
+  await page.route('**/api/status', route => route.fulfill({ status: 503, json: {
+    ...status, status: 'degraded', checks: { ...status.checks,
+      resend: { status: 'degraded', detail: 'Email integration not configured' } }
+  } }));
+  await page.goto(base + '/status/');
+  await expect(page.locator('#overall-label')).toHaveText('Degraded');
+  await expect(page.locator('.check')).toHaveCount(4);
+  await expect(page.locator('.check--degraded')).toContainText('Email integration not configured');
+  await page.unroute('**/api/status');
+  await page.route('**/api/status', route => route.fulfill({ status: 503, body: 'unavailable' }));
+  await page.reload();
+  await expect(page.locator('.check--error')).toContainText('UNAVAILABLE');
+});
+
 test('Contact retries preserve input and submit the honeypot after navigation', async ({ page }) => {
   let submissions = [];
   await page.route('https://challenges.cloudflare.com/turnstile/v0/api.js*', route => route.fulfill({ contentType: 'application/javascript', body: `window.turnstile={render(el){const i=document.createElement('input');i.type='hidden';i.name='website';i.value='mock-token';el.appendChild(i);return 'mock-widget'},remove(){},reset(){document.querySelector('[name=website]').value='reset-token'}};window.alienxTurnstileLoad();` }));
