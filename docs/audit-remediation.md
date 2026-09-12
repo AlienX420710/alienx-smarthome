@@ -1,6 +1,9 @@
 # Audit remediation
 
 Source: AlienX-SmartHome-Audit.md, baseline d55378c.
+See also: [ai-audit.md](ai-audit.md) for a point-in-time full audit and
+[ai-context.md](ai-context.md) for assistant onboarding — this file is the
+running remediation log against the baseline above, not a fresh audit.
 
 ## Inquiry boundary and contact flow
 
