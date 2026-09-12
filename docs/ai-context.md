@@ -2,8 +2,32 @@
 
 Read this before making changes. It's written to be usable by any AI
 coding assistant — Claude, ChatGPT/Codex, or otherwise — and intentionally
-contains no tool-specific instructions. Pair it with `AUDIT.md` for the
+contains no tool-specific instructions. Pair it with [ai-audit.md](ai-audit.md) for the
 detailed findings; this file is the shorter "orient yourself fast" version.
+
+## Main-only working rule
+
+Work directly on `main`. Do not create branches or pull requests unless the
+maintainer explicitly requests them. Preserve unrelated changes; never
+force-reset `main`. See [release-runbook.md](release-runbook.md) for rollback.
+
+## Latest recorded verification — 2026-09-12
+
+At revision `dfeffab4c826a45041780769b7472ada099ff22b`, all seven repository
+workflows passed, including 30 unit tests, 92 browser interaction/layout cases,
+48 accessibility/theme cases, and Safari. Lighthouse passed on its second
+attempt, not its first; repeatability remains an improvement item. Production
+reported that exact revision with operational status.
+
+After retrying the Cloudflare build, the maintainer reported that a real test
+email worked. This is owner-confirmed production submission/delivery evidence,
+not an automated live-email test or a new provider-record correlation. It
+supersedes the earlier unknown outcome for that submission only. Account-level
+gate enforcement, alerts, and rollback drills are not proven by this success.
+
+This record describes that revision, not every future commit. The audit's
+29-test count belongs to its older `1fa56cc` snapshot. Recheck current evidence
+before making release claims; no audit-wide completion is claimed.
 
 ## What this project actually is
 
@@ -34,9 +58,10 @@ concrete reasons:
 - **Bot protection:** Cloudflare Turnstile (`TURNSTILE_SECRET`,
   `TURNSTILE_HOSTNAMES`)
 - **Node:** `>=22` required (see `package.json` `engines`)
-- **Package manager:** npm — lockfile is committed and CI uses `npm ci`
-  against a pinned npm version for reproducibility (see
-  `docs/audit-remediation.md`, "Cleaning-by-Cassi practices" section)
+- **Package manager:** npm — lockfile is committed and CI uses `npm ci`.
+  Workflows select Node 22 and use its bundled npm; npm itself is not pinned
+  in CI. The npm 10.9.8 lockfile-repair validation in the remediation log
+  is historical evidence, not a current workflow pin.
 
 ## Repository layout
 
@@ -58,7 +83,8 @@ scripts/
   verify-release.mjs, scope-worker-types.mjs, lighthouse.mjs
 tests/
   *.test.cjs           → node:test unit tests (fast, no browser)
-  *.spec.cjs            → Playwright browser tests (accessibility, responsive, safari)
+  *.spec.cjs            → Playwright Chromium tests (accessibility, responsive, interactions)
+  safari.cjs           → Selenium with macOS Safari WebDriver
 docs/
   audit-remediation.md  → running log of a prior third-party audit + fixes (read this first)
   release-runbook.md    → deploy/rollback procedure
@@ -89,16 +115,19 @@ following:
 
 ```bash
 npm ci                    # reproducible install (CI parity)
-npm test                  # unit tests, ~29 currently, fast (~2s)
+npm test                  # unit tests; counts are revision-specific
 npm run typecheck         # astro check + tsc --noEmit — must be 0/0/0
 npm run build             # optimize-images.mjs then astro build
 npm run check             # test + typecheck + build + wrangler deploy --dry-run
 npm audit --audit-level=high
-npm run format / format:check
+npm run format            # apply formatting
+npm run format:check      # validate formatting without edits
 ```
 
-`npm run check` is effectively "everything CI's Quality workflow runs,
-locally." Run it before proposing any change as complete.
+For Quality's local equivalent, run `npm ci`, `npm run format:check`,
+`npm run check`, and `npm run audit`. `check` alone omits formatting and
+dependency auditing. Browser suites remain separate; report any environment
+blocker and do not substitute a partial local result for successful CI.
 
 ## Security-sensitive files — treat changes here with extra scrutiny
 
@@ -110,24 +139,28 @@ locally." Run it before proposing any change as complete.
 - `src/pages/api/inquiry.ts` — every field is re-validated here even
   though middleware already ran; this defense-in-depth is intentional,
   not redundant cruft to be "simplified away."
-- `astro.config.mjs` — the CSP `scriptDirective.hashes` array is 3 sha256
-  hashes of specific inline scripts. **If you edit any inline `<script>`
-  content anywhere in the codebase, its hash changes and you must
-  recompute and update this array, or the script will be silently blocked
-  by CSP in production** (it will still work in `astro dev` if Astro
-  doesn't enforce CSP identically there — always verify against a built
-  output, not just dev mode).
+- `astro.config.mjs` — Astro generates CSP hashes for processed scripts;
+  `scriptDirective.hashes` adds manual allowances. A processed-script edit
+  does not automatically require editing that array. For manually authorized
+  content, match the exact emitted script bytes to its hash and update only
+  the affected allowance. The three existing manual hashes lack a documented
+  source mapping; establishing that mapping remains open, not assumed done.
+  Inspect the generated CSP and test browser behavior using built output;
+  Astro's CSP feature is not supported in dev mode. The main resource policy
+  and the middleware's separate `frame-ancestors` header both need checking.
+  Reference: [Astro CSP configuration](https://docs.astro.build/en/reference/configuration-reference/#securitycsp).
 - `wrangler.json` — the `INQUIRY_RATE_LIMITER` namespace ID (`2107100911`)
   is reserved for this specific site. Don't reuse it elsewhere or
   regenerate it casually.
 
-## Known, self-acknowledged open items (see `AUDIT.md` §5 for detail)
+## Known, self-acknowledged open items (see [ai-audit.md](ai-audit.md) §5)
 
 - Cloudflare account-level settings (deployment gating, alerting) require
   dashboard access, not code changes.
-- Real end-to-end email/Turnstile delivery isn't verified by any test in
-  this repo — those are mocked. Verifying live delivery requires an actual
-  production submission plus provider-dashboard confirmation.
+- Repository email/Turnstile tests are mocked. See the dated owner-confirmed
+  live result above; it does not turn those tests into live verification.
+  Future release records should correlate approved submissions with provider
+  evidence without committing inquiry contents or credentials.
 - The isolate-local rate limiter is a deliberate bounded fallback, not a
   strict global quota; the Cloudflare Rate Limiting binding supplements it
   but is itself eventually consistent per edge location.

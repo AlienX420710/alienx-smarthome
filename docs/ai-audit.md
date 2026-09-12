@@ -10,9 +10,17 @@ over another — it's plain findings, verified against the actual code.
 - **Live site:** alienxsmarthome.com
 - **Audited commit:** `1fa56cc` — "feat: gate main deployment on exact-revision CI evidence"
 - **Audit date:** 2026-09-12
-- **Method:** full clone, dependency install, live execution of the test
+- **Method:** shallow clone of the working tree, dependency install, live execution of the test
   suite and type checker, manual read-through of every security-relevant
   file (middleware, API routes, CSP config, client scripts).
+
+**Snapshot boundary:** results and test counts below describe `1fa56cc`, not
+current main. Later editorial corrections clarify implementation details;
+they do not represent a rerun of the original audit. See
+[ai-context.md](ai-context.md#latest-recorded-verification--2026-09-12) for the
+later CI/deployment record and owner-confirmed email test, and
+[audit-remediation.md](audit-remediation.md) for subsequent fixes. Keep work
+on `main` unless the maintainer explicitly requests a branch or pull request.
 
 ---
 
@@ -40,8 +48,8 @@ worth reading before assuming any finding below is new — cross-reference
 against it to avoid re-reporting already-fixed issues.
 
 Nothing found in this pass rises to "high" severity. Findings are mostly
-around single points of failure inherent to a single-Worker-isolate
-architecture, a couple of minor CSP/header gaps, and things that cannot be
+around isolate-local state in a distributed Worker deployment,
+a couple of minor CSP/header gaps, and things that cannot be
 verified from source alone (live provider delivery, Cloudflare account-level
 settings).
 
@@ -104,8 +112,10 @@ and it's the most carefully built part of the codebase. Layers, in order:
 1. **Route scoping** — the entire security pipeline in `middleware.ts` only
    activates for `POST /api/inquiry` (matched by regex against the pathname).
    Everything else just gets security headers applied and passes through.
-2. **Idempotency-Key format validation** — must be a UUIDv4 or the request
-   is rejected before any other work happens.
+2. **Idempotency-Key format validation** — optional; a nonempty supplied
+   value must be a UUIDv4 or the request is rejected. When absent, the
+   server generates a new identifier, so that path does not preserve a
+   stable identity across retries.
 3. **Content-Type enforcement** — must be exactly `application/json`
    (parameters like charset are stripped before comparison); anything else
    is `415`.
@@ -128,7 +138,7 @@ and it's the most carefully built part of the codebase. Layers, in order:
 8. **Cloudflare Rate Limiting binding** (if configured) — a second,
    edge-location-scoped limiter, used in addition to (not instead of) the
    isolate-local one.
-9. **Honeypot field** (`faxNumber`) — any non-empty value silently rejects
+9. **Honeypot field** (`faxNumber`) — a nonempty trimmed string rejects
    as if verification failed, without revealing which check caught it.
 10. **Turnstile token**, disguised under the field name `website` (a
     plausible-looking form field name, intended to blend in for scripted
@@ -137,7 +147,7 @@ and it's the most carefully built part of the codebase. Layers, in order:
     `hostname` against an allow-list — not just `success` alone, which is
     the most common Turnstile integration mistake.
 11. Only after all of the above does `locals.verifiedInquiry` get set —
-    and the honeypot's `website` field is explicitly zeroed out before
+    and the Turnstile-token `website` field is explicitly cleared before
     being handed to the next stage, so it can't leak into the email body.
 
 Downstream, `inquiry.ts`:
@@ -184,10 +194,17 @@ font-src 'self'
 connect-src 'self' https://challenges.cloudflare.com
 frame-src https://challenges.cloudflare.com
 script-src 'self' https://challenges.cloudflare.com
-           + 3 pinned sha256 hashes (no 'unsafe-inline', no 'unsafe-eval')
+           + Astro-generated hashes and 3 additional configured sha256 hashes
 ```
 
-This is a strong policy. No `unsafe-inline` or `unsafe-eval` anywhere,
+This is a configuration summary, not a verbatim emitted policy; Astro also
+generates the style policy. Its processed-script hashes are generated
+automatically; the three configured hashes are additional allowances, not
+an exhaustive inventory. Their exact source mapping is not documented.
+See [Astro CSP configuration](https://docs.astro.build/en/reference/configuration-reference/#securitycsp)
+and the current primer before changing manual allowances.
+
+This is a strong policy. No `unsafe-inline` or `unsafe-eval` in this configuration,
 hash-pinned inline scripts, and a tight `connect-src`/`frame-src` scoped
 only to Turnstile. `frame-ancestors 'none'` is also set separately in
 `middleware.ts`'s response headers, backed up by `X-Frame-Options: DENY`
@@ -263,8 +280,9 @@ finding shape drift in production).
   payload validation (mocked at the handler level, no real email sent)
   and `status.ts` contract parsing (including adversarial/malformed
   inputs — null, arrays, `<script>` injected into enum fields, missing
-  keys). Separate Playwright suites exist for accessibility (axe-core),
-  responsive/interaction behavior, and Safari-specific checks, run in CI
+  keys). Separate Playwright Chromium suites cover accessibility (axe-core)
+  and responsive/interaction behavior. `tests/safari.cjs` uses Selenium with
+  macOS Safari WebDriver. These browser checks run in CI
   rather than locally in this pass (they require a browser + built site).
 - **Formatting:** Prettier + `prettier-plugin-astro`, enforced in CI via
   `format:check`, pinned versions in `package.json` (not floating).
@@ -284,6 +302,10 @@ finding shape drift in production).
 ---
 
 ## 5. Explicitly open / unverifiable items
+
+These are the original audit's open items. Consult the primer's later
+verification record before treating them as current unresolved outcomes,
+especially the owner-confirmed production email submission.
 
 These aren't judgment calls — they're things that genuinely can't be
 confirmed by reading source code, and the project's own
@@ -349,13 +371,21 @@ never claiming closure without validation.
 ```bash
 git clone --depth 1 https://github.com/AlienX420710/alienx-smarthome.git
 cd alienx-smarthome
+git fetch --depth 1 origin 1fa56cc2213ca957fbf5446c0792ab1cda6ff276
+git switch --detach FETCH_HEAD    # isolated read-only audit reproduction only
 npm ci
 npm test                       # unit tests — expect 29 passing
 npm run cf-typegen && npm run typecheck   # expect 0 errors/warnings/hints
 npm audit --audit-level=high   # expect 0 vulnerabilities
 ```
 
+Use those checkout commands only in a separate audit clone to reproduce the
+historical snapshot, not in the working repository where changes stay on main.
+For current validation, keep the current main checkout and use the primer's
+commands; do not expect historical counts from a fresh clone of latest main.
+
 Browser-dependent suites (`test:browser`, `test:a11y`, `test:lighthouse`)
 require a built site and a browser runtime; they weren't run in this pass
-because it was a source/static audit, and running them from a fresh clone
+because this pass covered source review plus unit/type checks, not browser
+execution. Running them from a fresh clone
 is straightforward if that verification is later needed.

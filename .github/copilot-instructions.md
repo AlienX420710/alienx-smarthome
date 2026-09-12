@@ -1,5 +1,9 @@
 # Copilot instructions for alienx-smarthome
 
+Work directly on `main`. Do not create branches or pull requests unless the
+maintainer explicitly requests them. Preserve unrelated changes and never
+force-reset `main`; use a new revert commit when a code rollback is needed.
+
 Read `docs/ai-context.md` first. It covers the stack, repo layout, which
 files are security-sensitive and why, and the commands to run before
 proposing any change as complete. `docs/ai-audit.md` has the detailed
@@ -25,6 +29,7 @@ CI uses `npm ci`; don't switch package managers or let the lockfile drift.
 
 ```bash
 npm ci
+npm run format:check
 npm test                  # unit tests — expect all passing
 npm run typecheck         # astro check + tsc --noEmit — expect 0/0/0
 npm run build
@@ -32,8 +37,9 @@ npm audit --audit-level=high
 ```
 
 `npm run check` runs test + typecheck + build + a Cloudflare deploy dry run
-in one command — that's what CI's Quality workflow runs, so it's the
-closest local proxy to a passing PR.
+in one command. Quality also runs formatting and dependency auditing: use
+`npm ci`, `npm run format:check`, `npm run check`, and `npm run audit`
+for its local equivalent. Browser suites are separate checks.
 
 State plainly what you ran and what passed. Don't say something is "fixed"
 or "verified" without saying how — this repo's existing audit log is
@@ -48,11 +54,14 @@ from "verified in production," and that convention should continue.
 - `src/pages/api/inquiry.ts` — re-validates every field independently of
   middleware. This duplication is intentional defense-in-depth, not
   redundant code to clean up.
-- `astro.config.mjs` — CSP `scriptDirective.hashes` are sha256 hashes of
-  specific inline `<script>` blocks. Editing any inline script's content
-  anywhere in the codebase changes its hash; the hash array must be
-  recomputed and updated or CSP will silently block it in production.
-  Verify against a built/deployed output, not just `astro dev`.
+- `astro.config.mjs` — Astro generates CSP hashes for processed scripts;
+  `scriptDirective.hashes` supplies additional allowances. Do not assume
+  every script edit needs a manual hash change. For manually authorized
+  content, identify the exact emitted bytes and verify the matching hash
+  before updating it. The existing three manual hashes have no documented
+  source mapping; do not guess what they authorize or remove them blindly.
+  Verify the emitted policy and browser behavior against built/deployed
+  output, not `astro dev`. See the CSP guidance in `docs/ai-context.md`.
 - `wrangler.json` — the `INQUIRY_RATE_LIMITER` namespace ID is reserved for
   this site specifically; don't regenerate or reuse it.
 
