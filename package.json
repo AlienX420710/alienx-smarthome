@@ -16,7 +16,7 @@
     "@playwright/test": "1.63.0",
     "axe-core": "4.10.3",
     "selenium-webdriver": "4.35.0",
-    "wrangler": "4.129.1"
+    "wrangler": "4.130.0"
   },
   "engines": {
     "node": ">=22"
