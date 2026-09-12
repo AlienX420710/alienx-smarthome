@@ -18,7 +18,7 @@ Lighthouse workflows green when changing tooling. Do not use `npm audit fix --fo
 2. Confirm the Cloudflare deployment itself succeeded. GitHub's dynamic
    "Push on main" CodeQL workflow is **not** deployment evidence.
 3. Run `EXPECTED_REVISION=<full-sha> node scripts/verify-release.mjs`. Push smoke
-   checks do this automatically and wait at most about five minutes for rollout.
+   checks do this automatically and wait at most about fifteen minutes for rollout.
    An old healthy build cannot satisfy the check. Scheduled smoke checks monitor
    current service health without assuming the newest main commit is deployed.
 4. Check both production hostnames, browser navigation, keyboard dialogs,
@@ -31,7 +31,37 @@ provider dashboard. Do not put real inquiry contents or credentials in CI logs.
 
 ## Account-owner actions still required
 
-- Configure release gating so Cloudflare cannot promote a failing main revision.
+### Activate the prepared deployment gate
+
+In Cloudflare, open Workers & Pages → alienx-smarthome → Settings → Build.
+Keep the production branch `main` and the build command `npm run build`.
+Set the production deploy command to **`npm run deploy`**. Cloudflare's default
+`npx wrangler deploy` bypasses the repository's new gate.
+
+That script requires successful Quality, Responsive, Accessibility, Lighthouse,
+and Safari push workflows for the exact checkout SHA. It refuses dirty checkouts,
+non-main Workers builds, stale revisions, failed checks, incomplete API evidence,
+and GitHub API errors. It waits up to twelve minutes for pending checks. The
+public GitHub API requires no additional token for this public repository; a
+rate-limit response blocks deployment rather than bypassing verification.
+
+Cloudflare supplies `WORKERS_CI_COMMIT_SHA` and `WORKERS_CI_BRANCH`. The gate
+compares that revision with Git HEAD and rechecks main before allowing Wrangler.
+Production smoke and integrity remain post-deployment monitoring, avoiding a
+circular dependency on a deployment that has not happened yet.
+
+This gate is prepared in code, **not confirmed active in account settings**.
+An administrator can still bypass it by changing the deploy command or deploying
+manually. Restrict deployment credentials and settings access to trusted operators.
+The main check reduces stale releases but is not an atomic deployment lock.
+After saving the setting, retry a build and confirm its log contains
+`CI approved main <sha>` before Wrangler publishes. Test a failing required check
+in an isolated non-production environment before claiming rejection is proven
+at account level; do not intentionally break production main for that exercise.
+
+Reference: [Cloudflare build/deploy commands and injected variables](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/).
+
+- Activate and verify release gating so Cloudflare cannot promote a failing main revision.
   Repository workflows alone do not enforce this against an independent
   Cloudflare Git integration. Preserve the requested main-only workflow.
 - Configure GitHub/Cloudflare failure notifications and confirm a monitored

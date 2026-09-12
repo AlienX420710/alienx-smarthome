@@ -2,7 +2,7 @@
 const expected = process.env.EXPECTED_REVISION;
 if (!/^[a-f0-9]{40}$/.test(expected ?? ''))
   throw new Error('EXPECTED_REVISION must be a full Git SHA');
-const deadline = Date.now() + 5 * 60 * 1000;
+const deadline = Date.now() + 15 * 60 * 1000;
 let last = 'No response';
 while (Date.now() < deadline) {
   try {

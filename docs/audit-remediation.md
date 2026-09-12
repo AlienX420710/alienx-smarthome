@@ -123,3 +123,21 @@ now matches the other pages.
 Local checks: clean npm 10.9.8 install, 28 unit tests, zero dependency audit
 findings, and successful raster decoding. Full CI/deployment verification of this
 follow-up is still required; formatting alone does not close style-ownership debt.
+
+Verification at 55b6240 subsequently passed all seven workflows, including
+28 unit tests at that revision, 92 browser interaction/layout cases,
+48 accessibility/theme cases, Safari, Lighthouse and production smoke. Production
+reported the exact revision as healthy. Formatting did not close style ownership debt.
+
+## Prepared main deployment gate
+
+The deployment command now waits for five successful pre-deployment workflows
+for the exact current main revision and blocks failed/missing/stale evidence.
+Post-deployment smoke allows fifteen minutes for a gated release to arrive.
+Regression coverage rejects wrong-commit, wrong-branch, PR-only and superseded
+successful-run evidence. The runbook gives the precise Cloudflare setting needed
+to activate the command. No account-setting change is claimed.
+
+Provider-account records can now be inspected through Resend. Historical delivery
+evidence is separate from a fresh production-form verification of the current
+release; neither provider configuration nor a direct API test proves that full path.
