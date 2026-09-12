@@ -9,7 +9,7 @@
 [![Responsive](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/responsive.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/responsive.yml)
 [![Accessibility](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/accessibility.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/accessibility.yml)
 [![Astro 7.3.1](https://img.shields.io/badge/Astro-7.3.1-2563EB?logo=astro&logoColor=white)](https://astro.build)
-[![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-39FF5A?logo=cloudflare&logoColor=14161E)](https://workers.cloudflare.com)
+[![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-39FF5A?logo=cloudflare&logoColor=211631)](https://workers.cloudflare.com)
 
 Web engineering, automation, infrastructure, and interactive browser experiences.
 
