@@ -4,82 +4,212 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE } from '../consts';
 
-
-const description = 'Seven interactive browser exhibits: pointer fields, kinetic type, physics, browser capabilities, light, depth, and gesture drawing.';
+const description =
+  'Seven interactive browser exhibits: pointer fields, kinetic type, physics, browser capabilities, light, depth, and gesture drawing.';
 ---
+
 <!doctype html>
 <html lang="en">
-  <head><link rel="stylesheet" href="/experience-museum.css" /><BaseHead title={`Experience — ${SITE_TITLE}`} description={description} /></head>
+  <head
+    ><link rel="stylesheet" href="/experience-museum.css" /><BaseHead
+      title={`Experience — ${SITE_TITLE}`}
+      description={description}
+    /></head
+  >
   <body>
     <Header />
     <main id="main-content" tabindex="-1">
       <section class="entrance" aria-labelledby="experience-title">
         <div class="entrance-copy">
           <p class="eyebrow">ALIENX / EXPERIENCE MUSEUM</p>
-          <h1 id="experience-title">Don't just <span>look.</span><br />touch the web.</h1>
-          <p class="lede">A collection of browser experiments built to prove a point: a website can be a machine, a playground, a simulation, and an interface at the same time.</p>
+          <h1 id="experience-title">
+            Don't just <span>look.</span><br />touch the web.
+          </h1>
+          <p class="lede">
+            A collection of browser experiments built to prove a point: a
+            website can be a machine, a playground, a simulation, and an
+            interface at the same time.
+          </p>
           <a class="enter" href="#museum">Enter the museum <span>↓</span></a>
         </div>
-        <div class="entrance-art" data-entrance-art aria-label="Interactive pointer field. Move your pointer through the exhibit.">
+        <div
+          class="entrance-art"
+          data-entrance-art
+          aria-label="Interactive pointer field. Move your pointer through the exhibit."
+        >
           <canvas data-pointer-canvas></canvas>
-          <div class="entrance-label"><span>EXHIBIT 00</span><strong>POINTER FIELD</strong></div>
+          <div class="entrance-label">
+            <span>EXHIBIT 00</span><strong>POINTER FIELD</strong>
+          </div>
         </div>
       </section>
 
       <section class="museum" id="museum" aria-labelledby="museum-title">
         <header class="museum-intro">
-          <div><p class="eyebrow">THE COLLECTION</p><h2 id="museum-title">Seven ways to make a browser <span>do something.</span></h2></div>
-          <p>Every exhibit is an actual interaction. No fake metrics. No dashboard to configure. Try them, break them, resize them, and see what happens.</p>
+          <div>
+            <p class="eyebrow">THE COLLECTION</p><h2 id="museum-title">
+              Seven ways to make a browser <span>do something.</span>
+            </h2>
+          </div>
+          <p>
+            Every exhibit is an actual interaction. No fake metrics. No
+            dashboard to configure. Try them, break them, resize them, and see
+            what happens.
+          </p>
         </header>
 
         <article class="exhibit exhibit--wide" id="pointer-field">
-          <div class="exhibit-meta"><span>01</span><span>INPUT / MOTION / CANVAS</span></div>
-          <div class="exhibit-copy"><p class="eyebrow">POINTER FIELD</p><h3>Move through a living field.</h3><p>Your pointer becomes an input signal. Particles calculate their distance from it and react in real time.</p></div>
-          <div class="pointer-lab" data-pointer-lab><canvas data-particle-canvas></canvas><div class="lab-hint">MOVE YOUR POINTER</div></div>
+          <div class="exhibit-meta">
+            <span>01</span><span>INPUT / MOTION / CANVAS</span>
+          </div>
+          <div class="exhibit-copy">
+            <p class="eyebrow">POINTER FIELD</p><h3>
+              Move through a living field.
+            </h3><p>
+              Your pointer becomes an input signal. Particles calculate their
+              distance from it and react in real time.
+            </p>
+          </div>
+          <div class="pointer-lab" data-pointer-lab>
+            <canvas data-particle-canvas></canvas><div class="lab-hint">
+              MOVE YOUR POINTER
+            </div>
+          </div>
         </article>
 
         <div class="exhibit-pair">
           <article class="exhibit" id="kinetic-type">
-            <div class="exhibit-meta"><span>02</span><span>TYPOGRAPHY / TRANSFORM</span></div>
-            <p class="eyebrow">KINETIC TYPE</p><h3>Words have weight.</h3><p>Hover or focus the words. Rotation and position turn typography into an interface.</p>
+            <div class="exhibit-meta">
+              <span>02</span><span>TYPOGRAPHY / TRANSFORM</span>
+            </div>
+            <p class="eyebrow">KINETIC TYPE</p><h3>Words have weight.</h3><p>
+              Hover or focus the words. Rotation and position turn typography
+              into an interface.
+            </p>
             <div class="type-stage" data-type-stage>
-              <button type="button" data-kinetic>MOVE</button><button type="button" data-kinetic>THINK</button><button type="button" data-kinetic>BUILD</button><button type="button" data-kinetic>RESPOND</button>
+              <button type="button" data-kinetic>MOVE</button><button
+                type="button"
+                data-kinetic>THINK</button
+              ><button type="button" data-kinetic>BUILD</button><button
+                type="button"
+                data-kinetic>RESPOND</button
+              >
             </div>
           </article>
 
           <article class="exhibit" id="physics">
-            <div class="exhibit-meta"><span>03</span><span>SIMULATION / POINTER</span></div>
-            <p class="eyebrow">PHYSICS PLAYGROUND</p><h3>Throw something.</h3><p>Grab the objects and fling them around the surface. The simulation uses velocity, gravity, friction, and collision with the bounds.</p>
-            <div class="physics-stage" data-physics-stage><canvas data-physics-canvas></canvas><button type="button" class="physics-reset" data-physics-reset>RESET</button></div>
+            <div class="exhibit-meta">
+              <span>03</span><span>SIMULATION / POINTER</span>
+            </div>
+            <p class="eyebrow">PHYSICS PLAYGROUND</p><h3>Throw something.</h3><p
+            >
+              Grab the objects and fling them around the surface. The simulation
+              uses velocity, gravity, friction, and collision with the bounds.
+            </p>
+            <div class="physics-stage" data-physics-stage>
+              <canvas data-physics-canvas></canvas><button
+                type="button"
+                class="physics-reset"
+                data-physics-reset>RESET</button
+              >
+            </div>
           </article>
         </div>
 
-
-
-
-
         <div class="exhibit-pair">
-
-
           <article class="exhibit" id="browser-lab">
-            <div class="exhibit-meta"><span>04</span><span>NATIVE APIS / PROGRESSIVE ENHANCEMENT</span></div>
-            <p class="eyebrow">BROWSER CAPABILITY LAB</p><h3>Ask the browser.</h3><p>No claims. These rows query this browser for capabilities it actually exposes.</p>
+            <div class="exhibit-meta">
+              <span>04</span><span>NATIVE APIS / PROGRESSIVE ENHANCEMENT</span>
+            </div>
+            <p class="eyebrow">BROWSER CAPABILITY LAB</p><h3>
+              Ask the browser.
+            </h3><p>
+              No claims. These rows query this browser for capabilities it
+              actually exposes.
+            </p>
             <div class="capability-list" data-capabilities></div>
           </article>
         </div>
-<div id="alienx-new-exhibits"><div class="exhibit-pair alienx-exhibit-pair"><article class="exhibit alienx-exhibit" id="light-field"><div class="exhibit-meta"><span>05</span><span>CANVAS / LIGHT / GEOMETRY</span></div><p class="eyebrow">LIGHT FIELD</p><h3>Move the light. Reveal the system.</h3><p>A canvas scene hides its structure until your pointer becomes a moving light source. Click to send a pulse through the field.</p><div class="alienx-light-stage" data-light-stage><canvas data-light-canvas></canvas><span>LIGHT / LIVE</span></div></article><article class="exhibit alienx-exhibit" id="spatial-ui"><div class="exhibit-meta"><span>06</span><span>CSS 3D / POINTER / DEPTH</span></div><p class="eyebrow">SPATIAL UI</p><h3>The interface has depth.</h3><p>Move around the scene and change its perspective. The browser is rendering a layered interface in three dimensions.</p><div class="alienx-spatial-stage" data-spatial-stage><div class="alienx-space" data-space><div class="alienx-space-plane back">SYSTEM / 03</div><div class="alienx-space-plane mid">SIGNAL / 02</div><div class="alienx-space-plane front"><strong>ALIENX</strong><span>DEPTH / 01</span></div></div><span data-space-readout>X +00° / Y +00°</span></div></article></div><article class="exhibit exhibit--wide alienx-exhibit" id="signal-trace"><div class="exhibit-meta"><span>07</span><span>POINTER / CANVAS / GESTURE</span></div><div class="exhibit-split"><div class="exhibit-copy"><p class="eyebrow">SIGNAL TRACE</p><h3>Your movement becomes data.</h3><p>Draw across the field. Pointer velocity changes the trace, leaving a glowing trace until you clear it.</p><button type="button" class="exhibit-button" data-signal-clear>Clear trace <span>×</span></button></div><div class="alienx-signal-stage" data-signal-stage><canvas data-signal-canvas></canvas><span>PRESS / DRAG</span></div></div></article></div>
+        <div id="alienx-new-exhibits">
+          <div class="exhibit-pair alienx-exhibit-pair">
+            <article class="exhibit alienx-exhibit" id="light-field">
+              <div class="exhibit-meta">
+                <span>05</span><span>CANVAS / LIGHT / GEOMETRY</span>
+              </div><p class="eyebrow">LIGHT FIELD</p><h3>
+                Move the light. Reveal the system.
+              </h3><p>
+                A canvas scene hides its structure until your pointer becomes a
+                moving light source. Click to send a pulse through the field.
+              </p><div class="alienx-light-stage" data-light-stage>
+                <canvas data-light-canvas></canvas><span>LIGHT / LIVE</span>
+              </div>
+            </article><article class="exhibit alienx-exhibit" id="spatial-ui">
+              <div class="exhibit-meta">
+                <span>06</span><span>CSS 3D / POINTER / DEPTH</span>
+              </div><p class="eyebrow">SPATIAL UI</p><h3>
+                The interface has depth.
+              </h3><p>
+                Move around the scene and change its perspective. The browser is
+                rendering a layered interface in three dimensions.
+              </p><div class="alienx-spatial-stage" data-spatial-stage>
+                <div class="alienx-space" data-space>
+                  <div class="alienx-space-plane back">SYSTEM / 03</div><div
+                    class="alienx-space-plane mid"
+                  >
+                    SIGNAL / 02
+                  </div><div class="alienx-space-plane front">
+                    <strong>ALIENX</strong><span>DEPTH / 01</span>
+                  </div>
+                </div><span data-space-readout>X +00° / Y +00°</span>
+              </div>
+            </article>
+          </div><article
+            class="exhibit exhibit--wide alienx-exhibit"
+            id="signal-trace"
+          >
+            <div class="exhibit-meta">
+              <span>07</span><span>POINTER / CANVAS / GESTURE</span>
+            </div><div class="exhibit-split">
+              <div class="exhibit-copy">
+                <p class="eyebrow">SIGNAL TRACE</p><h3>
+                  Your movement becomes data.
+                </h3><p>
+                  Draw across the field. Pointer velocity changes the trace,
+                  leaving a glowing trace until you clear it.
+                </p><button
+                  type="button"
+                  class="exhibit-button"
+                  data-signal-clear>Clear trace <span>×</span></button
+                >
+              </div><div class="alienx-signal-stage" data-signal-stage>
+                <canvas data-signal-canvas></canvas><span>PRESS / DRAG</span>
+              </div>
+            </div>
+          </article>
+        </div>
       </section>
 
       <section class="more-lab" aria-labelledby="more-title">
         <p class="eyebrow">NEXT EXHIBITION</p>
         <h2 id="more-title">The museum can keep <span>growing.</span></h2>
-        <div class="teaser-grid"><div><strong>OFFLINE</strong><span>Client-side resilience</span></div><div><strong>AUDIO REACTIVE</strong><span>Media APIs</span></div><div><strong>ACCESSIBILITY MODE</strong><span>Adaptive interfaces</span></div><div><strong>WEBGL</strong><span>GPU rendering</span></div></div>
+        <div class="teaser-grid">
+          <div>
+            <strong>OFFLINE</strong><span>Client-side resilience</span>
+          </div><div>
+            <strong>AUDIO REACTIVE</strong><span>Media APIs</span>
+          </div><div>
+            <strong>ACCESSIBILITY MODE</strong><span>Adaptive interfaces</span>
+          </div><div><strong>WEBGL</strong><span>GPU rendering</span></div>
+        </div>
       </section>
 
       <section class="closing" aria-labelledby="closing-title">
         <p class="eyebrow">EXIT / THE POINT</p>
         <h2 id="closing-title">You just interacted with the technology.</h2>
-        <p>That is what Experience is for. Technology explains the machinery. This museum lets people operate it.</p>
+        <p>
+          That is what Experience is for. Technology explains the machinery.
+          This museum lets people operate it.
+        </p>
         <a href="/technology">See what is underneath <span>→</span></a>
       </section>
     </main>
@@ -88,16 +218,747 @@ const description = 'Seven interactive browser exhibits: pointer fields, kinetic
     <script is:inline src="/experience.js" defer></script>
 
     <style>
-      :global(html){background:var(--museum-bg);color:var(--museum-text)}
-      :global(body){--museum-bg:#05070c;--museum-surface:#090d16;--museum-surface-2:#0d1320;--museum-text:#edf2fb;--museum-heading:#f8faff;--museum-muted:#9aa6bb;--museum-soft:#68758d;--museum-border:#1b2434;--museum-border-strong:#2b374d;--museum-blue:#6f82ff;--museum-green:var(--brand-green);margin:0;background:radial-gradient(circle at 10% 0,rgba(111,130,255,.11),transparent 32rem),radial-gradient(circle at 90% 20%,rgba(57,255,90,.04),transparent 28rem),var(--museum-bg)}
-      main{overflow:hidden}.entrance,.museum,.more-lab,.closing{width:min(1180px,calc(100% - 48px));margin:auto}.entrance{min-height:calc(100vh - 90px);display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:center;padding:65px 0 120px}.eyebrow{margin:0 0 15px;color:var(--museum-soft);font-size:.63rem;font-weight:900;letter-spacing:.18em}.entrance h1,.museum h2,.more-lab h2,.closing h2{margin:0;color:var(--museum-heading);letter-spacing:-.065em;line-height:.88}.entrance h1{font-size:clamp(3.5rem,7.7vw,7.7rem)}h1 span,h2 span,h3 span{color:var(--museum-green)}.lede{max-width:650px;margin:27px 0 0;color:var(--museum-muted);font-size:clamp(1.05rem,1.8vw,1.24rem);line-height:1.7}.enter,.closing a{display:inline-flex;align-items:center;gap:13px;margin-top:34px;padding:14px 18px;border-radius:999px;text-decoration:none;color:#061008;background:var(--museum-green);font-size:.7rem;font-weight:900;box-shadow:0 18px 60px rgba(57,255,90,.1)}.entrance-art{position:relative;min-height:560px;border:1px solid var(--museum-border-strong);border-radius:34px;overflow:hidden;background:#060a11;box-shadow:0 40px 110px rgba(0,0,0,.35)}.entrance-art canvas,.pointer-lab canvas,.physics-stage canvas{display:block;width:100%;height:100%}.entrance-art:before,.pointer-lab:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(111,130,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(111,130,255,.07) 1px,transparent 1px);background-size:38px 38px;pointer-events:none}.entrance-label{position:absolute;left:20px;bottom:20px;display:grid;gap:5px}.entrance-label span{color:var(--museum-soft);font-size:.5rem;letter-spacing:.16em;font-weight:900}.entrance-label strong{color:var(--museum-green);font-size:.68rem;letter-spacing:.12em}
-      .museum{padding:10px 0 120px}.museum-intro{display:grid;grid-template-columns:1fr .65fr;gap:70px;align-items:end;padding:25px 0 75px;border-top:1px solid var(--museum-border)}.museum h2{font-size:clamp(2.8rem,5.5vw,5.4rem)}.museum-intro>p,.exhibit-copy>p:not(.eyebrow),.exhibit>p:not(.eyebrow){margin:0;color:var(--museum-muted);line-height:1.75}.exhibit-pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.exhibit{position:relative;padding:25px;border:1px solid var(--museum-border);border-radius:26px;background:var(--museum-surface);overflow:hidden}.exhibit:hover{border-color:var(--museum-border-strong)}.exhibit--wide{margin-top:16px}.exhibit-meta{display:flex;justify-content:space-between;gap:15px;margin-bottom:42px;color:var(--museum-soft);font-size:.48rem;font-weight:900;letter-spacing:.13em}.exhibit h3{margin:0;color:var(--museum-heading);font-size:clamp(1.8rem,3vw,3rem);line-height:.95;letter-spacing:-.045em}.exhibit-copy{max-width:650px}.pointer-lab{position:relative;height:440px;margin-top:38px;border:1px solid var(--museum-border);border-radius:20px;overflow:hidden;background:#05080e}.lab-hint{position:absolute;inset:auto 0 20px;text-align:center;color:var(--museum-soft);font-size:.5rem;font-weight:900;letter-spacing:.16em;pointer-events:none}.type-stage{min-height:370px;margin-top:28px;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:5px;padding:20px;border:1px solid var(--museum-border);border-radius:20px;background:radial-gradient(circle at 50% 50%,rgba(111,130,255,.08),transparent 70%),var(--museum-surface-2)}.type-stage button{border:0;background:none;color:var(--museum-soft);font:900 clamp(1.9rem,4vw,4rem)/.82 Atkinson,system-ui;letter-spacing:-.07em;cursor:pointer;transform:translate(var(--tx,0),var(--ty,0)) rotate(var(--rot,0));transition:color .2s,transform .18s}.type-stage button:hover,.type-stage button:focus-visible{color:var(--museum-green);outline:none}.physics-stage{position:relative;height:370px;margin-top:28px;border:1px solid var(--museum-border);border-radius:20px;overflow:hidden;background:#05080e;cursor:grab}.physics-stage:active{cursor:grabbing}.physics-reset{position:absolute;right:12px;top:12px;padding:8px 11px;border:1px solid var(--museum-border-strong);border-radius:999px;background:rgba(5,8,14,.8);color:var(--museum-text);font:800 .55rem Atkinson,system-ui;cursor:pointer}.exhibit-split{display:grid;grid-template-columns:.7fr 1.3fr;gap:30px;align-items:center}.exhibit-button{margin-top:26px;padding:12px 15px;border:1px solid var(--museum-border-strong);border-radius:999px;background:var(--museum-surface-2);color:var(--museum-text);font:800 .65rem Atkinson,system-ui;cursor:pointer}.exhibit-button:hover,.exhibit-button:focus-visible{border-color:var(--museum-green);outline:none}.generation-stage{position:relative;min-height:430px;border:1px solid var(--museum-border);border-radius:20px;overflow:hidden;background:#05080e}.generated-block{position:absolute;left:var(--x);top:var(--y);width:clamp(35px,8vw,75px);aspect-ratio:1;display:grid;place-items:center;border:1px solid rgba(57,255,90,.45);color:var(--museum-green);font-weight:900;transform:translate(-50%,-50%) scale(var(--s)) rotate(var(--r));box-shadow:0 0 45px rgba(57,255,90,.07)}
-      .network-stage{margin-top:28px;border:1px solid var(--museum-border);border-radius:20px;overflow:hidden;background:#05080e}.network-stage svg{display:block;width:100%;height:auto;min-height:330px}.network-line{stroke:rgba(111,130,255,.2);stroke-width:1;transition:stroke .12s,stroke-width .12s}.network-hot{stroke:rgba(57,255,90,.65);stroke-width:2}.network-node{fill:var(--museum-green);opacity:.7;transition:r .12s}.algorithm-stage{margin-top:28px}.bars{height:250px;display:flex;align-items:flex-end;gap:3px;padding:18px;border:1px solid var(--museum-border);border-radius:20px;background:#05080e}.bars i{display:block;flex:1;min-width:2px;background:rgba(111,130,255,.55);transition:height .05s,background .05s}.bars i.is-active{background:var(--museum-green)}.algorithm-controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.algorithm-controls select,.algorithm-controls button{padding:9px 11px;border:1px solid var(--museum-border-strong);border-radius:999px;background:var(--museum-surface-2);color:var(--museum-text);font:800 .58rem Atkinson,system-ui}.algorithm-controls button{cursor:pointer}.algorithm-controls button:hover,.algorithm-controls button:focus-visible,.algorithm-controls select:focus-visible{border-color:var(--museum-green);outline:none}.algorithm-readout{display:flex;gap:18px;margin-top:12px;color:var(--museum-soft);font:700 .52rem ui-monospace,SFMono-Regular,Menlo,monospace}.dom-stage{display:grid;grid-template-columns:1fr .8fr;min-height:340px;margin-top:28px;border:1px solid var(--museum-border);border-radius:20px;overflow:hidden;background:#05080e}.dom-tree{padding:10px;overflow:auto;border-right:1px solid var(--museum-border)}.dom-node{display:block;width:100%;padding-top:7px;padding-bottom:7px;border:0;background:none;color:var(--museum-soft);text-align:left;font:700 .58rem ui-monospace,SFMono-Regular,Menlo,monospace;cursor:pointer;border-radius:5px}.dom-node:hover,.dom-node.is-selected{background:rgba(57,255,90,.07);color:var(--museum-green)}.dom-inspector{display:grid;align-content:start;gap:8px;padding:18px}.dom-inspector span{color:var(--museum-soft);font-size:.48rem;font-weight:900;letter-spacing:.12em}.dom-inspector strong{color:var(--museum-heading);font-size:1.1rem}.dom-inspector code{color:var(--museum-muted);font-size:.58rem;overflow-wrap:anywhere}.capability-list{margin-top:28px;border:1px solid var(--museum-border);border-radius:20px;overflow:hidden}.capability-row{display:flex;justify-content:space-between;gap:15px;padding:14px;border-bottom:1px solid var(--museum-border);font-size:.62rem}.capability-row:last-child{border-bottom:0}.capability-row span{color:var(--museum-muted)}.capability-row strong{color:var(--museum-green);font-size:.5rem;letter-spacing:.1em}.more-lab{padding:80px 0 140px;border-top:1px solid var(--museum-border)}.more-lab h2{font-size:clamp(2.8rem,5.5vw,5.2rem)}.teaser-grid{display:grid;grid-template-columns:repeat(4,1fr);margin-top:45px;border-top:1px solid var(--museum-border);border-bottom:1px solid var(--museum-border)}.teaser-grid div{display:grid;gap:8px;min-height:130px;padding:18px;border-right:1px solid var(--museum-border)}.teaser-grid div:last-child{border-right:0}.teaser-grid strong{color:var(--museum-text);font-size:.62rem}.teaser-grid span{color:var(--museum-soft);font-size:.55rem}.closing{padding:20px 0 150px;border-top:1px solid var(--museum-border)}.closing h2{max-width:900px;font-size:clamp(3rem,6vw,6rem)}.closing>p:not(.eyebrow){max-width:700px;margin-top:22px;color:var(--museum-muted);line-height:1.75}
-      @media(prefers-color-scheme:light){:global(html:where(:not([data-alienx-theme]))){background:#fff}:global(html:where(:not([data-alienx-theme]))) :global(body){--museum-bg:#fff;--museum-surface:#f6f8fb;--museum-surface-2:#eef2f7;--museum-text:#253047;--museum-heading:#0d1420;--museum-muted:#61718c;--museum-soft:#738099;--museum-border:#dfe5ee;--museum-border-strong:#c7d0df;--museum-blue:#5365db;--museum-green:var(--brand-green-dark);background:radial-gradient(circle at 10% 0,rgba(83,101,219,.07),transparent 32rem),var(--museum-bg)}:global(html:where(:not([data-alienx-theme]))) .entrance-art,:global(html:where(:not([data-alienx-theme]))) .pointer-lab,:global(html:where(:not([data-alienx-theme]))) .physics-stage,:global(html:where(:not([data-alienx-theme]))) .generation-stage,:global(html:where(:not([data-alienx-theme]))) .network-stage,:global(html:where(:not([data-alienx-theme]))) .bars,:global(html:where(:not([data-alienx-theme]))) .dom-stage{background:#f3f6fa}:global(html:where(:not([data-alienx-theme]))) .type-stage{background:radial-gradient(circle at 50% 50%,rgba(83,101,219,.06),transparent 70%),#f6f8fb}:global(html:where(:not([data-alienx-theme]))) .physics-reset{background:rgba(243,246,250,.88)}}:global(html[data-alienx-theme="light"]){background:#fff}:global(html[data-alienx-theme="light"]) :global(body){--museum-bg:#fff;--museum-surface:#f6f8fb;--museum-surface-2:#eef2f7;--museum-text:#253047;--museum-heading:#0d1420;--museum-muted:#61718c;--museum-soft:#738099;--museum-border:#dfe5ee;--museum-border-strong:#c7d0df;--museum-blue:#5365db;--museum-green:var(--brand-green-dark);background:radial-gradient(circle at 10% 0,rgba(83,101,219,.07),transparent 32rem),var(--museum-bg)}:global(html[data-alienx-theme="light"]) .entrance-art,:global(html[data-alienx-theme="light"]) .pointer-lab,:global(html[data-alienx-theme="light"]) .physics-stage,:global(html[data-alienx-theme="light"]) .generation-stage,:global(html[data-alienx-theme="light"]) .network-stage,:global(html[data-alienx-theme="light"]) .bars,:global(html[data-alienx-theme="light"]) .dom-stage{background:#f3f6fa}:global(html[data-alienx-theme="light"]) .type-stage{background:radial-gradient(circle at 50% 50%,rgba(83,101,219,.06),transparent 70%),#f6f8fb}:global(html[data-alienx-theme="light"]) .physics-reset{background:rgba(243,246,250,.88)}
-      :global(html:where([data-alienx-theme="light"])){background:#fff}
-      @media(max-width:900px){.entrance,.museum-intro,.exhibit-split{grid-template-columns:1fr}.entrance-art{min-height:430px}.exhibit-pair{grid-template-columns:1fr}.teaser-grid{grid-template-columns:1fr 1fr}.teaser-grid div:nth-child(2){border-right:0}.teaser-grid div:nth-child(-n+2){border-bottom:1px solid var(--museum-border)}}
-      @media(max-width:620px){.entrance,.museum,.more-lab,.closing{width:min(100% - 28px,1180px)}.entrance{padding:45px 0 80px}.entrance h1{font-size:clamp(3rem,15vw,5rem)}.entrance-art{min-height:360px}.museum-intro{gap:30px;padding-bottom:50px}.exhibit{padding:20px}.exhibit-meta{margin-bottom:32px}.pointer-lab{height:330px}.type-stage{min-height:300px}.physics-stage{height:300px}.generation-stage{min-height:330px}.network-stage svg{min-height:260px}.dom-stage{grid-template-columns:1fr;min-height:360px}.dom-tree{max-height:190px;border-right:0;border-bottom:1px solid var(--museum-border)}.teaser-grid{grid-template-columns:1fr}.teaser-grid div{border-right:0!important;border-bottom:1px solid var(--museum-border)}.teaser-grid div:last-child{border-bottom:0}.closing{padding-bottom:100px}}
-      @media(prefers-reduced-motion:reduce){.type-stage button{transition:none}.network-line,.network-node,.bars i{transition:none}.generated-block{transform:translate(-50%,-50%) scale(var(--s)) rotate(var(--r))}}
+      :global(html) {
+        background: var(--museum-bg);
+        color: var(--museum-text);
+      }
+      :global(body) {
+        --museum-bg: #05070c;
+        --museum-surface: #090d16;
+        --museum-surface-2: #0d1320;
+        --museum-text: #edf2fb;
+        --museum-heading: #f8faff;
+        --museum-muted: #9aa6bb;
+        --museum-soft: #68758d;
+        --museum-border: #1b2434;
+        --museum-border-strong: #2b374d;
+        --museum-blue: #6f82ff;
+        --museum-green: var(--brand-green);
+        margin: 0;
+        background:
+          radial-gradient(
+            circle at 10% 0,
+            rgba(111, 130, 255, 0.11),
+            transparent 32rem
+          ),
+          radial-gradient(
+            circle at 90% 20%,
+            rgba(57, 255, 90, 0.04),
+            transparent 28rem
+          ),
+          var(--museum-bg);
+      }
+      main {
+        overflow: hidden;
+      }
+      .entrance,
+      .museum,
+      .more-lab,
+      .closing {
+        width: min(1180px, calc(100% - 48px));
+        margin: auto;
+      }
+      .entrance {
+        min-height: calc(100vh - 90px);
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 70px;
+        align-items: center;
+        padding: 65px 0 120px;
+      }
+      .eyebrow {
+        margin: 0 0 15px;
+        color: var(--museum-soft);
+        font-size: 0.63rem;
+        font-weight: 900;
+        letter-spacing: 0.18em;
+      }
+      .entrance h1,
+      .museum h2,
+      .more-lab h2,
+      .closing h2 {
+        margin: 0;
+        color: var(--museum-heading);
+        letter-spacing: -0.065em;
+        line-height: 0.88;
+      }
+      .entrance h1 {
+        font-size: clamp(3.5rem, 7.7vw, 7.7rem);
+      }
+      h1 span,
+      h2 span,
+      h3 span {
+        color: var(--museum-green);
+      }
+      .lede {
+        max-width: 650px;
+        margin: 27px 0 0;
+        color: var(--museum-muted);
+        font-size: clamp(1.05rem, 1.8vw, 1.24rem);
+        line-height: 1.7;
+      }
+      .enter,
+      .closing a {
+        display: inline-flex;
+        align-items: center;
+        gap: 13px;
+        margin-top: 34px;
+        padding: 14px 18px;
+        border-radius: 999px;
+        text-decoration: none;
+        color: #061008;
+        background: var(--museum-green);
+        font-size: 0.7rem;
+        font-weight: 900;
+        box-shadow: 0 18px 60px rgba(57, 255, 90, 0.1);
+      }
+      .entrance-art {
+        position: relative;
+        min-height: 560px;
+        border: 1px solid var(--museum-border-strong);
+        border-radius: 34px;
+        overflow: hidden;
+        background: #060a11;
+        box-shadow: 0 40px 110px rgba(0, 0, 0, 0.35);
+      }
+      .entrance-art canvas,
+      .pointer-lab canvas,
+      .physics-stage canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .entrance-art:before,
+      .pointer-lab:before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(111, 130, 255, 0.07) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(111, 130, 255, 0.07) 1px, transparent 1px);
+        background-size: 38px 38px;
+        pointer-events: none;
+      }
+      .entrance-label {
+        position: absolute;
+        left: 20px;
+        bottom: 20px;
+        display: grid;
+        gap: 5px;
+      }
+      .entrance-label span {
+        color: var(--museum-soft);
+        font-size: 0.5rem;
+        letter-spacing: 0.16em;
+        font-weight: 900;
+      }
+      .entrance-label strong {
+        color: var(--museum-green);
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+      }
+      .museum {
+        padding: 10px 0 120px;
+      }
+      .museum-intro {
+        display: grid;
+        grid-template-columns: 1fr 0.65fr;
+        gap: 70px;
+        align-items: end;
+        padding: 25px 0 75px;
+        border-top: 1px solid var(--museum-border);
+      }
+      .museum h2 {
+        font-size: clamp(2.8rem, 5.5vw, 5.4rem);
+      }
+      .museum-intro > p,
+      .exhibit-copy > p:not(.eyebrow),
+      .exhibit > p:not(.eyebrow) {
+        margin: 0;
+        color: var(--museum-muted);
+        line-height: 1.75;
+      }
+      .exhibit-pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 16px;
+      }
+      .exhibit {
+        position: relative;
+        padding: 25px;
+        border: 1px solid var(--museum-border);
+        border-radius: 26px;
+        background: var(--museum-surface);
+        overflow: hidden;
+      }
+      .exhibit:hover {
+        border-color: var(--museum-border-strong);
+      }
+      .exhibit--wide {
+        margin-top: 16px;
+      }
+      .exhibit-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 42px;
+        color: var(--museum-soft);
+        font-size: 0.48rem;
+        font-weight: 900;
+        letter-spacing: 0.13em;
+      }
+      .exhibit h3 {
+        margin: 0;
+        color: var(--museum-heading);
+        font-size: clamp(1.8rem, 3vw, 3rem);
+        line-height: 0.95;
+        letter-spacing: -0.045em;
+      }
+      .exhibit-copy {
+        max-width: 650px;
+      }
+      .pointer-lab {
+        position: relative;
+        height: 440px;
+        margin-top: 38px;
+        border: 1px solid var(--museum-border);
+        border-radius: 20px;
+        overflow: hidden;
+        background: #05080e;
+      }
+      .lab-hint {
+        position: absolute;
+        inset: auto 0 20px;
+        text-align: center;
+        color: var(--museum-soft);
+        font-size: 0.5rem;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        pointer-events: none;
+      }
+      .type-stage {
+        min-height: 370px;
+        margin-top: 28px;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        gap: 5px;
+        padding: 20px;
+        border: 1px solid var(--museum-border);
+        border-radius: 20px;
+        background:
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(111, 130, 255, 0.08),
+            transparent 70%
+          ),
+          var(--museum-surface-2);
+      }
+      .type-stage button {
+        border: 0;
+        background: none;
+        color: var(--museum-soft);
+        font:
+          900 clamp(1.9rem, 4vw, 4rem) / 0.82 Atkinson,
+          system-ui;
+        letter-spacing: -0.07em;
+        cursor: pointer;
+        transform: translate(var(--tx, 0), var(--ty, 0)) rotate(var(--rot, 0));
+        transition:
+          color 0.2s,
+          transform 0.18s;
+      }
+      .type-stage button:hover,
+      .type-stage button:focus-visible {
+        color: var(--museum-green);
+        outline: none;
+      }
+      .physics-stage {
+        position: relative;
+        height: 370px;
+        margin-top: 28px;
+        border: 1px solid var(--museum-border);
+        border-radius: 20px;
+        overflow: hidden;
+        background: #05080e;
+        cursor: grab;
+      }
+      .physics-stage:active {
+        cursor: grabbing;
+      }
+      .physics-reset {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        padding: 8px 11px;
+        border: 1px solid var(--museum-border-strong);
+        border-radius: 999px;
+        background: rgba(5, 8, 14, 0.8);
+        color: var(--museum-text);
+        font:
+          800 0.55rem Atkinson,
+          system-ui;
+        cursor: pointer;
+      }
+      .exhibit-split {
+        display: grid;
+        grid-template-columns: 0.7fr 1.3fr;
+        gap: 30px;
+        align-items: center;
+      }
+      .exhibit-button {
+        margin-top: 26px;
+        padding: 12px 15px;
+        border: 1px solid var(--museum-border-strong);
+        border-radius: 999px;
+        background: var(--museum-surface-2);
+        color: var(--museum-text);
+        font:
+          800 0.65rem Atkinson,
+          system-ui;
+        cursor: pointer;
+      }
+      .exhibit-button:hover,
+      .exhibit-button:focus-visible {
+        border-color: var(--museum-green);
+        outline: none;
+      }
+      .generation-stage {
+        position: relative;
+        min-height: 430px;
+        border: 1px solid var(--museum-border);
+        border-radius: 20px;
+        overflow: hidden;
+        background: #05080e;
+      }
+      .generated-block {
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: clamp(35px, 8vw, 75px);
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(57, 255, 90, 0.45);
+        color: var(--museum-green);
+        font-weight: 900;
+        transform: translate(-50%, -50%) scale(var(--s)) rotate(var(--r));
+        box-shadow: 0 0 45px rgba(57, 255, 90, 0.07);
+      }
+      .network-stage {
+        margin-top: 28px;
+        border: 1px solid var(--museum-border);
+        border-radius: 20px;
+        overflow: hidden;
+        background: #05080e;
+      }
+      .network-stage svg {
+        display: block;
+        width: 100%;
+        height: auto;
+        min-height: 330px;
+      }
+      .network-line {
+        stroke: rgba(111, 130, 255, 0.2);
+        stroke-width: 1;
+        transition:
+          stroke 0.12s,
+          stroke-width 0.12s;
+      }
+      .network-hot {
+        stroke: rgba(57, 255, 90, 0.65);
+        stroke-width: 2;
+      }
+      .network-node {
+        fill: var(--museum-green);
+        opacity: 0.7;
+        transition: r 0.12s;
+      }
+      .algorithm-stage {
+        margin-top: 28px;
+      }
+      .bars {
+        height: 250px;
+        display: flex;
+        align-items: flex-end;
+        gap: 3px;
+        padding: 18px;
+        border: 1px solid var(--museum-border);
+        border-radius: 20px;
+        background: #05080e;
+      }
+      .bars i {
+        display: block;
+        flex: 1;
+        min-width: 2px;
+        background: rgba(111, 130, 255, 0.55);
+        transition:
+          height 0.05s,
+          background 0.05s;
+      }
+      .bars i.is-active {
+        background: var(--museum-green);
+      }
+      .algorithm-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .algorithm-controls select,
+      .algorithm-controls button {
+        padding: 9px 11px;
+        border: 1px solid var(--museum-border-strong);
+        border-radius: 999px;
+        background: var(--museum-surface-2);
+        color: var(--museum-text);
+        font:
+          800 0.58rem Atkinson,
+          system-ui;
+      }
+      .algorithm-controls button {
+        cursor: pointer;
+      }
+      .algorithm-controls button:hover,
+      .algorithm-controls button:focus-visible,
+      .algorithm-controls select:focus-visible {
+        border-color: var(--museum-green);
+        outline: none;
+      }
+      .algorithm-readout {
+        display: flex;
+        gap: 18px;
+        margin-top: 12px;
+        color: var(--museum-soft);
+        font:
+          700 0.52rem ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+      }
+      .dom-stage {
+        display: grid;
+        grid-template-columns: 1fr 0.8fr;
+        min-height: 340px;
+        margin-top: 28px;
+        border: 1px solid var(--museum-border);
+        border-radius: 20px;
+        overflow: hidden;
+        background: #05080e;
+      }
+      .dom-tree {
+        padding: 10px;
+        overflow: auto;
+        border-right: 1px solid var(--museum-border);
+      }
+      .dom-node {
+        display: block;
+        width: 100%;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        border: 0;
+        background: none;
+        color: var(--museum-soft);
+        text-align: left;
+        font:
+          700 0.58rem ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .dom-node:hover,
+      .dom-node.is-selected {
+        background: rgba(57, 255, 90, 0.07);
+        color: var(--museum-green);
+      }
+      .dom-inspector {
+        display: grid;
+        align-content: start;
+        gap: 8px;
+        padding: 18px;
+      }
+      .dom-inspector span {
+        color: var(--museum-soft);
+        font-size: 0.48rem;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+      }
+      .dom-inspector strong {
+        color: var(--museum-heading);
+        font-size: 1.1rem;
+      }
+      .dom-inspector code {
+        color: var(--museum-muted);
+        font-size: 0.58rem;
+        overflow-wrap: anywhere;
+      }
+      .capability-list {
+        margin-top: 28px;
+        border: 1px solid var(--museum-border);
+        border-radius: 20px;
+        overflow: hidden;
+      }
+      .capability-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 14px;
+        border-bottom: 1px solid var(--museum-border);
+        font-size: 0.62rem;
+      }
+      .capability-row:last-child {
+        border-bottom: 0;
+      }
+      .capability-row span {
+        color: var(--museum-muted);
+      }
+      .capability-row strong {
+        color: var(--museum-green);
+        font-size: 0.5rem;
+        letter-spacing: 0.1em;
+      }
+      .more-lab {
+        padding: 80px 0 140px;
+        border-top: 1px solid var(--museum-border);
+      }
+      .more-lab h2 {
+        font-size: clamp(2.8rem, 5.5vw, 5.2rem);
+      }
+      .teaser-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        margin-top: 45px;
+        border-top: 1px solid var(--museum-border);
+        border-bottom: 1px solid var(--museum-border);
+      }
+      .teaser-grid div {
+        display: grid;
+        gap: 8px;
+        min-height: 130px;
+        padding: 18px;
+        border-right: 1px solid var(--museum-border);
+      }
+      .teaser-grid div:last-child {
+        border-right: 0;
+      }
+      .teaser-grid strong {
+        color: var(--museum-text);
+        font-size: 0.62rem;
+      }
+      .teaser-grid span {
+        color: var(--museum-soft);
+        font-size: 0.55rem;
+      }
+      .closing {
+        padding: 20px 0 150px;
+        border-top: 1px solid var(--museum-border);
+      }
+      .closing h2 {
+        max-width: 900px;
+        font-size: clamp(3rem, 6vw, 6rem);
+      }
+      .closing > p:not(.eyebrow) {
+        max-width: 700px;
+        margin-top: 22px;
+        color: var(--museum-muted);
+        line-height: 1.75;
+      }
+      @media (prefers-color-scheme: light) {
+        :global(html:where(:not([data-alienx-theme]))) {
+          background: #fff;
+        }
+        :global(html:where(:not([data-alienx-theme]))) :global(body) {
+          --museum-bg: #fff;
+          --museum-surface: #f6f8fb;
+          --museum-surface-2: #eef2f7;
+          --museum-text: #253047;
+          --museum-heading: #0d1420;
+          --museum-muted: #61718c;
+          --museum-soft: #738099;
+          --museum-border: #dfe5ee;
+          --museum-border-strong: #c7d0df;
+          --museum-blue: #5365db;
+          --museum-green: var(--brand-green-dark);
+          background:
+            radial-gradient(
+              circle at 10% 0,
+              rgba(83, 101, 219, 0.07),
+              transparent 32rem
+            ),
+            var(--museum-bg);
+        }
+        :global(html:where(:not([data-alienx-theme]))) .entrance-art,
+        :global(html:where(:not([data-alienx-theme]))) .pointer-lab,
+        :global(html:where(:not([data-alienx-theme]))) .physics-stage,
+        :global(html:where(:not([data-alienx-theme]))) .generation-stage,
+        :global(html:where(:not([data-alienx-theme]))) .network-stage,
+        :global(html:where(:not([data-alienx-theme]))) .bars,
+        :global(html:where(:not([data-alienx-theme]))) .dom-stage {
+          background: #f3f6fa;
+        }
+        :global(html:where(:not([data-alienx-theme]))) .type-stage {
+          background:
+            radial-gradient(
+              circle at 50% 50%,
+              rgba(83, 101, 219, 0.06),
+              transparent 70%
+            ),
+            #f6f8fb;
+        }
+        :global(html:where(:not([data-alienx-theme]))) .physics-reset {
+          background: rgba(243, 246, 250, 0.88);
+        }
+      }
+      :global(html[data-alienx-theme='light']) {
+        background: #fff;
+      }
+      :global(html[data-alienx-theme='light']) :global(body) {
+        --museum-bg: #fff;
+        --museum-surface: #f6f8fb;
+        --museum-surface-2: #eef2f7;
+        --museum-text: #253047;
+        --museum-heading: #0d1420;
+        --museum-muted: #61718c;
+        --museum-soft: #738099;
+        --museum-border: #dfe5ee;
+        --museum-border-strong: #c7d0df;
+        --museum-blue: #5365db;
+        --museum-green: var(--brand-green-dark);
+        background:
+          radial-gradient(
+            circle at 10% 0,
+            rgba(83, 101, 219, 0.07),
+            transparent 32rem
+          ),
+          var(--museum-bg);
+      }
+      :global(html[data-alienx-theme='light']) .entrance-art,
+      :global(html[data-alienx-theme='light']) .pointer-lab,
+      :global(html[data-alienx-theme='light']) .physics-stage,
+      :global(html[data-alienx-theme='light']) .generation-stage,
+      :global(html[data-alienx-theme='light']) .network-stage,
+      :global(html[data-alienx-theme='light']) .bars,
+      :global(html[data-alienx-theme='light']) .dom-stage {
+        background: #f3f6fa;
+      }
+      :global(html[data-alienx-theme='light']) .type-stage {
+        background:
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(83, 101, 219, 0.06),
+            transparent 70%
+          ),
+          #f6f8fb;
+      }
+      :global(html[data-alienx-theme='light']) .physics-reset {
+        background: rgba(243, 246, 250, 0.88);
+      }
+      :global(html:where([data-alienx-theme='light'])) {
+        background: #fff;
+      }
+      @media (max-width: 900px) {
+        .entrance,
+        .museum-intro,
+        .exhibit-split {
+          grid-template-columns: 1fr;
+        }
+        .entrance-art {
+          min-height: 430px;
+        }
+        .exhibit-pair {
+          grid-template-columns: 1fr;
+        }
+        .teaser-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .teaser-grid div:nth-child(2) {
+          border-right: 0;
+        }
+        .teaser-grid div:nth-child(-n + 2) {
+          border-bottom: 1px solid var(--museum-border);
+        }
+      }
+      @media (max-width: 620px) {
+        .entrance,
+        .museum,
+        .more-lab,
+        .closing {
+          width: min(100% - 28px, 1180px);
+        }
+        .entrance {
+          padding: 45px 0 80px;
+        }
+        .entrance h1 {
+          font-size: clamp(3rem, 15vw, 5rem);
+        }
+        .entrance-art {
+          min-height: 360px;
+        }
+        .museum-intro {
+          gap: 30px;
+          padding-bottom: 50px;
+        }
+        .exhibit {
+          padding: 20px;
+        }
+        .exhibit-meta {
+          margin-bottom: 32px;
+        }
+        .pointer-lab {
+          height: 330px;
+        }
+        .type-stage {
+          min-height: 300px;
+        }
+        .physics-stage {
+          height: 300px;
+        }
+        .generation-stage {
+          min-height: 330px;
+        }
+        .network-stage svg {
+          min-height: 260px;
+        }
+        .dom-stage {
+          grid-template-columns: 1fr;
+          min-height: 360px;
+        }
+        .dom-tree {
+          max-height: 190px;
+          border-right: 0;
+          border-bottom: 1px solid var(--museum-border);
+        }
+        .teaser-grid {
+          grid-template-columns: 1fr;
+        }
+        .teaser-grid div {
+          border-right: 0 !important;
+          border-bottom: 1px solid var(--museum-border);
+        }
+        .teaser-grid div:last-child {
+          border-bottom: 0;
+        }
+        .closing {
+          padding-bottom: 100px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .type-stage button {
+          transition: none;
+        }
+        .network-line,
+        .network-node,
+        .bars i {
+          transition: none;
+        }
+        .generated-block {
+          transform: translate(-50%, -50%) scale(var(--s)) rotate(var(--r));
+        }
+      }
     </style>
   </body>
 </html>

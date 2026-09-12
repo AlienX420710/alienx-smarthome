@@ -1,0 +1,6 @@
+# Local-only provider setup. Leave secrets empty for static pages and mocked tests.
+# Replace with dedicated test credentials only for an approved integration test.
+TURNSTILE_SECRET=""
+RESEND_API_KEY=""
+# Must match the hostname returned by the chosen Turnstile testing setup.
+TURNSTILE_HOSTNAMES="localhost,127.0.0.1"

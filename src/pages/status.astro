@@ -6,253 +6,713 @@ import Footer from '../components/Footer.astro';
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title="System Status — AlienX SmartHome" description="Worker reachability and integration configuration for AlienX SmartHome." />
-	</head>
-	<body>
-		<Header />
-		<main id="main-content" tabindex="-1" class="status-page">
-			<section class="hero" aria-labelledby="status-title">
-				<div class="hero-copy">
-					<p class="eyebrow">ALIENX // SYSTEM STATUS</p>
-					<h1 id="status-title">Infrastructure,<br /><span>visible.</span></h1>
-					<p class="lede">A live view of the production systems behind AlienX SmartHome.</p>
-				</div>
-				<div class="core" aria-hidden="true">
-					<div class="core-orbit orbit-one"></div>
-					<div class="core-orbit orbit-two"></div>
-					<div class="core-ring"><i></i><i></i></div>
-					<div class="core-signal"></div>
-				</div>
-			</section>
+  <head>
+    <BaseHead
+      title="System Status — AlienX SmartHome"
+      description="Worker reachability and integration configuration for AlienX SmartHome."
+    />
+  </head>
+  <body>
+    <Header />
+    <main id="main-content" tabindex="-1" class="status-page">
+      <section class="hero" aria-labelledby="status-title">
+        <div class="hero-copy">
+          <p class="eyebrow">ALIENX // SYSTEM STATUS</p>
+          <h1 id="status-title">Infrastructure,<br /><span>visible.</span></h1>
+          <p class="lede">
+            A live view of the production systems behind AlienX SmartHome.
+          </p>
+        </div>
+        <div class="core" aria-hidden="true">
+          <div class="core-orbit orbit-one"></div>
+          <div class="core-orbit orbit-two"></div>
+          <div class="core-ring"><i></i><i></i></div>
+          <div class="core-signal"></div>
+        </div>
+      </section>
 
-			<section class="status-panel" aria-labelledby="overall-title">
-				<div class="panel-head">
-					<div>
-						<p class="section-label">PRODUCTION SIGNAL</p>
-						<h2 id="overall-title">System state</h2>
-					</div>
-					<div class="overall" id="overall" data-state="checking" aria-live="polite">
-						<span class="pulse"></span>
-						<span id="overall-label">Checking</span>
-					</div>
-				</div>
-				<div class="signal-line" aria-hidden="true"><span id="signal-progress"></span></div>
-				<div class="checks" id="checks" aria-live="polite" aria-busy="true"></div>
-				<div class="panel-meta">
-					<span id="updated">Establishing live signal…</span>
-					<button id="refresh" type="button">Refresh <kbd>R</kbd></button>
-				</div>
-			</section>
+      <section class="status-panel" aria-labelledby="overall-title">
+        <div class="panel-head">
+          <div>
+            <p class="section-label">PRODUCTION SIGNAL</p>
+            <h2 id="overall-title">System state</h2>
+          </div>
+          <div
+            class="overall"
+            id="overall"
+            data-state="checking"
+            aria-live="polite"
+          >
+            <span class="pulse"></span>
+            <span id="overall-label">Checking</span>
+          </div>
+        </div>
+        <div class="signal-line" aria-hidden="true">
+          <span id="signal-progress"></span>
+        </div>
+        <div class="checks" id="checks" aria-live="polite" aria-busy="true">
+        </div>
+        <div class="panel-meta">
+          <span id="updated">Establishing live signal…</span>
+          <button id="refresh" type="button">Refresh <kbd>R</kbd></button>
+        </div>
+      </section>
 
-			<section class="transparency" aria-labelledby="transparency-title">
-			<div>
-				<p class="section-label">HOW TO READ THIS</p>
-				<h2 id="transparency-title">Signals, not theater.</h2>
-			</div>
-			<div class="explanation">
-				<p><strong>Operational</strong> means the production Worker answered the live check.</p>
-				<p><strong>Configured</strong> means a required integration is present. It does not prove authentication or delivery succeeds.</p>
-				<p>The public check never exposes secrets or sends a test message. Smoke tests verify HTTP responses and configuration, not end-to-end inquiry delivery.</p>
-			</div>
-			</section>
+      <section class="transparency" aria-labelledby="transparency-title">
+        <div>
+          <p class="section-label">HOW TO READ THIS</p>
+          <h2 id="transparency-title">Signals, not theater.</h2>
+        </div>
+        <div class="explanation">
+          <p>
+            <strong>Operational</strong> means the production Worker answered the
+            live check.
+          </p>
+          <p>
+            <strong>Configured</strong> means a required integration is present.
+            It does not prove authentication or delivery succeeds.
+          </p>
+          <p>
+            The public check never exposes secrets or sends a test message.
+            Smoke tests verify HTTP responses and configuration, not end-to-end
+            inquiry delivery.
+          </p>
+        </div>
+      </section>
 
-			<section class="runtime" aria-label="Runtime details">
-				<div><span>RUNTIME</span><strong>Cloudflare Workers</strong></div>
-				<div><span>EDGE</span><strong>Cloudflare</strong></div>
-				<div><span>MONITORING</span><strong>Automated smoke tests</strong></div>
-			</section>
-		</main>
-		<Footer />
-	</body>
+      <section class="runtime" aria-label="Runtime details">
+        <div><span>RUNTIME</span><strong>Cloudflare Workers</strong></div>
+        <div><span>EDGE</span><strong>Cloudflare</strong></div>
+        <div><span>MONITORING</span><strong>Automated smoke tests</strong></div>
+      </section>
+    </main>
+    <Footer />
+  </body>
 </html>
 
 <script>
-	import { parseStatus, type StatusResponse } from '../lib/status';
-	let cleanup: (() => void) | undefined;
-	function initializeStatus() {
-	cleanup?.();
-	if (!document.querySelector('.status-page')) return;
-	const lifecycle = new AbortController();
-	const { signal } = lifecycle;
-	const checks = document.querySelector<HTMLElement>('#checks');
-	const overall = document.querySelector<HTMLElement>('#overall');
-	const overallLabel = document.querySelector<HTMLElement>('#overall-label');
-	const updated = document.querySelector<HTMLElement>('#updated');
-	const refreshButton = document.querySelector<HTMLButtonElement>('#refresh');
-	const progress = document.querySelector<HTMLElement>('#signal-progress');
-	let refreshTimer: number | undefined;
-	let refreshing = false;
+  import { parseStatus, type StatusResponse } from '../lib/status';
+  let cleanup: (() => void) | undefined;
+  function initializeStatus() {
+    cleanup?.();
+    if (!document.querySelector('.status-page')) return;
+    const lifecycle = new AbortController();
+    const { signal } = lifecycle;
+    const checks = document.querySelector<HTMLElement>('#checks');
+    const overall = document.querySelector<HTMLElement>('#overall');
+    const overallLabel = document.querySelector<HTMLElement>('#overall-label');
+    const updated = document.querySelector<HTMLElement>('#updated');
+    const refreshButton = document.querySelector<HTMLButtonElement>('#refresh');
+    const progress = document.querySelector<HTMLElement>('#signal-progress');
+    let refreshTimer: number | undefined;
+    let refreshing = false;
 
-	const labels: Array<[string, string, string]> = [
-		['worker', 'EDGE WORKER', 'The production application edge is responding.'],
-		['inquiry', 'INQUIRY API', 'The public inquiry route is available.'],
-		['turnstile', 'TURNSTILE', 'Bot protection is configured for production.'],
-		['resend', 'RESEND', 'Email delivery integration is configured.'],
-	];
+    const labels: Array<[string, string, string]> = [
+      [
+        'worker',
+        'EDGE WORKER',
+        'The production application edge is responding.',
+      ],
+      ['inquiry', 'INQUIRY API', 'The public inquiry route is available.'],
+      [
+        'turnstile',
+        'TURNSTILE',
+        'Bot protection is configured for production.',
+      ],
+      ['resend', 'RESEND', 'Email delivery integration is configured.'],
+    ];
 
-	const setOverall = (state: 'checking' | 'operational' | 'degraded') => {
-		if (!overall || !overallLabel) return;
-		overall.dataset.state = state;
-		overallLabel.textContent = state === 'checking' ? 'Checking' : state === 'operational' ? 'Operational' : 'Degraded';
-	};
+    const setOverall = (state: 'checking' | 'operational' | 'degraded') => {
+      if (!overall || !overallLabel) return;
+      overall.dataset.state = state;
+      overallLabel.textContent =
+        state === 'checking'
+          ? 'Checking'
+          : state === 'operational'
+            ? 'Operational'
+            : 'Degraded';
+    };
 
-	const renderChecks = (data: StatusResponse) => {
-		if (!checks) return;
-		checks.innerHTML = labels.map(([key, label, fallback]) => {
-			const check = data.checks[key];
-			const state = check?.status ?? 'degraded';
-			const detail = (check?.detail ?? fallback).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!);
-			const stateLabel = state === 'operational' ? 'OPERATIONAL' : state === 'configured' ? 'CONFIGURED' : 'DEGRADED';
-			return `<article class="check check--${state}">
+    const renderChecks = (data: StatusResponse) => {
+      if (!checks) return;
+      checks.innerHTML = labels
+        .map(([key, label, fallback]) => {
+          const check = data.checks[key];
+          const state = check?.status ?? 'degraded';
+          const detail = (check?.detail ?? fallback).replace(
+            /[&<>"']/g,
+            (char) =>
+              ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;',
+              })[char]!,
+          );
+          const stateLabel =
+            state === 'operational'
+              ? 'OPERATIONAL'
+              : state === 'configured'
+                ? 'CONFIGURED'
+                : 'DEGRADED';
+          return `<article class="check check--${state}">
 				<div class="check-icon" aria-hidden="true"><span></span></div>
 				<div class="check-copy"><span class="check-name">${label}</span><strong>${stateLabel}</strong><small>${detail}</small></div>
 			</article>`;
-		}).join('');
-		checks.setAttribute('aria-busy', 'false');
-	};
+        })
+        .join('');
+      checks.setAttribute('aria-busy', 'false');
+    };
 
-	const refresh = async () => {
-		if (refreshing || signal.aborted || document.hidden) return;
-        window.clearTimeout(refreshTimer);
-		refreshing = true;
-		setOverall('checking');
-		if (checks) checks.setAttribute('aria-busy', 'true');
-		if (refreshButton) refreshButton.disabled = true;
-		progress?.classList.add('loading');
+    const refresh = async () => {
+      if (refreshing || signal.aborted || document.hidden) return;
+      window.clearTimeout(refreshTimer);
+      refreshing = true;
+      setOverall('checking');
+      if (checks) checks.setAttribute('aria-busy', 'true');
+      if (refreshButton) refreshButton.disabled = true;
+      progress?.classList.add('loading');
 
-		try {
-			const response = await fetch('/api/status', { cache: 'no-store', signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]) });
-			if (!response.ok && response.status !== 503) throw new Error(`Status endpoint returned ${response.status}`);
-			const data = parseStatus(await response.json());
-            if (signal.aborted) return;
-			renderChecks(data);
-			setOverall(data.status === 'operational' ? 'operational' : 'degraded');
-			if (updated) updated.textContent = `Last checked ${new Date(data.generatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}`;
-		} catch {
-            if (signal.aborted) return;
-			if (checks) checks.innerHTML = '<article class="check check--degraded check--error"><div class="check-icon" aria-hidden="true"><span></span></div><div class="check-copy"><span class="check-name">STATUS ENDPOINT</span><strong>UNAVAILABLE</strong><small>The live signal could not be reached. Try again in a moment.</small></div></article>';
-			if (checks) checks.setAttribute('aria-busy', 'false');
-			setOverall('degraded');
-			if (updated) updated.textContent = 'Live signal unavailable';
-		} finally {
-			progress?.classList.remove('loading');
-			if (refreshButton) refreshButton.disabled = false;
-			refreshing = false;
-            scheduleRefresh();
-		}
-	};
+      try {
+        const response = await fetch('/api/status', {
+          cache: 'no-store',
+          signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]),
+        });
+        if (!response.ok && response.status !== 503)
+          throw new Error(`Status endpoint returned ${response.status}`);
+        const data = parseStatus(await response.json());
+        if (signal.aborted) return;
+        renderChecks(data);
+        setOverall(data.status === 'operational' ? 'operational' : 'degraded');
+        if (updated)
+          updated.textContent = `Last checked ${new Date(data.generatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}`;
+      } catch {
+        if (signal.aborted) return;
+        if (checks)
+          checks.innerHTML =
+            '<article class="check check--degraded check--error"><div class="check-icon" aria-hidden="true"><span></span></div><div class="check-copy"><span class="check-name">STATUS ENDPOINT</span><strong>UNAVAILABLE</strong><small>The live signal could not be reached. Try again in a moment.</small></div></article>';
+        if (checks) checks.setAttribute('aria-busy', 'false');
+        setOverall('degraded');
+        if (updated) updated.textContent = 'Live signal unavailable';
+      } finally {
+        progress?.classList.remove('loading');
+        if (refreshButton) refreshButton.disabled = false;
+        refreshing = false;
+        scheduleRefresh();
+      }
+    };
 
-	const scheduleRefresh = () => {
-		window.clearTimeout(refreshTimer);
-        if (signal.aborted || document.hidden) return;
-		refreshTimer = window.setTimeout(() => {
-			void refresh();
-		}, 30000);
-	};
+    const scheduleRefresh = () => {
+      window.clearTimeout(refreshTimer);
+      if (signal.aborted || document.hidden) return;
+      refreshTimer = window.setTimeout(() => {
+        void refresh();
+      }, 30000);
+    };
 
-	refreshButton?.addEventListener('click', () => {
-		void refresh();
-	}, { signal });
-	document.addEventListener('keydown', (event) => {
-		if (event.key.toLowerCase() === 'r' && !event.metaKey && !event.ctrlKey && !event.altKey && !(event.target instanceof HTMLElement && (event.target.isContentEditable || event.target.closest('input, textarea, select, [role=dialog]')))) {
-			event.preventDefault();
-			void refresh();
-		}
-	}, { signal });
-	document.addEventListener('visibilitychange', () => {
-		if (document.hidden) {
-			if (refreshTimer) window.clearTimeout(refreshTimer);
-		} else {
-			void refresh();
-		}
-	}, { signal });
-	cleanup = () => { lifecycle.abort(); window.clearTimeout(refreshTimer); };
-	void refresh();
-	}
-	document.addEventListener('astro:before-swap', () => cleanup?.());
-	document.addEventListener('astro:page-load', initializeStatus);
-	initializeStatus();
+    refreshButton?.addEventListener(
+      'click',
+      () => {
+        void refresh();
+      },
+      { signal },
+    );
+    document.addEventListener(
+      'keydown',
+      (event) => {
+        if (
+          event.key.toLowerCase() === 'r' &&
+          !event.metaKey &&
+          !event.ctrlKey &&
+          !event.altKey &&
+          !(
+            event.target instanceof HTMLElement &&
+            (event.target.isContentEditable ||
+              event.target.closest('input, textarea, select, [role=dialog]'))
+          )
+        ) {
+          event.preventDefault();
+          void refresh();
+        }
+      },
+      { signal },
+    );
+    document.addEventListener(
+      'visibilitychange',
+      () => {
+        if (document.hidden) {
+          if (refreshTimer) window.clearTimeout(refreshTimer);
+        } else {
+          void refresh();
+        }
+      },
+      { signal },
+    );
+    cleanup = () => {
+      lifecycle.abort();
+      window.clearTimeout(refreshTimer);
+    };
+    void refresh();
+  }
+  document.addEventListener('astro:before-swap', () => cleanup?.());
+  document.addEventListener('astro:page-load', initializeStatus);
+  initializeStatus();
 </script>
 
 <style>
-	.status-page {
-		width: min(1180px, calc(100% - 40px));
-		margin: 0 auto;
-		padding: 5.5rem 0 7rem;
-		position: relative;
-	}
-	.hero {
-		min-height: 31rem;
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) 23rem;
-		align-items: center;
-		gap: 3rem;
-		position: relative;
-	}
-	.hero-copy { position: relative; z-index: 2; max-width: 760px; }
-	.eyebrow,.section-label { margin: 0 0 1rem; color: #6d7b95; font-size: .68rem; font-weight: 700; letter-spacing: .24em; }
-	.hero h1 { margin: 0; color: #f8faff; font-size: clamp(4rem, 10vw, 8rem); line-height: .86; letter-spacing: -.075em; }
-	.hero h1 span { color: #39ff5a; }
-	.lede { max-width: 560px; margin: 2rem 0 0; color: #a0acc1; font-size: 1.08rem; line-height: 1.65; }
-	.core { width: 19rem; height: 19rem; justify-self: center; position: relative; filter: drop-shadow(0 0 2rem rgba(111,130,255,.12)); }
-	.core::before,.core::after { content: ''; position: absolute; inset: 24%; border: 1px solid rgba(111,130,255,.2); border-radius: 50%; }
-	.core::after { inset: 37%; border-color: rgba(57,255,90,.28); }
-	.core-orbit { position: absolute; inset: 5%; border: 1px solid rgba(111,130,255,.18); border-radius: 50%; }
-	.orbit-one { transform: rotate(28deg) scaleY(.46); }
-	.orbit-two { transform: rotate(-38deg) scaleY(.46); border-color: rgba(57,255,90,.22); }
-	.core-ring { position: absolute; inset: 30%; border: 1px solid rgba(111,130,255,.35); border-radius: 50%; box-shadow: inset 0 0 2rem rgba(111,130,255,.08), 0 0 2rem rgba(111,130,255,.08); }
-	.core-ring i { position: absolute; width: 5px; height: 5px; background: #39ff5a; border-radius: 50%; box-shadow: 0 0 12px #39ff5a; }
-	.core-ring i:first-child { top: 8%; left: 50%; }
-	.core-ring i:last-child { bottom: 8%; left: 50%; }
-	.core-signal { position: absolute; inset: 43%; border-radius: 50%; background: radial-gradient(circle, #39ff5a 0 18%, #6f82ff 19% 48%, rgba(111,130,255,.08) 49% 100%); box-shadow: 0 0 2rem rgba(57,255,90,.32); animation: signal-pulse 2.8s ease-in-out infinite; }
-	.status-panel { margin-top: 1rem; padding: 2rem; border: 1px solid #1b2537; border-radius: 28px; background: linear-gradient(145deg, rgba(10,15,26,.96), rgba(5,8,14,.98)); box-shadow: 0 2rem 5rem rgba(0,0,0,.22); }
-	.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
-	.panel-head h2,.transparency h2 { margin: 0; color: #f8faff; font-size: clamp(1.7rem, 4vw, 2.5rem); letter-spacing: -.05em; }
-	.overall { display: inline-flex; align-items: center; gap: .55rem; padding: .55rem .75rem; border: 1px solid #26314a; border-radius: 999px; color: #aeb9cd; font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; }
-	.overall[data-state="operational"] { border-color: rgba(57,255,90,.35); color: #39ff5a; }
-	.overall[data-state="degraded"] { border-color: rgba(224,164,73,.4); color: #e0a449; }
-	.pulse { width: .5rem; height: .5rem; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 4px rgba(111,130,255,.1); }
-	.overall[data-state="operational"] .pulse { box-shadow: 0 0 0 4px rgba(57,255,90,.1), 0 0 10px rgba(57,255,90,.5); }
-	.signal-line { height: 1px; margin: 1.5rem 0; background: #172033; overflow: hidden; }
-	.signal-line span { display: block; width: 100%; height: 100%; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, #6f82ff, #39ff5a); }
-	.signal-line span.loading { animation: scan 900ms ease-in-out infinite; }
-	.checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; }
-	.check { min-height: 8.5rem; display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; border: 1px solid #192236; border-radius: 18px; background: rgba(9,14,24,.75); transition: border-color 180ms ease, transform 180ms ease; }
-	.check:hover { transform: translateY(-2px); border-color: #2b3850; }
-	.check--operational { border-color: rgba(57,255,90,.24); }
-	.check--configured { border-color: rgba(111,130,255,.3); }
-	.check--degraded { border-color: rgba(224,164,73,.35); }
-	.check-icon { flex: 0 0 2.3rem; width: 2.3rem; height: 2.3rem; display: grid; place-items: center; border: 1px solid #2a3650; border-radius: 50%; }
-	.check-icon span { width: .48rem; height: .48rem; border-radius: 50%; background: #6f82ff; box-shadow: 0 0 10px rgba(111,130,255,.65); }
-	.check--operational .check-icon { border-color: rgba(57,255,90,.4); }
-	.check--operational .check-icon span { background: #39ff5a; box-shadow: 0 0 10px rgba(57,255,90,.65); }
-	.check--configured .check-icon span { background: #6f82ff; }
-	.check--degraded .check-icon span { background: #e0a449; box-shadow: 0 0 10px rgba(224,164,73,.55); }
-	.check-copy { min-width: 0; display: grid; gap: .3rem; }
-	.check-name { color: #7e8ba3; font-size: .65rem; font-weight: 700; letter-spacing: .16em; }
-	.check-copy strong { color: #e8edf7; font-size: 1rem; letter-spacing: .04em; }
-	.check--operational .check-copy strong { color: #39ff5a; }
-	.check--configured .check-copy strong { color: #8c9dff; }
-	.check--degraded .check-copy strong { color: #e0a449; }
-	.check-copy small { color: #76839a; font-size: .83rem; line-height: 1.5; }
-	.panel-meta { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.25rem; color: #657189; font-size: .75rem; }
-	.panel-meta button { border: 1px solid #26314a; border-radius: 9px; padding: .45rem .6rem .45rem .75rem; background: transparent; color: #a9b4c8; font: inherit; cursor: pointer; }
-	.panel-meta button:hover { border-color: #39ff5a; color: #39ff5a; }
-	.panel-meta button:disabled { opacity: .5; cursor: wait; }
-	kbd { margin-left: .35rem; padding: .1rem .3rem; border: 1px solid #303b50; border-radius: 4px; color: #6d7990; font-size: .65rem; }
-	.transparency { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 4rem; margin: 7rem 0 3rem; padding-top: 3rem; border-top: 1px solid #172033; }
-	.explanation { color: #7f8ba2; font-size: .92rem; line-height: 1.7; }
-	.explanation p { margin: 0 0 .9rem; }
-	.explanation strong { color: #c9d2e2; }
-	.runtime { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #172033; border-radius: 18px; overflow: hidden; background: rgba(8,12,20,.6); }
-	.runtime div { padding: 1.1rem 1.25rem; border-right: 1px solid #172033; display: grid; gap: .25rem; }
-	.runtime div:last-child { border-right: 0; }
-	.runtime span { color: #5f6c84; font-size: .6rem; font-weight: 700; letter-spacing: .18em; }
-	.runtime strong { color: #aab5c9; font-size: .82rem; }
-	@keyframes signal-pulse { 0%,100% { transform: scale(.92); opacity: .8; } 50% { transform: scale(1.08); opacity: 1; } }
-	@keyframes scan { 0% { transform: scaleX(0); } 55% { transform: scaleX(1); } 100% { transform: scaleX(1); opacity: 0; } }
-	@media (prefers-reduced-motion: reduce) { .core-signal { animation: none; } .check { transition: none; } }
-	@media (max-width: 800px) { .status-page { padding-top: 3rem; } .hero { min-height: 0; grid-template-columns: minmax(0, 1fr); gap: 2rem; padding-bottom: 2rem; } .core { width: 12rem; height: 12rem; justify-self: start; margin-left: 1rem; } .checks { grid-template-columns: 1fr; } .transparency { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 5rem; } .runtime { grid-template-columns: 1fr; } .runtime div { border-right: 0; border-bottom: 1px solid #172033; } .runtime div:last-child { border-bottom: 0; } }
-	@media (max-width: 520px) { .status-page { width: min(100% - 28px, 680px); } .status-panel { padding: 1.1rem; border-radius: 22px; } .panel-head { align-items: flex-start; flex-direction: column; } .hero h1 { font-size: clamp(2.4rem, 10.5vw, 3.5rem); overflow-wrap: anywhere; } .lede { font-size: 1rem; } .check { min-height: 0; } .panel-meta { align-items: flex-start; flex-direction: column; } }
+  .status-page {
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 5.5rem 0 7rem;
+    position: relative;
+  }
+  .hero {
+    min-height: 31rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 23rem;
+    align-items: center;
+    gap: 3rem;
+    position: relative;
+  }
+  .hero-copy {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+  }
+  .eyebrow,
+  .section-label {
+    margin: 0 0 1rem;
+    color: #6d7b95;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+  }
+  .hero h1 {
+    margin: 0;
+    color: #f8faff;
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 0.86;
+    letter-spacing: -0.075em;
+  }
+  .hero h1 span {
+    color: #39ff5a;
+  }
+  .lede {
+    max-width: 560px;
+    margin: 2rem 0 0;
+    color: #a0acc1;
+    font-size: 1.08rem;
+    line-height: 1.65;
+  }
+  .core {
+    width: 19rem;
+    height: 19rem;
+    justify-self: center;
+    position: relative;
+    filter: drop-shadow(0 0 2rem rgba(111, 130, 255, 0.12));
+  }
+  .core::before,
+  .core::after {
+    content: '';
+    position: absolute;
+    inset: 24%;
+    border: 1px solid rgba(111, 130, 255, 0.2);
+    border-radius: 50%;
+  }
+  .core::after {
+    inset: 37%;
+    border-color: rgba(57, 255, 90, 0.28);
+  }
+  .core-orbit {
+    position: absolute;
+    inset: 5%;
+    border: 1px solid rgba(111, 130, 255, 0.18);
+    border-radius: 50%;
+  }
+  .orbit-one {
+    transform: rotate(28deg) scaleY(0.46);
+  }
+  .orbit-two {
+    transform: rotate(-38deg) scaleY(0.46);
+    border-color: rgba(57, 255, 90, 0.22);
+  }
+  .core-ring {
+    position: absolute;
+    inset: 30%;
+    border: 1px solid rgba(111, 130, 255, 0.35);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 2rem rgba(111, 130, 255, 0.08),
+      0 0 2rem rgba(111, 130, 255, 0.08);
+  }
+  .core-ring i {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: #39ff5a;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #39ff5a;
+  }
+  .core-ring i:first-child {
+    top: 8%;
+    left: 50%;
+  }
+  .core-ring i:last-child {
+    bottom: 8%;
+    left: 50%;
+  }
+  .core-signal {
+    position: absolute;
+    inset: 43%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      #39ff5a 0 18%,
+      #6f82ff 19% 48%,
+      rgba(111, 130, 255, 0.08) 49% 100%
+    );
+    box-shadow: 0 0 2rem rgba(57, 255, 90, 0.32);
+    animation: signal-pulse 2.8s ease-in-out infinite;
+  }
+  .status-panel {
+    margin-top: 1rem;
+    padding: 2rem;
+    border: 1px solid #1b2537;
+    border-radius: 28px;
+    background: linear-gradient(
+      145deg,
+      rgba(10, 15, 26, 0.96),
+      rgba(5, 8, 14, 0.98)
+    );
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.22);
+  }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+  .panel-head h2,
+  .transparency h2 {
+    margin: 0;
+    color: #f8faff;
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    letter-spacing: -0.05em;
+  }
+  .overall {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid #26314a;
+    border-radius: 999px;
+    color: #aeb9cd;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .overall[data-state='operational'] {
+    border-color: rgba(57, 255, 90, 0.35);
+    color: #39ff5a;
+  }
+  .overall[data-state='degraded'] {
+    border-color: rgba(224, 164, 73, 0.4);
+    color: #e0a449;
+  }
+  .pulse {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 0 4px rgba(111, 130, 255, 0.1);
+  }
+  .overall[data-state='operational'] .pulse {
+    box-shadow:
+      0 0 0 4px rgba(57, 255, 90, 0.1),
+      0 0 10px rgba(57, 255, 90, 0.5);
+  }
+  .signal-line {
+    height: 1px;
+    margin: 1.5rem 0;
+    background: #172033;
+    overflow: hidden;
+  }
+  .signal-line span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: linear-gradient(90deg, #6f82ff, #39ff5a);
+  }
+  .signal-line span.loading {
+    animation: scan 900ms ease-in-out infinite;
+  }
+  .checks {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+  .check {
+    min-height: 8.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    border: 1px solid #192236;
+    border-radius: 18px;
+    background: rgba(9, 14, 24, 0.75);
+    transition:
+      border-color 180ms ease,
+      transform 180ms ease;
+  }
+  .check:hover {
+    transform: translateY(-2px);
+    border-color: #2b3850;
+  }
+  .check--operational {
+    border-color: rgba(57, 255, 90, 0.24);
+  }
+  .check--configured {
+    border-color: rgba(111, 130, 255, 0.3);
+  }
+  .check--degraded {
+    border-color: rgba(224, 164, 73, 0.35);
+  }
+  .check-icon {
+    flex: 0 0 2.3rem;
+    width: 2.3rem;
+    height: 2.3rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid #2a3650;
+    border-radius: 50%;
+  }
+  .check-icon span {
+    width: 0.48rem;
+    height: 0.48rem;
+    border-radius: 50%;
+    background: #6f82ff;
+    box-shadow: 0 0 10px rgba(111, 130, 255, 0.65);
+  }
+  .check--operational .check-icon {
+    border-color: rgba(57, 255, 90, 0.4);
+  }
+  .check--operational .check-icon span {
+    background: #39ff5a;
+    box-shadow: 0 0 10px rgba(57, 255, 90, 0.65);
+  }
+  .check--configured .check-icon span {
+    background: #6f82ff;
+  }
+  .check--degraded .check-icon span {
+    background: #e0a449;
+    box-shadow: 0 0 10px rgba(224, 164, 73, 0.55);
+  }
+  .check-copy {
+    min-width: 0;
+    display: grid;
+    gap: 0.3rem;
+  }
+  .check-name {
+    color: #7e8ba3;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+  }
+  .check-copy strong {
+    color: #e8edf7;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+  }
+  .check--operational .check-copy strong {
+    color: #39ff5a;
+  }
+  .check--configured .check-copy strong {
+    color: #8c9dff;
+  }
+  .check--degraded .check-copy strong {
+    color: #e0a449;
+  }
+  .check-copy small {
+    color: #76839a;
+    font-size: 0.83rem;
+    line-height: 1.5;
+  }
+  .panel-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.25rem;
+    color: #657189;
+    font-size: 0.75rem;
+  }
+  .panel-meta button {
+    border: 1px solid #26314a;
+    border-radius: 9px;
+    padding: 0.45rem 0.6rem 0.45rem 0.75rem;
+    background: transparent;
+    color: #a9b4c8;
+    font: inherit;
+    cursor: pointer;
+  }
+  .panel-meta button:hover {
+    border-color: #39ff5a;
+    color: #39ff5a;
+  }
+  .panel-meta button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+  }
+  kbd {
+    margin-left: 0.35rem;
+    padding: 0.1rem 0.3rem;
+    border: 1px solid #303b50;
+    border-radius: 4px;
+    color: #6d7990;
+    font-size: 0.65rem;
+  }
+  .transparency {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 4rem;
+    margin: 7rem 0 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid #172033;
+  }
+  .explanation {
+    color: #7f8ba2;
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+  .explanation p {
+    margin: 0 0 0.9rem;
+  }
+  .explanation strong {
+    color: #c9d2e2;
+  }
+  .runtime {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid #172033;
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgba(8, 12, 20, 0.6);
+  }
+  .runtime div {
+    padding: 1.1rem 1.25rem;
+    border-right: 1px solid #172033;
+    display: grid;
+    gap: 0.25rem;
+  }
+  .runtime div:last-child {
+    border-right: 0;
+  }
+  .runtime span {
+    color: #5f6c84;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+  .runtime strong {
+    color: #aab5c9;
+    font-size: 0.82rem;
+  }
+  @keyframes signal-pulse {
+    0%,
+    100% {
+      transform: scale(0.92);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(1.08);
+      opacity: 1;
+    }
+  }
+  @keyframes scan {
+    0% {
+      transform: scaleX(0);
+    }
+    55% {
+      transform: scaleX(1);
+    }
+    100% {
+      transform: scaleX(1);
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .core-signal {
+      animation: none;
+    }
+    .check {
+      transition: none;
+    }
+  }
+  @media (max-width: 800px) {
+    .status-page {
+      padding-top: 3rem;
+    }
+    .hero {
+      min-height: 0;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
+      padding-bottom: 2rem;
+    }
+    .core {
+      width: 12rem;
+      height: 12rem;
+      justify-self: start;
+      margin-left: 1rem;
+    }
+    .checks {
+      grid-template-columns: 1fr;
+    }
+    .transparency {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 5rem;
+    }
+    .runtime {
+      grid-template-columns: 1fr;
+    }
+    .runtime div {
+      border-right: 0;
+      border-bottom: 1px solid #172033;
+    }
+    .runtime div:last-child {
+      border-bottom: 0;
+    }
+  }
+  @media (max-width: 520px) {
+    .status-page {
+      width: min(100% - 28px, 680px);
+    }
+    .status-panel {
+      padding: 1.1rem;
+      border-radius: 22px;
+    }
+    .panel-head {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 10.5vw, 3.5rem);
+      overflow-wrap: anywhere;
+    }
+    .lede {
+      font-size: 1rem;
+    }
+    .check {
+      min-height: 0;
+    }
+    .panel-meta {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
 </style>

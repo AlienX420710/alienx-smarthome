@@ -98,3 +98,28 @@ clean, and npm audit reports zero vulnerabilities including development tooling.
   optimization are not represented as completed by automated browser checks.
 
 The original audit is a baseline, not a claim that every item is now closed.
+
+## Cleaning-by-Cassi practices adopted
+
+Revision 224bec8 failed clean installation in CI because its lockfile lacked
+transitive proxy dependencies. Local installation and audit success did not
+establish reproducibility. The follow-up regenerates the dependency graph from
+an empty directory using npm 10.9.8 and verifies `npm ci` with that same version.
+It replaces LHCI and its override chain with locked Lighthouse 13.4.1 directly,
+preserving every existing category threshold. No gate is reduced to obtain green.
+
+The README now uses one small repository-only banner, describes the actual
+feature status, lists all seven workflows, documents theme tokens/fonts and
+complete local verification, and links the release runbook. Provider acceptance
+is distinguished from inbox delivery. Public widget configuration and private
+Worker configuration have separate, secret-free example files.
+
+Maintained source is formatted with pinned Prettier and its Astro plugin; Quality
+checks formatting. `npm run check` now includes unit regressions. The build
+generates an optimized social WebP without altering the original artwork and
+decodes public raster assets to detect corruption. Technology's title separator
+now matches the other pages.
+
+Local checks: clean npm 10.9.8 install, 28 unit tests, zero dependency audit
+findings, and successful raster decoding. Full CI/deployment verification of this
+follow-up is still required; formatting alone does not close style-ownership debt.

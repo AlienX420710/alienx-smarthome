@@ -200,3 +200,7 @@ dist
 
 ### Astro ###
 .astro/
+public/alienx-social-preview.webp
+test-results/
+playwright-report/
+.lighthouseci/

@@ -4,13 +4,19 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE } from '../consts';
 
-const title = `Technology | ${SITE_TITLE}`;
-const description = 'Explore how AlienX engineers websites, applications, automation, APIs, data flows, infrastructure, and production systems.';
+const title = `Technology — ${SITE_TITLE}`;
+const description =
+  'Explore how AlienX engineers websites, applications, automation, APIs, data flows, infrastructure, and production systems.';
 ---
+
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="/technology-light-theme.css" /><BaseHead title={title} description={description} /></head>
+    <link rel="stylesheet" href="/technology-light-theme.css" /><BaseHead
+      title={title}
+      description={description}
+    /></head
+  >
   <body>
     <Header />
     <main id="main-content" tabindex="-1">
@@ -18,137 +24,986 @@ const description = 'Explore how AlienX engineers websites, applications, automa
         <div>
           <p class="eyebrow">ALIENX / TECHNOLOGY</p>
           <h1>Built from the <span>web outward.</span></h1>
-          <p class="lede">AlienX builds technology as a connected system: interfaces on the front, logic behind them, automation around them, and infrastructure underneath everything.</p>
-          <div class="hero-tags"><span>WEB</span><span>APPS</span><span>APIs</span><span>AUTOMATION</span><span>INFRASTRUCTURE</span></div>
+          <p class="lede">
+            AlienX builds technology as a connected system: interfaces on the
+            front, logic behind them, automation around them, and infrastructure
+            underneath everything.
+          </p>
+          <div class="hero-tags">
+            <span>WEB</span><span>APPS</span><span>APIs</span><span
+              >AUTOMATION</span
+            ><span>INFRASTRUCTURE</span>
+          </div>
         </div>
         <div class="system-map" aria-label="AlienX technology system map">
-          <div class="map-core"><span>ALIENX</span><strong>ENGINEERING</strong></div>
-          <div class="map-node map-node--top"><small>INTERFACE</small><strong>FRONTEND</strong></div>
-          <div class="map-node map-node--right"><small>LOGIC</small><strong>BACKEND</strong></div>
-          <div class="map-node map-node--bottom"><small>OPERATE</small><strong>INFRASTRUCTURE</strong></div>
-          <div class="map-node map-node--left"><small>CONNECT</small><strong>AUTOMATION</strong></div>
-          <i class="map-line map-line--one"></i><i class="map-line map-line--two"></i><i class="map-line map-line--three"></i><i class="map-line map-line--four"></i>
+          <div class="map-core">
+            <span>ALIENX</span><strong>ENGINEERING</strong>
+          </div>
+          <div class="map-node map-node--top">
+            <small>INTERFACE</small><strong>FRONTEND</strong>
+          </div>
+          <div class="map-node map-node--right">
+            <small>LOGIC</small><strong>BACKEND</strong>
+          </div>
+          <div class="map-node map-node--bottom">
+            <small>OPERATE</small><strong>INFRASTRUCTURE</strong>
+          </div>
+          <div class="map-node map-node--left">
+            <small>CONNECT</small><strong>AUTOMATION</strong>
+          </div>
+          <i class="map-line map-line--one"></i><i
+            class="map-line map-line--two"></i><i
+            class="map-line map-line--three"></i><i
+            class="map-line map-line--four"></i>
         </div>
       </section>
 
-      <section class="capabilities" id="capabilities" aria-labelledby="capabilities-title">
+      <section
+        class="capabilities"
+        id="capabilities"
+        aria-labelledby="capabilities-title"
+      >
         <div class="section-heading">
           <p class="eyebrow">01 / WHAT WE BUILD</p>
-          <h2 id="capabilities-title">Technology is more than a <span>stack.</span></h2>
-          <p>These are the engineering disciplines that can combine into a real product, service, internal tool, or automated workflow.</p>
+          <h2 id="capabilities-title">
+            Technology is more than a <span>stack.</span>
+          </h2>
+          <p>
+            These are the engineering disciplines that can combine into a real
+            product, service, internal tool, or automated workflow.
+          </p>
         </div>
         <div class="capability-grid">
           <article class="capability capability--hero">
-            <span class="number">01</span><p class="kicker">FRONTEND ENGINEERING</p>
+            <span class="number">01</span><p class="kicker">
+              FRONTEND ENGINEERING
+            </p>
             <h3>Interfaces with structure, motion, and intent.</h3>
-            <p>Semantic HTML, modern CSS, TypeScript, responsive systems, component architecture, browser APIs, progressive enhancement, and interaction design.</p>
-            <div class="tech-strip"><span>HTML</span><span>CSS</span><span>JS / TS</span><span>ASTRO</span><span>ACCESSIBILITY</span></div>
+            <p>
+              Semantic HTML, modern CSS, TypeScript, responsive systems,
+              component architecture, browser APIs, progressive enhancement, and
+              interaction design.
+            </p>
+            <div class="tech-strip">
+              <span>HTML</span><span>CSS</span><span>JS / TS</span><span
+                >ASTRO</span
+              ><span>ACCESSIBILITY</span>
+            </div>
           </article>
           <article class="capability">
             <span class="number">02</span><p class="kicker">APPLICATIONS</p>
             <h3>Websites are only one kind of software.</h3>
-            <p>Interactive tools, client portals, internal applications, dashboards, forms, content systems, and custom browser experiences built around the problem.</p>
+            <p>
+              Interactive tools, client portals, internal applications,
+              dashboards, forms, content systems, and custom browser experiences
+              built around the problem.
+            </p>
             <div class="capability-mark"><i></i><i></i><i></i></div>
           </article>
           <article class="capability">
             <span class="number">03</span><p class="kicker">BACKEND / APIs</p>
             <h3>Give the interface a reliable system behind it.</h3>
-            <p>Validation, request handling, typed boundaries, integrations, data persistence, webhooks, authentication flows, and failure-aware server logic.</p>
-            <div class="endpoint"><span>POST</span><strong>/api/</strong><b>VALIDATED</b></div>
+            <p>
+              Validation, request handling, typed boundaries, integrations, data
+              persistence, webhooks, authentication flows, and failure-aware
+              server logic.
+            </p>
+            <div class="endpoint">
+              <span>POST</span><strong>/api/</strong><b>VALIDATED</b>
+            </div>
           </article>
           <article class="capability capability--wide">
             <span class="number">04</span><p class="kicker">AUTOMATION + AI</p>
             <h3>Connect the work that humans shouldn't have to repeat.</h3>
-            <p>Event-driven workflows can move information between websites, APIs, email, databases, business tools, and AI services. The goal is not automation for its own sake; it is removing friction from a real process.</p>
+            <p>
+              Event-driven workflows can move information between websites,
+              APIs, email, databases, business tools, and AI services. The goal
+              is not automation for its own sake; it is removing friction from a
+              real process.
+            </p>
             <div class="workflow" aria-label="Automation architecture">
-              <div><small>TRIGGER</small><strong>EVENT</strong></div><b>→</b><div><small>DECIDE</small><strong>LOGIC / AI</strong></div><b>→</b><div><small>EXECUTE</small><strong>ACTION</strong></div><b>→</b><div><small>VERIFY</small><strong>RESULT</strong></div>
+              <div><small>TRIGGER</small><strong>EVENT</strong></div><b>→</b
+              ><div><small>DECIDE</small><strong>LOGIC / AI</strong></div><b
+                >→</b
+              ><div><small>EXECUTE</small><strong>ACTION</strong></div><b>→</b
+              ><div><small>VERIFY</small><strong>RESULT</strong></div>
             </div>
           </article>
           <article class="capability">
             <span class="number">05</span><p class="kicker">DATA</p>
             <h3>Move information without losing control.</h3>
-            <p>Payloads, schemas, transformations, validation, storage, exports, imports, and service-to-service data flows designed around clear contracts.</p>
-            <div class="data-flow"><span>INPUT</span><i></i><span>SCHEMA</span><i></i><span>DATA</span></div>
+            <p>
+              Payloads, schemas, transformations, validation, storage, exports,
+              imports, and service-to-service data flows designed around clear
+              contracts.
+            </p>
+            <div class="data-flow">
+              <span>INPUT</span><i></i><span>SCHEMA</span><i></i><span
+                >DATA</span
+              >
+            </div>
           </article>
           <article class="capability">
             <span class="number">06</span><p class="kicker">INFRASTRUCTURE</p>
             <h3>Ship it. Run it. Know when it breaks.</h3>
-            <p>Cloud and edge deployment, DNS, environments, caching, observability, source control, build pipelines, and operational boundaries.</p>
-            <div class="infra-stack"><span>SOURCE</span><span>BUILD</span><span>EDGE</span><span>OBSERVE</span></div>
+            <p>
+              Cloud and edge deployment, DNS, environments, caching,
+              observability, source control, build pipelines, and operational
+              boundaries.
+            </p>
+            <div class="infra-stack">
+              <span>SOURCE</span><span>BUILD</span><span>EDGE</span><span
+                >OBSERVE</span
+              >
+            </div>
           </article>
           <article class="capability capability--wide">
-            <span class="number">07</span><p class="kicker">PERFORMANCE + SECURITY</p>
+            <span class="number">07</span><p class="kicker">
+              PERFORMANCE + SECURITY
+            </p>
             <h3>Quality is an engineering constraint, not a finishing pass.</h3>
-            <div class="quality-grid"><div><strong>PERFORMANCE</strong><p>Reduce unnecessary work, payload, blocking, and rendering cost.</p></div><div><strong>SECURITY</strong><p>Validate inputs, protect secrets, minimize privilege, and respect trust boundaries.</p></div><div><strong>ACCESSIBILITY</strong><p>Make interaction operable, understandable, and usable across devices and abilities.</p></div></div>
+            <div class="quality-grid">
+              <div>
+                <strong>PERFORMANCE</strong><p>
+                  Reduce unnecessary work, payload, blocking, and rendering
+                  cost.
+                </p>
+              </div><div>
+                <strong>SECURITY</strong><p>
+                  Validate inputs, protect secrets, minimize privilege, and
+                  respect trust boundaries.
+                </p>
+              </div><div>
+                <strong>ACCESSIBILITY</strong><p>
+                  Make interaction operable, understandable, and usable across
+                  devices and abilities.
+                </p>
+              </div>
+            </div>
           </article>
         </div>
       </section>
 
       <section class="layers" aria-labelledby="layers-title">
-        <div class="section-heading"><p class="eyebrow">02 / SYSTEM LAYERS</p><h2 id="layers-title">One product. <span>Many layers.</span></h2><p>Good systems make the boundaries between layers explicit instead of hiding complexity behind a single buzzword.</p></div>
-        <div class="layer-table">
-          <button class="layer is-selected" type="button" aria-pressed="true" aria-controls="layer-detail" data-layer="interface"><span>01</span><strong>Interface</strong><small>What the user sees and operates.</small><b>FRONTEND</b></button>
-          <button class="layer" type="button" aria-pressed="false" aria-controls="layer-detail" data-layer="application"><span>02</span><strong>Application</strong><small>What the product actually does.</small><b>BACKEND</b></button>
-          <button class="layer" type="button" aria-pressed="false" aria-controls="layer-detail" data-layer="automation"><span>03</span><strong>Automation</strong><small>What happens without another click.</small><b>WORKFLOWS</b></button>
-          <button class="layer" type="button" aria-pressed="false" aria-controls="layer-detail" data-layer="operations"><span>04</span><strong>Operations</strong><small>Where the system lives and how it is observed.</small><b>INFRA</b></button>
+        <div class="section-heading">
+          <p class="eyebrow">02 / SYSTEM LAYERS</p><h2 id="layers-title">
+            One product. <span>Many layers.</span>
+          </h2><p>
+            Good systems make the boundaries between layers explicit instead of
+            hiding complexity behind a single buzzword.
+          </p>
         </div>
-        <div class="layer-detail" id="layer-detail" aria-live="polite" data-layer-detail>Responsive composition, semantic structure, interaction, accessibility, and browser-native capabilities.</div>
+        <div class="layer-table">
+          <button
+            class="layer is-selected"
+            type="button"
+            aria-pressed="true"
+            aria-controls="layer-detail"
+            data-layer="interface"
+            ><span>01</span><strong>Interface</strong><small
+              >What the user sees and operates.</small
+            ><b>FRONTEND</b></button
+          >
+          <button
+            class="layer"
+            type="button"
+            aria-pressed="false"
+            aria-controls="layer-detail"
+            data-layer="application"
+            ><span>02</span><strong>Application</strong><small
+              >What the product actually does.</small
+            ><b>BACKEND</b></button
+          >
+          <button
+            class="layer"
+            type="button"
+            aria-pressed="false"
+            aria-controls="layer-detail"
+            data-layer="automation"
+            ><span>03</span><strong>Automation</strong><small
+              >What happens without another click.</small
+            ><b>WORKFLOWS</b></button
+          >
+          <button
+            class="layer"
+            type="button"
+            aria-pressed="false"
+            aria-controls="layer-detail"
+            data-layer="operations"
+            ><span>04</span><strong>Operations</strong><small
+              >Where the system lives and how it is observed.</small
+            ><b>INFRA</b></button
+          >
+        </div>
+        <div
+          class="layer-detail"
+          id="layer-detail"
+          aria-live="polite"
+          data-layer-detail
+        >
+          Responsive composition, semantic structure, interaction,
+          accessibility, and browser-native capabilities.
+        </div>
       </section>
 
       <section class="toolbox" aria-labelledby="toolbox-title">
-        <div class="section-heading"><p class="eyebrow">03 / TOOLBOX</p><h2 id="toolbox-title">Use the right tool for the <span>constraint.</span></h2></div>
+        <div class="section-heading">
+          <p class="eyebrow">03 / TOOLBOX</p><h2 id="toolbox-title">
+            Use the right tool for the <span>constraint.</span>
+          </h2>
+        </div>
         <div class="toolbox-grid">
-          <div><span>WEB</span><p>HTML · CSS · JavaScript · TypeScript · Astro</p></div>
-          <div><span>SERVER</span><p>APIs · validation · webhooks · data · integrations</p></div>
-          <div><span>AUTOMATION</span><p>Events · workflows · scheduled jobs · AI-assisted tasks</p></div>
-          <div><span>PLATFORM</span><p>Cloudflare · Git · CI/CD · DNS · edge delivery · observability</p></div>
-          <div><span>QUALITY</span><p>Accessibility · performance · security · SEO · testing</p></div>
-          <div><span>METHOD</span><p>Progressive enhancement · small primitives · explicit boundaries</p></div>
+          <div>
+            <span>WEB</span><p>HTML · CSS · JavaScript · TypeScript · Astro</p>
+          </div>
+          <div>
+            <span>SERVER</span><p>
+              APIs · validation · webhooks · data · integrations
+            </p>
+          </div>
+          <div>
+            <span>AUTOMATION</span><p>
+              Events · workflows · scheduled jobs · AI-assisted tasks
+            </p>
+          </div>
+          <div>
+            <span>PLATFORM</span><p>
+              Cloudflare · Git · CI/CD · DNS · edge delivery · observability
+            </p>
+          </div>
+          <div>
+            <span>QUALITY</span><p>
+              Accessibility · performance · security · SEO · testing
+            </p>
+          </div>
+          <div>
+            <span>METHOD</span><p>
+              Progressive enhancement · small primitives · explicit boundaries
+            </p>
+          </div>
         </div>
       </section>
 
       <section class="principles" aria-labelledby="principles-title">
-        <div class="section-heading"><p class="eyebrow">04 / ENGINEERING PRINCIPLES</p><h2 id="principles-title">The invisible parts still <span>matter.</span></h2></div>
+        <div class="section-heading">
+          <p class="eyebrow">04 / ENGINEERING PRINCIPLES</p><h2
+            id="principles-title"
+          >
+            The invisible parts still <span>matter.</span>
+          </h2>
+        </div>
         <div class="principle-grid">
-          <article><span>01</span><h3>Progressive enhancement</h3><p>Start with a useful document. Add capability where it earns its complexity.</p></article>
-          <article><span>02</span><h3>Performance as design</h3><p>Network, rendering, and asset decisions affect how the product feels.</p></article>
-          <article><span>03</span><h3>Accessible by default</h3><p>Semantics, focus, keyboard behavior, contrast, and motion belong in the implementation.</p></article>
-          <article><span>04</span><h3>Observable systems</h3><p>When something fails, the system should provide enough signal to understand why.</p></article>
-          <article><span>05</span><h3>Secure boundaries</h3><p>Secrets, inputs, permissions, dependencies, and external services deserve explicit trust boundaries.</p></article>
-          <article><span>06</span><h3>Human-readable engineering</h3><p>The next person maintaining the system is part of the architecture.</p></article>
+          <article>
+            <span>01</span><h3>Progressive enhancement</h3><p>
+              Start with a useful document. Add capability where it earns its
+              complexity.
+            </p>
+          </article>
+          <article>
+            <span>02</span><h3>Performance as design</h3><p>
+              Network, rendering, and asset decisions affect how the product
+              feels.
+            </p>
+          </article>
+          <article>
+            <span>03</span><h3>Accessible by default</h3><p>
+              Semantics, focus, keyboard behavior, contrast, and motion belong
+              in the implementation.
+            </p>
+          </article>
+          <article>
+            <span>04</span><h3>Observable systems</h3><p>
+              When something fails, the system should provide enough signal to
+              understand why.
+            </p>
+          </article>
+          <article>
+            <span>05</span><h3>Secure boundaries</h3><p>
+              Secrets, inputs, permissions, dependencies, and external services
+              deserve explicit trust boundaries.
+            </p>
+          </article>
+          <article>
+            <span>06</span><h3>Human-readable engineering</h3><p>
+              The next person maintaining the system is part of the
+              architecture.
+            </p>
+          </article>
         </div>
       </section>
 
-      <section class="cta"><div><p class="eyebrow">05 / THE OUTCOME</p><h2>Technology should make something <span>possible.</span></h2><p>Bring the problem. AlienX can help determine whether the right answer is a website, application, integration, automation, or a combination of all of them.</p></div><a href="/contact">Start a project <span>→</span></a></section>
+      <section class="cta">
+        <div>
+          <p class="eyebrow">05 / THE OUTCOME</p><h2>
+            Technology should make something <span>possible.</span>
+          </h2><p>
+            Bring the problem. AlienX can help determine whether the right
+            answer is a website, application, integration, automation, or a
+            combination of all of them.
+          </p>
+        </div><a href="/contact">Start a project <span>→</span></a>
+      </section>
     </main>
     <Footer />
     <script>
-      const details: Record<string, string>={interface:'Responsive composition, semantic structure, interaction, accessibility, and browser-native capabilities.',application:'Request handling, validation, business logic, data contracts, integrations, and server-side processing.',automation:'Event-driven workflows, scheduled jobs, service connections, notifications, and AI-assisted actions.',operations:'Deployment, DNS, environments, caching, observability, source control, and runtime concerns.'};
+      const details: Record<string, string> = {
+        interface:
+          'Responsive composition, semantic structure, interaction, accessibility, and browser-native capabilities.',
+        application:
+          'Request handling, validation, business logic, data contracts, integrations, and server-side processing.',
+        automation:
+          'Event-driven workflows, scheduled jobs, service connections, notifications, and AI-assisted actions.',
+        operations:
+          'Deployment, DNS, environments, caching, observability, source control, and runtime concerns.',
+      };
       function initializeLayers() {
-      const detail=document.querySelector('[data-layer-detail]');
-      document.querySelectorAll<HTMLButtonElement>('[data-layer]').forEach((button) => {
-        if (button.dataset.bound) return;
-        button.dataset.bound = 'true';
-        button.addEventListener('click', () => {
-          document.querySelectorAll<HTMLButtonElement>('[data-layer]').forEach((item) => {
-            const selected = item === button;
-            item.classList.toggle('is-selected', selected);
-            item.setAttribute('aria-pressed', String(selected));
+        const detail = document.querySelector('[data-layer-detail]');
+        document
+          .querySelectorAll<HTMLButtonElement>('[data-layer]')
+          .forEach((button) => {
+            if (button.dataset.bound) return;
+            button.dataset.bound = 'true';
+            button.addEventListener('click', () => {
+              document
+                .querySelectorAll<HTMLButtonElement>('[data-layer]')
+                .forEach((item) => {
+                  const selected = item === button;
+                  item.classList.toggle('is-selected', selected);
+                  item.setAttribute('aria-pressed', String(selected));
+                });
+              if (detail)
+                detail.textContent = details[button.dataset.layer ?? ''] ?? '';
+            });
           });
-          if (detail) detail.textContent = details[button.dataset.layer ?? ''] ?? '';
-        });
-      });
       }
       document.addEventListener('astro:page-load', initializeLayers);
       initializeLayers();
     </script>
     <style>
-      :global(html){background:var(--tech-bg);color:var(--tech-text)}
-      :global(body){--tech-bg:#05070c;--tech-surface:#090d16;--tech-surface-2:#0d1320;--tech-text:#e8edf7;--tech-heading:#f8faff;--tech-muted:#9ca8bd;--tech-soft:#6f7b91;--tech-border:#1b2332;--tech-border-strong:#2b374c;--tech-blue:#6f82ff;--tech-green:var(--brand-green);margin:0;background:radial-gradient(circle at 75% 0,rgba(111,130,255,.11),transparent 34rem),var(--tech-bg)}
-      main{overflow:hidden}.hero,.capabilities,.layers,.toolbox,.principles,.cta{width:min(1180px,calc(100% - 48px));margin:auto}.hero{min-height:calc(100vh - 90px);display:grid;grid-template-columns:1.05fr .95fr;gap:70px;align-items:center;padding:80px 0 130px}.eyebrow{margin:0 0 16px;color:var(--tech-soft);font-size:.67rem;font-weight:900;letter-spacing:.18em}.hero h1{max-width:850px;margin:0;color:var(--tech-heading);font-size:clamp(3.5rem,8vw,7.8rem);line-height:.86;letter-spacing:-.075em}.hero h1 span,h2 span{color:var(--tech-green)}.lede{max-width:700px;margin:28px 0 0;color:var(--tech-muted);font-size:clamp(1.05rem,1.8vw,1.28rem);line-height:1.7}.hero-tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:32px}.hero-tags span,.tech-strip span{padding:7px 9px;border:1px solid var(--tech-border-strong);border-radius:999px;color:var(--tech-soft);font-size:.52rem;font-weight:900;letter-spacing:.08em}.system-map{position:relative;min-height:500px;border:1px solid var(--tech-border-strong);border-radius:34px;background:radial-gradient(circle,rgba(57,255,90,.06),transparent 38%),#060a11;overflow:hidden}.system-map:before{content:'';position:absolute;inset:12%;border:1px solid rgba(111,130,255,.12);border-radius:50%;box-shadow:0 0 0 70px rgba(111,130,255,.025),0 0 0 140px rgba(111,130,255,.018)}.map-core,.map-node{position:absolute;z-index:2;display:grid;gap:5px;text-align:center}.map-core{top:50%;left:50%;width:145px;height:145px;transform:translate(-50%,-50%);place-content:center;border:1px solid rgba(57,255,90,.38);border-radius:50%;background:radial-gradient(circle,rgba(57,255,90,.18),rgba(57,255,90,.02) 65%,transparent 66%);box-shadow:0 0 80px rgba(57,255,90,.1)}.map-core span{color:var(--tech-green);font-size:.55rem;font-weight:900;letter-spacing:.16em}.map-core strong{color:var(--tech-heading);font-size:.82rem}.map-node{padding:13px 15px;border:1px solid var(--tech-border-strong);border-radius:13px;background:rgba(9,13,22,.92)}.map-node small{color:var(--tech-soft);font-size:.5rem;font-weight:800;letter-spacing:.12em}.map-node strong{color:var(--tech-heading);font-size:.7rem}.map-node--top{top:11%;left:50%;transform:translateX(-50%)}.map-node--right{top:50%;right:8%;transform:translateY(-50%)}.map-node--bottom{bottom:11%;left:50%;transform:translateX(-50%)}.map-node--left{top:50%;left:8%;transform:translateY(-50%)}.map-line{position:absolute;z-index:1;left:50%;top:50%;width:38%;height:1px;transform-origin:left;background:linear-gradient(90deg,var(--tech-green),transparent)}.map-line--one{transform:rotate(-90deg)}.map-line--two{transform:rotate(0deg)}.map-line--three{transform:rotate(90deg)}.map-line--four{transform:rotate(180deg)}
-      .capabilities{padding:20px 0 150px}.section-heading{max-width:820px;margin-bottom:50px}.section-heading h2{margin:0;color:var(--tech-heading);font-size:clamp(2.5rem,5.5vw,5rem);line-height:.93;letter-spacing:-.06em}.section-heading>p:last-child{margin:20px 0 0;color:var(--tech-muted);line-height:1.75}.capability-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.capability{position:relative;min-height:300px;padding:30px;border:1px solid var(--tech-border);border-radius:24px;background:linear-gradient(145deg,var(--tech-surface),rgba(9,13,22,.7))}.capability--hero{background:linear-gradient(145deg,#0d1421,#080c14)}.capability--wide{grid-column:span 2}.number{color:var(--tech-blue);font-size:.58rem;font-weight:900;letter-spacing:.14em}.kicker{margin:10px 0 0;color:var(--tech-soft);font-size:.58rem;font-weight:900;letter-spacing:.14em}.capability h3{max-width:650px;margin:16px 0 12px;color:var(--tech-heading);font-size:clamp(1.5rem,3vw,2.45rem);line-height:1;letter-spacing:-.045em}.capability>p:not(.kicker){max-width:680px;margin:0;color:var(--tech-muted);line-height:1.7}.tech-strip{display:flex;flex-wrap:wrap;gap:7px;margin-top:28px}.capability-mark{display:flex;gap:8px;position:absolute;right:30px;bottom:30px}.capability-mark i{display:block;width:14px;height:14px;border:1px solid var(--tech-green);border-radius:50%}.capability-mark i:nth-child(2){transform:translateY(-8px)}.capability-mark i:nth-child(3){transform:translateY(-16px)}.endpoint{display:flex;gap:12px;align-items:center;margin-top:28px;padding:12px;border:1px solid var(--tech-border-strong);border-radius:12px;font-size:.6rem}.endpoint span,.endpoint b{color:var(--tech-soft);letter-spacing:.1em}.endpoint strong{color:var(--tech-heading)}.endpoint b{margin-left:auto}.workflow{display:flex;align-items:center;gap:12px;margin-top:30px;overflow:auto}.workflow>div{min-width:130px;padding:16px;border:1px solid var(--tech-border-strong);border-radius:13px}.workflow small{display:block;color:var(--tech-soft);font-size:.5rem;font-weight:900;letter-spacing:.1em}.workflow strong{display:block;margin-top:6px;color:var(--tech-heading);font-size:.75rem}.workflow>b{color:var(--tech-green)}.data-flow,.infra-stack{display:flex;gap:7px;align-items:center;margin-top:30px}.data-flow span,.infra-stack span{padding:9px;border:1px solid var(--tech-border-strong);border-radius:8px;color:var(--tech-soft);font-size:.5rem;font-weight:900;letter-spacing:.08em}.data-flow i{width:24px;height:1px;background:var(--tech-border-strong)}.infra-stack{flex-wrap:wrap}.quality-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:30px}.quality-grid>div{padding:18px;border:1px solid var(--tech-border);border-radius:14px;background:rgba(255,255,255,.015)}.quality-grid strong{color:var(--tech-green);font-size:.58rem;letter-spacing:.1em}.quality-grid p{margin:10px 0 0;color:var(--tech-muted);font-size:.86rem;line-height:1.6}
-      .layers,.toolbox,.principles{padding:30px 0 150px}.layer-table{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.layer{appearance:none;text-align:left;min-height:190px;padding:22px;border:1px solid var(--tech-border);border-radius:16px;background:var(--tech-surface);color:inherit;cursor:pointer}.layer:hover,.layer.is-selected{border-color:var(--tech-blue);background:var(--tech-surface-2)}.layer span{color:var(--tech-blue);font-size:.55rem;font-weight:900}.layer strong{display:block;margin-top:25px;color:var(--tech-heading);font-size:1.2rem}.layer small{display:block;margin-top:8px;color:var(--tech-muted);line-height:1.5}.layer b{display:block;margin-top:20px;color:var(--tech-green);font-size:.5rem;letter-spacing:.1em}.layer-detail{margin-top:8px;padding:24px;border:1px solid var(--tech-border);border-radius:16px;color:var(--tech-muted);line-height:1.7;background:rgba(255,255,255,.015)}.toolbox-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid var(--tech-border);background:var(--tech-border)}.toolbox-grid>div{min-height:130px;padding:24px;background:var(--tech-surface)}.toolbox-grid span{color:var(--tech-green);font-size:.55rem;font-weight:900;letter-spacing:.12em}.toolbox-grid p{margin:14px 0 0;color:var(--tech-muted);line-height:1.6}.principle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.principle-grid article{padding:24px;border-top:1px solid var(--tech-border)}.principle-grid article>span{color:var(--tech-blue);font-size:.55rem;font-weight:900}.principle-grid h3{margin:16px 0 8px;color:var(--tech-heading);font-size:1.05rem}.principle-grid p{margin:0;color:var(--tech-muted);line-height:1.65}.cta{display:flex;align-items:end;justify-content:space-between;gap:40px;padding:30px 0 140px}.cta .section-heading{margin:0}.cta h2{max-width:800px;margin:0;color:var(--tech-heading);font-size:clamp(2.5rem,5vw,5rem);line-height:.94;letter-spacing:-.06em}.cta p:last-child{max-width:700px;color:var(--tech-muted);line-height:1.7}.cta a{flex:0 0 auto;padding:14px 18px;border:1px solid var(--tech-green);border-radius:999px;color:var(--tech-green);font-weight:800;text-decoration:none}.cta a:hover{background:var(--tech-green);color:#05070c}.cta a span{margin-left:8px}@media(max-width:900px){.hero{grid-template-columns:1fr;gap:40px}.system-map{min-height:430px}.capability-grid,.layer-table,.toolbox-grid,.principle-grid{grid-template-columns:1fr}.capability--wide{grid-column:auto}.quality-grid{grid-template-columns:1fr}.cta{display:block}.cta a{display:inline-block;margin-top:20px}}@media(max-width:600px){.hero,.capabilities,.layers,.toolbox,.principles,.cta{width:min(100% - 28px,1180px)}.hero{padding:55px 0 90px}.system-map{min-height:360px;border-radius:24px}.map-core{width:115px;height:115px}.map-node--left{left:4%}.map-node--right{right:4%}.map-node{padding:10px}.capability{padding:24px}.workflow{align-items:stretch}.workflow>b{display:none}.workflow>div{min-width:150px}.toolbox-grid>div{min-height:auto}.layers,.toolbox,.principles{padding-bottom:100px}.cta{padding-bottom:90px}}
-      @media(prefers-reduced-motion:reduce){.layer{scroll-behavior:auto}}
+      :global(html) {
+        background: var(--tech-bg);
+        color: var(--tech-text);
+      }
+      :global(body) {
+        --tech-bg: #05070c;
+        --tech-surface: #090d16;
+        --tech-surface-2: #0d1320;
+        --tech-text: #e8edf7;
+        --tech-heading: #f8faff;
+        --tech-muted: #9ca8bd;
+        --tech-soft: #6f7b91;
+        --tech-border: #1b2332;
+        --tech-border-strong: #2b374c;
+        --tech-blue: #6f82ff;
+        --tech-green: var(--brand-green);
+        margin: 0;
+        background:
+          radial-gradient(
+            circle at 75% 0,
+            rgba(111, 130, 255, 0.11),
+            transparent 34rem
+          ),
+          var(--tech-bg);
+      }
+      main {
+        overflow: hidden;
+      }
+      .hero,
+      .capabilities,
+      .layers,
+      .toolbox,
+      .principles,
+      .cta {
+        width: min(1180px, calc(100% - 48px));
+        margin: auto;
+      }
+      .hero {
+        min-height: calc(100vh - 90px);
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 70px;
+        align-items: center;
+        padding: 80px 0 130px;
+      }
+      .eyebrow {
+        margin: 0 0 16px;
+        color: var(--tech-soft);
+        font-size: 0.67rem;
+        font-weight: 900;
+        letter-spacing: 0.18em;
+      }
+      .hero h1 {
+        max-width: 850px;
+        margin: 0;
+        color: var(--tech-heading);
+        font-size: clamp(3.5rem, 8vw, 7.8rem);
+        line-height: 0.86;
+        letter-spacing: -0.075em;
+      }
+      .hero h1 span,
+      h2 span {
+        color: var(--tech-green);
+      }
+      .lede {
+        max-width: 700px;
+        margin: 28px 0 0;
+        color: var(--tech-muted);
+        font-size: clamp(1.05rem, 1.8vw, 1.28rem);
+        line-height: 1.7;
+      }
+      .hero-tags {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+        margin-top: 32px;
+      }
+      .hero-tags span,
+      .tech-strip span {
+        padding: 7px 9px;
+        border: 1px solid var(--tech-border-strong);
+        border-radius: 999px;
+        color: var(--tech-soft);
+        font-size: 0.52rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+      }
+      .system-map {
+        position: relative;
+        min-height: 500px;
+        border: 1px solid var(--tech-border-strong);
+        border-radius: 34px;
+        background:
+          radial-gradient(circle, rgba(57, 255, 90, 0.06), transparent 38%),
+          #060a11;
+        overflow: hidden;
+      }
+      .system-map:before {
+        content: '';
+        position: absolute;
+        inset: 12%;
+        border: 1px solid rgba(111, 130, 255, 0.12);
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 70px rgba(111, 130, 255, 0.025),
+          0 0 0 140px rgba(111, 130, 255, 0.018);
+      }
+      .map-core,
+      .map-node {
+        position: absolute;
+        z-index: 2;
+        display: grid;
+        gap: 5px;
+        text-align: center;
+      }
+      .map-core {
+        top: 50%;
+        left: 50%;
+        width: 145px;
+        height: 145px;
+        transform: translate(-50%, -50%);
+        place-content: center;
+        border: 1px solid rgba(57, 255, 90, 0.38);
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(57, 255, 90, 0.18),
+          rgba(57, 255, 90, 0.02) 65%,
+          transparent 66%
+        );
+        box-shadow: 0 0 80px rgba(57, 255, 90, 0.1);
+      }
+      .map-core span {
+        color: var(--tech-green);
+        font-size: 0.55rem;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+      }
+      .map-core strong {
+        color: var(--tech-heading);
+        font-size: 0.82rem;
+      }
+      .map-node {
+        padding: 13px 15px;
+        border: 1px solid var(--tech-border-strong);
+        border-radius: 13px;
+        background: rgba(9, 13, 22, 0.92);
+      }
+      .map-node small {
+        color: var(--tech-soft);
+        font-size: 0.5rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+      }
+      .map-node strong {
+        color: var(--tech-heading);
+        font-size: 0.7rem;
+      }
+      .map-node--top {
+        top: 11%;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .map-node--right {
+        top: 50%;
+        right: 8%;
+        transform: translateY(-50%);
+      }
+      .map-node--bottom {
+        bottom: 11%;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .map-node--left {
+        top: 50%;
+        left: 8%;
+        transform: translateY(-50%);
+      }
+      .map-line {
+        position: absolute;
+        z-index: 1;
+        left: 50%;
+        top: 50%;
+        width: 38%;
+        height: 1px;
+        transform-origin: left;
+        background: linear-gradient(90deg, var(--tech-green), transparent);
+      }
+      .map-line--one {
+        transform: rotate(-90deg);
+      }
+      .map-line--two {
+        transform: rotate(0deg);
+      }
+      .map-line--three {
+        transform: rotate(90deg);
+      }
+      .map-line--four {
+        transform: rotate(180deg);
+      }
+      .capabilities {
+        padding: 20px 0 150px;
+      }
+      .section-heading {
+        max-width: 820px;
+        margin-bottom: 50px;
+      }
+      .section-heading h2 {
+        margin: 0;
+        color: var(--tech-heading);
+        font-size: clamp(2.5rem, 5.5vw, 5rem);
+        line-height: 0.93;
+        letter-spacing: -0.06em;
+      }
+      .section-heading > p:last-child {
+        margin: 20px 0 0;
+        color: var(--tech-muted);
+        line-height: 1.75;
+      }
+      .capability-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .capability {
+        position: relative;
+        min-height: 300px;
+        padding: 30px;
+        border: 1px solid var(--tech-border);
+        border-radius: 24px;
+        background: linear-gradient(
+          145deg,
+          var(--tech-surface),
+          rgba(9, 13, 22, 0.7)
+        );
+      }
+      .capability--hero {
+        background: linear-gradient(145deg, #0d1421, #080c14);
+      }
+      .capability--wide {
+        grid-column: span 2;
+      }
+      .number {
+        color: var(--tech-blue);
+        font-size: 0.58rem;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+      }
+      .kicker {
+        margin: 10px 0 0;
+        color: var(--tech-soft);
+        font-size: 0.58rem;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+      }
+      .capability h3 {
+        max-width: 650px;
+        margin: 16px 0 12px;
+        color: var(--tech-heading);
+        font-size: clamp(1.5rem, 3vw, 2.45rem);
+        line-height: 1;
+        letter-spacing: -0.045em;
+      }
+      .capability > p:not(.kicker) {
+        max-width: 680px;
+        margin: 0;
+        color: var(--tech-muted);
+        line-height: 1.7;
+      }
+      .tech-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 28px;
+      }
+      .capability-mark {
+        display: flex;
+        gap: 8px;
+        position: absolute;
+        right: 30px;
+        bottom: 30px;
+      }
+      .capability-mark i {
+        display: block;
+        width: 14px;
+        height: 14px;
+        border: 1px solid var(--tech-green);
+        border-radius: 50%;
+      }
+      .capability-mark i:nth-child(2) {
+        transform: translateY(-8px);
+      }
+      .capability-mark i:nth-child(3) {
+        transform: translateY(-16px);
+      }
+      .endpoint {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-top: 28px;
+        padding: 12px;
+        border: 1px solid var(--tech-border-strong);
+        border-radius: 12px;
+        font-size: 0.6rem;
+      }
+      .endpoint span,
+      .endpoint b {
+        color: var(--tech-soft);
+        letter-spacing: 0.1em;
+      }
+      .endpoint strong {
+        color: var(--tech-heading);
+      }
+      .endpoint b {
+        margin-left: auto;
+      }
+      .workflow {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 30px;
+        overflow: auto;
+      }
+      .workflow > div {
+        min-width: 130px;
+        padding: 16px;
+        border: 1px solid var(--tech-border-strong);
+        border-radius: 13px;
+      }
+      .workflow small {
+        display: block;
+        color: var(--tech-soft);
+        font-size: 0.5rem;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+      }
+      .workflow strong {
+        display: block;
+        margin-top: 6px;
+        color: var(--tech-heading);
+        font-size: 0.75rem;
+      }
+      .workflow > b {
+        color: var(--tech-green);
+      }
+      .data-flow,
+      .infra-stack {
+        display: flex;
+        gap: 7px;
+        align-items: center;
+        margin-top: 30px;
+      }
+      .data-flow span,
+      .infra-stack span {
+        padding: 9px;
+        border: 1px solid var(--tech-border-strong);
+        border-radius: 8px;
+        color: var(--tech-soft);
+        font-size: 0.5rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+      }
+      .data-flow i {
+        width: 24px;
+        height: 1px;
+        background: var(--tech-border-strong);
+      }
+      .infra-stack {
+        flex-wrap: wrap;
+      }
+      .quality-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 30px;
+      }
+      .quality-grid > div {
+        padding: 18px;
+        border: 1px solid var(--tech-border);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.015);
+      }
+      .quality-grid strong {
+        color: var(--tech-green);
+        font-size: 0.58rem;
+        letter-spacing: 0.1em;
+      }
+      .quality-grid p {
+        margin: 10px 0 0;
+        color: var(--tech-muted);
+        font-size: 0.86rem;
+        line-height: 1.6;
+      }
+      .layers,
+      .toolbox,
+      .principles {
+        padding: 30px 0 150px;
+      }
+      .layer-table {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      .layer {
+        appearance: none;
+        text-align: left;
+        min-height: 190px;
+        padding: 22px;
+        border: 1px solid var(--tech-border);
+        border-radius: 16px;
+        background: var(--tech-surface);
+        color: inherit;
+        cursor: pointer;
+      }
+      .layer:hover,
+      .layer.is-selected {
+        border-color: var(--tech-blue);
+        background: var(--tech-surface-2);
+      }
+      .layer span {
+        color: var(--tech-blue);
+        font-size: 0.55rem;
+        font-weight: 900;
+      }
+      .layer strong {
+        display: block;
+        margin-top: 25px;
+        color: var(--tech-heading);
+        font-size: 1.2rem;
+      }
+      .layer small {
+        display: block;
+        margin-top: 8px;
+        color: var(--tech-muted);
+        line-height: 1.5;
+      }
+      .layer b {
+        display: block;
+        margin-top: 20px;
+        color: var(--tech-green);
+        font-size: 0.5rem;
+        letter-spacing: 0.1em;
+      }
+      .layer-detail {
+        margin-top: 8px;
+        padding: 24px;
+        border: 1px solid var(--tech-border);
+        border-radius: 16px;
+        color: var(--tech-muted);
+        line-height: 1.7;
+        background: rgba(255, 255, 255, 0.015);
+      }
+      .toolbox-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        border: 1px solid var(--tech-border);
+        background: var(--tech-border);
+      }
+      .toolbox-grid > div {
+        min-height: 130px;
+        padding: 24px;
+        background: var(--tech-surface);
+      }
+      .toolbox-grid span {
+        color: var(--tech-green);
+        font-size: 0.55rem;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+      }
+      .toolbox-grid p {
+        margin: 14px 0 0;
+        color: var(--tech-muted);
+        line-height: 1.6;
+      }
+      .principle-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .principle-grid article {
+        padding: 24px;
+        border-top: 1px solid var(--tech-border);
+      }
+      .principle-grid article > span {
+        color: var(--tech-blue);
+        font-size: 0.55rem;
+        font-weight: 900;
+      }
+      .principle-grid h3 {
+        margin: 16px 0 8px;
+        color: var(--tech-heading);
+        font-size: 1.05rem;
+      }
+      .principle-grid p {
+        margin: 0;
+        color: var(--tech-muted);
+        line-height: 1.65;
+      }
+      .cta {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 40px;
+        padding: 30px 0 140px;
+      }
+      .cta .section-heading {
+        margin: 0;
+      }
+      .cta h2 {
+        max-width: 800px;
+        margin: 0;
+        color: var(--tech-heading);
+        font-size: clamp(2.5rem, 5vw, 5rem);
+        line-height: 0.94;
+        letter-spacing: -0.06em;
+      }
+      .cta p:last-child {
+        max-width: 700px;
+        color: var(--tech-muted);
+        line-height: 1.7;
+      }
+      .cta a {
+        flex: 0 0 auto;
+        padding: 14px 18px;
+        border: 1px solid var(--tech-green);
+        border-radius: 999px;
+        color: var(--tech-green);
+        font-weight: 800;
+        text-decoration: none;
+      }
+      .cta a:hover {
+        background: var(--tech-green);
+        color: #05070c;
+      }
+      .cta a span {
+        margin-left: 8px;
+      }
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .system-map {
+          min-height: 430px;
+        }
+        .capability-grid,
+        .layer-table,
+        .toolbox-grid,
+        .principle-grid {
+          grid-template-columns: 1fr;
+        }
+        .capability--wide {
+          grid-column: auto;
+        }
+        .quality-grid {
+          grid-template-columns: 1fr;
+        }
+        .cta {
+          display: block;
+        }
+        .cta a {
+          display: inline-block;
+          margin-top: 20px;
+        }
+      }
+      @media (max-width: 600px) {
+        .hero,
+        .capabilities,
+        .layers,
+        .toolbox,
+        .principles,
+        .cta {
+          width: min(100% - 28px, 1180px);
+        }
+        .hero {
+          padding: 55px 0 90px;
+        }
+        .system-map {
+          min-height: 360px;
+          border-radius: 24px;
+        }
+        .map-core {
+          width: 115px;
+          height: 115px;
+        }
+        .map-node--left {
+          left: 4%;
+        }
+        .map-node--right {
+          right: 4%;
+        }
+        .map-node {
+          padding: 10px;
+        }
+        .capability {
+          padding: 24px;
+        }
+        .workflow {
+          align-items: stretch;
+        }
+        .workflow > b {
+          display: none;
+        }
+        .workflow > div {
+          min-width: 150px;
+        }
+        .toolbox-grid > div {
+          min-height: auto;
+        }
+        .layers,
+        .toolbox,
+        .principles {
+          padding-bottom: 100px;
+        }
+        .cta {
+          padding-bottom: 90px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .layer {
+          scroll-behavior: auto;
+        }
+      }
     </style>
   </body>
 </html>

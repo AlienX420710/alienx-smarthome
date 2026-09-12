@@ -50,40 +50,7 @@ jobs:
           exit 1
 
       - name: Run Lighthouse quality gate
-        run: |
-
-          set +e
-          npx --no-install lhci autorun --config=lighthouse.config.cjs
-          LHCI_STATUS=$?
-          set -e
-
-          node <<'REPORT'
-          const fs = require('fs');
-          const path = '.lighthouseci';
-          if (!fs.existsSync(path)) process.exit(0);
-          for (const file of fs.readdirSync(path).filter(name => name.endsWith('.json'))) {
-            try {
-              const report = JSON.parse(fs.readFileSync(`${path}/${file}`, 'utf8'));
-              if (!report.categories || !report.audits) continue;
-              console.log(`\nLighthouse diagnostics: ${report.finalUrl || report.requestedUrl || file}`);
-              for (const [id, category] of Object.entries(report.categories)) {
-                const score = category.score;
-                if (typeof score === 'number') console.log(`  ${id}: ${(score * 100).toFixed(0)}`);
-                if (typeof score !== 'number' || score >= (id === 'performance' ? 0.85 : 0.95)) continue;
-                for (const ref of category.auditRefs || []) {
-                  const audit = report.audits[ref.id];
-                  if (audit && typeof audit.score === 'number' && audit.score < 1) {
-                    console.log(`    FAIL ${ref.id}: ${audit.title} (score ${audit.score})`);
-                  }
-                }
-              }
-            } catch (error) {
-              console.log(`Could not parse Lighthouse report ${file}: ${error.message}`);
-            }
-          }
-          REPORT
-
-          exit "$LHCI_STATUS"
+        run: npm run test:lighthouse
 
       - name: Upload Lighthouse diagnostics
         if: always()

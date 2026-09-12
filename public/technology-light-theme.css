@@ -1,154 +1,207 @@
-html[data-alienx-theme="light"][data-alienx-page="technology"] .capability,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .layer,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .toolbox-grid > div,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .principle-grid article,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .quality-grid > div,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .layer-detail,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .endpoint,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .workflow > div,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .data-flow span,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .infra-stack span {
+html[data-alienx-theme='light'][data-alienx-page='technology'] .capability,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .layer,
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .toolbox-grid
+  > div,
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .principle-grid
+  article,
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .quality-grid
+  > div,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .layer-detail,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .endpoint,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .workflow > div,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .data-flow span,
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .infra-stack
+  span {
   background: #ffffff !important;
   border-color: #c8d1df !important;
 }
 
-html[data-alienx-theme="light"][data-alienx-page="technology"] .capability--hero {
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .capability--hero {
   background: #f2f5f9 !important;
 }
 
-html[data-alienx-theme="light"][data-alienx-page="technology"] .layer:hover,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .layer.is-selected {
+html[data-alienx-theme='light'][data-alienx-page='technology'] .layer:hover,
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .layer.is-selected {
   background: #eef2f7 !important;
   border-color: #8fa0b7 !important;
 }
 
-html[data-alienx-theme="light"][data-alienx-page="technology"] .layer strong,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .endpoint strong,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .workflow strong,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .capability h3,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .principle-grid h3 {
+html[data-alienx-theme='light'][data-alienx-page='technology'] .layer strong,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .endpoint strong,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .workflow strong,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .capability h3,
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .principle-grid
+  h3 {
   color: #0d1420 !important;
 }
 
-html[data-alienx-theme="light"][data-alienx-page="technology"] .layer small,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .layer span,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .layer b,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .toolbox-grid p,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .principle-grid p,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .quality-grid p,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .workflow small,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .layer-detail,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .capability > p:not(.kicker) {
+html[data-alienx-theme='light'][data-alienx-page='technology'] .layer small,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .layer span,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .layer b,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .toolbox-grid p,
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .principle-grid
+  p,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .quality-grid p,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .workflow small,
+html[data-alienx-theme='light'][data-alienx-page='technology'] .layer-detail,
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .capability
+  > p:not(.kicker) {
   color: #334155 !important;
 }
 
-html[data-alienx-theme="light"][data-alienx-page="technology"] .toolbox-grid {
+html[data-alienx-theme='light'][data-alienx-page='technology'] .toolbox-grid {
   background: #c8d1df !important;
   border-color: #c8d1df !important;
 }
 
-html[data-alienx-theme="light"][data-alienx-page="technology"] .system-map {
+html[data-alienx-theme='light'][data-alienx-page='technology'] .system-map {
   background: #060a11 !important;
 }
 
-html[data-alienx-theme="light"][data-alienx-page="technology"] .system-map .map-node {
-  background: rgba(9, 13, 22, .92) !important;
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .system-map
+  .map-node {
+  background: rgba(9, 13, 22, 0.92) !important;
   border-color: #2b374c !important;
 }
 
-html[data-alienx-theme="light"][data-alienx-page="technology"] .system-map .map-node strong,
-html[data-alienx-theme="light"][data-alienx-page="technology"] .system-map .map-core strong {
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .system-map
+  .map-node
+  strong,
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .system-map
+  .map-core
+  strong {
   color: #f8faff !important;
 }
 
-html[data-alienx-theme="light"][data-alienx-page="technology"] .system-map .map-node small {
+html[data-alienx-theme='light'][data-alienx-page='technology']
+  .system-map
+  .map-node
+  small {
   color: #aeb9ca !important;
 }
 
-html[data-alienx-theme="light"][data-alienx-page="technology"] body {
+html[data-alienx-theme='light'][data-alienx-page='technology'] body {
   --tech-green: #167538;
   --tech-blue: #4053bd;
 }
-html[data-alienx-theme="light"][data-alienx-page="technology"] .system-map {
+html[data-alienx-theme='light'][data-alienx-page='technology'] .system-map {
   --tech-green: #39ff5a;
   --tech-blue: #6f82ff;
 }
 
 @media (prefers-color-scheme: light) {
-html:not([data-alienx-theme])[data-alienx-page="technology"] .capability,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .layer,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .toolbox-grid > div,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .principle-grid article,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .quality-grid > div,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .layer-detail,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .endpoint,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .workflow > div,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .data-flow span,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .infra-stack span {
-  background: #ffffff !important;
-  border-color: #c8d1df !important;
-}
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .capability,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .layer,
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .toolbox-grid
+    > div,
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .principle-grid
+    article,
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .quality-grid
+    > div,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .layer-detail,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .endpoint,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .workflow > div,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .data-flow span,
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .infra-stack
+    span {
+    background: #ffffff !important;
+    border-color: #c8d1df !important;
+  }
 
-html:not([data-alienx-theme])[data-alienx-page="technology"] .capability--hero {
-  background: #f2f5f9 !important;
-}
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .capability--hero {
+    background: #f2f5f9 !important;
+  }
 
-html:not([data-alienx-theme])[data-alienx-page="technology"] .layer:hover,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .layer.is-selected {
-  background: #eef2f7 !important;
-  border-color: #8fa0b7 !important;
-}
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .layer:hover,
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .layer.is-selected {
+    background: #eef2f7 !important;
+    border-color: #8fa0b7 !important;
+  }
 
-html:not([data-alienx-theme])[data-alienx-page="technology"] .layer strong,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .endpoint strong,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .workflow strong,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .capability h3,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .principle-grid h3 {
-  color: #0d1420 !important;
-}
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .layer strong,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .endpoint strong,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .workflow strong,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .capability h3,
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .principle-grid
+    h3 {
+    color: #0d1420 !important;
+  }
 
-html:not([data-alienx-theme])[data-alienx-page="technology"] .layer small,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .layer span,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .layer b,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .toolbox-grid p,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .principle-grid p,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .quality-grid p,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .workflow small,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .layer-detail,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .capability > p:not(.kicker) {
-  color: #334155 !important;
-}
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .layer small,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .layer span,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .layer b,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .toolbox-grid p,
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .principle-grid
+    p,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .quality-grid p,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .workflow small,
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .layer-detail,
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .capability
+    > p:not(.kicker) {
+    color: #334155 !important;
+  }
 
-html:not([data-alienx-theme])[data-alienx-page="technology"] .toolbox-grid {
-  background: #c8d1df !important;
-  border-color: #c8d1df !important;
-}
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .toolbox-grid {
+    background: #c8d1df !important;
+    border-color: #c8d1df !important;
+  }
 
-html:not([data-alienx-theme])[data-alienx-page="technology"] .system-map {
-  background: #060a11 !important;
-}
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .system-map {
+    background: #060a11 !important;
+  }
 
-html:not([data-alienx-theme])[data-alienx-page="technology"] .system-map .map-node {
-  background: rgba(9, 13, 22, .92) !important;
-  border-color: #2b374c !important;
-}
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .system-map
+    .map-node {
+    background: rgba(9, 13, 22, 0.92) !important;
+    border-color: #2b374c !important;
+  }
 
-html:not([data-alienx-theme])[data-alienx-page="technology"] .system-map .map-node strong,
-html:not([data-alienx-theme])[data-alienx-page="technology"] .system-map .map-core strong {
-  color: #f8faff !important;
-}
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .system-map
+    .map-node
+    strong,
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .system-map
+    .map-core
+    strong {
+    color: #f8faff !important;
+  }
 
-html:not([data-alienx-theme])[data-alienx-page="technology"] .system-map .map-node small {
-  color: #aeb9ca !important;
-}
+  html:not([data-alienx-theme])[data-alienx-page='technology']
+    .system-map
+    .map-node
+    small {
+    color: #aeb9ca !important;
+  }
 
-html:not([data-alienx-theme])[data-alienx-page="technology"] body {
-  --tech-green: #167538;
-  --tech-blue: #4053bd;
-}
-html:not([data-alienx-theme])[data-alienx-page="technology"] .system-map {
-  --tech-green: #39ff5a;
-  --tech-blue: #6f82ff;
-}
-
+  html:not([data-alienx-theme])[data-alienx-page='technology'] body {
+    --tech-green: #167538;
+    --tech-blue: #4053bd;
+  }
+  html:not([data-alienx-theme])[data-alienx-page='technology'] .system-map {
+    --tech-green: #39ff5a;
+    --tech-blue: #6f82ff;
+  }
 }

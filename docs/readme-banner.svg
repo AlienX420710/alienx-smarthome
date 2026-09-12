@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340" role="img" aria-labelledby="title desc">
+  <title id="title">AlienX SmartHome</title>
+  <desc id="desc">Technology built to do something. Web, automation, infrastructure, and browser experiences.</desc>
+  <rect width="1200" height="340" rx="24" fill="#14161e"/>
+  <path d="M64 66H1136" stroke="#303647"/>
+  <rect x="64" y="65" width="110" height="3" fill="#39ff5a"/>
+  <text x="64" y="125" fill="#a5b0ff" font-family="monospace" font-size="18" letter-spacing="4">WEB / AUTOMATION / INFRASTRUCTURE</text>
+  <text x="60" y="208" font-family="Arial,sans-serif" font-size="76" font-weight="700"><tspan fill="#39ff5a">AlienX</tspan><tspan fill="#eaeef6"> SmartHome</tspan></text>
+  <text x="64" y="270" fill="#c5cede" font-family="Arial,sans-serif" font-size="28">Technology built to do something.</text>
+  <path d="M1040 138l44 44-44 44m-58-44h99" fill="none" stroke="#6f82ff" stroke-width="6"/>
+</svg>

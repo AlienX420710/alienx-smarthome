@@ -1,238 +1,130 @@
 <div align="center">
 
-<a href="https://alienxsmarthome.com">
-  <img src="./public/alienx-social-preview.jpg" alt="AlienX SmartHome — modern web engineering, automation, infrastructure, and interactive technology" width="100%" />
-</a>
+<a href="https://alienxsmarthome.com"><img src="./docs/readme-banner.svg" alt="AlienX SmartHome — technology built to do something" width="100%" /></a>
 
-<br /><br />
-
-[![Live Website](https://img.shields.io/badge/LIVE_WEBSITE-alienxsmarthome.com-00C853?style=for-the-badge&logo=googlechrome&logoColor=white)](https://alienxsmarthome.com)
-[![Start a Project](https://img.shields.io/badge/START_A-PROJECT-00AEEF?style=for-the-badge&logo=rocket&logoColor=white)](https://alienxsmarthome.com/contact)
+[Live website](https://alienxsmarthome.com) · [Explore the museum](https://alienxsmarthome.com/experience/) · [Start a project](https://alienxsmarthome.com/contact/)
 
 [![Quality](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/quality.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/quality.yml)
 [![Production Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-smoke.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-smoke.yml)
 [![Responsive](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/responsive.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/responsive.yml)
 [![Accessibility](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/accessibility.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/accessibility.yml)
-[![Astro 7](https://img.shields.io/badge/Astro-7.3.1-FF5D01?logo=astro&logoColor=white)](https://astro.build)
-[![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?logo=cloudflare&logoColor=white)](https://workers.cloudflare.com)
 
-### Technology built to do something.
-
-A public-facing technology showcase for **web engineering, automation, infrastructure, and interactive browser experiences.**
-
-[Work](https://alienxsmarthome.com/work) · [Experience](https://alienxsmarthome.com/experience) · [Technology](https://alienxsmarthome.com/technology) · [Status](https://alienxsmarthome.com/status) · [About](https://alienxsmarthome.com/about) · [Start a Project](https://alienxsmarthome.com/contact)
+Web engineering, automation, infrastructure, and interactive browser experiences.
 
 </div>
 
----
+## What this project is
 
-## Welcome
+AlienX SmartHome is an engineering showcase, not a Home Assistant dashboard or a home-control application. The site combines browser experiments, an interactive stack explanation, a public configuration-status endpoint, and a protected project inquiry form.
 
-AlienX SmartHome is a production web project built to demonstrate what modern frontend engineering, backend services, deployment infrastructure, automation, and browser-native interaction can look like when the website itself is part of the proof.
+Only **`main`** is maintained and deployed. [Audit progress](docs/audit-remediation.md) records repairs and verification limits. The [release runbook](docs/release-runbook.md) covers acceptance checks, incident triage, and rollback.
 
-The project started around smart-home technology and expanded into a broader engineering showcase. It is intentionally **not** a conventional Home Assistant dashboard or home-automation management interface.
+| Area         | Current implementation                                                                                  |
+| :----------- | :------------------------------------------------------------------------------------------------------ |
+| Experience   | Seven browser exhibits with keyboard controls and motion preferences                                    |
+| Technology   | Interactive architecture layers and implementation explanations                                         |
+| Status       | Worker reachability, integration configuration, and deployed Git revision—not an email-delivery monitor |
+| Contact      | Validated, Turnstile-protected inquiry submission with retry recovery                                   |
+| Work / About | Placeholder content awaiting genuine case studies and owner biography                                   |
 
-<table>
-<tr>
-<td width="50%" valign="top">
+## Inquiry handling
 
-### What it showcases
+Requests pass origin/content-type/body-size checks, honeypot and rate controls, Turnstile verification, and field validation before contacting Resend. The endpoint requires server-owned verification state; direct calls cannot skip middleware protection.
 
-- Responsive web interfaces
-- Interactive browser experiences
-- Automation and system integrations
-- Cloud infrastructure and deployment
-- Secure project inquiry handling
-- Performance, accessibility, and reduced-motion behavior
+- Turnstile tokens are checked for hostname and the `contact` action.
+- Requests have bounded sizes and timeouts. Failed submissions preserve entered values and refresh verification.
+- Unchanged retries retain a payload-bound idempotency key. Resend retains idempotency records for 24 hours.
+- Edge rate counters are shared within each Cloudflare location, not a strict global quota. A bounded isolate-local limit supplements them.
+- Success requires provider acceptance with an email ID. **Acceptance is not proof of inbox delivery.** Visiting the noindex follow-up page directly is not a receipt.
+- Browser and API regression tests mock verification/email delivery; they send no email.
 
-</td>
-<td width="50%" valign="top">
+Security headers include a response-level frame-ancestor policy and an Astro-generated script CSP. Never put provider secrets in browser code or commit local credentials. Report vulnerabilities through [SECURITY.md](SECURITY.md).
 
-### Built for production
+## Design and accessibility
 
-- Cloudflare Workers deployment
-- Turnstile-protected inquiry API
-- Server-side validation and rate limiting
-- Resend-backed email delivery
-- Production health monitoring
-- Automated responsive compatibility checks
-- Automated light/dark accessibility checks
+The existing identity stays blue, green, and neutral. These values describe the shared foundation; page-specific systems retain scoped tokens.
 
-</td>
-</tr>
-</table>
+| Token / role           | Light                                                                     | Dark      |
+| :--------------------- | :------------------------------------------------------------------------ | :-------- |
+| Primary accent         | `#2563EB`                                                                 | `#6F82FF` |
+| Accent interaction     | `#1D4ED8`                                                                 | `#A5B0FF` |
+| Shared page background | `#FFFFFF`                                                                 | `#14161E` |
+| Shared body text       | `#222939`                                                                 | `#DCE0E8` |
+| Identity green         | `#39FF5A` decorative accent; darker variants for small light-surface text | `#39FF5A` |
 
-## Website preview
+Body type is locally hosted **Atkinson**, regular and bold. Technical readouts use system monospace fonts. Neon accents are not blanket approval for text contrast.
 
-<div align="center">
-  <a href="https://alienxsmarthome.com">
-    <img src="./public/alienx-social-preview.jpg" alt="AlienX SmartHome production website preview" width="820" />
-  </a>
-  <br />
-  <sub>Select the preview to visit the production website.</sub>
-</div>
+System, explicit light, and explicit dark themes are supported. Saved choices must win over OS preferences before paint and after navigation. Focus visibility, skip navigation, modal focus containment, keyboard alternatives, and reduced-motion behavior are tested requirements—not a claim of complete assistive-technology certification.
 
-## What is inside
+## Stack and source ownership
 
-| Area | Purpose |
-| :--- | :--- |
-| **Work** | Selected engineering work and project outcomes |
-| **Experience** | Interactive browser experiments and visual systems |
-| **Technology** | The stack, engineering disciplines, and implementation approach |
-| **Status** | Public-facing production service health and runtime signals |
-| **About** | The story, principles, and direction behind AlienX |
-| **Start a Project** | Secure project inquiry flow for new work |
+Astro, TypeScript, Cloudflare Workers, Turnstile, and Resend power the application. Cloudflare Images and KV support the adapter. Exact application and test-tool versions are pinned in [package.json](package.json) and the committed lockfile.
 
-> The site favors real implementation over simulated dashboards, fake metrics, or decorative claims.
+| Path                 | Responsibility                                                          |
+| :------------------- | :---------------------------------------------------------------------- |
+| `src/pages/`         | Page documents and API endpoints                                        |
+| `src/components/`    | Navigation, metadata, dialogs, and shared controls                      |
+| `src/lib/`           | Shared runtime response validation                                      |
+| `src/styles/`        | Shared foundation and theme styles                                      |
+| `public/`            | Visitor assets, fonts, and lifecycle-managed browser scripts            |
+| `tests/`             | Mocked API, preference, browser, and Safari regressions                 |
+| `scripts/`           | Image validation/optimization, Lighthouse, type scoping, release checks |
+| `docs/`              | Audit evidence, operations, and README-only artwork                     |
+| `.github/workflows/` | Local-build quality gates and production monitoring                     |
 
-## Contact flow
-
-```mermaid
-flowchart LR
-    A[Project inquiry] --> B[Turnstile verification]
-    B --> C[Worker validation]
-    C --> D[Rate limit + honeypot]
-    D --> E[Resend acceptance]
-    E --> F[Success page]
-```
-
-The success state is reached only after the production email provider accepts the inquiry. Validation and delivery failures remain on the form instead of reporting a false success.
-
-## Security and reliability
-
-The production application uses multiple independent controls around its public inquiry surface:
-
-- Cloudflare Turnstile token and hostname verification
-- Same-origin submission enforcement
-- Honeypot spam detection
-- Per-IP rate limiting
-- Field allowlists and length limits
-- Actual request-body size enforcement
-- Resend response-ID confirmation
-- Production security headers
-- Dependency auditing
-- Automated production smoke checks
-- Responsive viewport compatibility testing
-- Automated light/dark accessibility and contrast testing
-
-Security reports should be submitted privately according to the [security policy](./SECURITY.md) or emailed to **alienx@alienxsmarthome.com**.
-
-## Accessibility and theme contract
-
-Accessibility is treated as a release requirement, not a visual preference.
-
-The site must maintain readable foreground/background contrast in **system, light, and dark presentation states**. In particular:
-
-- Light text must never be rendered against a light background.
-- Dark text must never be rendered against a dark background.
-- Interactive controls, links, form fields, headings, and body copy must remain distinguishable in both themes.
-- Keyboard focus indicators must remain visible in both themes.
-- Color must not be the only mechanism used to communicate state.
-- User `prefers-reduced-motion` preferences must be respected.
-- Explicit theme selections must not leave stale foreground/background combinations behind.
-
-The GitHub accessibility workflow exercises the production routes in both explicit light and dark themes with axe-based WCAG checks and a Lighthouse accessibility audit. Chrome Lighthouse remains the preferred quick local developer check before pushing visual or interaction changes.
-
-## Design system
-
-AlienX uses a restrained dark interface with controlled blue and green accents rather than treating every page as a separate visual system.
-
-| Accent | Role |
-| :--- | :--- |
-| **Blue** | Primary interface structure, navigation, and technical emphasis |
-| **Green** | AlienX identity, active states, system/core visuals, and key actions |
-| **Dark neutrals** | Contrast, depth, panels, and content hierarchy |
-| **Motion** | Interaction feedback and browser-native experimentation |
-
-Responsive behavior, keyboard focus states, theme contrast, and reduced-motion preferences are treated as part of the design rather than afterthoughts.
-
-## Technology
-
-| Layer | Technology | Purpose |
-| :--- | :--- | :--- |
-| Framework | [Astro 7.3.1](https://astro.build) | Pages, routing, rendering, and site composition |
-| Language | TypeScript 5.9.3 | Application logic and type safety |
-| Runtime | [Cloudflare Workers](https://workers.cloudflare.com) | Production hosting and server-side functionality |
-| Protection | [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) | Server-validated bot protection |
-| Email | [Resend](https://resend.com) | Project inquiry notification delivery |
-| Validation | GitHub Actions | Build, type, audit, smoke, responsive, and accessibility quality gates |
-
-The production build also uses Cloudflare Images for image processing, Cloudflare KV for sessions, Astro Sitemap for discovery, and focused client-side JavaScript where browser state or interaction requires it.
+There is no shared `src/layouts/` directory. Some legacy page overrides remain in BaseHead/global styles; formatting makes them reviewable but does not eliminate that ownership debt. Original social artwork is preserved; the build generates a smaller WebP and decodes public raster images to detect corruption.
 
 ## Automated checks
 
-| Check | When it runs | What it protects |
-| :--- | :--- | :--- |
-| **Quality** | Every push and pull request to `main` | Install, build, TypeScript, Worker dry run, and dependency audit |
-| **Production Smoke** | Every push to `main` and hourly | Both production hostnames, HTML response, `/api/status`, and known Worker failure regression |
-| **Responsive Compatibility** | Every push and pull request to `main` | 84 viewport/page combinations for overflow and runtime regressions |
-| **Accessibility & Theme** | Every push and pull request to `main` | Light/dark contrast, WCAG accessibility, and Lighthouse accessibility score |
+| Workflow              | When                                 | Scope                                                                                           |
+| :-------------------- | :----------------------------------- | :---------------------------------------------------------------------------------------------- |
+| Quality               | Push / PR to main                    | Clean install, formatting, API tests, build, Astro/TypeScript, Worker dry run, dependency audit |
+| Responsive            | Push / PR; manual                    | Built local preview: 84 route/viewport combinations plus interaction regressions                |
+| Accessibility & Theme | Push / PR; manual                    | Built local preview: 48 route/theme/OS cases, axe WCAG checks, Lighthouse accessibility ≥95     |
+| Lighthouse            | Push / PR; manual                    | Built local preview: accessibility, best practices, SEO ≥95; performance ≥85                    |
+| Safari                | Push / PR; manual                    | Built local preview in actual macOS Safari WebDriver                                            |
+| Production Integrity  | Push / PR, six-hour schedule; manual | Live host security headers, redirects, and SEO                                                  |
+| Production Smoke      | Push, hourly; manual                 | Live host/API health; pushes also require the exact Git revision                                |
 
-Only **`main`** is maintained and deployed to production.
+GitHub CodeQL is separate security analysis. Cloudflare Builds is a separate deployment integration: neither a passing CodeQL run nor a healthy old deployment proves a new release succeeded. Independent deployment gating and notification recipients still require account-owner configuration. See the runbook before declaring a release accepted.
 
-## Project map
+## Local setup
 
-```text
-/
-├── .github/
-│   └── workflows/                Quality, smoke, responsive, and accessibility checks
-├── public/                       Static assets, fonts, icons, and browser scripts
-├── src/
-│   ├── components/               Shared interface components
-│   ├── layouts/                  Shared page structure and metadata
-│   ├── pages/                    Routes and server endpoints
-│   ├── styles/                   Global styling and design tokens
-│   ├── icons/                    Site icon components
-│   └── consts.ts                 Site-wide metadata and content constants
-├── astro.config.mjs              Astro configuration
-├── wrangler.json                 Cloudflare Workers configuration
-├── package.json                  Dependencies and development commands
-├── package-lock.json             Locked dependency tree
-└── SECURITY.md                   Private vulnerability reporting policy
-```
-
-## Local development
-
-The project requires **Node.js 22 or newer** and npm.
+Use **Node 22.19+** (or a newer supported LTS) and npm. CI uses Node 22; verify lockfile changes with a clean install, not only an existing `node_modules` tree.
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Then open `http://localhost:4321`.
+Open [localhost:4321](http://localhost:4321). Static pages and mocked tests need no live provider secrets. Without local bindings, `/api/status` intentionally reports degraded configuration with HTTP 503.
 
-| Command | Purpose |
-| :--- | :--- |
-| `npm run dev` | Start the Astro development server |
-| `npm run build` | Create the production build |
-| `npm run check` | Build, type-check, and validate a Cloudflare deployment bundle |
-| `npm run audit` | Check dependencies for high-severity vulnerabilities |
-| `npm run preview` | Build and preview through the Cloudflare runtime |
-| `npm run deploy` | Deploy the current release through Wrangler |
+For an explicitly approved real integration test, copy `.dev.vars.example` to `.dev.vars` and `.env.example` to `.env`. Supply dedicated test credentials and a matching public `PUBLIC_TURNSTILE_SITE_KEY`, then configure the hostname policy consistently. The public key is injected at build time; an empty value preserves the existing production widget. Never put secrets in `PUBLIC_*` variables or use production mail credentials for automated tests. Cloudflare production secrets are `TURNSTILE_SECRET` and `RESEND_API_KEY`; `TURNSTILE_HOSTNAMES` is a non-secret Worker variable.
 
-For quick developer accessibility validation, use **Chrome DevTools → Lighthouse → Accessibility** and test both light and dark presentation states. The GitHub workflow provides the repeatable release gate.
+| Command                                   | Purpose                                                       |
+| :---------------------------------------- | :------------------------------------------------------------ |
+| `npm run dev`                             | Generate optimized assets and start Astro                     |
+| `npm test`                                | Mocked handlers, status contracts, and preference regressions |
+| `npm run typecheck`                       | Astro diagnostics and TypeScript                              |
+| `npm run build`                           | Validate/optimize images and build the Worker site            |
+| `npm run check`                           | Tests, type checks, build, and Worker deploy dry run          |
+| `npm run audit`                           | Audit the full dependency tree, including test tools          |
+| `npm run preview`                         | Build and start the local Cloudflare runtime                  |
+| `npm run test:browser`                    | Responsive and interactive Chromium checks                    |
+| `npm run test:a11y`                       | Theme/OS and accessibility matrix                             |
+| `npm run test:lighthouse`                 | Existing Lighthouse score gates against local preview         |
+| `npm run format` / `npm run format:check` | Format maintained source / check formatting                   |
+| `npm run cf-typegen`                      | Regenerate and scope Worker declarations                      |
+| `npm run deploy`                          | Deploy through configured Wrangler; follow the runbook first  |
 
-## Production
+Browser checks require a running preview on port 4321:
 
-The public site is available at:
+```bash
+npx playwright install chromium
+npm run preview
+# In another terminal:
+npm run test:browser
+npm run test:a11y
+```
 
-**https://alienxsmarthome.com**
-
-The production Worker serves both the apex and `www` hostnames. GitHub Actions continuously verifies the deployed experience rather than treating a successful build as the only definition of a healthy release.
-
----
-
-<div align="center">
-
-<img src="./public/android-chrome-192x192.png" alt="AlienX SmartHome logo" width="120" />
-
-### AlienX SmartHome
-
-*The website is part of the proof.*
-
-[Website](https://alienxsmarthome.com) · [Work](https://alienxsmarthome.com/work) · [Technology](https://alienxsmarthome.com/technology) · [Start a Project](https://alienxsmarthome.com/contact)
-
-<sub>Modern web engineering · automation · infrastructure · interactive technology</sub>
-
-</div>
+Lighthouse needs Chrome/Chromium. `node tests/safari.cjs` needs macOS and enabled Safari WebDriver. Browser tests do not replace physical-device, screen-reader, or actual provider-delivery verification.

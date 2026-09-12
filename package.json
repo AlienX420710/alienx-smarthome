@@ -9,7 +9,10 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
-    "@lhci/cli": "0.15.1",
+    "lighthouse": "13.4.1",
+    "prettier": "3.6.2",
+    "prettier-plugin-astro": "0.14.1",
+    "sharp": "0.35.4",
     "@playwright/test": "1.63.0",
     "axe-core": "4.10.3",
     "selenium-webdriver": "4.35.0",
@@ -21,30 +24,23 @@
   "private": true,
   "scripts": {
     "astro": "astro",
-    "build": "astro build",
+    "build": "node scripts/optimize-images.mjs && astro build",
     "cf-typegen": "wrangler types && node scripts/scope-worker-types.mjs",
-    "check": "astro check && astro build && tsc --noEmit && wrangler deploy --dry-run",
+    "check": "npm test && npm run typecheck && npm run build && wrangler deploy --dry-run",
     "audit": "npm audit --audit-level=high",
     "deploy": "wrangler deploy",
-    "dev": "astro dev",
-    "preview": "astro build && wrangler dev",
+    "dev": "node scripts/optimize-images.mjs && astro dev",
+    "preview": "npm run build && wrangler dev",
     "test": "node --test tests/*.test.cjs",
     "typecheck": "astro check && tsc --noEmit",
     "test:browser": "playwright test tests/responsive.spec.cjs tests/interactions.spec.cjs --reporter=line",
-    "test:a11y": "playwright test tests/accessibility.spec.cjs --reporter=line"
+    "test:a11y": "playwright test tests/accessibility.spec.cjs --reporter=line",
+    "test:lighthouse": "node scripts/lighthouse.mjs",
+    "format": "prettier --write src public/*.js public/*.css scripts tests .github README.md docs/*.md *.config.*",
+    "format:check": "prettier --check src public/*.js public/*.css scripts tests .github README.md docs/*.md *.config.*"
   },
   "overrides": {
-    "sharp": "0.35.4",
-    "@lhci/cli": {
-      "lighthouse": "13.4.1",
-      "tmp": "0.2.7",
-      "uuid": "11.1.1"
-    },
-    "@lhci/utils": {
-      "lighthouse": "13.4.1"
-    },
-    "tmp": "0.2.7",
-    "qs": "6.16.0"
+    "sharp": "0.35.4"
   },
   "type": "module"
 }

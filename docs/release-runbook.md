@@ -8,9 +8,9 @@ Run `npm ci`, `npm test`, `npm run check`, and `npm run audit` on Node 22.
 For browser checks, start the built Cloudflare preview on port 4321, install the
 Playwright Chromium browser, and run `npm run test:browser` and `npm run test:a11y`.
 `node tests/safari.cjs` requires macOS Safari WebDriver. Lighthouse configuration
-is committed in `lighthouse.config.cjs` and `lighthouse-accessibility.config.cjs`.
-The LHCI overrides update its older transitive dependencies; keep the full
-Lighthouse workflows green when changing them. Do not use `npm audit fix --force`.
+is committed in `lighthouse.config.cjs`; `scripts/lighthouse.mjs` runs the locked
+Lighthouse CLI, with `--accessibility` for the accessibility-only job. Keep both
+Lighthouse workflows green when changing tooling. Do not use `npm audit fix --force`.
 
 ## Release acceptance
 

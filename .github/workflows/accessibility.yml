@@ -60,7 +60,7 @@ jobs:
       - name: Run Lighthouse accessibility audit
         run: |
 
-          npx --no-install lhci autorun --config=lighthouse-accessibility.config.cjs
+          node scripts/lighthouse.mjs --accessibility
 
       - name: Upload diagnostics on failure
         if: failure()

@@ -5,7 +5,9 @@
   const remove = () => {
     const id = window.__alienxTurnstileWidgetId;
     if (id != null && window.turnstile) {
-      try { window.turnstile.remove(id); } catch {}
+      try {
+        window.turnstile.remove(id);
+      } catch {}
     }
     window.__alienxTurnstileWidgetId = null;
     container = null;
@@ -16,11 +18,22 @@
     remove();
     container = next;
     window.__alienxTurnstileWidgetId = window.turnstile.render(next, {
-      sitekey: next.dataset.sitekey, action: 'contact', theme: 'auto', size: 'compact',
-      'response-field-name': 'website', 'refresh-expired': 'auto', 'refresh-timeout': 'auto',
-      callback: () => { next.dataset.state = 'success'; },
-      'expired-callback': () => { next.dataset.state = 'expired'; },
-      'error-callback': () => { next.dataset.state = 'error'; }
+      sitekey: next.dataset.sitekey,
+      action: 'contact',
+      theme: 'auto',
+      size: 'compact',
+      'response-field-name': 'website',
+      'refresh-expired': 'auto',
+      'refresh-timeout': 'auto',
+      callback: () => {
+        next.dataset.state = 'success';
+      },
+      'expired-callback': () => {
+        next.dataset.state = 'expired';
+      },
+      'error-callback': () => {
+        next.dataset.state = 'error';
+      },
     });
   };
   window.__alienxTurnstileReset = () => {
@@ -33,7 +46,8 @@
   if (window.turnstile) render();
   else {
     const script = document.createElement('script');
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=alienxTurnstileLoad';
+    script.src =
+      'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=alienxTurnstileLoad';
     script.async = true;
     document.head.appendChild(script);
   }
