@@ -2,7 +2,9 @@
 interface Props {
   name?: string;
 }
-const { name = 'faxNumber' } = Astro.props;
+// Avoid phone/fax field identifiers that contact autofill can populate.
+// Keep the API's legacy faxNumber property separate from the DOM field name.
+const { name = 'inquiryReference' } = Astro.props;
 const siteKey =
   import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAAEpKpAcymsk9J_-A';
 ---
@@ -16,6 +18,9 @@ const siteKey =
     tabindex="-1"
     autocomplete="off"
     inputmode="none"
+    readonly
+    data-lpignore="true"
+    data-1p-ignore
   />
 </div>
 <script is:inline src="/contact-security.js"></script>

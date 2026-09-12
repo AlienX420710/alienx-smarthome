@@ -225,6 +225,11 @@ test('Contact retries preserve input and submit the honeypot after navigation', 
     .first()
     .click();
   await page.locator('#name').fill('Test Person');
+  await expect(page.locator('[name=faxNumber]')).toHaveCount(0);
+  const trap = page.locator('[name=inquiryReference]');
+  await expect(trap).toHaveAttribute('readonly', '');
+  await expect(trap).toHaveAttribute('autocomplete', 'off');
+  await expect(trap).toHaveValue('');
   await page.locator('#email').fill('test@example.test');
   await page.locator('#phone').fill('+44 20 7946 0958');
   await page.locator('#contact-method').selectOption('email');
@@ -242,6 +247,14 @@ test('Contact retries preserve input and submit the honeypot after navigation', 
   expect(submissions[0].faxNumber).toBe('');
   expect(submissions[0].phone).toBe('+44 20 7946 0958');
   expect(submissions[1].website).toBe('reset-token');
+  // Readonly prevents ordinary editing/autofill, not hostile script writes.
+  // Such values must still reach server-side spam rejection, never be cleared.
+  await trap.evaluate((input) => {
+    input.value = 'injected-spam-value';
+  });
+  await page.locator('#submit-button').click();
+  await expect.poll(() => submissions.length).toBe(3);
+  expect(submissions[2].faxNumber).toBe('injected-spam-value');
 });
 
 test('theme commands persist across client navigation and reload', async ({

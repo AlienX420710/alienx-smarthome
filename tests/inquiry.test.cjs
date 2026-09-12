@@ -102,6 +102,19 @@ for (const body of ['null', '[]', 'true', '"string"', '{']) {
     assert.deepEqual(h.counts(), { verifies: 0, emails: 0 });
   });
 }
+test('reported inquiry rejection identifies a populated trap before Turnstile', async () => {
+  const h = harness();
+  const response = await h.send({ ...valid, faxNumber: '+1 202 555 0100' });
+  const body = await response.json();
+  assert.equal(response.status, 403);
+  assert.equal(body.code, 'inquiry-rejected');
+  assert.equal(
+    body.error,
+    'We could not verify this inquiry. Please try again.',
+  );
+  assert.deepEqual(h.counts(), { verifies: 0, emails: 0 });
+});
+
 test('size, origin, content type and honeypot checks precede providers', async () => {
   const h = harness();
   assert.equal(

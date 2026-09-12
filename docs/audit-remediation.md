@@ -144,3 +144,17 @@ to activate the command. No account-setting change is claimed.
 Provider-account records can now be inspected through Resend. Historical delivery
 evidence is separate from a fresh production-form verification of the current
 release; neither provider configuration nor a direct API test proves that full path.
+
+## Hidden-field false rejection
+
+The user reported “We could not verify this inquiry. Please try again.” on the
+production form. At deployed revision 56eb78b that exact message is emitted only
+when the `faxNumber` honeypot is populated, before Turnstile. Autofill is a
+plausible source, not directly observed on the user's device.
+
+The DOM trap now uses a neutral identifier, is read-only, and supplies password
+manager exclusion hints. The client still forwards its value under the existing
+API property, and the server still rejects nonempty traps; nothing is silently
+cleared or bypassed. Browser regressions check the new attributes and ensure
+script-injected trap values still reach the API. A fresh real-device submission
+is required to confirm the user's path is unblocked.
