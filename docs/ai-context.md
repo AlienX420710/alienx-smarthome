@@ -1,9 +1,9 @@
 # AlienX SmartHome — Assistant Context Primer
 
-Read this before making changes. It's written to be usable by any AI
-coding assistant — Claude, ChatGPT/Codex, or otherwise — and intentionally
-contains no tool-specific instructions. Pair it with [ai-audit.md](ai-audit.md) for the
-detailed findings; this file is the shorter "orient yourself fast" version.
+Read [AGENTS.md](../AGENTS.md) and [project-state.md](project-state.md) first.
+This Codex-maintained primer owns architecture and implementation guidance for
+any coding assistant. The canonical register owns current recorded status;
+[ai-audit.md](ai-audit.md) is historical supporting material, not its replacement.
 
 ## Main-only working rule
 
@@ -13,21 +13,9 @@ force-reset `main`. See [release-runbook.md](release-runbook.md) for rollback.
 
 ## Latest recorded verification — 2026-09-12
 
-At revision `dfeffab4c826a45041780769b7472ada099ff22b`, all seven repository
-workflows passed, including 30 unit tests, 92 browser interaction/layout cases,
-48 accessibility/theme cases, and Safari. Lighthouse passed on its second
-attempt, not its first; repeatability remains an improvement item. Production
-reported that exact revision with operational status.
-
-After retrying the Cloudflare build, the maintainer reported that a real test
-email worked. This is owner-confirmed production submission/delivery evidence,
-not an automated live-email test or a new provider-record correlation. It
-supersedes the earlier unknown outcome for that submission only. Account-level
-gate enforcement, alerts, and rollback drills are not proven by this success.
-
-This record describes that revision, not every future commit. The audit's
-29-test count belongs to its older `1fa56cc` snapshot. Recheck current evidence
-before making release claims; no audit-wide completion is claimed.
+The dated runtime and owner-confirmed email evidence now lives in
+[project-state.md](project-state.md#last-recorded-runtime-verification).
+This heading remains for existing links; do not duplicate mutable status here.
 
 ## What this project actually is
 
@@ -153,7 +141,11 @@ blocker and do not substitute a partial local result for successful CI.
   is reserved for this specific site. Don't reuse it elsewhere or
   regenerate it casually.
 
-## Known, self-acknowledged open items (see [ai-audit.md](ai-audit.md) §5)
+## Verification boundaries
+
+Use [the canonical findings register](project-state.md#findings-register) for
+current priorities and closure criteria. The following are architectural limits,
+not a second mutable task list.
 
 - Cloudflare account-level settings (deployment gating, alerting) require
   dashboard access, not code changes.

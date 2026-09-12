@@ -17,7 +17,7 @@ Web engineering, automation, infrastructure, and interactive browser experiences
 
 AlienX SmartHome is an engineering showcase, not a Home Assistant dashboard or a home-control application. The site combines browser experiments, an interactive stack explanation, a public configuration-status endpoint, and a protected project inquiry form.
 
-Only **`main`** is maintained and deployed. [Audit progress](docs/audit-remediation.md) records repairs and verification limits. The [release runbook](docs/release-runbook.md) covers acceptance checks, incident triage, and rollback.
+Only **`main`** is maintained and deployed. Start with the Codex-maintained [project state and findings register](docs/project-state.md); assistants must also read [AGENTS.md](AGENTS.md). [Audit progress](docs/audit-remediation.md) records repair history. The [release runbook](docs/release-runbook.md) covers acceptance checks, incident triage, and rollback.
 
 `npm run deploy` now checks five required CI workflows for the exact current main
 revision before invoking Wrangler. Cloudflare must use this deploy command for

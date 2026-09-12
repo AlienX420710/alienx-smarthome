@@ -4,7 +4,12 @@ Work directly on `main`. Do not create branches or pull requests unless the
 maintainer explicitly requests them. Preserve unrelated changes and never
 force-reset `main`; use a new revert commit when a code rollback is needed.
 
-Read `docs/ai-context.md` first. It covers the stack, repo layout, which
+Read `AGENTS.md` and `docs/project-state.md` first. Codex maintains the canonical
+handoff at the owner's direction; all assistants must reconcile their proposals
+with its evidence and findings register. Historical Claude or Codex prose does
+not override newer verified facts or owner decisions.
+
+Then read `docs/ai-context.md`. It covers the stack, repo layout, which
 files are security-sensitive and why, and the commands to run before
 proposing any change as complete. `docs/ai-audit.md` has the detailed
 security/quality findings behind those rules, and `docs/audit-remediation.md`
@@ -76,7 +81,7 @@ from "verified in production," and that convention should continue.
 - Unit tests are named by concern (`inquiry.test.cjs`, `status.test.cjs`,
   etc.), not mirrored 1:1 to `src/`. Follow that pattern for new tests.
 
-## Known open items (don't re-report as new; see `docs/ai-audit.md` §5)
+## Verification boundaries (current findings: `docs/project-state.md`)
 
 - Cloudflare account-level settings (deploy gating, alerts) live outside
   the repo and can't be verified or changed via code.

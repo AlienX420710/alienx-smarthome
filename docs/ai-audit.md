@@ -1,5 +1,10 @@
 # AlienX SmartHome — Full Audit & Analysis
 
+**Historical reference:** originally produced by Claude; subsequently corrected
+by Codex. Current project authority, status, and acceptance criteria live in
+[project-state.md](project-state.md). Preserve this audit's provenance and
+snapshot evidence; do not treat its conclusions as current release approval.
+
 **Purpose of this document:** a neutral, model-agnostic technical audit of the
 `alienx-smarthome` repository, written so that any AI assistant (Claude,
 ChatGPT, or otherwise) can pick it up and have accurate, verified context
