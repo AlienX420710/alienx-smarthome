@@ -44,12 +44,14 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
       });
 
       if (!result.title) throw new Error(`${route}: missing document title`);
-      if (!['interactive', 'complete'].includes(result.readyState))
+      if (!['interactive', 'complete'].includes(result.readyState)) {
         throw new Error(
           `${route}: document did not reach an interactive state`,
         );
-      if (!result.hasBody || !result.hasMain)
+      }
+      if (!result.hasBody || !result.hasMain) {
         throw new Error(`${route}: missing body/main`);
+      }
       if (result.documentWidth > result.viewportWidth + 1) {
         throw new Error(
           `${route}: horizontal overflow (${result.documentWidth}px > ${result.viewportWidth}px)`,
@@ -62,16 +64,30 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
       }
 
       for (const theme of ['light', 'dark']) {
-        await driver.executeScript((selectedTheme) => {
-          document.documentElement.dataset.alienxTheme = selectedTheme;
-        }, theme);
-        const themeState = await driver.executeScript(() => ({
-          theme: document.documentElement.dataset.alienxTheme,
-          bodyBackground: getComputedStyle(document.body).backgroundColor,
-          bodyColor: getComputedStyle(document.body).color,
-        }));
-        if (themeState.theme !== theme)
-          throw new Error(`${route}: failed to apply ${theme} theme`);
+        const themeState = await driver.executeAsyncScript(
+          (selectedTheme, done) => {
+            const root = document.documentElement;
+            root.setAttribute('data-alienx-theme', selectedTheme);
+
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                const body = document.body;
+                done({
+                  theme: root.getAttribute('data-alienx-theme'),
+                  bodyBackground: getComputedStyle(body).backgroundColor,
+                  bodyColor: getComputedStyle(body).color,
+                });
+              });
+            });
+          },
+          theme,
+        );
+
+        if (themeState.theme !== theme) {
+          throw new Error(
+            `${route}: failed to apply ${theme} theme (found ${String(themeState.theme)})`,
+          );
+        }
         if (!themeState.bodyBackground || !themeState.bodyColor) {
           throw new Error(`${route}: invalid ${theme} computed styles`);
         }
