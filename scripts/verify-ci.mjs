@@ -8,6 +8,7 @@ export const required = [
   'lighthouse.yml',
   'safari.yml',
 ];
+
 export function assessRuns(runs, sha) {
   return required.map((file) => {
     const matches = runs.filter(
@@ -35,60 +36,107 @@ export async function verify() {
   }).trim();
   const buildSha =
     process.env.WORKERS_CI_COMMIT_SHA || process.env.GITHUB_SHA || sha;
-  if (!/^[a-f0-9]{40}$/.test(sha) || buildSha !== sha)
+
+  if (!/^[a-f0-9]{40}$/.test(sha) || buildSha !== sha) {
     throw Error('Build revision differs from checkout');
-  if (process.env.WORKERS_CI_BRANCH && process.env.WORKERS_CI_BRANCH !== 'main')
+  }
+  if (process.env.WORKERS_CI_BRANCH && process.env.WORKERS_CI_BRANCH !== 'main') {
     throw Error('Only main may deploy');
+  }
   if (
     execFileSync('git', ['status', '--porcelain', '--untracked-files=normal'], {
       encoding: 'utf8',
     }).trim()
-  )
+  ) {
     throw Error('Refusing a modified checkout');
+  }
+
+  const token =
+    process.env.GITHUB_TOKEN ||
+    process.env.GH_TOKEN ||
+    process.env.ALIENX_GITHUB_TOKEN ||
+    '';
+
+  if (process.env.WORKERS_CI && !token) {
+    throw Error(
+      'Cloudflare release gate requires GITHUB_TOKEN with read access to repository contents and Actions',
+    );
+  }
+
   const api = 'https://api.github.com/repos/AlienX420710/alienx-smarthome';
+  const headers = {
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'AlienX-release-gate',
+    'X-GitHub-Api-Version': '2022-11-28',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+
   const get = async (path) => {
     const response = await fetch(api + path, {
-      headers: {
-        Accept: 'application/vnd.github+json',
-        'User-Agent': 'AlienX-release-gate',
-      },
+      headers,
       signal: AbortSignal.timeout(15000),
     });
-    if (!response.ok)
-      throw Error(`GitHub verification unavailable: HTTP ${response.status}`);
+
+    if (!response.ok) {
+      const remaining = response.headers.get('x-ratelimit-remaining');
+      const reset = response.headers.get('x-ratelimit-reset');
+      const rate =
+        remaining === null
+          ? ''
+          : `; rate-limit remaining=${remaining}${
+              reset ? ` reset=${new Date(Number(reset) * 1000).toISOString()}` : ''
+            }`;
+      throw Error(
+        `GitHub verification unavailable: HTTP ${response.status}${rate}`,
+      );
+    }
+
     return response.json();
   };
+
   const current = async () => {
-    if ((await get('/git/ref/heads/main')).object.sha !== sha)
+    if ((await get('/git/ref/heads/main')).object.sha !== sha) {
       throw Error('A newer main revision exists; refusing stale deployment');
+    }
   };
+
   await current();
+
   const deadline = Date.now() + 12 * 60 * 1000;
   while (Date.now() < deadline) {
     const payload = await get(
       `/actions/runs?head_sha=${sha}&event=push&per_page=100`,
     );
-    if (!Array.isArray(payload.workflow_runs) || payload.total_count > 100)
+
+    if (!Array.isArray(payload.workflow_runs) || payload.total_count > 100) {
       throw Error('Incomplete workflow evidence');
+    }
+
     const checks = assessRuns(payload.workflow_runs, sha);
     console.log(
       checks.map((check) => `${check.file}: ${check.state}`).join('; '),
     );
+
     if (
       checks.some(
         (check) => !['missing', 'pending', 'success'].includes(check.state),
       )
-    )
+    ) {
       throw Error('Required CI failed; deployment blocked');
+    }
+
     if (checks.every((check) => check.state === 'success')) {
       await current();
       console.log(`CI approved main ${sha}`);
       return;
     }
+
     await new Promise((resolve) => setTimeout(resolve, 30000));
   }
+
   throw Error('Timed out waiting for required CI; deployment blocked');
 }
+
 if (
   process.argv[1] &&
   import.meta.url === pathToFileURL(process.argv[1]).href
