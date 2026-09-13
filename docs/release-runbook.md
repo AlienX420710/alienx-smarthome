@@ -46,50 +46,51 @@ Turnstile challenge succeeds, or that email reaches an inbox. Perform one
 explicitly approved real inquiry and correlate its request/email IDs with the
 provider dashboard. Do not put real inquiry contents or credentials in CI logs.
 
-## Account-owner actions still required
+## Deployment gate
 
-### Activate the prepared deployment gate
+Cloudflare Workers Builds remains the deployment executor. Keep the production
+branch `main`, the build command `npm run build`, and the production deploy command
+`npm run deploy`.
 
-In Cloudflare, open Workers & Pages → alienx-smarthome → Settings → Build.
-Keep the production branch `main` and the build command `npm run build`.
-Set the production deploy command to **`npm run deploy`**. Cloudflare's default
-`npx wrangler deploy` bypasses the repository's new gate.
+The deploy command runs `scripts/verify-ci.mjs` before Wrangler. The verifier no
+longer calls the GitHub REST API from Cloudflare and does not require a GitHub PAT.
+Instead, `.github/workflows/release-approval.yml` runs inside GitHub after any of
+the five required workflows completes. With GitHub's short-lived `GITHUB_TOKEN`,
+that workflow checks Quality, Responsive, Accessibility, Lighthouse, and Safari
+for the exact current `main` SHA. It publishes one lightweight Git tag ref:
 
-That script requires successful Quality, Responsive, Accessibility, Lighthouse,
-and Safari push workflows for the exact checkout SHA. It refuses dirty checkouts,
-non-main Workers builds, stale revisions, failed checks, incomplete API evidence,
-and GitHub API errors. It waits up to twelve minutes for pending checks. The
-public GitHub API requires no additional token for this public repository; a
-rate-limit response blocks deployment rather than bypassing verification.
+- `alienx-ci-approved-main` when all five exact-SHA push workflows succeeded.
+- `alienx-ci-rejected-main` when the latest exact-SHA evidence contains a failure.
 
-Cloudflare supplies `WORKERS_CI_COMMIT_SHA` and `WORKERS_CI_BRANCH`. The gate
-compares that revision with Git HEAD and rechecks main before allowing Wrangler.
-Production smoke and integrity remain post-deployment monitoring, avoiding a
-circular dependency on a deployment that has not happened yet.
+If some checks are still missing or pending, no release ref is published.
+Obsolete workflow results cannot move either release ref because the publisher
+first confirms that its SHA is still current `main`.
 
-This gate is prepared in code, **not confirmed active in account settings**.
-An administrator can still bypass it by changing the deploy command or deploying
-manually. Restrict deployment credentials and settings access to trusted operators.
-The main check reduces stale releases but is not an atomic deployment lock.
-After saving the setting, retry a build and confirm its log contains
-`CI approved main <sha>` before Wrangler publishes. Test a failing required check
-in an isolated non-production environment before claiming rejection is proven
-at account level; do not intentionally break production main for that exercise.
+Cloudflare verifies those refs using normal Git smart-HTTP (`git ls-remote`) and
+still checks that its checkout SHA matches the Workers build SHA, that the build
+branch is `main`, that the checkout is clean, and that the same SHA remains the
+current `main` immediately before deployment. A rejection ref blocks immediately;
+missing approval waits up to twelve minutes and then fails closed. A newer `main`
+revision blocks a stale deployment.
 
-Reference: [Cloudflare build/deploy commands and injected variables](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/).
+This removes the shared unauthenticated GitHub REST rate-limit dependency that
+previously produced HTTP 403 failures in Cloudflare while preserving exact-SHA,
+fail-closed promotion. The GitHub release-approval workflow needs `actions: read`
+and `contents: write` only so its ephemeral repository token can read workflow
+evidence and move the two dedicated release refs. No long-lived GitHub token is
+stored in Cloudflare.
 
-- Activate and verify release gating so Cloudflare cannot promote a failing main revision.
-  Repository workflows alone do not enforce this against an independent
-  Cloudflare Git integration. Preserve the requested main-only workflow.
-- Configure GitHub/Cloudflare failure notifications and confirm a monitored
-  recipient. A scheduled job without a recipient is not an alerting system.
+After any gate change, inspect the GitHub Release Approval run and the Cloudflare
+build log. A successful release should show `CI approved main <sha>` immediately
+before Wrangler publishes. Do not weaken or bypass this gate to make a failed
+release green.
+
+- Verify failure notifications reach a monitored recipient. A scheduled job
+  without a recipient is not an alerting system.
 - Verify Turnstile production hostname configuration, Resend sender/domain
   authentication, and actual delivery using the respective dashboards.
 - Check that rate-limit namespace `2107100911` does not collide with another
   Worker owned by this account. It is this site's documented namespace.
-
-These settings require account administration/provider access not supplied to
-the repository connection. They have not been changed or declared verified.
 
 ## Rollback
 
