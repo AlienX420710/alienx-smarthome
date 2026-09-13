@@ -88,12 +88,19 @@ audit finding. Reconcile newly revisited baseline items before claiming closure.
 | AX-002 | P2 / verified at d8bf0d3 | Former integrity workflow checked unrelated live code immediately; candidate and exact-revision production checks are now separated and verified. | Candidate checks and live monitoring are clearly separated; release evidence names and verifies the deployed SHA.                             |
 | AX-003 | P2 / verified at d8bf0d3 | Fixed three-sample Lighthouse measurement implemented and reverified; see dated evidence above and below.                                         | Fixed sample count and documented aggregation, all reports retained, unchanged thresholds; inspect variability rather than rerun until green. |
 | AX-004 | P2 / open                | Three manual CSP hashes in `astro.config.mjs` have no documented source mapping.                                                                  | Map allowances to exact emitted bytes or prove an allowance obsolete; built-browser verification shows no required script blocked.            |
-| AX-005 | P1 / implementation changed, verification pending | The release gate no longer polls the unauthenticated GitHub REST API from Cloudflare. GitHub now publishes exact-SHA approved/rejected refs after the five required workflows, and Cloudflare verifies those refs over Git before Wrangler deploys. | Required workflows create correct approval/rejection refs, the Cloudflare build consumes the exact ref for the same SHA, failed evidence blocks promotion, and successful evidence deploys that revision. |
+| AX-005 | P1 / pending             | Exact-SHA approval refs replace Cloudflare-side GitHub REST polling; current architecture still needs release verification.                       | Prove required workflows publish approval/rejection refs and Cloudflare consumes the same SHA fail-closed.                                    |
 | AX-006 | P2 / owner-needed        | Alert recipients and rollback recovery remain unverified.                                                                                         | Confirm monitored failure notification receipt and record an authorized rollback drill with revision/version evidence.                        |
 | AX-007 | P2 / open                | Historical secret scan is not recorded.                                                                                                           | Full-history scan with tool/version, scope, date, and sanitized outcome; any confirmed exposed secrets rotated by owner.                      |
 | AX-008 | P2 / owner-needed        | Automated accessibility and an owner email test do not establish assistive-technology coverage.                                                   | Record actual screen-reader, keyboard, and touch-device test scope and outcomes; resolve resulting defects.                                   |
 | AX-009 | P3 / open                | Remaining style ownership/dead-CSS cleanup is not closed by formatting.                                                                           | Identify specific redundant rules/components and verify affected routes/themes after scoped cleanup.                                          |
 | AX-010 | P3 / owner-needed        | Work/About need authentic owner-supplied material.                                                                                                | Owner-approved factual content; no invented clients, results, or biography.                                                                   |
+
+AX-005 now uses GitHub's short-lived workflow token to publish the dedicated
+`alienx-ci-approved-main` or `alienx-ci-rejected-main` ref after the five
+required push workflows. Cloudflare checks those refs with `git ls-remote`
+before Wrangler deploys; no long-lived GitHub token is stored in Cloudflare.
+Implementation is not marked verified until successful exact-SHA promotion and
+failed-evidence rejection are both observed.
 
 The previous honeypot rejection was addressed in `dfeffab4`: the neutral,
 read-only DOM trap still forwards injected values to the server for rejection.
