@@ -3,9 +3,48 @@
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
+
 .alienx-exhibit {
   overflow: hidden;
 }
+
+/*
+ * EXPERIENCE TOUCH POLICY
+ *
+ * Interactive surfaces own the pointer/touch gesture. Normal page content
+ * outside these surfaces remains scrollable.
+ *
+ * Do not change these surfaces back to touch-action: pan-y. Their vertical
+ * pointer movement is part of the interaction, so allowing pan-y lets mobile
+ * browsers steal the gesture and scroll the page instead.
+ */
+[data-entrance-art],
+[data-entrance-art] canvas,
+#pointer-field .pointer-lab,
+#pointer-field .pointer-lab canvas,
+#physics .physics-stage,
+#physics .physics-stage canvas,
+#kinetic-type .type-stage,
+#kinetic-type [data-kinetic],
+#light-field .alienx-light-stage,
+#light-field .alienx-light-stage canvas,
+#spatial-ui .alienx-spatial-stage,
+#spatial-ui .alienx-space,
+#signal-trace .alienx-signal-stage,
+#signal-trace .alienx-signal-stage canvas {
+  touch-action: none;
+  overscroll-behavior: contain;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.exhibit canvas {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
 .alienx-light-stage,
 .alienx-spatial-stage,
 .alienx-signal-stage {
@@ -20,18 +59,25 @@
     rgba(30, 55, 95, 0.28),
     rgba(4, 7, 13, 0.96) 70%
   );
-  touch-action: pan-y;
-  overscroll-behavior: auto;
+  touch-action: none;
+  overscroll-behavior: contain;
   -webkit-user-select: none;
   user-select: none;
+  -webkit-touch-callout: none;
 }
+
 .alienx-light-stage canvas,
 .alienx-signal-stage canvas {
   display: block;
   width: 100%;
   height: 280px;
-  touch-action: pan-y;
+  touch-action: none;
+  overscroll-behavior: contain;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
+
 .alienx-light-stage > span,
 .alienx-spatial-stage > span,
 .alienx-signal-stage > span {
@@ -47,6 +93,7 @@
   color: rgba(180, 205, 235, 0.72);
   pointer-events: none;
 }
+
 .alienx-spatial-stage {
   perspective: 900px;
   display: grid;
@@ -56,14 +103,20 @@
     rgba(44, 73, 122, 0.24),
     rgba(3, 6, 12, 0.98) 72%
   );
+  touch-action: none;
+  overscroll-behavior: contain;
 }
+
 .alienx-space {
   width: min(78%, 420px);
   height: 210px;
   position: relative;
   transform-style: preserve-3d;
   transition: transform 90ms linear;
+  touch-action: none;
+  pointer-events: none;
 }
+
 .alienx-space-plane {
   position: absolute;
   inset: 20% 10%;
@@ -83,21 +136,26 @@
   letter-spacing: 0.16em;
   box-shadow: 0 0 30px rgba(40, 90, 160, 0.12);
   backface-visibility: hidden;
+  pointer-events: none;
 }
+
 .alienx-space-plane.back {
   transform: translateZ(-70px) scale(0.88);
   opacity: 0.36;
 }
+
 .alienx-space-plane.mid {
   transform: translateZ(0);
   opacity: 0.6;
 }
+
 .alienx-space-plane.front {
   transform: translateZ(75px);
   color: rgba(57, 255, 90, 0.8);
   border-color: rgba(57, 255, 90, 0.5);
   box-shadow: 0 0 35px rgba(57, 255, 90, 0.12);
 }
+
 .alienx-space-plane.front strong {
   font:
     800 clamp(25px, 5vw, 42px) / 1 system-ui,
@@ -105,47 +163,68 @@
   letter-spacing: 0.08em;
   color: white;
 }
+
 .alienx-space-plane.front span {
   margin-top: 0.55rem;
   color: rgba(57, 255, 90, 0.7);
 }
+
 .alienx-signal-stage {
   margin-top: 0;
   min-height: 330px;
+  touch-action: none;
+  overscroll-behavior: contain;
 }
+
 .alienx-signal-stage canvas {
   height: 330px;
+  touch-action: none;
+  overscroll-behavior: contain;
 }
+
 .alienx-signal-stage.is-active {
   border-color: rgba(57, 255, 90, 0.5);
   box-shadow: 0 0 35px rgba(57, 255, 90, 0.08) inset;
 }
-[data-entrance-art],
-[data-entrance-art] canvas,
-#pointer-field .pointer-lab,
-#pointer-field .pointer-lab canvas,
+
+/* Physics and drawing require strict gesture ownership. */
 #physics .physics-stage,
 #physics .physics-stage canvas,
-#kinetic-type .type-stage,
-#kinetic-type [data-kinetic],
-#light-field .alienx-light-stage,
-#spatial-ui .alienx-spatial-stage,
-#signal-trace .alienx-signal-stage {
-  touch-action: pan-y;
-  overscroll-behavior: auto;
-  -webkit-user-select: none;
-  user-select: none;
+#signal-trace .alienx-signal-stage,
+#signal-trace .alienx-signal-stage canvas {
+  touch-action: none;
+  overscroll-behavior: none;
 }
+
 @media (max-width: 800px) {
   .alienx-exhibit-pair {
     display: grid;
   }
+
   .alienx-signal-stage,
   .alienx-signal-stage canvas {
     min-height: 260px;
     height: 260px;
   }
+
+  [data-entrance-art],
+  [data-entrance-art] canvas,
+  #pointer-field .pointer-lab,
+  #pointer-field .pointer-lab canvas,
+  #physics .physics-stage,
+  #physics .physics-stage canvas,
+  #kinetic-type .type-stage,
+  #kinetic-type [data-kinetic],
+  #light-field .alienx-light-stage,
+  #light-field .alienx-light-stage canvas,
+  #spatial-ui .alienx-spatial-stage,
+  #signal-trace .alienx-signal-stage,
+  #signal-trace .alienx-signal-stage canvas {
+    touch-action: none;
+    overscroll-behavior: contain;
+  }
 }
+
 @media (prefers-reduced-motion: reduce) {
   .alienx-space {
     transition: none;
