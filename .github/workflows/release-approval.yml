@@ -1,0 +1,40 @@
+name: AlienX Release Approval
+
+on:
+  workflow_run:
+    workflows:
+      - AlienX Quality
+      - AlienX Responsive Compatibility
+      - AlienX Accessibility & Theme Compatibility
+      - AlienX Lighthouse Quality
+      - AlienX Safari Compatibility
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: release-approval-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+
+jobs:
+  approval:
+    name: Publish exact-revision release evidence
+    if: >-
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+
+      - name: Publish release approval state
+        env:
+          APPROVAL_SHA: ${{ github.event.workflow_run.head_sha }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/publish-ci-approval.mjs

@@ -1,5 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+
 test('release gate requires exact main push evidence and the latest run', async () => {
   const { required, assessRuns } = await import('../scripts/verify-ci.mjs');
   const runs = required.map((file, id) => ({
@@ -34,4 +35,18 @@ test('release gate requires exact main push evidence and the latest run', async 
     )[0].state,
     'pending',
   );
+});
+
+test('release gate parses only exact Git refs', async () => {
+  const { approvalRefs, parseRemoteRefs } = await import('../scripts/verify-ci.mjs');
+  const approved = 'a'.repeat(40);
+  const rejected = 'b'.repeat(40);
+  const refs = parseRemoteRefs(
+    `${approved}\t${approvalRefs.approved}\n${rejected}\t${approvalRefs.rejected}\n`,
+  );
+
+  assert.equal(refs.get(approvalRefs.approved), approved);
+  assert.equal(refs.get(approvalRefs.rejected), rejected);
+  assert.equal(parseRemoteRefs('').size, 0);
+  assert.equal(parseRemoteRefs(`not-a-sha\t${approvalRefs.approved}\n`).size, 0);
 });

@@ -120,75 +120,85 @@ There is no shared `src/layouts/` directory. Some legacy page overrides remain i
 | Responsive            | Push / PR; manual               | Candidate security/SEO contract; 84 route/viewport combinations plus interaction regressions           |
 | Accessibility & Theme | Push / PR; manual               | Built local preview: 48 route/theme/OS cases, axe WCAG checks, Lighthouse accessibility ≥95            |
 | Lighthouse            | Push / PR; manual               | Built local preview: accessibility, best practices, SEO ≥95; performance ≥85                           |
-| Safari                | Push / PR; manual               | Built local preview in Safari WebDriver                                                               |
-| Production Smoke      | Push / schedule / manual        | Exact deployed revision on push; scheduled live service and inquiry/configuration details              |
-| Production Integrity  | Push / 6-hour schedule / manual | Exact deployed revision on push, then security-header and SEO contract on both production hostnames    |
+| Safari                | Push / PR; manual               | Built local preview in actual macOS Safari WebDriver                                                   |
+| Production Integrity  | Push, six-hour schedule; manual | Both live hosts: separate frame/resource CSP, headers, redirects, SEO; pushes require the deployed SHA |
+| Production Smoke      | Push, hourly; manual            | Live host/API health; pushes also require the exact Git revision                                       |
+| Browser Diagnostics   | Manual only                     | Isolated local WebKit loads, CSS/JS/header comparisons, screenshots and traces; not a release gate     |
+| CodeQL                | GitHub security analysis        | JavaScript/TypeScript and workflow analysis                                                            |
+| Workers Build         | Cloudflare Git integration      | Production build and deployment                                                                        |
 
-For browser workflows, one preview server is reused within that workflow only. Test files are committed; CI does not generate test source dynamically. The responsive matrix records runtime errors, document overflow, navigation containment, hit-target sizes, heading visibility, modal focus behavior, reduced-motion semantics, and key interaction state. Production checks run after deployment; they do not replace candidate verification.
+The five pre-deployment gates remain Quality, Responsive, Accessibility,
+Lighthouse, and Safari. Lighthouse collects three fixed samples per route:
+median performance must meet 85, while every sample must meet 95 for the other
+categories. Measurement errors fail closed; reports retain every sample.
 
-`npm run check` runs unit tests, Astro/TypeScript checks, a production build, and a Wrangler dry run. Quality additionally checks formatting and high-severity npm advisories.
+Browser Diagnostics is adapted from Cleaning by Cassi's manual workflow. It
+uses an unconfigured local preview, never sends inquiries, and deliberately
+alters isolated browser responses to investigate loading failures. Its results
+do not replace production security, Safari, or accessibility acceptance.
+
+GitHub CodeQL is separate security analysis. Cloudflare Builds is a separate deployment integration: neither a passing CodeQL run nor a healthy old deployment proves a new release succeeded. Independent deployment gating and notification recipients still require account-owner configuration. See the runbook before declaring a release accepted.
 
 ## 🚀 Local development
 
-Requirements: Node **22+**, npm, and local copies of required secrets. Copy the examples; never commit the filled files.
+Use **Node 22.19+** (or a newer supported LTS) and npm. CI uses Node 22; verify lockfile changes with a clean install, not only an existing `node_modules` tree.
 
 ```bash
-cp .dev.vars.example .dev.vars
-cp .env.example .env
 npm ci
 npm run dev
 ```
 
-Before pushing application changes:
+Open [localhost:4321](http://localhost:4321). Static pages and mocked tests need no live provider secrets. Without local bindings, `/api/status` intentionally reports degraded configuration with HTTP 503.
+
+For an explicitly approved real integration test, copy `.dev.vars.example` to `.dev.vars` and `.env.example` to `.env`. Supply dedicated test credentials and a matching public `PUBLIC_TURNSTILE_SITE_KEY`, then configure the hostname policy consistently. The public key is injected at build time; an empty value preserves the existing production widget. Never put secrets in `PUBLIC_*` variables or use production mail credentials for automated tests. Cloudflare production secrets are `TURNSTILE_SECRET` and `RESEND_API_KEY`; `TURNSTILE_HOSTNAMES` is a non-secret Worker variable.
+
+| Command                                   | Purpose                                                       |
+| :---------------------------------------- | :------------------------------------------------------------ |
+| `npm run dev`                             | Generate optimized assets and start Astro                     |
+| `npm test`                                | Mocked handlers, status contracts, and preference regressions |
+| `npm run typecheck`                       | Astro diagnostics and TypeScript                              |
+| `npm run build`                           | Validate/optimize images and build the Worker site            |
+| `npm run check`                           | Tests, type checks, build, and Worker deploy dry run          |
+| `npm run audit`                           | Audit the full dependency tree, including test tools          |
+| `npm run preview`                         | Build and start the local Cloudflare runtime                  |
+| `npm run test:browser`                    | Responsive and interactive Chromium checks                    |
+| `npm run test:a11y`                       | Theme/OS and accessibility matrix                             |
+| `npm run test:lighthouse`                 | Existing Lighthouse score gates against local preview         |
+| `npm run format` / `npm run format:check` | Format maintained source / check formatting                   |
+| `npm run cf-typegen`                      | Regenerate and scope Worker declarations                      |
+| `npm run deploy`                          | Deploy through configured Wrangler; follow the runbook first  |
+
+Browser checks require a running preview on port 4321:
 
 ```bash
-npm run format:check
-npm run check
-npm run audit
-```
-
-Browser suites are separate from `npm run check`:
-
-```bash
+npx playwright install chromium
 npm run preview
+# In another terminal:
 npm run test:browser
 npm run test:a11y
 ```
 
-Safari uses `tests/safari.cjs` on macOS with Safari WebDriver enabled. Lighthouse uses the built preview and the committed configuration. See [docs/release-runbook.md](docs/release-runbook.md) for release acceptance and rollback.
+Lighthouse needs Chrome/Chromium. `node tests/safari.cjs` needs macOS and enabled Safari WebDriver. Browser tests do not replace physical-device, screen-reader, or actual provider-delivery verification.
 
-## 🔐 Deployment and runtime configuration
+## 🔧 Maintenance and operations
 
-Cloudflare Workers Builds is expected to build `main` with `npm run build` and deploy with `npm run deploy`. The deploy command verifies the exact current revision's required CI evidence before running Wrangler. Keep production bindings and secrets in Cloudflare, not in GitHub or source control.
+Start with the [canonical project state](docs/project-state.md) for dated
+verification and outstanding findings. The [release runbook](docs/release-runbook.md)
+covers promotion, incident triage, and rollback. Historical audits are evidence
+for their recorded revisions, not blanket claims about current main.
 
-Required runtime configuration includes:
+For focused WebKit loading diagnostics, run the **AlienX Browser Diagnostics**
+workflow manually from GitHub Actions. Download its `webkit-diagnostics`
+artifact for per-mode screenshots, traces, and `summary.json`.
 
-- `TURNSTILE_SECRET`
-- `TURNSTILE_HOSTNAMES`
-- `RESEND_API_KEY`
-- `RESEND_FROM`
-- `CONTACT_EMAIL`
-- `IMAGES`
-- `SESSION`
-- `INQUIRY_RATE_LIMITER`
+---
 
-The Worker also exposes `/api/status`, which reports configured integration state and the deployed Git revision. It does not expose secret values.
+<div align="center">
 
-## 🧪 Evidence and project status
+### AlienX SmartHome
 
-The durable status record is [docs/project-state.md](docs/project-state.md). Historical repair detail lives in [docs/audit-remediation.md](docs/audit-remediation.md). Assistants should not treat an older audit paragraph, workflow badge, or memory as stronger evidence than current code plus revision-specific verification.
+_Technology built to do something._
 
-A successful workflow run proves that workflow passed at that revision. A successful deployment proves Cloudflare accepted a deployment. A healthy `/api/status` revision proves which revision was observed live. Provider acceptance and owner-confirmed inbox delivery remain separate evidence levels.
+[Website](https://alienxsmarthome.com) · [Explore](https://alienxsmarthome.com/experience/) · [Start a project](https://alienxsmarthome.com/contact/)
 
-## 📚 Documentation
-
-- [Project state and findings](docs/project-state.md)
-- [Assistant context](docs/ai-context.md)
-- [Audit remediation history](docs/audit-remediation.md)
-- [Release / rollback runbook](docs/release-runbook.md)
-- [Security policy](SECURITY.md)
-- [Historical AI audit](docs/ai-audit.md)
-
-## 📜 License
-
-This repository is currently all-rights-reserved unless a file says otherwise. Do not assume tutorial/demo code from external sources is licensed for reuse; review its license before importing anything.
+</div>
