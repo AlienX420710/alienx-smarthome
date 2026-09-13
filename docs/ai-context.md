@@ -38,7 +38,7 @@ concrete reasons:
 
 ## Tech stack
 
-- **Framework:** Astro 7.3.1, SSR mode, TypeScript 5.9.3
+- **Framework:** Astro 7.3.2, SSR mode, TypeScript 6.0.3
 - **Deploy target:** Cloudflare Workers via `@astrojs/cloudflare`
 - **Bindings:** `ASSETS` (static files), `IMAGES` (Cloudflare Images),
   `SESSION` (KV), `INQUIRY_RATE_LIMITER` (Rate Limiting API)

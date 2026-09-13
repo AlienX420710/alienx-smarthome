@@ -10,7 +10,7 @@ module.exports = {
         'http://127.0.0.1:4321/about/',
         'http://127.0.0.1:4321/contact/',
       ],
-      numberOfRuns: 1,
+      numberOfRuns: 3,
       settings: {
         onlyCategories: [
           'accessibility',

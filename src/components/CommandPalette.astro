@@ -8,7 +8,8 @@
   <div class="palette__backdrop" data-palette-close></div>
   <section class="palette__panel">
     <div class="palette__top">
-      <span id="palette-title">ALIENX COMMAND</span><kbd>ESC</kbd>
+      <span id="palette-title">ALIENX COMMAND</span>
+      <kbd>ESC</kbd>
     </div>
     <input
       id="palette-input"
@@ -24,8 +25,7 @@
       role="listbox"
       aria-label="Command results"
       aria-live="polite"
-    >
-    </div>
+    ></div>
     <div class="palette__hint" id="palette-hint">
       Press <kbd>Cmd K</kbd> / <kbd>Ctrl K</kbd> anywhere · arrows to navigate ·
       Enter to run
@@ -347,8 +347,7 @@
         keywords: 'inspect page document url title performance',
         run: () => {
           const n = performance.getEntriesByType('navigation')[0] as
-            | PerformanceNavigationTiming
-            | undefined;
+            PerformanceNavigationTiming | undefined;
           overlay(
             'INSPECT // PAGE',
             `Path: ${location.pathname}\nTitle: ${document.title}\nViewport: ${innerWidth} × ${innerHeight}\nDevice pixel ratio: ${devicePixelRatio}\nNavigation: ${n ? Math.round(n.duration) + ' ms' : 'n/a'}\nOnline: ${navigator.onLine ? 'yes' : 'no'}`,

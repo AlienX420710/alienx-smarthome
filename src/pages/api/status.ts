@@ -28,7 +28,7 @@ export const GET: APIRoute = async ({ request }) => {
   };
   const turnstileConfigured = Boolean(
     bindings.TURNSTILE_SECRET &&
-      bindings.TURNSTILE_HOSTNAMES?.split(',').some((host) => host.trim()),
+    bindings.TURNSTILE_HOSTNAMES?.split(',').some((host) => host.trim()),
   );
 
   const checks: Record<string, Check> = {

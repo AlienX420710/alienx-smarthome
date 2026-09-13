@@ -18,7 +18,11 @@ import Footer from '../components/Footer.astro';
       <section class="hero" aria-labelledby="status-title">
         <div class="hero-copy">
           <p class="eyebrow">ALIENX // SYSTEM STATUS</p>
-          <h1 id="status-title">Infrastructure,<br /><span>visible.</span></h1>
+          <h1 id="status-title">
+            Infrastructure,
+            <br />
+            <span>visible.</span>
+          </h1>
           <p class="lede">
             A live view of the production systems behind AlienX SmartHome.
           </p>
@@ -26,7 +30,10 @@ import Footer from '../components/Footer.astro';
         <div class="core" aria-hidden="true">
           <div class="core-orbit orbit-one"></div>
           <div class="core-orbit orbit-two"></div>
-          <div class="core-ring"><i></i><i></i></div>
+          <div class="core-ring">
+            <i></i>
+            <i></i>
+          </div>
           <div class="core-signal"></div>
         </div>
       </section>
@@ -50,11 +57,17 @@ import Footer from '../components/Footer.astro';
         <div class="signal-line" aria-hidden="true">
           <span id="signal-progress"></span>
         </div>
-        <div class="checks" id="checks" aria-live="polite" aria-busy="true">
-        </div>
+        <div
+          class="checks"
+          id="checks"
+          aria-live="polite"
+          aria-busy="true"
+        ></div>
         <div class="panel-meta">
           <span id="updated">Establishing live signal…</span>
-          <button id="refresh" type="button">Refresh <kbd>R</kbd></button>
+          <button id="refresh" type="button">
+            Refresh <kbd>R</kbd>
+          </button>
         </div>
       </section>
 
@@ -65,8 +78,8 @@ import Footer from '../components/Footer.astro';
         </div>
         <div class="explanation">
           <p>
-            <strong>Operational</strong> means the production Worker answered the
-            live check.
+            <strong>Operational</strong> means the production Worker answered
+            the live check.
           </p>
           <p>
             <strong>Configured</strong> means a required integration is present.
@@ -81,9 +94,18 @@ import Footer from '../components/Footer.astro';
       </section>
 
       <section class="runtime" aria-label="Runtime details">
-        <div><span>RUNTIME</span><strong>Cloudflare Workers</strong></div>
-        <div><span>EDGE</span><strong>Cloudflare</strong></div>
-        <div><span>MONITORING</span><strong>Automated smoke tests</strong></div>
+        <div>
+          <span>RUNTIME</span>
+          <strong>Cloudflare Workers</strong>
+        </div>
+        <div>
+          <span>EDGE</span>
+          <strong>Cloudflare</strong>
+        </div>
+        <div>
+          <span>MONITORING</span>
+          <strong>Automated smoke tests</strong>
+        </div>
       </section>
     </main>
     <Footer />

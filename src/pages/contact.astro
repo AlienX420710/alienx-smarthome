@@ -26,24 +26,32 @@ import { SITE_TITLE } from '../consts';
             build. Give us enough context to make the first conversation useful.
           </p>
           <div class="signal" aria-label="Inquiry process">
-            <span>01</span><b>Tell us</b><i></i><span>02</span><b>We respond</b
-            ><i></i><span>03</span><b>Explore it</b>
+            <span>01</span>
+            <b>Tell us</b>
+            <i></i>
+            <span>02</span>
+            <b>We respond</b>
+            <i></i>
+            <span>03</span>
+            <b>Explore it</b>
           </div>
         </div>
 
         <form id="inquiry-form" method="post" action="/api/inquiry" novalidate>
-          <noscript
-            ><p>
+          <noscript>
+            <p>
               JavaScript is required for security verification. You can also
               email alienx@alienxsmarthome.com.
-            </p></noscript
-          >
+            </p>
+          </noscript>
           <fieldset>
             <legend>Contact</legend>
             <div class="field-grid">
               <div class="field">
-                <label for="name">Name <span aria-hidden="true">*</span></label
-                ><input
+                <label for="name">
+                  Name <span aria-hidden="true">*</span>
+                </label>
+                <input
                   id="name"
                   name="name"
                   type="text"
@@ -51,24 +59,28 @@ import { SITE_TITLE } from '../consts';
                   minlength="2"
                   maxlength="100"
                   required
-                /><p class="error" data-error="name" role="alert"></p>
+                />
+                <p class="error" data-error="name" role="alert"></p>
               </div>
               <div class="field">
-                <label for="email"
-                  >Email <span aria-hidden="true">*</span></label
-                ><input
+                <label for="email">
+                  Email <span aria-hidden="true">*</span>
+                </label>
+                <input
                   id="email"
                   name="email"
                   type="email"
                   autocomplete="email"
                   maxlength="254"
                   required
-                /><p class="error" data-error="email" role="alert"></p>
+                />
+                <p class="error" data-error="email" role="alert"></p>
               </div>
             </div>
             <div class="field-grid">
               <div class="field">
-                <label for="phone">Phone</label><input
+                <label for="phone">Phone</label>
+                <input
                   id="phone"
                   name="phone"
                   type="tel"
@@ -76,149 +88,151 @@ import { SITE_TITLE } from '../consts';
                   inputmode="tel"
                   maxlength="30"
                   placeholder="(555) 555-5555"
-                /><p class="hint">Required if you prefer phone or text.</p><p
-                  class="error"
-                  data-error="phone"
-                  role="alert"
-                >
-                </p>
+                />
+                <p class="hint">Required if you prefer phone or text.</p>
+                <p class="error" data-error="phone" role="alert"></p>
               </div>
               <div class="field">
-                <label for="company">Company / business</label><input
+                <label for="company">Company / business</label>
+                <input
                   id="company"
                   name="company"
                   type="text"
                   autocomplete="organization"
                   maxlength="120"
-                /><p class="error" data-error="company" role="alert"></p>
+                />
+                <p class="error" data-error="company" role="alert"></p>
               </div>
             </div>
             <div class="field-grid">
               <div class="field">
-                <label for="contact-method"
-                  >Best way to contact you <span aria-hidden="true">*</span
-                  ></label
-                ><select id="contact-method" name="contactMethod" required
-                  ><option value="">Choose one</option><option value="email"
-                    >Email</option
-                  ><option value="phone">Phone call</option><option value="text"
-                    >Text message</option
-                  ><option value="either">Email or phone</option></select
-                ><p class="error" data-error="contactMethod" role="alert"></p>
+                <label for="contact-method">
+                  Best way to contact you <span aria-hidden="true">*</span>
+                </label>
+                <select id="contact-method" name="contactMethod" required>
+                  <option value="">Choose one</option>
+                  <option value="email">Email</option>
+                  <option value="phone">Phone call</option>
+                  <option value="text">Text message</option>
+                  <option value="either">Email or phone</option>
+                </select>
+                <p class="error" data-error="contactMethod" role="alert"></p>
               </div>
               <div class="field">
-                <label for="contact-time">Best time to contact you</label
-                ><select id="contact-time" name="contactTime"
-                  ><option value="">No preference</option><option
-                    value="morning">Morning</option
-                  ><option value="afternoon">Afternoon</option><option
-                    value="evening">Evening</option
-                  ><option value="anytime">Anytime</option></select
-                ><p class="error" data-error="contactTime" role="alert"></p>
+                <label for="contact-time">Best time to contact you</label>
+                <select id="contact-time" name="contactTime">
+                  <option value="">No preference</option>
+                  <option value="morning">Morning</option>
+                  <option value="afternoon">Afternoon</option>
+                  <option value="evening">Evening</option>
+                  <option value="anytime">Anytime</option>
+                </select>
+                <p class="error" data-error="contactTime" role="alert"></p>
               </div>
             </div>
             <div class="field">
-              <label for="timezone">Time zone</label><select
-                id="timezone"
-                name="timezone"
-                ><option value="">No preference</option><option value="Eastern"
-                  >Eastern</option
-                ><option value="Central">Central</option><option
-                  value="Mountain">Mountain</option
-                ><option value="Pacific">Pacific</option><option value="Alaska"
-                  >Alaska</option
-                ><option value="Hawaii">Hawaii</option><option value="Other"
-                  >Other / outside the U.S.</option
-                ></select
-              >
+              <label for="timezone">Time zone</label>
+              <select id="timezone" name="timezone">
+                <option value="">No preference</option>
+                <option value="Eastern">Eastern</option>
+                <option value="Central">Central</option>
+                <option value="Mountain">Mountain</option>
+                <option value="Pacific">Pacific</option>
+                <option value="Alaska">Alaska</option>
+                <option value="Hawaii">Hawaii</option>
+                <option value="Other">Other / outside the U.S.</option>
+              </select>
             </div>
           </fieldset>
 
           <fieldset>
             <legend>Project</legend>
             <div class="field">
-              <label for="project-type"
-                >What are you interested in? <span aria-hidden="true">*</span
-                ></label
-              ><select id="project-type" name="projectType" required
-                ><option value="">Choose one</option><option
-                  value="website-design">Website design</option
-                ><option value="website-redesign">Website redesign</option
-                ><option value="ecommerce">E-commerce website</option><option
-                  value="smart-home">Smart-home / technology experience</option
-                ><option value="interactive-web">Interactive website</option
-                ><option value="web-app">Web application</option><option
-                  value="seo-performance">SEO / performance</option
-                ><option value="other">Something else</option></select
-              ><p class="error" data-error="projectType" role="alert"></p>
+              <label for="project-type">
+                What are you interested in? <span aria-hidden="true">*</span>
+              </label>
+              <select id="project-type" name="projectType" required>
+                <option value="">Choose one</option>
+                <option value="website-design">Website design</option>
+                <option value="website-redesign">Website redesign</option>
+                <option value="ecommerce">E-commerce website</option>
+                <option value="smart-home">
+                  Smart-home / technology experience
+                </option>
+                <option value="interactive-web">Interactive website</option>
+                <option value="web-app">Web application</option>
+                <option value="seo-performance">SEO / performance</option>
+                <option value="other">Something else</option>
+              </select>
+              <p class="error" data-error="projectType" role="alert"></p>
             </div>
             <div class="field-grid">
               <div class="field">
-                <label for="current-website">What do you have today?</label
-                ><select id="current-website" name="currentWebsite"
-                  ><option value="">Choose one</option><option value="none"
-                    >No website yet</option
-                  ><option value="existing">Existing website</option><option
-                    value="redesign">Existing site that needs a redesign</option
-                  ><option value="other">Other</option></select
-                >
+                <label for="current-website">What do you have today?</label>
+                <select id="current-website" name="currentWebsite">
+                  <option value="">Choose one</option>
+                  <option value="none">No website yet</option>
+                  <option value="existing">Existing website</option>
+                  <option value="redesign">
+                    Existing site that needs a redesign
+                  </option>
+                  <option value="other">Other</option>
+                </select>
               </div>
               <div class="field">
-                <label for="website-url">Current website URL</label><input
+                <label for="website-url">Current website URL</label>
+                <input
                   id="website-url"
                   name="websiteUrl"
                   type="url"
                   inputmode="url"
                   maxlength="2048"
                   placeholder="https://example.com"
-                /><p class="error" data-error="websiteUrl" role="alert"></p>
+                />
+                <p class="error" data-error="websiteUrl" role="alert"></p>
               </div>
             </div>
             <div class="field-grid three">
               <div class="field">
-                <label for="timeline">Target timeline</label><select
-                  id="timeline"
-                  name="timeline"
-                  ><option value="">Choose one</option><option value="asap"
-                    >ASAP</option
-                  ><option value="under-30-days">Within 30 days</option><option
-                    value="1-3-months">1–3 months</option
-                  ><option value="3-6-months">3–6 months</option><option
-                    value="exploring">Just exploring</option
-                  ></select
-                >
+                <label for="timeline">Target timeline</label>
+                <select id="timeline" name="timeline">
+                  <option value="">Choose one</option>
+                  <option value="asap">ASAP</option>
+                  <option value="under-30-days">Within 30 days</option>
+                  <option value="1-3-months">1–3 months</option>
+                  <option value="3-6-months">3–6 months</option>
+                  <option value="exploring">Just exploring</option>
+                </select>
               </div>
               <div class="field">
-                <label for="budget">Approximate budget</label><select
-                  id="budget"
-                  name="budget"
-                  ><option value="">Choose one</option><option
-                    value="under-1000">Under $1,000</option
-                  ><option value="1000-2500">$1,000–$2,500</option><option
-                    value="2500-5000">$2,500–$5,000</option
-                  ><option value="5000-10000">$5,000–$10,000</option><option
-                    value="10000-plus">$10,000+</option
-                  ><option value="not-sure">Not sure yet</option></select
-                >
+                <label for="budget">Approximate budget</label>
+                <select id="budget" name="budget">
+                  <option value="">Choose one</option>
+                  <option value="under-1000">Under $1,000</option>
+                  <option value="1000-2500">$1,000–$2,500</option>
+                  <option value="2500-5000">$2,500–$5,000</option>
+                  <option value="5000-10000">$5,000–$10,000</option>
+                  <option value="10000-plus">$10,000+</option>
+                  <option value="not-sure">Not sure yet</option>
+                </select>
               </div>
               <div class="field">
-                <label for="source">How did you find us?</label><select
-                  id="source"
-                  name="source"
-                  ><option value="">Choose one</option><option value="google"
-                    >Google</option
-                  ><option value="social">Social media</option><option
-                    value="referral">Referral</option
-                  ><option value="experience">Saw the AlienX experience</option
-                  ><option value="other">Other</option></select
-                >
+                <label for="source">How did you find us?</label>
+                <select id="source" name="source">
+                  <option value="">Choose one</option>
+                  <option value="google">Google</option>
+                  <option value="social">Social media</option>
+                  <option value="referral">Referral</option>
+                  <option value="experience">Saw the AlienX experience</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
             </div>
             <div class="field">
-              <label for="message"
-                >Tell us about the project <span aria-hidden="true">*</span
-                ></label
-              ><textarea
+              <label for="message">
+                Tell us about the project <span aria-hidden="true">*</span>
+              </label>
+              <textarea
                 id="message"
                 name="message"
                 rows="7"
@@ -226,40 +240,44 @@ import { SITE_TITLE } from '../consts';
                 maxlength="4000"
                 required
                 placeholder="What are you trying to build, improve, or accomplish?"
-              ></textarea><p class="hint">
+              ></textarea>
+              <p class="hint">
                 A few sentences is plenty. Don't include passwords, payment
                 details, or other sensitive information.
-              </p><p class="error" data-error="message" role="alert"></p>
+              </p>
+              <p class="error" data-error="message" role="alert"></p>
             </div>
           </fieldset>
 
           <HoneypotField />
           <div class="consent">
-            <label class="checkbox-label"
-              ><input
+            <label class="checkbox-label">
+              <input
                 id="consent"
                 name="consent"
                 type="checkbox"
                 value="yes"
                 required
-              /><span
-                >I agree that AlienX may contact me about this inquiry.</span
-              ></label
-            ><p class="error" data-error="consent" role="alert"></p>
+              />
+              <span>
+                I agree that AlienX may contact me about this inquiry.
+              </span>
+            </label>
+            <p class="error" data-error="consent" role="alert"></p>
           </div>
           <div class="actions">
-            <button type="submit" id="submit-button"
-              ><span data-button-label>Start the conversation</span><span
-                class="arrow"
-                aria-hidden="true">→</span
-              ></button
-            ><p
+            <button type="submit" id="submit-button">
+              <span data-button-label>Start the conversation</span>
+              <span class="arrow" aria-hidden="true">
+                →
+              </span>
+            </button>
+            <p
               class="form-status"
               id="form-status"
               role="status"
               aria-live="polite"
-            >
-            </p>
+            ></p>
           </div>
         </form>
       </section>
@@ -297,10 +315,7 @@ import { SITE_TITLE } from '../consts';
       const consent = form.elements.namedItem('consent') as HTMLInputElement;
       const setError = (field: string, message: string) => {
         const control = form.elements.namedItem(field) as
-          | HTMLInputElement
-          | HTMLTextAreaElement
-          | HTMLSelectElement
-          | null;
+          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null;
         const error = form.querySelector<HTMLElement>(
           `[data-error="${field}"]`,
         );
@@ -341,10 +356,8 @@ import { SITE_TITLE } from '../consts';
         const websiteUrl = value('websiteUrl');
         const message = value('message');
         let firstInvalid:
-          | HTMLInputElement
-          | HTMLTextAreaElement
-          | HTMLSelectElement
-          | null = null;
+          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null =
+          null;
         if (name.length < 2 || name.length > 100) {
           setError('name', 'Please enter your name.');
           firstInvalid = form.elements.namedItem('name') as HTMLInputElement;

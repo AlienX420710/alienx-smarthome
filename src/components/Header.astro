@@ -4,55 +4,68 @@ import CommandPalette from './CommandPalette.astro';
 import { SITE_TITLE } from '../consts';
 ---
 
-<a class="skip-link" href="#main-content">Skip to content</a><header>
+<a class="skip-link" href="#main-content">
+  Skip to content
+</a>
+<header>
   <nav aria-label="Primary navigation">
-    <a href="/" class="title-link" aria-label={`${SITE_TITLE} home`}
-      ><img
-        src="/favicon.svg"
-        alt=""
-        class="site-logo"
-        width="28"
-        height="28"
-      /><span><strong>AlienX</strong> <em>SmartHome</em></span></a
-    ><div class="internal-links">
-      <HeaderLink href="/">Home</HeaderLink><HeaderLink href="/work"
-        >Work</HeaderLink
-      ><HeaderLink href="/experience" reload>Experience</HeaderLink><HeaderLink
-        href="/technology">Technology</HeaderLink
-      ><HeaderLink href="/status">Status</HeaderLink><HeaderLink href="/about"
-        >About Me</HeaderLink
-      ><HeaderLink href="/contact">Start a project</HeaderLink>
-    </div><div class="external-links">
+    <a href="/" class="title-link" aria-label={`${SITE_TITLE} home`}>
+      <img src="/favicon.svg" alt="" class="site-logo" width="28" height="28" />
+      <span>
+        <strong>AlienX</strong> <em>SmartHome</em>
+      </span>
+    </a>
+    <div class="internal-links">
+      <HeaderLink href="/">Home</HeaderLink>
+      <HeaderLink href="/work">Work</HeaderLink>
+      <HeaderLink href="/experience" reload>
+        Experience
+      </HeaderLink>
+      <HeaderLink href="/technology">Technology</HeaderLink>
+      <HeaderLink href="/status">Status</HeaderLink>
+      <HeaderLink href="/about">About Me</HeaderLink>
+      <HeaderLink href="/contact">Start a project</HeaderLink>
+    </div>
+    <div class="external-links">
       <button
         class="command"
         type="button"
         data-command-trigger
-        aria-label="Open command palette">⌘K</button
-      ><a
+        aria-label="Open command palette"
+      >
+        ⌘K
+      </button>
+      <a
         class="ha-link"
         href="https://alienxhomeassistant.alienxsmarthome.com"
         target="_blank"
         rel="noreferrer"
         aria-label="Home Assistant"
-        ><svg viewBox="0 0 24 24" aria-hidden="true"
-          ><path d="m3 11 9-7 9 7"></path><path d="M5.5 10.5V20h13v-9.5"
-          ></path><path d="M9 20v-6h6v6"></path></svg
-        ><span>Home Assistant</span></a
-      ><a
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m3 11 9-7 9 7"></path>
+          <path d="M5.5 10.5V20h13v-9.5"></path>
+          <path d="M9 20v-6h6v6"></path>
+        </svg>
+        <span>Home Assistant</span>
+      </a>
+      <a
         class="source-link"
         href="https://github.com/AlienX420710/alienx-smarthome"
         target="_blank"
         rel="noreferrer"
         aria-label="AlienX SmartHome source code on GitHub"
-        ><svg viewBox="0 0 24 24" aria-hidden="true"
-          ><path
-            d="M15 22v-4.2c0-1.1-.4-1.8-1-2.2 3.3-.4 6.7-1.6 6.7-7.1 0-1.6-.6-2.9-1.6-3.9 0 0-1.3-.4-4.2 1.5-1.2-.3-2.5-.4-3.7-.4s-2.5.1-3.7.4C4.4.3 3.1.7 3.1.7c-.9 2-.4 3.5-.2 3.9-1 1-1.6 1.8-1 3.9 0 5.5 3.4 6.7 6.7 7.1-.6.4-1 .9-1 1.8V22"
-          ></path><path d="M7 18c-3 .9-3-1.5-4.2-1.8"></path></svg
-        ><span>Source</span></a
       >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 22v-4.2c0-1.1-.4-1.8-1-2.2 3.3-.4 6.7-1.6 6.7-7.1 0-1.6-.6-2.9-1.6-3.9 0 0-1.3-.4-4.2 1.5-1.2-.3-2.5-.4-3.7-.4s-2.5.1-3.7.4C4.4.3 3.1.7 3.1.7c-.9 2-.4 3.5-.2 3.9-1 1-1.6 1.8-1 3.9 0 5.5 3.4 6.7 6.7 7.1-.6.4-1 .9-1 1.8V22"></path>
+          <path d="M7 18c-3 .9-3-1.5-4.2-1.8"></path>
+        </svg>
+        <span>Source</span>
+      </a>
     </div>
   </nav>
-</header><CommandPalette />
+</header>
+<CommandPalette />
 <style>
   header {
     margin: 0;

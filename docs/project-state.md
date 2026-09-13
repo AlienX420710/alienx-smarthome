@@ -78,6 +78,23 @@ email test. Autofill remains a plausible original cause, not an observed fact.
 
 ## Maintaining the record
 
+### Dependency and build maintenance — 2026-09-13 (validation pending)
+
+The next maintenance change updates Astro to 7.3.2 and the Cloudflare adapter
+to 14.3.1, with current compatible tooling and SHA-pinned Actions v7 releases.
+TypeScript 7.0.2 is deliberately not adopted: @astrojs/check 0.9.10 declares
+support for TypeScript 5/6 only. TypeScript 6.0.3 is the compatible upgrade.
+Pinned dependencies explain why an open Dependabot PR does not automatically
+update main. Dependency PRs may be superseded by the validated main change;
+closing them is not evidence that their versions were merged unchanged.
+
+AX-003 implementation now uses three fixed Lighthouse samples, median
+performance at the existing threshold, and worst-sample checks for other
+categories. Missing/invalid measurements fail closed. Raw reports and numeric
+timing metrics are retained. Unit tests cover isolated outliers, repeated slow
+samples, missing evidence, and accessibility regressions. Full CI and exact-SHA
+Cloudflare rollout are still required before this maintenance is verified.
+
 Keep finding IDs stable. Add revision and dated evidence when moving an item
 to implemented or verified; retain remaining limits. A historical report or
 assistant suggestion is input for review, not automatic closure or authority.

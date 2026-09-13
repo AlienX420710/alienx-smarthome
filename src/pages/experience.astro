@@ -10,12 +10,10 @@ const description =
 
 <!doctype html>
 <html lang="en">
-  <head
-    ><link rel="stylesheet" href="/experience-museum.css" /><BaseHead
-      title={`Experience — ${SITE_TITLE}`}
-      description={description}
-    /></head
-  >
+  <head>
+    <link rel="stylesheet" href="/experience-museum.css" />
+    <BaseHead title={`Experience — ${SITE_TITLE}`} description={description} />
+  </head>
   <body>
     <Header />
     <main id="main-content" tabindex="-1">
@@ -23,14 +21,18 @@ const description =
         <div class="entrance-copy">
           <p class="eyebrow">ALIENX / EXPERIENCE MUSEUM</p>
           <h1 id="experience-title">
-            Don't just <span>look.</span><br />touch the web.
+            Don't just <span>look.</span>
+            <br />
+            touch the web.
           </h1>
           <p class="lede">
             A collection of browser experiments built to prove a point: a
             website can be a machine, a playground, a simulation, and an
             interface at the same time.
           </p>
-          <a class="enter" href="#museum">Enter the museum <span>↓</span></a>
+          <a class="enter" href="#museum">
+            Enter the museum <span>↓</span>
+          </a>
         </div>
         <div
           class="entrance-art"
@@ -39,7 +41,8 @@ const description =
         >
           <canvas data-pointer-canvas></canvas>
           <div class="entrance-label">
-            <span>EXHIBIT 00</span><strong>POINTER FIELD</strong>
+            <span>EXHIBIT 00</span>
+            <strong>POINTER FIELD</strong>
           </div>
         </div>
       </section>
@@ -47,7 +50,8 @@ const description =
       <section class="museum" id="museum" aria-labelledby="museum-title">
         <header class="museum-intro">
           <div>
-            <p class="eyebrow">THE COLLECTION</p><h2 id="museum-title">
+            <p class="eyebrow">THE COLLECTION</p>
+            <h2 id="museum-title">
               Seven ways to make a browser <span>do something.</span>
             </h2>
           </div>
@@ -60,58 +64,67 @@ const description =
 
         <article class="exhibit exhibit--wide" id="pointer-field">
           <div class="exhibit-meta">
-            <span>01</span><span>INPUT / MOTION / CANVAS</span>
+            <span>01</span>
+            <span>INPUT / MOTION / CANVAS</span>
           </div>
           <div class="exhibit-copy">
-            <p class="eyebrow">POINTER FIELD</p><h3>
-              Move through a living field.
-            </h3><p>
+            <p class="eyebrow">POINTER FIELD</p>
+            <h3>Move through a living field.</h3>
+            <p>
               Your pointer becomes an input signal. Particles calculate their
               distance from it and react in real time.
             </p>
           </div>
           <div class="pointer-lab" data-pointer-lab>
-            <canvas data-particle-canvas></canvas><div class="lab-hint">
-              MOVE YOUR POINTER
-            </div>
+            <canvas data-particle-canvas></canvas>
+            <div class="lab-hint">MOVE YOUR POINTER</div>
           </div>
         </article>
 
         <div class="exhibit-pair">
           <article class="exhibit" id="kinetic-type">
             <div class="exhibit-meta">
-              <span>02</span><span>TYPOGRAPHY / TRANSFORM</span>
+              <span>02</span>
+              <span>TYPOGRAPHY / TRANSFORM</span>
             </div>
-            <p class="eyebrow">KINETIC TYPE</p><h3>Words have weight.</h3><p>
+            <p class="eyebrow">KINETIC TYPE</p>
+            <h3>Words have weight.</h3>
+            <p>
               Hover or focus the words. Rotation and position turn typography
               into an interface.
             </p>
             <div class="type-stage" data-type-stage>
-              <button type="button" data-kinetic>MOVE</button><button
-                type="button"
-                data-kinetic>THINK</button
-              ><button type="button" data-kinetic>BUILD</button><button
-                type="button"
-                data-kinetic>RESPOND</button
-              >
+              <button type="button" data-kinetic>
+                MOVE
+              </button>
+              <button type="button" data-kinetic>
+                THINK
+              </button>
+              <button type="button" data-kinetic>
+                BUILD
+              </button>
+              <button type="button" data-kinetic>
+                RESPOND
+              </button>
             </div>
           </article>
 
           <article class="exhibit" id="physics">
             <div class="exhibit-meta">
-              <span>03</span><span>SIMULATION / POINTER</span>
+              <span>03</span>
+              <span>SIMULATION / POINTER</span>
             </div>
-            <p class="eyebrow">PHYSICS PLAYGROUND</p><h3>Throw something.</h3><p
-            >
+            <p class="eyebrow">PHYSICS PLAYGROUND</p>
+            <h3>Throw something.</h3>
+            <p>
               Grab the objects and fling them around the surface. The simulation
               uses velocity, gravity, friction, and collision with the bounds.
             </p>
             <div class="physics-stage" data-physics-stage>
-              <canvas data-physics-canvas></canvas><button
-                type="button"
-                class="physics-reset"
-                data-physics-reset>RESET</button
-              >
+              <canvas data-physics-canvas></canvas>
+              <button type="button" class="physics-reset" data-physics-reset>
+                RESET
+              </button>
             </div>
           </article>
         </div>
@@ -119,11 +132,12 @@ const description =
         <div class="exhibit-pair">
           <article class="exhibit" id="browser-lab">
             <div class="exhibit-meta">
-              <span>04</span><span>NATIVE APIS / PROGRESSIVE ENHANCEMENT</span>
+              <span>04</span>
+              <span>NATIVE APIS / PROGRESSIVE ENHANCEMENT</span>
             </div>
-            <p class="eyebrow">BROWSER CAPABILITY LAB</p><h3>
-              Ask the browser.
-            </h3><p>
+            <p class="eyebrow">BROWSER CAPABILITY LAB</p>
+            <h3>Ask the browser.</h3>
+            <p>
               No claims. These rows query this browser for capabilities it
               actually exposes.
             </p>
@@ -134,55 +148,67 @@ const description =
           <div class="exhibit-pair alienx-exhibit-pair">
             <article class="exhibit alienx-exhibit" id="light-field">
               <div class="exhibit-meta">
-                <span>05</span><span>CANVAS / LIGHT / GEOMETRY</span>
-              </div><p class="eyebrow">LIGHT FIELD</p><h3>
-                Move the light. Reveal the system.
-              </h3><p>
+                <span>05</span>
+                <span>CANVAS / LIGHT / GEOMETRY</span>
+              </div>
+              <p class="eyebrow">LIGHT FIELD</p>
+              <h3>Move the light. Reveal the system.</h3>
+              <p>
                 A canvas scene hides its structure until your pointer becomes a
                 moving light source. Click to send a pulse through the field.
-              </p><div class="alienx-light-stage" data-light-stage>
-                <canvas data-light-canvas></canvas><span>LIGHT / LIVE</span>
-              </div>
-            </article><article class="exhibit alienx-exhibit" id="spatial-ui">
-              <div class="exhibit-meta">
-                <span>06</span><span>CSS 3D / POINTER / DEPTH</span>
-              </div><p class="eyebrow">SPATIAL UI</p><h3>
-                The interface has depth.
-              </h3><p>
-                Move around the scene and change its perspective. The browser is
-                rendering a layered interface in three dimensions.
-              </p><div class="alienx-spatial-stage" data-spatial-stage>
-                <div class="alienx-space" data-space>
-                  <div class="alienx-space-plane back">SYSTEM / 03</div><div
-                    class="alienx-space-plane mid"
-                  >
-                    SIGNAL / 02
-                  </div><div class="alienx-space-plane front">
-                    <strong>ALIENX</strong><span>DEPTH / 01</span>
-                  </div>
-                </div><span data-space-readout>X +00° / Y +00°</span>
+              </p>
+              <div class="alienx-light-stage" data-light-stage>
+                <canvas data-light-canvas></canvas>
+                <span>LIGHT / LIVE</span>
               </div>
             </article>
-          </div><article
+            <article class="exhibit alienx-exhibit" id="spatial-ui">
+              <div class="exhibit-meta">
+                <span>06</span>
+                <span>CSS 3D / POINTER / DEPTH</span>
+              </div>
+              <p class="eyebrow">SPATIAL UI</p>
+              <h3>The interface has depth.</h3>
+              <p>
+                Move around the scene and change its perspective. The browser is
+                rendering a layered interface in three dimensions.
+              </p>
+              <div class="alienx-spatial-stage" data-spatial-stage>
+                <div class="alienx-space" data-space>
+                  <div class="alienx-space-plane back">SYSTEM / 03</div>
+                  <div class="alienx-space-plane mid">SIGNAL / 02</div>
+                  <div class="alienx-space-plane front">
+                    <strong>ALIENX</strong>
+                    <span>DEPTH / 01</span>
+                  </div>
+                </div>
+                <span data-space-readout>X +00° / Y +00°</span>
+              </div>
+            </article>
+          </div>
+          <article
             class="exhibit exhibit--wide alienx-exhibit"
             id="signal-trace"
           >
             <div class="exhibit-meta">
-              <span>07</span><span>POINTER / CANVAS / GESTURE</span>
-            </div><div class="exhibit-split">
+              <span>07</span>
+              <span>POINTER / CANVAS / GESTURE</span>
+            </div>
+            <div class="exhibit-split">
               <div class="exhibit-copy">
-                <p class="eyebrow">SIGNAL TRACE</p><h3>
-                  Your movement becomes data.
-                </h3><p>
+                <p class="eyebrow">SIGNAL TRACE</p>
+                <h3>Your movement becomes data.</h3>
+                <p>
                   Draw across the field. Pointer velocity changes the trace,
                   leaving a glowing trace until you clear it.
-                </p><button
-                  type="button"
-                  class="exhibit-button"
-                  data-signal-clear>Clear trace <span>×</span></button
-                >
-              </div><div class="alienx-signal-stage" data-signal-stage>
-                <canvas data-signal-canvas></canvas><span>PRESS / DRAG</span>
+                </p>
+                <button type="button" class="exhibit-button" data-signal-clear>
+                  Clear trace <span>×</span>
+                </button>
+              </div>
+              <div class="alienx-signal-stage" data-signal-stage>
+                <canvas data-signal-canvas></canvas>
+                <span>PRESS / DRAG</span>
               </div>
             </div>
           </article>
@@ -191,15 +217,26 @@ const description =
 
       <section class="more-lab" aria-labelledby="more-title">
         <p class="eyebrow">NEXT EXHIBITION</p>
-        <h2 id="more-title">The museum can keep <span>growing.</span></h2>
+        <h2 id="more-title">
+          The museum can keep <span>growing.</span>
+        </h2>
         <div class="teaser-grid">
           <div>
-            <strong>OFFLINE</strong><span>Client-side resilience</span>
-          </div><div>
-            <strong>AUDIO REACTIVE</strong><span>Media APIs</span>
-          </div><div>
-            <strong>ACCESSIBILITY MODE</strong><span>Adaptive interfaces</span>
-          </div><div><strong>WEBGL</strong><span>GPU rendering</span></div>
+            <strong>OFFLINE</strong>
+            <span>Client-side resilience</span>
+          </div>
+          <div>
+            <strong>AUDIO REACTIVE</strong>
+            <span>Media APIs</span>
+          </div>
+          <div>
+            <strong>ACCESSIBILITY MODE</strong>
+            <span>Adaptive interfaces</span>
+          </div>
+          <div>
+            <strong>WEBGL</strong>
+            <span>GPU rendering</span>
+          </div>
         </div>
       </section>
 
@@ -210,13 +247,14 @@ const description =
           That is what Experience is for. Technology explains the machinery.
           This museum lets people operate it.
         </p>
-        <a href="/technology">See what is underneath <span>→</span></a>
+        <a href="/technology">
+          See what is underneath <span>→</span>
+        </a>
       </section>
     </main>
     <Footer />
 
     <script is:inline src="/experience.js" defer></script>
-
     <style>
       :global(html) {
         background: var(--museum-bg);

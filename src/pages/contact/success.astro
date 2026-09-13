@@ -7,29 +7,38 @@ import { SITE_TITLE } from '../../consts';
 
 <!doctype html>
 <html lang="en">
-  <head
-    ><BaseHead
+  <head>
+    <BaseHead
       title={`Inquiry follow-up — ${SITE_TITLE}`}
       description="Continue exploring AlienX after your inquiry. Explore more of the AlienX SmartHome experience while you wait for a response."
-    /></head
-  ><body
-    ><Header /><main id="main-content" tabindex="-1">
+    />
+  </head>
+  <body>
+    <Header />
+    <main id="main-content" tabindex="-1">
       <section class="success" aria-labelledby="title">
-        <div class="mark" aria-hidden="true">✓</div><p class="eyebrow">
-          ALIENX / NEXT STEPS
-        </p><h1 id="title">Keep exploring.</h1><p class="lede">
+        <div class="mark" aria-hidden="true">
+          ✓
+        </div>
+        <p class="eyebrow">ALIENX / NEXT STEPS</p>
+        <h1 id="title">Keep exploring.</h1>
+        <p class="lede">
           If you submitted an inquiry successfully, it was accepted by our email
           provider. Inbox delivery is not guaranteed. If you have not submitted
           one, start with the contact form.
-        </p><nav class="next" aria-label="Continue exploring AlienX">
-          <a class="primary" href="/experience"
-            >Explore the experience <span aria-hidden="true">→</span></a
-          ><a href="/technology">See the technology</a><a href="/about"
-            >Read About Me</a
-          ><a href="/">Back to home</a>
+        </p>
+        <nav class="next" aria-label="Continue exploring AlienX">
+          <a class="primary" href="/experience">
+            Explore the experience <span aria-hidden="true">→</span>
+          </a>
+          <a href="/technology">See the technology</a>
+          <a href="/about">Read About Me</a>
+          <a href="/">Back to home</a>
         </nav>
       </section>
-    </main><Footer /></body>
+    </main>
+    <Footer />
+  </body>
 </html>
 <style>
   :global(body) {

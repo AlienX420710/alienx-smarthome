@@ -39,9 +39,11 @@ const structuredData = {
 <meta name="theme-color" content="#070b14" />
 <meta
   name="robots"
-  content={Astro.url.pathname.startsWith('/contact/success')
-    ? 'noindex, follow'
-    : 'index, follow'}
+  content={
+    Astro.url.pathname.startsWith('/contact/success')
+      ? 'noindex, follow'
+      : 'index, follow'
+  }
 />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
 
@@ -521,12 +523,10 @@ const structuredData = {
 <meta name="twitter:image" content={socialImage} />
 <meta name="twitter:image:alt" content={`${title} — AlienX SmartHome`} />
 
-{
-  isHomePage && (
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify(structuredData)}
-    />
-  )
-}
+{isHomePage && (
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(structuredData)}
+  ></script>
+)}

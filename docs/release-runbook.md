@@ -12,6 +12,14 @@ is committed in `lighthouse.config.cjs`; `scripts/lighthouse.mjs` runs the locke
 Lighthouse CLI, with `--accessibility` for the accessibility-only job. Keep both
 Lighthouse workflows green when changing tooling. Do not use `npm audit fix --force`.
 
+The quality audit collects three fixed samples per route and compares median
+performance against the unchanged 0.85 threshold. Accessibility, best practices,
+and SEO must meet 0.95 in every sample. Measurement errors or missing scores
+fail closed. The accessibility-only job runs one sample per route. All raw
+reports and `summary.json` are retained in the Lighthouse diagnostics artifact;
+inspect timing metrics before assuming a failure is transient. This is not an
+automatic retry-until-pass policy.
+
 ## Release acceptance
 
 1. Record the full commit SHA on `main` and inspect every check for that SHA.
