@@ -19,6 +19,33 @@ New evidence can correct this record regardless of which assistant found it.
 
 ## Last recorded runtime verification
 
+Verified on 2026-09-13 at `d8bf0d3de9682f96e0c059accb63e7be25b824fb`:
+
+- All seven automatic push workflows, both CodeQL checks, and Cloudflare Builds
+  succeeded. [Exact-revision checks](https://github.com/AlienX420710/alienx-smarthome/commit/d8bf0d3de9682f96e0c059accb63e7be25b824fb/checks).
+- [Responsive CI](https://github.com/AlienX420710/alienx-smarthome/actions/runs/34773767198)
+  passed the eight-route candidate security/SEO contract and 92 browser cases.
+- [Production Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/34773767173)
+  waited for the exact deployed revision, then passed eight routes on each of
+  the apex and www hosts. A separate read-only local execution of
+  `verify-integrity.mjs` with that full `EXPECTED_REVISION` passed both hosts
+  again; `/api/status` also reported that revision as operational.
+- [Lighthouse](https://github.com/AlienX420710/alienx-smarthome/actions/runs/34773767221)
+  passed all seven routes with median performance 1 at the unchanged 0.85
+  threshold. Homepage samples were 0.99, 1, 1; Status samples were 0.95, 1, 1;
+  all other performance samples were 1.
+- A fresh local rerun passed all 35 unit tests and formatting checks. This
+  rerun did not rebuild the application or repeat the browser suites locally;
+  the full build and browser evidence above comes from CI.
+
+AX-001 and AX-002 meet their recorded acceptance criteria at this revision.
+AX-003 was reverified. The manual Browser Diagnostics workflow was not run.
+No fresh real inquiry, account rejection exercise, alert receipt test, or
+rollback drill was performed. AX-004 through AX-010 remain open or owner-needed.
+This documentation update does not itself establish a newer verified deployment.
+
+### Earlier dependency release
+
 The dependency/Lighthouse release `44de4b9a8e769959f05b5ebb2aa1c99b784234d3`
 passed all seven workflows, CodeQL, and Cloudflare Builds on 2026-09-13.
 Production reported that exact revision as operational. It passed 32 unit
@@ -55,18 +82,18 @@ owner-needed requires evidence or action outside repository editing. This is
 the currently triaged backlog, not a replacement inventory of every baseline
 audit finding. Reconcile newly revisited baseline items before claiming closure.
 
-| ID     | Priority / status        | Finding and source                                                                                                    | Acceptance evidence                                                                                                                           |
-| ------ | ------------------------ | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| AX-001 | P1 / implemented         | `production-integrity.yml` accepts any CSP header; middleware's frame-only header can hide a missing resource policy. | Separate frame and resource-policy checks; regressions reject missing script policy, weakened directives, and frame-only policy.              |
-| AX-002 | P2 / implemented         | Integrity checks live production immediately, unlike exact-revision push smoke.                                       | Candidate checks and live monitoring are clearly separated; release evidence names and verifies the deployed SHA.                             |
-| AX-003 | P2 / verified at 44de4b9 | Fixed three-sample Lighthouse measurement implemented and verified; see dated evidence below.                         | Fixed sample count and documented aggregation, all reports retained, unchanged thresholds; inspect variability rather than rerun until green. |
-| AX-004 | P2 / open                | Three manual CSP hashes in `astro.config.mjs` have no documented source mapping.                                      | Map allowances to exact emitted bytes or prove an allowance obsolete; built-browser verification shows no required script blocked.            |
-| AX-005 | P1 / owner-needed        | `scripts/verify-ci.mjs` prepares a deployment gate; account enforcement is not independently recorded.                | Account configuration and build log show the gate runs; isolated non-production test proves failed required evidence blocks promotion.        |
-| AX-006 | P2 / owner-needed        | Alert recipients and rollback recovery remain unverified.                                                             | Confirm monitored failure notification receipt and record an authorized rollback drill with revision/version evidence.                        |
-| AX-007 | P2 / open                | Historical secret scan is not recorded.                                                                               | Full-history scan with tool/version, scope, date, and sanitized outcome; any confirmed exposed secrets rotated by owner.                      |
-| AX-008 | P2 / owner-needed        | Automated accessibility and an owner email test do not establish assistive-technology coverage.                       | Record actual screen-reader, keyboard, and touch-device test scope and outcomes; resolve resulting defects.                                   |
-| AX-009 | P3 / open                | Remaining style ownership/dead-CSS cleanup is not closed by formatting.                                               | Identify specific redundant rules/components and verify affected routes/themes after scoped cleanup.                                          |
-| AX-010 | P3 / owner-needed        | Work/About need authentic owner-supplied material.                                                                    | Owner-approved factual content; no invented clients, results, or biography.                                                                   |
+| ID     | Priority / status        | Finding and source                                                                                                                                | Acceptance evidence                                                                                                                           |
+| ------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| AX-001 | P1 / verified at d8bf0d3 | Former integrity check accepted any CSP header, allowing a frame-only header to hide a missing resource policy; repaired and verified.            | Separate frame and resource-policy checks; regressions reject missing script policy, weakened directives, and frame-only policy.              |
+| AX-002 | P2 / verified at d8bf0d3 | Former integrity workflow checked unrelated live code immediately; candidate and exact-revision production checks are now separated and verified. | Candidate checks and live monitoring are clearly separated; release evidence names and verifies the deployed SHA.                             |
+| AX-003 | P2 / verified at d8bf0d3 | Fixed three-sample Lighthouse measurement implemented and reverified; see dated evidence above and below.                                         | Fixed sample count and documented aggregation, all reports retained, unchanged thresholds; inspect variability rather than rerun until green. |
+| AX-004 | P2 / open                | Three manual CSP hashes in `astro.config.mjs` have no documented source mapping.                                                                  | Map allowances to exact emitted bytes or prove an allowance obsolete; built-browser verification shows no required script blocked.            |
+| AX-005 | P1 / owner-needed        | `scripts/verify-ci.mjs` prepares a deployment gate; account enforcement is not independently recorded.                                            | Account configuration and build log show the gate runs; isolated non-production test proves failed required evidence blocks promotion.        |
+| AX-006 | P2 / owner-needed        | Alert recipients and rollback recovery remain unverified.                                                                                         | Confirm monitored failure notification receipt and record an authorized rollback drill with revision/version evidence.                        |
+| AX-007 | P2 / open                | Historical secret scan is not recorded.                                                                                                           | Full-history scan with tool/version, scope, date, and sanitized outcome; any confirmed exposed secrets rotated by owner.                      |
+| AX-008 | P2 / owner-needed        | Automated accessibility and an owner email test do not establish assistive-technology coverage.                                                   | Record actual screen-reader, keyboard, and touch-device test scope and outcomes; resolve resulting defects.                                   |
+| AX-009 | P3 / open                | Remaining style ownership/dead-CSS cleanup is not closed by formatting.                                                                           | Identify specific redundant rules/components and verify affected routes/themes after scoped cleanup.                                          |
+| AX-010 | P3 / owner-needed        | Work/About need authentic owner-supplied material.                                                                                                | Owner-approved factual content; no invented clients, results, or biography.                                                                   |
 
 The previous honeypot rejection was addressed in `dfeffab4`: the neutral,
 read-only DOM trap still forwards injected values to the server for rejection.
@@ -106,7 +133,7 @@ samples, missing evidence, and accessibility regressions. Full CI and exact-SHA
 Cloudflare rollout passed at 44de4b9 as recorded above; AX-003 is verified for
 this change. This does not guarantee every future performance run will pass.
 
-### Integrity contract repair — implementation pending CI
+### Integrity contract repair — 2026-09-13 (verified at d8bf0d3)
 
 AX-001 now has a parsed-HTML contract requiring both a frame-ancestors response
 header and a complete resource policy. Tests reject frame-only protection,
@@ -123,9 +150,11 @@ PRs; push runs wait for the expected deployed revision. Both production hosts
 are checked before and after the eight-route audit, with request timeouts and
 exact-SHA matching on pushes. Scheduled/manual monitoring reports the observed
 revision without requiring an undeployed main commit. Production Integrity stays
-outside the pre-deployment gate to avoid a circular dependency. These two
-implementations require successful candidate CI and a production run before
-being marked verified.
+outside the pre-deployment gate to avoid a circular dependency. Both
+implementations passed candidate CI and exact-revision production verification
+at d8bf0d3, followed by the independent live rerun recorded above. This closes
+AX-001 and AX-002 for that revision, not the separate manual hash mapping or
+account-level deployment enforcement findings.
 
 Keep finding IDs stable. Add revision and dated evidence when moving an item
 to implemented or verified; retain remaining limits. A historical report or
