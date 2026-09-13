@@ -6,8 +6,14 @@ const deadline = Date.now() + 15 * 60 * 1000;
 let last = 'No response';
 while (Date.now() < deadline) {
   try {
-    const response = await fetch('https://alienxsmarthome.com/api/status', {
+    const status = new URL('https://alienxsmarthome.com/api/status');
+    status.searchParams.set('_alienx_revision', `${expected}-${Date.now()}`);
+    const response = await fetch(status, {
       cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, max-age=0',
+        Pragma: 'no-cache',
+      },
       signal: AbortSignal.timeout(15000),
     });
     const data = await response.json();
