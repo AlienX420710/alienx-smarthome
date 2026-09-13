@@ -38,9 +38,8 @@ test('release gate requires exact main push evidence and the latest run', async 
 });
 
 test('release gate parses only exact Git refs', async () => {
-  const { approvalRefs, parseRemoteRefs } = await import(
-    '../scripts/verify-ci.mjs'
-  );
+  const releaseGate = await import('../scripts/verify-ci.mjs');
+  const { approvalRefs, parseRemoteRefs } = releaseGate;
   const approved = 'a'.repeat(40);
   const rejected = 'b'.repeat(40);
   const refs = parseRemoteRefs(
