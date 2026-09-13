@@ -10,7 +10,21 @@ if (expected && !/^[a-f0-9]{40}$/.test(expected))
 const request = (url, options = {}) =>
   fetch(url, { ...options, signal: AbortSignal.timeout(15000) });
 const revision = async (origin) => {
-  const response = await request(origin + '/api/status');
+  const status = new URL(origin + '/api/status');
+  if (!candidate)
+    status.searchParams.set(
+      '_alienx_revision',
+      `${expected ?? 'current'}-${Date.now()}`,
+    );
+  const response = await request(status, {
+    cache: 'no-store',
+    headers: candidate
+      ? undefined
+      : {
+          'Cache-Control': 'no-cache, no-store, max-age=0',
+          Pragma: 'no-cache',
+        },
+  });
   const data = await response.json();
   if (
     !candidate &&
