@@ -100,6 +100,42 @@ read-only DOM trap still forwards injected values to the server for rejection.
 Unit/browser regressions passed and the owner later confirmed a successful
 email test. Autofill remains a plausible original cause, not an observed fact.
 
+## Post-security roadmap — frontend research
+
+Queued by the owner on 2026-09-13. Start this research after the outstanding
+security work: CSP hash mapping (AX-004), account-level deployment enforcement
+(AX-005), and historical secret scanning (AX-007). Keep alerting and recovery
+(AX-006) ahead of optional visual enhancements. These references do not change
+the status or acceptance criteria of any existing finding.
+
+The following are owner-supplied resources to investigate, not reviewed or
+approved implementations. Preserve all eight references for the research pass:
+
+- [ ] [Marko Denic — HTML tips](https://markodenic.com/html-tips/)
+- [ ] [Marko Denic — markodenic.tech](https://markodenic.tech)
+- [ ] [DNXEMPIRE-1 — 50-cool-html-css-Projects](https://github.com/DNXEMPIRE-1/50-cool-html-css-Projects)
+- [ ] [Brad Traversy — 50projects50days](https://github.com/bradtraversy/50projects50days)
+- [ ] [Solygambas — html-css-javascript-projects](https://github.com/solygambas/html-css-javascript-projects)
+- [ ] [Solygambas — CodePen](https://codepen.io/solygambas)
+- [ ] [Diego Card — awesome-html5](https://github.com/diegocard/awesome-html5)
+- [ ] [CSS-Tricks](https://css-tricks.com)
+
+Research output: a prioritized shortlist of specific HTML, CSS, and interaction
+ideas that solve an identifiable AlienX usability or presentation need. Record
+the source/demo, proposed route or component, expected benefit, effort, and an
+adopt/adapt/skip decision with reasons. Check each resource only after reviewing
+it and recording that decision; checking it does not mean its code was imported.
+
+Before adopting any example, verify its license and attribution requirements,
+current browser support (including Safari), semantic HTML, keyboard and touch
+access, light/dark contrast, and reduced-motion behavior. Evaluate Astro
+navigation lifecycle compatibility, CSP requirements, third-party requests,
+dependency cost, and performance. Prefer small, reusable changes consistent
+with AlienX's existing design and style ownership (AX-009); do not bulk-import
+demos, weaken security, or present tutorial projects as authentic client work
+(AX-010). Any later implementation needs the affected build, browser,
+accessibility, security-integrity, and Lighthouse checks.
+
 ## Decisions to preserve
 
 - **Main only:** owner requirement, not a suggestion to create a PR workflow.
