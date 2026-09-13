@@ -4,7 +4,8 @@ const sha = process.env.APPROVAL_SHA ?? '';
 const token = process.env.GITHUB_TOKEN ?? '';
 const repository = process.env.GITHUB_REPOSITORY ?? '';
 
-if (!/^[a-f0-9]{40}$/.test(sha)) throw Error('APPROVAL_SHA must be a full Git SHA');
+if (!/^[a-f0-9]{40}$/.test(sha))
+  throw Error('APPROVAL_SHA must be a full Git SHA');
 if (!token) throw Error('GITHUB_TOKEN is required');
 if (repository !== 'AlienX420710/alienx-smarthome') {
   throw Error(`Unexpected repository: ${repository || '(missing)'}`);
@@ -96,5 +97,7 @@ if (failed) {
   await setRef(approvalRefs.approved, sha);
   console.log(`Published CI approval for ${sha}`);
 } else {
-  console.log(`CI evidence for ${sha} is still pending; no release ref published`);
+  console.log(
+    `CI evidence for ${sha} is still pending; no release ref published`,
+  );
 }

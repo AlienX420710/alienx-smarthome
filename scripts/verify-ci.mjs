@@ -55,7 +55,10 @@ export async function verify() {
   if (!/^[a-f0-9]{40}$/.test(sha) || buildSha !== sha) {
     throw Error('Build revision differs from checkout');
   }
-  if (process.env.WORKERS_CI_BRANCH && process.env.WORKERS_CI_BRANCH !== 'main') {
+  if (
+    process.env.WORKERS_CI_BRANCH &&
+    process.env.WORKERS_CI_BRANCH !== 'main'
+  ) {
     throw Error('Only main may deploy');
   }
   if (
