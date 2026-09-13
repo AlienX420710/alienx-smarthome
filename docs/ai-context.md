@@ -67,7 +67,8 @@ public/
   experience.js        → animation controller for the /experience page
 scripts/
   optimize-images.mjs  → runs before dev/build
-  verify-ci.mjs         → runs before deploy
+  verify-ci.mjs         → Cloudflare-side exact-SHA release-ref verifier before deploy
+  publish-ci-approval.mjs → GitHub-side exact-SHA approval/rejection publisher
   verify-release.mjs, scope-worker-types.mjs, lighthouse.mjs
 tests/
   *.test.cjs           → node:test unit tests (fast, no browser)
@@ -79,6 +80,13 @@ docs/
 wrangler.json           → Worker config: routes, bindings, rate-limiter namespace
 astro.config.mjs        → CSP policy, Cloudflare adapter, sitemap config
 ```
+
+The deployment gate is split deliberately: GitHub's `release-approval.yml`
+reads exact-SHA results for Quality, Responsive, Accessibility, Lighthouse, and
+Safari with its ephemeral `GITHUB_TOKEN`, then moves the dedicated approved or
+rejected tag ref. Cloudflare's `verify-ci.mjs` does not call the GitHub REST API;
+it checks those refs over normal Git before Wrangler deploys. Preserve this
+separation unless replacing it with an equally fail-closed exact-SHA design.
 
 ## Before you touch anything: read `docs/audit-remediation.md`
 
@@ -147,8 +155,9 @@ Use [the canonical findings register](project-state.md#findings-register) for
 current priorities and closure criteria. The following are architectural limits,
 not a second mutable task list.
 
-- Cloudflare account-level settings (deployment gating, alerting) require
-  dashboard access, not code changes.
+- Cloudflare account-level settings and alerting still require dashboard access;
+  repository code can enforce release evidence only if Workers Builds continues
+  to use `npm run deploy` as its production deploy command.
 - Repository email/Turnstile tests are mocked. See the dated owner-confirmed
   live result above; it does not turn those tests into live verification.
   Future release records should correlate approved submissions with provider
