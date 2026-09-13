@@ -2,28 +2,49 @@
 
 <a href="https://alienxsmarthome.com"><img src="./docs/readme-banner.svg" alt="AlienX SmartHome — technology built to do something" width="100%" /></a>
 
-[Live website](https://alienxsmarthome.com) · [Explore the museum](https://alienxsmarthome.com/experience/) · [Start a project](https://alienxsmarthome.com/contact/)
+<br />
+
+[![Live Website](https://img.shields.io/badge/LIVE_WEBSITE-alienxsmarthome.com-2563EB?style=for-the-badge&logo=googlechrome&logoColor=white)](https://alienxsmarthome.com)
+[![Start a Project](https://img.shields.io/badge/START_A-PROJECT-39FF5A?style=for-the-badge&logo=maildotru&logoColor=14161E)](https://alienxsmarthome.com/contact/)
 
 [![Quality](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/quality.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/quality.yml)
 [![Production Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-smoke.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-smoke.yml)
 [![Responsive](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/responsive.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/responsive.yml)
 [![Accessibility](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/accessibility.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/accessibility.yml)
+[![Safari](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/safari.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/safari.yml)
+[![Lighthouse](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/lighthouse.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/lighthouse.yml)
+[![Production Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-integrity.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-integrity.yml)
 [![Astro 7.3.2](https://img.shields.io/badge/Astro-7.3.2-2563EB?logo=astro&logoColor=white)](https://astro.build)
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?logo=cloudflare&logoColor=211631)](https://workers.cloudflare.com)
 
+### Technology built to do something.
+
 Web engineering, automation, infrastructure, and interactive browser experiences.
+
+[Explore the museum](https://alienxsmarthome.com/experience/) · [Technology](https://alienxsmarthome.com/technology/) · [System status](https://alienxsmarthome.com/status/) · [Contact](https://alienxsmarthome.com/contact/)
 
 </div>
 
-## What this project is
+---
+
+## ✨ Welcome
 
 AlienX SmartHome is an engineering showcase, not a Home Assistant dashboard or a home-control application. The site combines browser experiments, an interactive stack explanation, a public configuration-status endpoint, and a protected project inquiry form.
+
+| Explore the experience                  | Built with safeguards                                   |
+| :-------------------------------------- | :------------------------------------------------------ |
+| Seven interactive browser exhibits      | Turnstile and independent server validation             |
+| A readable view of the technology stack | Bounded requests, rate limits, and safe retries         |
+| System, light, and dark themes          | Keyboard navigation and reduced-motion support          |
+| Live runtime/configuration status       | Exact-revision release checks and production monitoring |
 
 Only **`main`** is maintained and deployed. Start with the Codex-maintained [project state and findings register](docs/project-state.md); assistants must also read [AGENTS.md](AGENTS.md). [Audit progress](docs/audit-remediation.md) records repair history. The [release runbook](docs/release-runbook.md) covers acceptance checks, incident triage, and rollback.
 
 `npm run deploy` now checks five required CI workflows for the exact current main
 revision before invoking Wrangler. Cloudflare must use this deploy command for
 the gate to apply; the account-level setting still needs operator confirmation.
+
+## 🧭 Explore AlienX
 
 | Area         | Current implementation                                                                                  |
 | :----------- | :------------------------------------------------------------------------------------------------------ |
@@ -33,7 +54,7 @@ the gate to apply; the account-level setting still needs operator confirmation.
 | Contact      | Validated, Turnstile-protected inquiry submission with retry recovery                                   |
 | Work / About | Placeholder content awaiting genuine case studies and owner biography                                   |
 
-## Inquiry handling
+## 🛡️ Inquiry handling and security
 
 Requests pass origin/content-type/body-size checks, honeypot and rate controls, Turnstile verification, and field validation before contacting Resend. The endpoint requires server-owned verification state; direct calls cannot skip middleware protection.
 
@@ -46,7 +67,7 @@ Requests pass origin/content-type/body-size checks, honeypot and rate controls, 
 
 Security headers include a response-level frame-ancestor policy and an Astro-generated script CSP. Never put provider secrets in browser code or commit local credentials. Report vulnerabilities through [SECURITY.md](SECURITY.md).
 
-## Design and accessibility
+## 🎨 Brand and accessibility
 
 The existing identity stays blue, green, and neutral. These values describe the shared foundation; page-specific systems retain scoped tokens.
 
@@ -62,9 +83,20 @@ Body type is locally hosted **Atkinson**, regular and bold. Technical readouts u
 
 System, explicit light, and explicit dark themes are supported. Saved choices must win over OS preferences before paint and after navigation. Focus visibility, skip navigation, modal focus containment, keyboard alternatives, and reduced-motion behavior are tested requirements—not a claim of complete assistive-technology certification.
 
-## Stack and source ownership
+## ⚙️ Technology
 
 Astro, TypeScript, Cloudflare Workers, Turnstile, and Resend power the application. Cloudflare Images and KV support the adapter. Exact application and test-tool versions are pinned in [package.json](package.json) and the committed lockfile.
+
+| Layer        | Technology                                                             | Purpose                                                     |
+| :----------- | :--------------------------------------------------------------------- | :---------------------------------------------------------- |
+| Framework    | [Astro](https://astro.build)                                           | Page routing and rendering                                  |
+| Runtime      | [Cloudflare Workers](https://workers.cloudflare.com)                   | Hosting and API execution                                   |
+| Language     | [TypeScript](https://www.typescriptlang.org)                           | Application and contract checking                           |
+| Verification | [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) | Server-verified bot protection                              |
+| Email        | [Resend](https://resend.com)                                           | Inquiry notification delivery                               |
+| Validation   | GitHub Actions                                                         | Build, browser, accessibility, security, and release checks |
+
+## 📁 Project map
 
 | Path                 | Responsibility                                                          |
 | :------------------- | :---------------------------------------------------------------------- |
@@ -80,21 +112,34 @@ Astro, TypeScript, Cloudflare Workers, Turnstile, and Resend power the applicati
 
 There is no shared `src/layouts/` directory. Some legacy page overrides remain in BaseHead/global styles; formatting makes them reviewable but does not eliminate that ownership debt. Original social artwork is preserved; the build generates a smaller WebP and decodes public raster images to detect corruption.
 
-## Automated checks
+## ✅ Automated checks
 
-| Workflow              | When                                 | Scope                                                                                           |
-| :-------------------- | :----------------------------------- | :---------------------------------------------------------------------------------------------- |
-| Quality               | Push / PR to main                    | Clean install, formatting, API tests, build, Astro/TypeScript, Worker dry run, dependency audit |
-| Responsive            | Push / PR; manual                    | Built local preview: 84 route/viewport combinations plus interaction regressions                |
-| Accessibility & Theme | Push / PR; manual                    | Built local preview: 48 route/theme/OS cases, axe WCAG checks, Lighthouse accessibility ≥95     |
-| Lighthouse            | Push / PR; manual                    | Built local preview: accessibility, best practices, SEO ≥95; performance ≥85                    |
-| Safari                | Push / PR; manual                    | Built local preview in actual macOS Safari WebDriver                                            |
-| Production Integrity  | Push / PR, six-hour schedule; manual | Live host security headers, redirects, and SEO                                                  |
-| Production Smoke      | Push, hourly; manual                 | Live host/API health; pushes also require the exact Git revision                                |
+| Workflow              | When                            | Scope                                                                                                  |
+| :-------------------- | :------------------------------ | :----------------------------------------------------------------------------------------------------- |
+| Quality               | Push / PR to main               | Clean install, formatting, API tests, build, Astro/TypeScript, Worker dry run, dependency audit        |
+| Responsive            | Push / PR; manual               | Candidate security/SEO contract; 84 route/viewport combinations plus interaction regressions           |
+| Accessibility & Theme | Push / PR; manual               | Built local preview: 48 route/theme/OS cases, axe WCAG checks, Lighthouse accessibility ≥95            |
+| Lighthouse            | Push / PR; manual               | Built local preview: accessibility, best practices, SEO ≥95; performance ≥85                           |
+| Safari                | Push / PR; manual               | Built local preview in actual macOS Safari WebDriver                                                   |
+| Production Integrity  | Push, six-hour schedule; manual | Both live hosts: separate frame/resource CSP, headers, redirects, SEO; pushes require the deployed SHA |
+| Production Smoke      | Push, hourly; manual            | Live host/API health; pushes also require the exact Git revision                                       |
+| Browser Diagnostics   | Manual only                     | Isolated local WebKit loads, CSS/JS/header comparisons, screenshots and traces; not a release gate     |
+| CodeQL                | GitHub security analysis        | JavaScript/TypeScript and workflow analysis                                                            |
+| Workers Build         | Cloudflare Git integration      | Production build and deployment                                                                        |
+
+The five pre-deployment gates remain Quality, Responsive, Accessibility,
+Lighthouse, and Safari. Lighthouse collects three fixed samples per route:
+median performance must meet 85, while every sample must meet 95 for the other
+categories. Measurement errors fail closed; reports retain every sample.
+
+Browser Diagnostics is adapted from Cleaning by Cassi's manual workflow. It
+uses an unconfigured local preview, never sends inquiries, and deliberately
+alters isolated browser responses to investigate loading failures. Its results
+do not replace production security, Safari, or accessibility acceptance.
 
 GitHub CodeQL is separate security analysis. Cloudflare Builds is a separate deployment integration: neither a passing CodeQL run nor a healthy old deployment proves a new release succeeded. Independent deployment gating and notification recipients still require account-owner configuration. See the runbook before declaring a release accepted.
 
-## Local setup
+## 🚀 Local development
 
 Use **Node 22.19+** (or a newer supported LTS) and npm. CI uses Node 22; verify lockfile changes with a clean install, not only an existing `node_modules` tree.
 
@@ -134,3 +179,26 @@ npm run test:a11y
 ```
 
 Lighthouse needs Chrome/Chromium. `node tests/safari.cjs` needs macOS and enabled Safari WebDriver. Browser tests do not replace physical-device, screen-reader, or actual provider-delivery verification.
+
+## 🔧 Maintenance and operations
+
+Start with the [canonical project state](docs/project-state.md) for dated
+verification and outstanding findings. The [release runbook](docs/release-runbook.md)
+covers promotion, incident triage, and rollback. Historical audits are evidence
+for their recorded revisions, not blanket claims about current main.
+
+For focused WebKit loading diagnostics, run the **AlienX Browser Diagnostics**
+workflow manually from GitHub Actions. Download its `webkit-diagnostics`
+artifact for per-mode screenshots, traces, and `summary.json`.
+
+---
+
+<div align="center">
+
+### AlienX SmartHome
+
+_Technology built to do something._
+
+[Website](https://alienxsmarthome.com) · [Explore](https://alienxsmarthome.com/experience/) · [Start a project](https://alienxsmarthome.com/contact/)
+
+</div>

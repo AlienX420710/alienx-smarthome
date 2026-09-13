@@ -49,6 +49,11 @@ jobs:
           cat /tmp/alienx-preview.log
           exit 1
 
+      - name: Verify candidate security and SEO contract
+        env:
+          EXPECTED_REVISION: ${{ github.sha }}
+        run: node scripts/verify-integrity.mjs --candidate
+
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 

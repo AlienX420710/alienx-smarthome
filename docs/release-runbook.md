@@ -32,6 +32,15 @@ automatic retry-until-pass policy.
 4. Check both production hostnames, browser navigation, keyboard dialogs,
    narrow-screen scrolling, and the Status configuration details.
 
+Responsive CI validates the built candidate's security headers, separate frame
+and resource CSP policies, and SEO contract using
+`EXPECTED_REVISION=<full-sha> node scripts/verify-integrity.mjs --candidate`.
+It includes the noindex success page. Production Integrity is a separate
+post-deployment workflow: push runs wait for the pushed revision and validate
+both hosts against it before and after the audit. Scheduled/manual runs record
+the observed revision. Use `node scripts/verify-integrity.mjs` for a read-only
+live check. Do not add this post-deployment workflow to the deployment gate.
+
 Configuration status does not prove that an API key authenticates, that a
 Turnstile challenge succeeds, or that email reaches an inbox. Perform one
 explicitly approved real inquiry and correlate its request/email IDs with the

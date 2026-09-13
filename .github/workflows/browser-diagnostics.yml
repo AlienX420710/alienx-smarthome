@@ -1,0 +1,48 @@
+name: AlienX Browser Diagnostics
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    name: Isolated WebKit load diagnostics
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build candidate
+        run: npm run build
+      - name: Install WebKit
+        run: npx playwright install webkit
+      - name: Start local preview
+        run: npx wrangler dev --port 4321 --host 127.0.0.1 --upstream-protocol http > /tmp/alienx-diagnostics.log 2>&1 &
+      - name: Wait for preview
+        run: |
+          for attempt in {1..30}; do
+            if curl --fail --silent --max-time 5 http://127.0.0.1:4321/ > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/alienx-diagnostics.log
+          exit 1
+      - name: Run isolated diagnostics
+        run: node scripts/webkit-diagnostics.cjs
+      - name: Retain diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: webkit-diagnostics
+          path: |
+            /tmp/alienx-diagnostics.log
+            test-results/webkit-diagnostics
+          if-no-files-found: warn
