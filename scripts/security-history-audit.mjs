@@ -1,6 +1,7 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 
+// Scan every reachable text blob while suppressing any matched credential value.
 const execFileAsync = promisify(execFile);
 const root = process.cwd();
 const maxBytes = 2 * 1024 * 1024;
