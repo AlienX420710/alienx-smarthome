@@ -57,11 +57,15 @@ for (const [object, path] of objects) {
   const size = Number(sizeText.trim());
   if (!Number.isFinite(size) || size > maxBytes) continue;
 
-  const { stdout: text } = await execFileAsync('git', ['cat-file', '-p', object], {
-    cwd: root,
-    encoding: 'utf8',
-    maxBuffer: maxBytes + 1024,
-  });
+  const { stdout: text } = await execFileAsync(
+    'git',
+    ['cat-file', '-p', object],
+    {
+      cwd: root,
+      encoding: 'utf8',
+      maxBuffer: maxBytes + 1024,
+    },
+  );
   if (text.includes('\u0000')) continue;
   scanned += 1;
 
