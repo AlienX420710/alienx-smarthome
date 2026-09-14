@@ -27,25 +27,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Apply scoped cleanup
+      - name: Apply scoped non-workflow cleanup
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
-
-          quality = Path('.github/workflows/quality.yml')
-          text = quality.read_text()
-          checkout_old = """      - name: Checkout\n        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1\n"""
-          checkout_new = checkout_old + """        with:\n          fetch-depth: 0\n"""
-          if checkout_old not in text:
-              raise SystemExit('quality checkout anchor not found')
-          text = text.replace(checkout_old, checkout_new, 1)
-          audit_old = """      - name: Repository security audit\n        run: npm run security:audit\n"""
-          audit_new = audit_old + """\n      - name: Historical secret audit\n        run: node scripts/security-history-audit.mjs\n"""
-          if audit_old not in text:
-              raise SystemExit('quality security audit anchor not found')
-          text = text.replace(audit_old, audit_new, 1)
-          quality.write_text(text)
 
           css_path = Path('src/styles/global.css')
           css = css_path.read_text()
@@ -109,10 +95,9 @@ jobs:
           state = state.replace(marker, section + marker, 1)
           state_path.write_text(state)
           PY
-          rm -f .github/workflows/security-history.yml
 
       - name: Format final changed files
-        run: npx prettier --write src/styles/global.css docs/project-state.md .github/workflows/quality.yml .github/workflows/ax007-ax009-once.yml
+        run: npx prettier --write src/styles/global.css docs/project-state.md
 
       - name: Verify formatting
         run: npm run format:check
@@ -132,13 +117,12 @@ jobs:
       - name: Cloudflare dry run
         run: npx wrangler deploy --dry-run
 
-      - name: Commit final cleanup and remove one-shot workflow
+      - name: Commit validated non-workflow cleanup
         shell: bash
         run: |
-          rm -f .github/workflows/ax007-ax009-once.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
+          git add src/styles/global.css docs/project-state.md
           git diff --cached --quiet && exit 0
-          git commit -m 'chore: close AX-007 and scope AX-009 cleanup'
+          git commit -m 'chore: scope AX-009 style ownership cleanup'
           git push
