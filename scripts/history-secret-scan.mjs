@@ -12,7 +12,10 @@ const revList = execFileSync('git', ['rev-list', '--objects', '--all'], {
 
 const batch = spawnSync(
   'git',
-  ['cat-file', '--batch-check=%(objectname) %(objecttype) %(objectsize) %(rest)'],
+  [
+    'cat-file',
+    '--batch-check=%(objectname) %(objecttype) %(objectsize) %(rest)',
+  ],
   {
     input: revList,
     encoding: 'utf8',
@@ -49,7 +52,9 @@ for (const line of batch.stdout.split('\n')) {
   if (/(^|\/)\.env(?:\.|$)/i.test(path) && !/(^|\/)\.env\.example$/i.test(path))
     failures.push(`${sha.slice(0, 12)} ${path}: historical environment file`);
   if (/\.(?:pem|key|p12|pfx)$/i.test(path))
-    failures.push(`${sha.slice(0, 12)} ${path}: historical key/certificate container`);
+    failures.push(
+      `${sha.slice(0, 12)} ${path}: historical key/certificate container`,
+    );
   if (/(^|\/)(?:id_rsa|id_ed25519|credentials\.json)$/i.test(path))
     failures.push(`${sha.slice(0, 12)} ${path}: historical credential file`);
 
@@ -71,7 +76,9 @@ for (const line of batch.stdout.split('\n')) {
   textBlobCount += 1;
   const text = body.toString('utf8');
   if (secretPatterns.some((pattern) => pattern.test(text)))
-    failures.push(`${sha.slice(0, 12)} ${path}: credential-like material detected`);
+    failures.push(
+      `${sha.slice(0, 12)} ${path}: credential-like material detected`,
+    );
 }
 
 if (failures.length) {
