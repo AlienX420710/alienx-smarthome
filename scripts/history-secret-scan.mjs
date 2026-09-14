@@ -1,5 +1,6 @@
 import { execFileSync, spawnSync } from 'node:child_process';
 
+// Scan every reachable historical blob while keeping potential secret values out of CI logs.
 const TOOL = 'AlienX history-secret-scan v1';
 const MAX_TEXT_BLOB = 2 * 1024 * 1024;
 const failures = [];
