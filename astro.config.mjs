@@ -37,11 +37,6 @@ export default defineConfig({
       ],
       scriptDirective: {
         resources: ["'self'", 'https://challenges.cloudflare.com'],
-        hashes: [
-          'sha256-6X1+jmZLs/WOvx97u4NMEamhfcaYlaIi0kwtWmTuojg=',
-          'sha256-RPJQjhqRTh8k5XtuKuYf/W//EtaouYMGfMXBF1BE6ak=',
-          'sha256-aNGoVdyuJpFmZwl4BowEme7vQ2WzQaE0Sja5OCOTpmw=',
-        ],
       },
     },
   },
