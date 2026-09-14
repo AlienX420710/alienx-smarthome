@@ -179,7 +179,7 @@ import { SITE_TITLE } from '../consts';
       gap: 0.7rem;
     }
   }
-  @media (max-width: 900px) {
+  @media (max-width: 1050px) {
     nav {
       flex-wrap: wrap;
     }
@@ -221,9 +221,11 @@ import { SITE_TITLE } from '../consts';
       gap: 0.45rem 0.85rem;
     }
     .internal-links :global(a) {
+      min-width: 44px;
       min-height: 44px;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
     }
     .command {
       min-width: 44px;
