@@ -2,7 +2,7 @@
 
 > Maintainer note: this is a distilled research notebook, not a copy/paste catalog. Revisit the linked sources when implementing a pattern, verify current browser support, and adapt the idea to AlienX's accessibility, performance, security, responsive, Safari/WebKit, and Lighthouse gates.
 
-Last research pass: 2026-09-13.
+Last research pass: 2026-09-14.
 
 ## Why this exists
 
@@ -20,6 +20,47 @@ The source set below is useful less as a collection of complete applications and
 8. Do not add a library for an interaction that the platform can express clearly in a few maintainable lines.
 9. Verify licensing before copying source code or assets. Ideas/patterns can be reimplemented; source licenses still matter.
 10. Browser support and standards evolve. Old "HTML5" resource lists are discovery indexes, not current compatibility truth. Verify against current standards/MDN/Can I Use before shipping.
+
+## Current AlienX adoption state
+
+The first implementation pass has begun rather than remaining purely research:
+
+- `/lab` is the sandbox for patterns that have not earned a production role.
+- The Lab currently demonstrates semantic fieldset/radio state, CSS `:has()`, a
+  native range control, `<details>/<summary>`, container-query adaptation,
+  responsive behavior, light/dark theming, and reduced-motion handling without
+  adding a custom JavaScript dependency.
+- Lab is surfaced in the primary and footer navigation. Responsive navigation
+  was repaired so the expanded primary nav wraps before 1024px overflow and
+  retains 44px mobile touch targets.
+- Production adoption remains deliberately narrower than the Lab. A pattern
+  moves into a production component only when it solves a specific semantic,
+  usability, lifecycle, responsive, or performance problem and passes the full
+  quality matrix.
+
+### Next implementation queue
+
+Use this order for the component-by-component pass:
+
+1. **Native semantic upgrades:** find custom disclosure/group/search/range/media
+   behavior that can be simplified with native elements without changing the
+   intended product behavior.
+2. **Component responsiveness:** identify reusable panels/cards that still rely
+   on viewport assumptions and adopt container queries only where their local
+   width is the real constraint.
+3. **CSS-owned state:** use `:has()` or other declarative selectors where
+   JavaScript exists only to mirror descendant state into a parent class.
+4. **Progressive enhancement and lifecycle:** remove unnecessary listeners,
+   timers, measurements, or rendering loops; make optional effects fail soft.
+5. **Production style ownership:** fold AX-009 dead/redundant CSS cleanup into
+   each scoped component change so deletions are proven rather than guessed.
+6. **Lab-only experiments:** range-driven comparison, compact SVG data display,
+   progress/state machine, live filtering/search, View Transitions, and explicit
+   drag/draw/physics surfaces. Promote only after a concrete product use emerges.
+
+Do not prioritize novelty-only effects such as kinetic typography, animated
+navigation, carousels, or glass panels over the semantic/performance work above.
+They remain reference ideas, not roadmap commitments.
 
 ## 1. Marko Denic — HTML Tips
 
