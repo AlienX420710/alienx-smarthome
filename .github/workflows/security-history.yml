@@ -1,0 +1,24 @@
+name: AlienX Historical Secret Audit
+
+on:
+  pull_request:
+    paths:
+      - scripts/security-history-audit.mjs
+      - .github/workflows/security-history.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  history:
+    name: Full-history credential scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout complete history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - name: Scan reachable Git history without logging secret values
+        run: node scripts/security-history-audit.mjs
