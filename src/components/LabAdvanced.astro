@@ -1,0 +1,431 @@
+<section class="advanced-lab" aria-labelledby="advanced-lab-title">
+  <div class="advanced-lab__intro">
+    <p class="eyebrow">05 // DEEP LAB</p>
+    <h2 id="advanced-lab-title">Push the platform before adding a framework.</h2>
+    <p>
+      Three experiments explore native state, inline SVG, intrinsic layout, and
+      CSS perspective. JavaScript is used only where the browser needs a small
+      bridge between input and presentation.
+    </p>
+  </div>
+
+  <div class="advanced-lab__grid">
+    <article class="telemetry-card">
+      <div class="card-topline">
+        <span>INLINE SVG</span>
+        <span>ZERO CHART DEPENDENCY</span>
+      </div>
+      <h3>Signal telemetry</h3>
+      <p>
+        A compact responsive chart uses semantic SVG primitives, currentColor,
+        and a real text description instead of importing a charting runtime.
+      </p>
+      <figure>
+        <svg viewBox="0 0 600 220" role="img" aria-labelledby="signal-title signal-desc">
+          <title id="signal-title">AlienX signal telemetry</title>
+          <desc id="signal-desc">
+            A line graph rises and falls across eight samples, ending near its
+            highest point.
+          </desc>
+          <g class="grid-lines" aria-hidden="true">
+            <path d="M20 40H580 M20 90H580 M20 140H580 M20 190H580"></path>
+          </g>
+          <path
+            class="signal-fill"
+            d="M20 174 L100 145 L180 158 L260 103 L340 122 L420 69 L500 92 L580 48 L580 200 L20 200 Z"
+          ></path>
+          <path
+            class="signal-line"
+            d="M20 174 L100 145 L180 158 L260 103 L340 122 L420 69 L500 92 L580 48"
+          ></path>
+          <g class="signal-points" aria-hidden="true">
+            <circle cx="20" cy="174" r="5"></circle>
+            <circle cx="100" cy="145" r="5"></circle>
+            <circle cx="180" cy="158" r="5"></circle>
+            <circle cx="260" cy="103" r="5"></circle>
+            <circle cx="340" cy="122" r="5"></circle>
+            <circle cx="420" cy="69" r="5"></circle>
+            <circle cx="500" cy="92" r="5"></circle>
+            <circle cx="580" cy="48" r="5"></circle>
+          </g>
+        </svg>
+        <figcaption>
+          <span>LATENCY</span>
+          <strong>18 ms</strong>
+          <span>STABILITY</span>
+          <strong>99.98%</strong>
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="native-meter-card">
+      <div class="card-topline">
+        <span>NATIVE STATE</span>
+        <span>METER / PROGRESS</span>
+      </div>
+      <h3>System budget</h3>
+      <p>
+        Native progress semantics expose state directly to assistive technology
+        while CSS supplies the visual system.
+      </p>
+      <div class="budget-row">
+        <label for="runtime-budget">Runtime budget</label>
+        <meter id="runtime-budget" min="0" max="100" low="35" high="75" optimum="20" value="28">
+          28 out of 100
+        </meter>
+        <span>28 / 100</span>
+      </div>
+      <div class="budget-row">
+        <label for="delivery-progress">Delivery pipeline</label>
+        <progress id="delivery-progress" max="100" value="84">84%</progress>
+        <span>84%</span>
+      </div>
+    </article>
+  </div>
+
+  <fieldset class="perspective-lab">
+    <legend>Perspective deck mode</legend>
+    <div class="perspective-controls">
+      <input type="radio" name="deck-mode" id="deck-interface" checked />
+      <label for="deck-interface">Interface</label>
+      <input type="radio" name="deck-mode" id="deck-system" />
+      <label for="deck-system">System</label>
+      <input type="radio" name="deck-mode" id="deck-edge" />
+      <label for="deck-edge">Edge</label>
+    </div>
+    <div class="perspective-stage" aria-hidden="true">
+      <div class="perspective-card perspective-card--back">
+        <span>LAYER 03</span>
+        <strong>EDGE</strong>
+      </div>
+      <div class="perspective-card perspective-card--middle">
+        <span>LAYER 02</span>
+        <strong>SYSTEM</strong>
+      </div>
+      <div class="perspective-card perspective-card--front">
+        <span>LAYER 01</span>
+        <strong>INTERFACE</strong>
+      </div>
+    </div>
+    <p class="perspective-note">
+      The selected native radio changes the parent state through <code>:has()</code>.
+      No script owns the interaction.
+    </p>
+  </fieldset>
+</section>
+
+<style>
+  .advanced-lab {
+    padding: clamp(5rem, 10vw, 8rem) 0;
+    border-bottom: 1px solid #171d2a;
+  }
+  .advanced-lab__intro {
+    max-width: 820px;
+    margin-bottom: 3rem;
+  }
+  .eyebrow {
+    margin: 0 0 1.1rem;
+    color: #9aa7bb;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+  }
+  h2,
+  h3 {
+    color: #f6f8ff;
+  }
+  h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(2.3rem, 5vw, 4.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+  }
+  h3 {
+    margin: 1.5rem 0 0.8rem;
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  .advanced-lab__intro > p:last-child,
+  article > p,
+  .perspective-note {
+    color: #a6b0c2;
+    line-height: 1.7;
+  }
+  .advanced-lab__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    gap: 1rem;
+  }
+  article,
+  .perspective-lab {
+    min-width: 0;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border: 1px solid #1d2536;
+    border-radius: 26px;
+    background: linear-gradient(145deg, #0c111b, #080b12);
+  }
+  .card-topline {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: #7e8ba1;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+  }
+  figure {
+    margin: 2rem 0 0;
+  }
+  svg {
+    width: 100%;
+    height: auto;
+    color: #39ff5a;
+  }
+  .grid-lines path {
+    fill: none;
+    stroke: #202a3b;
+    stroke-width: 1;
+  }
+  .signal-fill {
+    fill: rgb(57 255 90 / 0.08);
+  }
+  .signal-line {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .signal-points circle {
+    fill: #080b12;
+    stroke: currentColor;
+    stroke-width: 3;
+  }
+  figcaption {
+    display: grid;
+    grid-template-columns: auto 1fr auto 1fr;
+    gap: 0.5rem 0.8rem;
+    align-items: baseline;
+    color: #7f8da3;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+  }
+  figcaption strong {
+    color: #edf2fb;
+    font-size: 0.9rem;
+  }
+  .native-meter-card {
+    display: grid;
+    align-content: start;
+  }
+  .budget-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.65rem 1rem;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+  .budget-row label {
+    color: #e8edf7;
+    font-weight: 700;
+  }
+  .budget-row meter,
+  .budget-row progress {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 0.9rem;
+    accent-color: #39ff5a;
+  }
+  .budget-row > span {
+    color: #8d9bb0;
+    font-variant-numeric: tabular-nums;
+  }
+  .perspective-lab {
+    margin-top: 1rem;
+  }
+  .perspective-lab legend {
+    padding: 0 0.5rem;
+    color: #8f9bb0;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .perspective-controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.45rem;
+    padding: 0.4rem;
+    border: 1px solid #1b2333;
+    border-radius: 16px;
+    background: #060910;
+  }
+  .perspective-controls input {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    opacity: 0;
+  }
+  .perspective-controls label {
+    display: grid;
+    min-height: 48px;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    color: #8f9ab0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .perspective-controls input:focus-visible + label {
+    outline: 2px solid #39ff5a;
+    outline-offset: 2px;
+  }
+  .perspective-controls input:checked + label {
+    border-color: rgb(57 255 90 / 0.4);
+    background: rgb(57 255 90 / 0.09);
+    color: #f7faff;
+  }
+  .perspective-stage {
+    position: relative;
+    min-height: clamp(360px, 50vw, 560px);
+    margin-top: 1rem;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid #1b2333;
+    border-radius: 22px;
+    background:
+      radial-gradient(circle at 50% 45%, rgb(57 255 90 / 0.11), transparent 26rem),
+      #070b12;
+    perspective: 950px;
+  }
+  .perspective-card {
+    position: absolute;
+    width: min(76%, 620px);
+    min-height: 210px;
+    display: grid;
+    align-content: end;
+    gap: 0.4rem;
+    padding: 1.5rem;
+    border: 1px solid #28344b;
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgb(17 24 37 / 0.96), rgb(8 12 19 / 0.96));
+    box-shadow: 0 30px 80px rgb(0 0 0 / 0.32);
+    transition:
+      transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity 300ms ease,
+      border-color 300ms ease;
+  }
+  .perspective-card span {
+    color: #8390a5;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+  }
+  .perspective-card strong {
+    color: #f4f7fd;
+    font-size: clamp(1.8rem, 6vw, 4rem);
+    letter-spacing: -0.05em;
+  }
+  .perspective-card--back {
+    transform: translate3d(0, -80px, -220px) rotateX(58deg);
+    opacity: 0.45;
+  }
+  .perspective-card--middle {
+    transform: translate3d(0, -20px, -100px) rotateX(48deg);
+    opacity: 0.68;
+  }
+  .perspective-card--front {
+    transform: translate3d(0, 70px, 30px) rotateX(38deg);
+    border-color: rgb(57 255 90 / 0.4);
+  }
+  .perspective-lab:has(#deck-system:checked) .perspective-card--middle {
+    transform: translate3d(0, 70px, 30px) rotateX(38deg);
+    opacity: 1;
+    border-color: rgb(57 255 90 / 0.4);
+  }
+  .perspective-lab:has(#deck-system:checked) .perspective-card--front {
+    transform: translate3d(0, 145px, -110px) rotateX(48deg);
+    opacity: 0.5;
+    border-color: #28344b;
+  }
+  .perspective-lab:has(#deck-edge:checked) .perspective-card--back {
+    transform: translate3d(0, 70px, 30px) rotateX(38deg);
+    opacity: 1;
+    border-color: rgb(57 255 90 / 0.4);
+  }
+  .perspective-lab:has(#deck-edge:checked) .perspective-card--middle {
+    transform: translate3d(0, 145px, -100px) rotateX(48deg);
+    opacity: 0.55;
+    border-color: #28344b;
+  }
+  .perspective-lab:has(#deck-edge:checked) .perspective-card--front {
+    transform: translate3d(0, 210px, -220px) rotateX(58deg);
+    opacity: 0.3;
+    border-color: #28344b;
+  }
+  .perspective-note {
+    margin: 1.25rem 0 0;
+  }
+  code {
+    color: #39ff5a;
+  }
+  @media (max-width: 620px) {
+    .perspective-controls {
+      grid-template-columns: 1fr;
+    }
+    figcaption {
+      grid-template-columns: auto 1fr;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .perspective-card {
+      transition: none;
+    }
+  }
+  @media (prefers-color-scheme: light) {
+    :global(html:where(:not([data-alienx-theme]))) .advanced-lab {
+      border-color: #dfe5ee;
+    }
+    :global(html:where(:not([data-alienx-theme]))) h2,
+    :global(html:where(:not([data-alienx-theme]))) h3 {
+      color: #101722;
+    }
+    :global(html:where(:not([data-alienx-theme]))) article,
+    :global(html:where(:not([data-alienx-theme]))) .perspective-lab,
+    :global(html:where(:not([data-alienx-theme]))) .perspective-stage {
+      border-color: #d8e0ea;
+      background: #fff;
+    }
+    :global(html:where(:not([data-alienx-theme]))) .advanced-lab__intro > p:last-child,
+    :global(html:where(:not([data-alienx-theme]))) article > p,
+    :global(html:where(:not([data-alienx-theme]))) .perspective-note {
+      color: #52627a;
+    }
+    :global(html:where(:not([data-alienx-theme]))) .budget-row label,
+    :global(html:where(:not([data-alienx-theme]))) figcaption strong {
+      color: #17202d;
+    }
+  }
+  :global(html[data-alienx-theme='light']) .advanced-lab {
+    border-color: #dfe5ee;
+  }
+  :global(html[data-alienx-theme='light']) h2,
+  :global(html[data-alienx-theme='light']) h3 {
+    color: #101722;
+  }
+  :global(html[data-alienx-theme='light']) article,
+  :global(html[data-alienx-theme='light']) .perspective-lab,
+  :global(html[data-alienx-theme='light']) .perspective-stage {
+    border-color: #d8e0ea;
+    background: #fff;
+  }
+  :global(html[data-alienx-theme='light']) .advanced-lab__intro > p:last-child,
+  :global(html[data-alienx-theme='light']) article > p,
+  :global(html[data-alienx-theme='light']) .perspective-note {
+    color: #52627a;
+  }
+  :global(html[data-alienx-theme='light']) .budget-row label,
+  :global(html[data-alienx-theme='light']) figcaption strong {
+    color: #17202d;
+  }
+</style>
