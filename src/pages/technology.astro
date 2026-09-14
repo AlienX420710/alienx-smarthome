@@ -423,26 +423,37 @@ const description =
         operations:
           'Deployment, DNS, environments, caching, observability, source control, and runtime concerns.',
       };
+      let layerCleanup: (() => void) | undefined;
       function initializeLayers() {
-        const detail = document.querySelector('[data-layer-detail]');
-        document
-          .querySelectorAll<HTMLButtonElement>('[data-layer]')
-          .forEach((button) => {
-            if (button.dataset.bound) return;
-            button.dataset.bound = 'true';
-            button.addEventListener('click', () => {
-              document
-                .querySelectorAll<HTMLButtonElement>('[data-layer]')
-                .forEach((item) => {
-                  const selected = item === button;
-                  item.classList.toggle('is-selected', selected);
-                  item.setAttribute('aria-pressed', String(selected));
-                });
-              if (detail)
-                detail.textContent = details[button.dataset.layer ?? ''] ?? '';
-            });
-          });
+        layerCleanup?.();
+        const table = document.querySelector<HTMLElement>('.layer-table');
+        const detail = document.querySelector<HTMLElement>(
+          '[data-layer-detail]',
+        );
+        if (!table || !detail) return;
+        const lifecycle = new AbortController();
+        table.addEventListener(
+          'click',
+          (event) => {
+            const button =
+              event.target instanceof Element
+                ? event.target.closest<HTMLButtonElement>('[data-layer]')
+                : null;
+            if (!button || !table.contains(button)) return;
+            table
+              .querySelectorAll<HTMLButtonElement>('[data-layer]')
+              .forEach((item) => {
+                const selected = item === button;
+                item.classList.toggle('is-selected', selected);
+                item.setAttribute('aria-pressed', String(selected));
+              });
+            detail.textContent = details[button.dataset.layer ?? ''] ?? '';
+          },
+          { signal: lifecycle.signal },
+        );
+        layerCleanup = () => lifecycle.abort();
       }
+      document.addEventListener('astro:before-swap', () => layerCleanup?.());
       document.addEventListener('astro:page-load', initializeLayers);
       initializeLayers();
     </script>
@@ -668,10 +679,11 @@ const description =
       }
       .capability-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
         gap: 16px;
       }
       .capability {
+        container-type: inline-size;
         position: relative;
         min-height: 300px;
         padding: 30px;
@@ -687,7 +699,7 @@ const description =
         background: linear-gradient(145deg, #0d1421, #080c14);
       }
       .capability--wide {
-        grid-column: span 2;
+        grid-column: 1 / -1;
       }
       .number {
         color: var(--tech-blue);
@@ -819,7 +831,7 @@ const description =
       }
       .quality-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
         gap: 12px;
         margin-top: 30px;
       }
@@ -847,7 +859,7 @@ const description =
       }
       .layer-table {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
         gap: 8px;
       }
       .layer {
@@ -901,7 +913,7 @@ const description =
       }
       .toolbox-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
         gap: 1px;
         border: 1px solid var(--tech-border);
         background: var(--tech-border);
@@ -924,7 +936,7 @@ const description =
       }
       .principle-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
         gap: 12px;
       }
       .principle-grid article {
@@ -992,12 +1004,6 @@ const description =
         }
         .system-map {
           min-height: 430px;
-        }
-        .capability-grid,
-        .layer-table,
-        .toolbox-grid,
-        .principle-grid {
-          grid-template-columns: 1fr;
         }
         .capability--wide {
           grid-column: auto;

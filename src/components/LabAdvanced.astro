@@ -1,7 +1,9 @@
 <section class="advanced-lab" aria-labelledby="advanced-lab-title">
   <div class="advanced-lab__intro">
     <p class="eyebrow">05 // DEEP LAB</p>
-    <h2 id="advanced-lab-title">Push the platform before adding a framework.</h2>
+    <h2 id="advanced-lab-title">
+      Push the platform before adding a framework.
+    </h2>
     <p>
       Three experiments explore native state, inline SVG, intrinsic layout, and
       CSS perspective. JavaScript is used only where the browser needs a small
@@ -21,7 +23,11 @@
         and a real text description instead of importing a charting runtime.
       </p>
       <figure>
-        <svg viewBox="0 0 600 220" role="img" aria-labelledby="signal-title signal-desc">
+        <svg
+          viewBox="0 0 600 220"
+          role="img"
+          aria-labelledby="signal-title signal-desc"
+        >
           <title id="signal-title">AlienX signal telemetry</title>
           <desc id="signal-desc">
             A line graph rises and falls across eight samples, ending near its
@@ -70,14 +76,24 @@
       </p>
       <div class="budget-row">
         <label for="runtime-budget">Runtime budget</label>
-        <meter id="runtime-budget" min="0" max="100" low="35" high="75" optimum="20" value="28">
+        <meter
+          id="runtime-budget"
+          min="0"
+          max="100"
+          low="35"
+          high="75"
+          optimum="20"
+          value="28"
+        >
           28 out of 100
         </meter>
         <span>28 / 100</span>
       </div>
       <div class="budget-row">
         <label for="delivery-progress">Delivery pipeline</label>
-        <progress id="delivery-progress" max="100" value="84">84%</progress>
+        <progress id="delivery-progress" max="100" value="84">
+          84%
+        </progress>
         <span>84%</span>
       </div>
     </article>
@@ -108,8 +124,8 @@
       </div>
     </div>
     <p class="perspective-note">
-      The selected native radio changes the parent state through <code>:has()</code>.
-      No script owns the interaction.
+      The selected native radio changes the parent state through{' '}
+      <code>:has()</code>. No script owns the interaction.
     </p>
   </fieldset>
 </section>
@@ -295,7 +311,11 @@
     border: 1px solid #1b2333;
     border-radius: 22px;
     background:
-      radial-gradient(circle at 50% 45%, rgb(57 255 90 / 0.11), transparent 26rem),
+      radial-gradient(
+        circle at 50% 45%,
+        rgb(57 255 90 / 0.11),
+        transparent 26rem
+      ),
       #070b12;
     perspective: 950px;
   }
@@ -309,7 +329,11 @@
     padding: 1.5rem;
     border: 1px solid #28344b;
     border-radius: 22px;
-    background: linear-gradient(145deg, rgb(17 24 37 / 0.96), rgb(8 12 19 / 0.96));
+    background: linear-gradient(
+      145deg,
+      rgb(17 24 37 / 0.96),
+      rgb(8 12 19 / 0.96)
+    );
     box-shadow: 0 30px 80px rgb(0 0 0 / 0.32);
     transition:
       transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -396,7 +420,9 @@
       border-color: #d8e0ea;
       background: #fff;
     }
-    :global(html:where(:not([data-alienx-theme]))) .advanced-lab__intro > p:last-child,
+    :global(html:where(:not([data-alienx-theme])))
+      .advanced-lab__intro
+      > p:last-child,
     :global(html:where(:not([data-alienx-theme]))) article > p,
     :global(html:where(:not([data-alienx-theme]))) .perspective-note {
       color: #52627a;

@@ -28,8 +28,8 @@ import { SITE_TITLE } from '../consts';
       <section class="journey" aria-labelledby="journey-title">
         <p class="eyebrow">THE JOURNEY</p>
         <h2 id="journey-title">One chapter led to the next.</h2>
-        <div class="timeline">
-          <article>
+        <ol class="timeline">
+          <li class="timeline-item">
             <span class="number">01</span>
             <div>
               <h3>Home Assistant</h3>
@@ -38,8 +38,8 @@ import { SITE_TITLE } from '../consts';
                 the door to a much deeper interest in technology.
               </p>
             </div>
-          </article>
-          <article>
+          </li>
+          <li class="timeline-item">
             <span class="number">02</span>
             <div>
               <h3>Unraid</h3>
@@ -48,8 +48,8 @@ import { SITE_TITLE } from '../consts';
                 creating a new layer of things to learn and build.
               </p>
             </div>
-          </article>
-          <article>
+          </li>
+          <li class="timeline-item">
             <span class="number">03</span>
             <div>
               <h3>Networking</h3>
@@ -59,8 +59,8 @@ import { SITE_TITLE } from '../consts';
                 the services.
               </p>
             </div>
-          </article>
-          <article>
+          </li>
+          <li class="timeline-item">
             <span class="number">04</span>
             <div>
               <h3>Websites</h3>
@@ -70,8 +70,8 @@ import { SITE_TITLE } from '../consts';
                 next direction.
               </p>
             </div>
-          </article>
-        </div>
+          </li>
+        </ol>
       </section>
       <section class="story" aria-labelledby="story-title">
         <p class="eyebrow">THE STORY</p>
@@ -155,9 +155,12 @@ import { SITE_TITLE } from '../consts';
   .timeline {
     display: grid;
     gap: 1rem;
-    margin-top: 3rem;
+    margin: 3rem 0 0;
+    padding: 0;
+    list-style: none;
   }
-  article {
+  .timeline-item {
+    container-type: inline-size;
     display: grid;
     grid-template-columns: 72px 1fr;
     gap: 1.5rem;
@@ -174,7 +177,7 @@ import { SITE_TITLE } from '../consts';
       border-color 180ms ease,
       transform 180ms ease;
   }
-  article:hover {
+  .timeline-item:hover {
     border-color: color-mix(in srgb, var(--about-accent) 36%, transparent);
     transform: translateY(-2px);
   }
@@ -185,14 +188,21 @@ import { SITE_TITLE } from '../consts';
     letter-spacing: 0.16em;
     padding-top: 0.25rem;
   }
-  article h3 {
+  .timeline-item h3 {
     margin: 0;
     font-size: 1.6rem;
   }
-  article p {
+  .timeline-item p {
     margin: 0.8rem 0 0;
     color: var(--about-soft);
     line-height: 1.65;
+  }
+
+  @container (max-width: 420px) {
+    .timeline-item {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
   }
   .story {
     max-width: 760px;
@@ -220,10 +230,10 @@ import { SITE_TITLE } from '../consts';
       --about-card-border: #dce2ec;
       --about-accent: var(--brand-green-dark);
     }
-    :global(html:where(:not([data-alienx-theme]))) article {
+    :global(html:where(:not([data-alienx-theme]))) .timeline-item {
       box-shadow: 0 10px 30px rgba(42, 55, 80, 0.05);
     }
-    :global(html:where(:not([data-alienx-theme]))) article:hover {
+    :global(html:where(:not([data-alienx-theme]))) .timeline-item:hover {
       border-color: color-mix(in srgb, var(--about-accent) 42%, transparent);
     }
   }
@@ -241,10 +251,10 @@ import { SITE_TITLE } from '../consts';
     --about-card-border: #dce2ec;
     --about-accent: var(--brand-green-dark);
   }
-  :global(html[data-alienx-theme='light']) article {
+  :global(html[data-alienx-theme='light']) .timeline-item {
     box-shadow: 0 10px 30px rgba(42, 55, 80, 0.05);
   }
-  :global(html[data-alienx-theme='light']) article:hover {
+  :global(html[data-alienx-theme='light']) .timeline-item:hover {
     border-color: color-mix(in srgb, var(--about-accent) 42%, transparent);
   }
   :global(html:where([data-alienx-theme='light'])) :global(body) {
@@ -270,16 +280,16 @@ import { SITE_TITLE } from '../consts';
     .story {
       margin-top: 5rem;
     }
-    .timeline article {
+    .timeline .timeline-item {
       grid-template-columns: 1fr;
       gap: 0.5rem;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    article {
+    .timeline-item {
       transition: none;
     }
-    article:hover {
+    .timeline-item:hover {
       transform: none;
     }
   }

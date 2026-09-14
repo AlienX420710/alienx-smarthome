@@ -14,16 +14,29 @@ if (!outputStat || outputStat.mtimeMs < inputStat.mtimeMs) {
     .webp({ quality: 85 })
     .toFile(output);
 }
-async function validate(directory) {
+async function validate(directory, assets = []) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const path = join(directory, entry.name);
-    if (entry.isDirectory()) await validate(path);
+    if (entry.isDirectory()) await validate(path, assets);
     else if (/\.(png|jpe?g|webp|avif)$/i.test(entry.name)) {
-      await sharp(path, { failOn: 'error' }).raw().toBuffer();
+      const image = sharp(path, { failOn: 'error' });
+      const metadata = await image.metadata();
+      await image.raw().toBuffer();
+      assets.push({
+        path,
+        width: metadata.width ?? 0,
+        height: metadata.height ?? 0,
+        format: metadata.format ?? 'unknown',
+        bytes: (await stat(path)).size,
+      });
     }
   }
+  return assets;
 }
-await validate('public');
-console.log(
-  'Social image generated; public raster images decoded successfully.',
-);
+const assets = await validate('public');
+console.log('Media audit: public raster assets decode successfully.');
+for (const asset of assets.sort((a, b) => a.path.localeCompare(b.path))) {
+  console.log(
+    `  ${asset.path}: ${asset.width}x${asset.height} ${asset.format} ${Math.round(asset.bytes / 1024)} KiB`,
+  );
+}
