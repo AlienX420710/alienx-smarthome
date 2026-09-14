@@ -25,16 +25,20 @@ import { SITE_TITLE } from '../consts';
             If the experience made you stop and think, tell us what you want to
             build. Give us enough context to make the first conversation useful.
           </p>
-          <div class="signal" aria-label="Inquiry process">
-            <span>01</span>
-            <b>Tell us</b>
-            <i></i>
-            <span>02</span>
-            <b>We respond</b>
-            <i></i>
-            <span>03</span>
-            <b>Explore it</b>
-          </div>
+          <ol class="signal" aria-label="Inquiry process">
+            <li>
+              <span>01</span>
+              <b>Tell us</b>
+            </li>
+            <li>
+              <span>02</span>
+              <b>We respond</b>
+            </li>
+            <li>
+              <span>03</span>
+              <b>Explore it</b>
+            </li>
+          </ol>
         </div>
 
         <form id="inquiry-form" method="post" action="/api/inquiry" novalidate>
@@ -546,22 +550,35 @@ import { SITE_TITLE } from '../consts';
   }
   .signal {
     display: grid;
-    grid-template-columns: auto auto 1fr auto auto 1fr auto;
-    gap: 0.75rem;
-    align-items: center;
-    margin-top: 4rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 4rem 0 0;
+    padding: 0;
+    list-style: none;
     color: var(--contact-soft);
     font-size: 0.7rem;
     letter-spacing: 0.12em;
+  }
+  .signal li {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.55rem;
+    align-items: center;
+  }
+  .signal li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 0.15rem);
+    width: 0.7rem;
+    height: 1px;
+    background: var(--contact-divider);
   }
   .signal b {
     color: #d8e0ef;
     font-size: 0.68rem;
     white-space: nowrap;
-  }
-  .signal i {
-    height: 1px;
-    background: var(--contact-divider);
   }
   form {
     padding: 2rem;
@@ -842,13 +859,18 @@ import { SITE_TITLE } from '../consts';
       grid-template-columns: 1fr;
     }
     .signal {
-      grid-template-columns: auto auto 1fr auto auto;
+      grid-template-columns: 1fr;
+      gap: 0.9rem;
     }
-    .signal i:last-of-type {
-      display: none;
+    .signal li {
+      grid-template-columns: 2.2rem 1fr;
     }
-    .signal b:last-of-type {
-      display: none;
+    .signal li:not(:last-child)::after {
+      top: auto;
+      bottom: -0.65rem;
+      left: 1rem;
+      width: 1px;
+      height: 0.4rem;
     }
   }
   @media (prefers-reduced-motion: reduce) {

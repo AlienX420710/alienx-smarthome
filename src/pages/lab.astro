@@ -222,8 +222,58 @@ import Footer from '../components/Footer.astro';
         </div>
       </section>
 
+      <section class="comparison-section" aria-labelledby="comparison-title">
+        <div class="section-copy">
+          <p class="eyebrow">04 // COMPARISON FIELD</p>
+          <h2 id="comparison-title">
+            A before/after slider without a custom drag widget.
+          </h2>
+          <p>
+            A native range input owns keyboard, touch, and pointer behavior. A
+            few lines of progressive JavaScript only synchronize the visual
+            split with the control value.
+          </p>
+        </div>
+
+        <figure class="comparison-lab">
+          <div
+            class="comparison-stage"
+            id="comparison-stage"
+            style="--split: 50%"
+          >
+            <div class="comparison-layer comparison-layer--baseline">
+              <span>BASELINE</span>
+              <strong>Static brochure</strong>
+              <p>Content exists, but the interface mostly waits to be read.</p>
+            </div>
+            <div class="comparison-layer comparison-layer--enhanced">
+              <span>ALIENX</span>
+              <strong>Responsive system</strong>
+              <p>Semantics, interaction, state, and layout work together.</p>
+            </div>
+            <div class="comparison-divider" aria-hidden="true"></div>
+          </div>
+          <figcaption>
+            <label for="comparison-range">Reveal enhanced system</label>
+            <div class="comparison-control">
+              <input
+                id="comparison-range"
+                type="range"
+                min="0"
+                max="100"
+                value="50"
+                aria-describedby="comparison-output"
+              />
+              <output id="comparison-output" for="comparison-range">
+                50%
+              </output>
+            </div>
+          </figcaption>
+        </figure>
+      </section>
+
       <section class="manifesto" aria-labelledby="manifesto-title">
-        <p class="eyebrow">04 // RULE</p>
+        <p class="eyebrow">05 // RULE</p>
         <h2 id="manifesto-title">
           Use complexity only where it earns its keep.
         </h2>
@@ -240,6 +290,33 @@ import Footer from '../components/Footer.astro';
     <Footer />
   </body>
 </html>
+
+<script>
+  let comparisonCleanup: (() => void) | undefined;
+
+  function initializeComparison() {
+    comparisonCleanup?.();
+    const range = document.querySelector<HTMLInputElement>('#comparison-range');
+    const stage = document.querySelector<HTMLElement>('#comparison-stage');
+    const output =
+      document.querySelector<HTMLOutputElement>('#comparison-output');
+    if (!range || !stage || !output) return;
+
+    const lifecycle = new AbortController();
+    const update = () => {
+      const value = `${range.value}%`;
+      stage.style.setProperty('--split', value);
+      output.value = value;
+    };
+
+    range.addEventListener('input', update, { signal: lifecycle.signal });
+    update();
+    comparisonCleanup = () => lifecycle.abort();
+  }
+
+  document.addEventListener('astro:page-load', initializeComparison);
+  initializeComparison();
+</script>
 
 <style>
   :global(body) {
@@ -905,5 +982,170 @@ import Footer from '../components/Footer.astro';
       #fff 72%
     );
     color: #122019;
+  }
+
+  .comparison-section {
+    padding: clamp(5rem, 10vw, 8rem) 0;
+    border-bottom: 1px solid #171d2a;
+  }
+
+  .comparison-lab {
+    margin: 0;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    border: 1px solid #1d2536;
+    border-radius: 28px;
+    background: #080c13;
+  }
+
+  .comparison-stage {
+    --split: 50%;
+    position: relative;
+    min-height: clamp(300px, 48vw, 520px);
+    overflow: hidden;
+    border: 1px solid #20283a;
+    border-radius: 20px;
+    background: #090d15;
+  }
+
+  .comparison-layer {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: end;
+    gap: 0.75rem;
+    padding: clamp(1.5rem, 5vw, 4rem);
+  }
+
+  .comparison-layer span {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+  }
+
+  .comparison-layer strong {
+    max-width: 700px;
+    font-size: clamp(2rem, 6vw, 5rem);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+
+  .comparison-layer p {
+    max-width: 540px;
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  .comparison-layer--baseline {
+    background:
+      linear-gradient(145deg, rgb(255 255 255 / 0.03), transparent 60%), #111722;
+    color: #aab4c5;
+  }
+
+  .comparison-layer--baseline strong {
+    color: #d7deea;
+  }
+
+  .comparison-layer--enhanced {
+    clip-path: inset(0 calc(100% - var(--split)) 0 0);
+    background:
+      radial-gradient(
+        circle at 20% 20%,
+        rgb(57 255 90 / 0.2),
+        transparent 24rem
+      ),
+      linear-gradient(145deg, #0a1710, #07100b 72%);
+    color: #b7c9bd;
+  }
+
+  .comparison-layer--enhanced span,
+  .comparison-layer--enhanced strong {
+    color: var(--lab-accent);
+  }
+
+  .comparison-divider {
+    position: absolute;
+    inset-block: 0;
+    left: var(--split);
+    width: 2px;
+    transform: translateX(-1px);
+    background: #f5f8ff;
+    box-shadow: 0 0 24px rgb(255 255 255 / 0.28);
+    pointer-events: none;
+  }
+
+  .comparison-divider::after {
+    content: '↔';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #dce4ef;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: #f5f8ff;
+    color: #0c1118;
+    font-weight: 800;
+  }
+
+  .comparison-lab figcaption {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 1.3fr);
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.25rem 0.25rem 0;
+  }
+
+  .comparison-lab label {
+    color: #e8edf7;
+    font-weight: 700;
+  }
+
+  .comparison-control {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.85rem;
+    align-items: center;
+  }
+
+  .comparison-control output {
+    min-width: 3.5rem;
+    color: #9aa7bb;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  @media (max-width: 680px) {
+    .comparison-lab figcaption {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    :global(html:where(:not([data-alienx-theme]))) .comparison-section {
+      border-color: #dfe5ee;
+    }
+    :global(html:where(:not([data-alienx-theme]))) .comparison-lab,
+    :global(html:where(:not([data-alienx-theme]))) .comparison-stage {
+      border-color: #d8e0ea;
+      background: #fff;
+    }
+    :global(html:where(:not([data-alienx-theme]))) .comparison-lab label {
+      color: #17202d;
+    }
+  }
+
+  :global(html[data-alienx-theme='light']) .comparison-section {
+    border-color: #dfe5ee;
+  }
+  :global(html[data-alienx-theme='light']) .comparison-lab,
+  :global(html[data-alienx-theme='light']) .comparison-stage {
+    border-color: #d8e0ea;
+    background: #fff;
+  }
+  :global(html[data-alienx-theme='light']) .comparison-lab label {
+    color: #17202d;
   }
 </style>

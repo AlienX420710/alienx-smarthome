@@ -400,11 +400,12 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
   }
   .capability-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
     gap: 1rem;
     margin-top: 3rem;
   }
   .capability-card {
+    container-type: inline-size;
     position: relative;
     min-height: 250px;
     padding: 2rem;
@@ -454,6 +455,19 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
     bottom: 1.8rem;
     color: var(--home-accent);
     font-size: 1.25rem;
+  }
+  @container (max-width: 360px) {
+    .capability-card {
+      min-height: 230px;
+      padding: 1.5rem;
+    }
+    .capability-card h3 {
+      margin-top: 2.75rem;
+    }
+    .card-arrow {
+      right: 1.5rem;
+      bottom: 1.4rem;
+    }
   }
   .proof {
     display: grid;
@@ -540,7 +554,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
     .hero__visual {
       min-height: 400px;
     }
-    .capability-grid,
     .proof {
       grid-template-columns: 1fr;
     }
