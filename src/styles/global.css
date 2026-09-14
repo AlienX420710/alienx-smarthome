@@ -232,6 +232,16 @@ select {
 button {
   cursor: pointer;
 }
+:where(a, button, summary) {
+  -webkit-tap-highlight-color: rgba(57, 255, 90, 0.14);
+}
+:where(button, [role='button'], a[class*='button']):active {
+  transform: translateY(1px);
+}
+summary:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
 p {
   margin-bottom: 1em;
 }

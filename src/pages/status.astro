@@ -77,19 +77,25 @@ import Footer from '../components/Footer.astro';
           <h2 id="transparency-title">Signals, not theater.</h2>
         </div>
         <div class="explanation">
-          <p>
-            <strong>Operational</strong> means the production Worker answered
-            the live check.
-          </p>
-          <p>
-            <strong>Configured</strong> means a required integration is present.
-            It does not prove authentication or delivery succeeds.
-          </p>
-          <p>
-            The public check never exposes secrets or sends a test message.
-            Smoke tests verify HTTP responses and configuration, not end-to-end
-            inquiry delivery.
-          </p>
+          <details open>
+            <summary>What does Operational mean?</summary>
+            <p>The production Worker answered the live check.</p>
+          </details>
+          <details>
+            <summary>What does Configured mean?</summary>
+            <p>
+              A required integration is present. It does not prove
+              authentication or delivery succeeds.
+            </p>
+          </details>
+          <details>
+            <summary>What does the public check expose?</summary>
+            <p>
+              It never exposes secrets or sends a test message. Smoke tests
+              verify HTTP responses and configuration, not end-to-end inquiry
+              delivery.
+            </p>
+          </details>
         </div>
       </section>
 
@@ -616,6 +622,24 @@ import Footer from '../components/Footer.astro';
   }
   .explanation strong {
     color: #c9d2e2;
+  }
+  .explanation details {
+    border-top: 1px solid #1b2537;
+  }
+  .explanation details:last-child {
+    border-bottom: 1px solid #1b2537;
+  }
+  .explanation summary {
+    padding: 1rem 2rem 1rem 0;
+    color: #dfe6f2;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .explanation summary::marker {
+    color: #39ff5a;
+  }
+  .explanation details p {
+    margin: 0 0 1rem;
   }
   .runtime {
     display: grid;

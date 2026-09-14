@@ -2,7 +2,41 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 import { SITE_TITLE } from '../consts';
+
+const projects = [
+  {
+    eyebrow: 'WEB PLATFORM',
+    title: 'AlienX SmartHome',
+    summary:
+      'The production Astro and Cloudflare platform behind this site: responsive UI, theme support, accessibility gates, security headers, and exact-revision deployment.',
+    href: '/',
+    tags: ['Astro', 'Cloudflare', 'TypeScript', 'Accessibility'],
+    outcome:
+      'A production site whose own engineering is part of the portfolio.',
+  },
+  {
+    eyebrow: 'INTERACTION',
+    title: 'Experience Museum',
+    summary:
+      'Seven browser exhibits spanning canvas, pointer input, physics, kinetic typography, native APIs, CSS depth, and gesture drawing.',
+    href: '/experience',
+    tags: ['Canvas', 'Pointer Events', 'CSS 3D', 'Progressive enhancement'],
+    outcome:
+      'A touch, keyboard, and reduced-motion-aware interactive browser exhibition.',
+  },
+  {
+    eyebrow: 'RELEASE ENGINEERING',
+    title: 'Exact-revision release gate',
+    summary:
+      'A fail-closed release architecture that publishes approval for the exact main SHA only after Quality, Responsive, Accessibility, Lighthouse, and Safari gates succeed.',
+    href: '/status',
+    tags: ['GitHub Actions', 'Cloudflare Workers', 'Git refs', 'Smoke tests'],
+    outcome:
+      'Production cannot intentionally deploy a revision that the required CI matrix rejected.',
+  },
+];
 ---
 
 <!doctype html>
@@ -123,6 +157,24 @@ import { SITE_TITLE } from '../consts';
           </div>
         </div>
       </section>
+      <section class="portfolio" aria-labelledby="portfolio-title">
+        <div class="section-heading">
+          <p class="eyebrow">REAL BUILDS</p>
+          <h2 id="portfolio-title">
+            The portfolio starts with systems that already exist.
+          </h2>
+          <p class="section-copy">
+            No invented clients and no placeholder metrics. These are real
+            AlienX builds with inspectable behavior and production constraints.
+          </p>
+        </div>
+        <div class="portfolio-grid">
+          {projects.map((project) => (
+            <ProjectCard {...project} />
+          ))}
+        </div>
+      </section>
+
       <section class="note" aria-labelledby="note-title">
         <p class="eyebrow">THE PORTFOLIO GROWS WITH THE WORK</p>
         <h2 id="note-title">Real builds will replace the placeholders.</h2>
@@ -254,6 +306,17 @@ import { SITE_TITLE } from '../consts';
   .principles h3 {
     margin: 0.9rem 0 0.75rem;
     font-size: 1.25rem;
+  }
+  .portfolio {
+    margin-top: 6rem;
+    padding-top: 5rem;
+    border-top: 1px solid var(--page-border);
+  }
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: 1rem;
+    margin-top: 3rem;
   }
   .note {
     margin-top: 6rem;
