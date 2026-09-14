@@ -67,7 +67,9 @@ import Footer from '../components/Footer.astro';
             </div>
 
             <div class="readout">
-              <p class="readout__status"><span></span> SYSTEM ONLINE</p>
+              <p class="readout__status">
+                <span></span> SYSTEM ONLINE
+              </p>
               <div class="mode-copy mode-copy--web">
                 <span class="mode-kicker">MODE // WEB</span>
                 <strong>Interfaces become systems.</strong>
@@ -122,7 +124,9 @@ import Footer from '../components/Footer.astro';
               value="72"
             />
             <div class="range-scale" aria-hidden="true">
-              <span>0</span><span>50</span><span>100</span>
+              <span>0</span>
+              <span>50</span>
+              <span>100</span>
             </div>
             <p>
               The browser owns the interaction model. AlienX only owns the
@@ -163,7 +167,9 @@ import Footer from '../components/Footer.astro';
       <section class="container-section" aria-labelledby="container-title">
         <div class="section-copy">
           <p class="eyebrow">03 // CONTAINER LOGIC</p>
-          <h2 id="container-title">Components respond to space, not devices.</h2>
+          <h2 id="container-title">
+            Components respond to space, not devices.
+          </h2>
           <p>
             These cards use container queries. Their internal composition reacts
             to the width they actually receive instead of assuming a phone,
@@ -218,7 +224,9 @@ import Footer from '../components/Footer.astro';
 
       <section class="manifesto" aria-labelledby="manifesto-title">
         <p class="eyebrow">04 // RULE</p>
-        <h2 id="manifesto-title">Use complexity only where it earns its keep.</h2>
+        <h2 id="manifesto-title">
+          Use complexity only where it earns its keep.
+        </h2>
         <p>
           AlienX can still be strange, kinetic, technical, and memorable. The
           trick is making the browser do as much of the work as possible, then
@@ -238,7 +246,11 @@ import Footer from '../components/Footer.astro';
     --lab-accent: #39ff5a;
     --lab-accent-rgb: 57 255 90;
     background:
-      radial-gradient(circle at 50% -20%, rgb(57 255 90 / 0.09), transparent 32rem),
+      radial-gradient(
+        circle at 50% -20%,
+        rgb(57 255 90 / 0.09),
+        transparent 32rem
+      ),
       #05070c;
     color: #eef2ff;
   }
@@ -411,7 +423,11 @@ import Footer from '../components/Footer.astro';
     padding: clamp(2rem, 5vw, 4rem);
     border-radius: 0 0 22px 22px;
     background:
-      radial-gradient(circle at 20% 50%, rgb(var(--reactor-rgb) / 0.14), transparent 30rem),
+      radial-gradient(
+        circle at 20% 50%,
+        rgb(var(--reactor-rgb) / 0.14),
+        transparent 30rem
+      ),
       linear-gradient(145deg, #0a0f18, #070a10);
   }
 
@@ -458,7 +474,11 @@ import Footer from '../components/Footer.astro';
     display: grid;
     place-items: center;
     border: 1px solid rgb(var(--reactor-rgb) / 0.65);
-    background: radial-gradient(circle, rgb(var(--reactor-rgb) / 0.24), #080b12 70%);
+    background: radial-gradient(
+      circle,
+      rgb(var(--reactor-rgb) / 0.24),
+      #080b12 70%
+    );
     color: #fff;
     font-size: clamp(1.5rem, 4vw, 2.5rem);
     font-weight: 800;
@@ -626,8 +646,7 @@ import Footer from '../components/Footer.astro';
     border: 1px solid #1d2536;
     border-radius: 24px;
     background:
-      linear-gradient(145deg, rgb(57 255 90 / 0.04), transparent 45%),
-      #090d15;
+      linear-gradient(145deg, rgb(57 255 90 / 0.04), transparent 45%), #090d15;
   }
 
   .module__index {
@@ -822,7 +841,11 @@ import Footer from '../components/Footer.astro';
     }
 
     :global(html:where(:not([data-alienx-theme]))) .reactor-core {
-      background: radial-gradient(circle, rgb(var(--reactor-rgb) / 0.18), #fff 72%);
+      background: radial-gradient(
+        circle,
+        rgb(var(--reactor-rgb) / 0.18),
+        #fff 72%
+      );
       color: #122019;
     }
   }
@@ -876,7 +899,11 @@ import Footer from '../components/Footer.astro';
   }
 
   :global(html[data-alienx-theme='light']) .reactor-core {
-    background: radial-gradient(circle, rgb(var(--reactor-rgb) / 0.18), #fff 72%);
+    background: radial-gradient(
+      circle,
+      rgb(var(--reactor-rgb) / 0.18),
+      #fff 72%
+    );
     color: #122019;
   }
 </style>

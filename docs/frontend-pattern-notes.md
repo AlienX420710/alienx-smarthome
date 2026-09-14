@@ -6,7 +6,7 @@ Last research pass: 2026-09-13.
 
 ## Why this exists
 
-The source set below is useful less as a collection of complete applications and more as a pattern library: native HTML capabilities, small CSS/JS interactions, interaction design ideas, and broader HTML platform references. AlienX should borrow the *smallest sound primitive* behind an effect rather than import demo code wholesale.
+The source set below is useful less as a collection of complete applications and more as a pattern library: native HTML capabilities, small CSS/JS interactions, interaction design ideas, and broader HTML platform references. AlienX should borrow the _smallest sound primitive_ behind an effect rather than import demo code wholesale.
 
 ## Rules for future self
 
@@ -85,6 +85,7 @@ Future self: when a requested effect sounds novel, search this catalog for the i
 ## 5. Solygambas — 100+ HTML/CSS/JavaScript Projects + CodePen
 
 Sources:
+
 - https://github.com/solygambas/html-css-javascript-projects
 - https://codepen.io/solygambas
 
