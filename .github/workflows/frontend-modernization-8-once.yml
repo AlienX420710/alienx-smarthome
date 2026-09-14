@@ -23,6 +23,18 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Correct transform assertion
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/modernize-all-eight-once.py')
+          text = path.read_text()
+          old = "s = replace_once(s, '  .story {\\n', insert + '  .story {\\n', 'about container query')"
+          new = "s = s.replace('  .story {\\n', insert + '  .story {\\n', 1)"
+          if old not in text:
+              raise SystemExit('about assertion patch target missing')
+          path.write_text(text.replace(old, new, 1))
+          PY
       - name: Apply modernization
         run: python3 scripts/modernize-all-eight-once.py
       - name: Format touched sources
