@@ -1,0 +1,140 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  summary: string;
+  href: string;
+  tags: string[];
+  outcome: string;
+}
+
+const { eyebrow, title, summary, href, tags, outcome } = Astro.props;
+---
+
+<article class="project-card">
+  <div class="project-card__topline">
+    <span>{eyebrow}</span>
+    <span>REAL BUILD</span>
+  </div>
+  <h3>{title}</h3>
+  <p>{summary}</p>
+  <dl>
+    <div>
+      <dt>Outcome</dt>
+      <dd>{outcome}</dd>
+    </div>
+  </dl>
+  <ul aria-label={`${title} technologies`}>
+    {tags.map((tag) => <li>{tag}</li>)}
+  </ul>
+  <a href={href}>
+    Open build <span aria-hidden="true">↗</span>
+  </a>
+</article>
+
+<style>
+  .project-card {
+    container-type: inline-size;
+    min-width: 0;
+    min-height: 100%;
+    padding: clamp(1.5rem, 4cqi, 2.25rem);
+    border: 1px solid var(--page-border);
+    border-radius: 26px;
+    background: color-mix(in srgb, var(--page-heading) 3%, transparent);
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+  .project-card:has(a:focus-visible),
+  .project-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--brand-green) 48%, var(--page-border));
+    box-shadow: 0 18px 45px rgb(0 0 0 / 0.1);
+  }
+  .project-card__topline {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--page-muted);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+  h3 {
+    margin: 2.5rem 0 0.9rem;
+    color: var(--page-heading);
+    font-size: clamp(1.5rem, 7cqi, 2.4rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  p,
+  dd {
+    color: var(--page-muted);
+    line-height: 1.65;
+  }
+  dl {
+    margin: 1.5rem 0 0;
+  }
+  dl div {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--page-border);
+  }
+  dt {
+    color: var(--page-heading);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  dd {
+    margin: 0;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    padding: 0.4rem 0.55rem;
+    border: 1px solid var(--page-border);
+    border-radius: 999px;
+    color: var(--page-muted);
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+  }
+  a {
+    display: inline-flex;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+    color: var(--page-heading);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  a:hover,
+  a:focus-visible {
+    color: var(--brand-green);
+  }
+  @container (max-width: 360px) {
+    .project-card__topline,
+    dl div {
+      grid-template-columns: 1fr;
+      flex-direction: column;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .project-card {
+      transition: none;
+    }
+    .project-card:has(a:focus-visible),
+    .project-card:hover {
+      transform: none;
+    }
+  }
+</style>
