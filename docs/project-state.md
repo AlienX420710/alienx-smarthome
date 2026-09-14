@@ -1,10 +1,11 @@
 # AlienX SmartHome — canonical project state
 
 Maintained by Codex at the owner's direction. Last editorial update: 2026-09-14.
-This is the authoritative repository index for recorded status and outstanding
-work. It is not a claim that every current deployment or audit item is verified.
-Owner decisions govern intent; code and dated evidence establish technical facts.
-New evidence can correct this record regardless of which assistant found it.
+This is the authoritative repository index for recorded status, verified evidence,
+and outstanding work. It is not a claim that every current deployment or audit
+item is verified. Owner decisions govern intent; code and dated evidence establish
+technical facts. New evidence can correct this record regardless of which assistant
+found it.
 
 ## Document ownership
 
