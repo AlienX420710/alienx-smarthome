@@ -45,9 +45,25 @@ Verified on 2026-09-14 at `4a51a7ef9cdad8a44f71bad157a13333809471c2`:
 AX-005's successful-promotion acceptance path is verified at this revision.
 The architecture remains fail-closed, but a deliberately failed required-gate
 release has not yet been staged solely to re-demonstrate rejection behavior.
-AX-006 and AX-008 still require owner/device evidence. AX-004 and AX-007 remain
-security follow-ups unless separately closed by newer evidence. AX-009 and
-AX-010 remain longer-term work.
+AX-006 and AX-008 still require owner/device evidence. AX-004 and AX-007 are
+verified at `e69c280`; AX-009 is the next scoped repository cleanup, and
+AX-010 remains longer-term work.
+
+### Security follow-up closure — 2026-09-14 (verified at e69c280)
+
+AX-004 and AX-007 are closed by repository evidence at
+`e69c280fe6fd2a7eabb547fb4b7f8fff11ec0ced`. A clean Astro 7.3.2 build
+found no emitted inline script matching the three manual CSP hashes, so those
+allowances were removed without broadening the remaining policy. The same
+revision passed the required browser gates, Cloudflare deployment, Production
+Smoke, and post-Smoke Production Integrity.
+
+The historical credential scanner walks all reachable Git objects, ignores
+binary and oversized content for value matching, uses eight sanitized detector
+classes, and never prints matched secret values. Its verified preflight passed
+with no credential-like findings. The follow-up Quality integration makes the
+full-history scan part of every required Quality run instead of leaving it as a
+standalone opt-in workflow.
 
 ### Earlier dependency release
 
@@ -92,10 +108,10 @@ audit finding. Reconcile newly revisited baseline items before claiming closure.
 | AX-001 | P1 / verified at d8bf0d3        | Former integrity check accepted any CSP header, allowing a frame-only header to hide a missing resource policy; repaired and verified. | Separate frame and resource-policy checks; regressions reject missing script policy, weakened directives, and frame-only policy.              |
 | AX-002 | P2 / verified at d8bf0d3        | Candidate and exact-revision production checks are separated; production sequencing was hardened again at 4a51a7e.                     | Candidate checks stay pre-deploy; Smoke proves exact live SHA; Integrity runs after successful Smoke on that same SHA.                        |
 | AX-003 | P2 / verified at d8bf0d3        | Fixed three-sample Lighthouse measurement implemented and reverified.                                                                  | Fixed sample count and documented aggregation, all reports retained, unchanged thresholds; inspect variability rather than rerun until green. |
-| AX-004 | P2 / open                       | Three manual CSP hashes in `astro.config.mjs` have no documented source mapping.                                                       | Map allowances to exact emitted bytes or prove an allowance obsolete; built-browser verification shows no required script blocked.            |
+| AX-004 | P2 / verified at e69c280        | Three manual CSP hashes lacked documented source mapping; a clean Astro 7.3.2 build proved all three obsolete and they were removed.   | Clean-build mapping found no emitted inline script requiring them; all required browser gates and deployed Integrity passed without them.     |
 | AX-005 | P1 / promotion verified 4a51a7e | Exact-SHA approval refs replace Cloudflare-side GitHub REST polling; successful promotion and consumption are now verified.            | Required workflows publish the approval ref and Cloudflare consumes the same SHA fail-closed; retain a negative rejection-path exercise.      |
 | AX-006 | P2 / owner-needed               | Alert recipients and rollback recovery remain unverified.                                                                              | Confirm monitored failure notification receipt and record an authorized rollback drill with revision/version evidence.                        |
-| AX-007 | P2 / open                       | Historical secret scan is not recorded.                                                                                                | Full-history scan with tool/version, scope, date, and sanitized outcome; any confirmed exposed secrets rotated by owner.                      |
+| AX-007 | P2 / verified at e69c280        | Full reachable-history credential scanning is implemented with sanitized output and recorded in repository CI.                         | `security-history-audit.mjs` scans reachable text blobs with eight detector classes, suppresses values, and passed the verified preflight.    |
 | AX-008 | P2 / owner-needed               | Automated accessibility and an owner email test do not establish assistive-technology coverage.                                        | Record actual screen-reader, keyboard, and touch-device test scope and outcomes; resolve resulting defects.                                   |
 | AX-009 | P3 / open                       | Remaining style ownership/dead-CSS cleanup is not closed by formatting.                                                                | Identify specific redundant rules/components and verify affected routes/themes after scoped cleanup.                                          |
 | AX-010 | P3 / owner-needed               | Work/About need authentic owner-supplied material.                                                                                     | Owner-approved factual content; no invented clients, results, or biography.                                                                   |
@@ -118,8 +134,8 @@ teaching demos.
 
 Current implementation order after the security pass:
 
-1. Finish repository-only security follow-ups that can be proven without owner
-   intervention: AX-004 CSP hash mapping and AX-007 historical secret scanning.
+1. Preserve the verified AX-004 CSP cleanup and AX-007 historical-secret scan;
+   keep the history scan in the required Quality path so regressions fail closed.
 2. Keep AX-006 alert/rollback verification and AX-008 real assistive-technology
    testing visible as owner/device-required work; do not fabricate closure.
 3. Audit existing production components against `frontend-pattern-notes.md` and
