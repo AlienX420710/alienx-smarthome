@@ -1,8 +1,10 @@
 name: AlienX Production Integrity
 
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows:
+      - AlienX Production Smoke
+    types: [completed]
   schedule:
     - cron: '17 */6 * * *'
   workflow_dispatch:
@@ -11,30 +13,37 @@ permissions:
   contents: read
 
 concurrency:
-  group: production-integrity-${{ github.workflow }}-${{ github.ref }}
+  group: production-integrity-${{ github.workflow }}-${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.ref }}
   cancel-in-progress: true
 
 jobs:
   integrity:
     name: Deployed revision security and SEO
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (
+        github.event.workflow_run.event == 'push' &&
+        github.event.workflow_run.head_branch == 'main' &&
+        github.event.workflow_run.conclusion == 'success'
+      )
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - name: Checkout
+      - name: Checkout verified revision
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           cache: npm
+
       - name: Install locked verification tooling
         run: npm ci
-      - name: Wait for pushed revision
-        if: github.event_name == 'push'
-        env:
-          EXPECTED_REVISION: ${{ github.sha }}
-        run: node scripts/verify-release.mjs
+
       - name: Verify deployed security and SEO
         env:
-          EXPECTED_REVISION: ${{ github.event_name == 'push' && github.sha || '' }}
+          EXPECTED_REVISION: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || '' }}
         run: node scripts/verify-integrity.mjs

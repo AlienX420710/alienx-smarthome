@@ -7,8 +7,10 @@ const origins = candidate
 const expected = process.env.EXPECTED_REVISION;
 if (expected && !/^[a-f0-9]{40}$/.test(expected))
   throw new Error('Invalid expected revision');
+
 const request = (url, options = {}) =>
   fetch(url, { ...options, signal: AbortSignal.timeout(15000) });
+
 const revision = async (origin) => {
   const status = new URL(origin + '/api/status');
   if (!candidate)
@@ -31,13 +33,51 @@ const revision = async (origin) => {
     (!response.ok || data.ok !== true || data.status !== 'operational')
   )
     throw new Error(`${origin}: unhealthy production status`);
-  if (
-    !/^[a-f0-9]{40}$/.test(data.buildRevision ?? '') ||
-    (expected && data.buildRevision !== expected)
-  )
-    throw new Error(`${origin}: unexpected revision ${data.buildRevision}`);
+  if (!/^[a-f0-9]{40}$/.test(data.buildRevision ?? ''))
+    throw new Error(`${origin}: invalid revision ${data.buildRevision}`);
   return data.buildRevision;
 };
+
+const waitForExpectedRevision = async (origin) => {
+  if (candidate || !expected) return revision(origin);
+
+  const deadline = Date.now() + 2 * 60 * 1000;
+  let consecutive = 0;
+  let last = 'No response';
+  while (Date.now() < deadline) {
+    try {
+      const actual = await revision(origin);
+      last = `revision ${actual}`;
+      if (actual === expected) {
+        consecutive += 1;
+        if (consecutive >= 3) return actual;
+      } else {
+        consecutive = 0;
+      }
+    } catch (error) {
+      consecutive = 0;
+      last = error.message;
+    }
+    console.log(
+      `Waiting for stable production revision ${expected} at ${origin}: ${last}; ${consecutive}/3 confirmations`,
+    );
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+  }
+  throw new Error(
+    `${origin}: production revision did not stabilize at ${expected}: ${last}`,
+  );
+};
+
+const productionUrl = (origin, route) => {
+  const url = new URL(route, origin);
+  if (!candidate)
+    url.searchParams.set(
+      '_alienx_integrity',
+      `${expected ?? 'current'}-${Date.now()}`,
+    );
+  return url;
+};
+
 const routes = [
   '/',
   '/work/',
@@ -49,9 +89,17 @@ const routes = [
   '/contact/success/',
 ];
 for (const origin of origins) {
-  const before = await revision(origin);
+  const before = await waitForExpectedRevision(origin);
   for (const route of routes) {
-    const response = await request(origin + route);
+    const response = await request(productionUrl(origin, route), {
+      cache: candidate ? undefined : 'no-store',
+      headers: candidate
+        ? undefined
+        : {
+            'Cache-Control': 'no-cache, no-store, max-age=0',
+            Pragma: 'no-cache',
+          },
+    });
     if (
       !response.ok ||
       !response.headers.get('content-type')?.includes('text/html')
@@ -79,7 +127,7 @@ for (const origin of origins) {
       throw new Error(`${route}: development hostname leaked`);
   }
   for (const path of ['/robots.txt', '/sitemap-index.xml']) {
-    if (!(await request(origin + path)).ok)
+    if (!(await request(productionUrl(origin, path))).ok)
       throw new Error(`${origin}${path}: unavailable`);
   }
   if (!candidate) {
@@ -95,6 +143,8 @@ for (const origin of origins) {
       throw new Error(`${origin}: incorrect HTTPS redirect`);
   }
   const after = await revision(origin);
+  if (expected && after !== expected)
+    throw new Error(`${origin}: revision changed during verification to ${after}`);
   if (before !== after)
     throw new Error(`${origin}: revision changed during verification`);
   console.log(
