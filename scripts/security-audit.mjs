@@ -67,10 +67,7 @@ for (const file of workflowFiles) {
 }
 
 for (const file of trackedFiles) {
-  if (
-    /(^|\/)\.env(?:\.|$)/i.test(file) &&
-    !/(^|\/)\.env\.example$/i.test(file)
-  )
+  if (/(^|\/)\.env(?:\.|$)/i.test(file) && !/(^|\/)\.env\.example$/i.test(file))
     fail(`${file}: tracked environment file is prohibited`);
   if (/\.(?:pem|key|p12|pfx)$/i.test(file))
     fail(`${file}: tracked key/certificate container is prohibited`);
@@ -105,12 +102,16 @@ for (const file of trackedFiles) {
     fail(`${file}: credential-like material detected`);
 }
 
-const packageJson = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
+const packageJson = JSON.parse(
+  await readFile(join(root, 'package.json'), 'utf8'),
+);
 const packageLock = JSON.parse(
   await readFile(join(root, 'package-lock.json'), 'utf8'),
 );
 if (packageLock.lockfileVersion !== 3)
-  fail(`package-lock.json: expected lockfileVersion 3, got ${packageLock.lockfileVersion}`);
+  fail(
+    `package-lock.json: expected lockfileVersion 3, got ${packageLock.lockfileVersion}`,
+  );
 
 const dependencies = {
   ...(packageJson.dependencies ?? {}),
@@ -129,7 +130,10 @@ for (const section of ['dependencies', 'devDependencies']) {
     fail(`package-lock.json: root ${section} does not match package.json`);
 }
 
-const dependabot = await readFile(join(root, '.github', 'dependabot.yml'), 'utf8');
+const dependabot = await readFile(
+  join(root, '.github', 'dependabot.yml'),
+  'utf8',
+);
 for (const ecosystem of ['npm', 'github-actions']) {
   if (!new RegExp(`package-ecosystem:\\s*${ecosystem}`).test(dependabot))
     fail(`.github/dependabot.yml: missing ${ecosystem} updates`);

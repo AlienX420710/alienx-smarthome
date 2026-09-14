@@ -144,7 +144,9 @@ for (const origin of origins) {
   }
   const after = await revision(origin);
   if (expected && after !== expected)
-    throw new Error(`${origin}: revision changed during verification to ${after}`);
+    throw new Error(
+      `${origin}: revision changed during verification to ${after}`,
+    );
   if (before !== after)
     throw new Error(`${origin}: revision changed during verification`);
   console.log(
