@@ -35,6 +35,15 @@ export function assessRuns(runs, sha) {
   });
 }
 
+export function classifyApproval(checks) {
+  const failed = checks.some(
+    (check) => !['missing', 'pending', 'success'].includes(check.state),
+  );
+  if (failed) return 'rejected';
+  if (checks.every((check) => check.state === 'success')) return 'approved';
+  return 'pending';
+}
+
 export function parseRemoteRefs(output) {
   const refs = new Map();
   for (const line of output.trim().split('\n')) {
