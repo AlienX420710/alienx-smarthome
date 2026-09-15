@@ -1,4 +1,8 @@
-import { assessRuns, approvalRefs } from './verify-ci.mjs';
+import {
+  assessRuns,
+  approvalRefs,
+  classifyApproval,
+} from './verify-ci.mjs';
 
 const sha = process.env.APPROVAL_SHA ?? '';
 const token = process.env.GITHUB_TOKEN ?? '';
@@ -54,11 +58,7 @@ if (!Array.isArray(payload.workflow_runs) || payload.total_count > 100) {
 
 const checks = assessRuns(payload.workflow_runs, sha);
 console.log(checks.map((check) => `${check.file}: ${check.state}`).join('; '));
-
-const failed = checks.some(
-  (check) => !['missing', 'pending', 'success'].includes(check.state),
-);
-const approved = checks.every((check) => check.state === 'success');
+const decision = classifyApproval(checks);
 
 const shortRef = (fullRef) => fullRef.replace(/^refs\//, '');
 
@@ -88,11 +88,11 @@ const setRef = async (fullRef, targetSha) => {
   });
 };
 
-if (failed) {
+if (decision === 'rejected') {
   await deleteRef(approvalRefs.approved);
   await setRef(approvalRefs.rejected, sha);
   console.log(`Published CI rejection for ${sha}`);
-} else if (approved) {
+} else if (decision === 'approved') {
   await deleteRef(approvalRefs.rejected);
   await setRef(approvalRefs.approved, sha);
   console.log(`Published CI approval for ${sha}`);

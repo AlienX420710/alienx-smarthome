@@ -37,6 +37,51 @@ test('release gate requires exact main push evidence and the latest run', async 
   );
 });
 
+test('release approval classifies failed, pending, and successful evidence fail-closed', async () => {
+  const { required, assessRuns, classifyApproval } = await import(
+    '../scripts/verify-ci.mjs'
+  );
+  const successfulRuns = required.map((file, id) => ({
+    id,
+    path: `.github/workflows/${file}`,
+    head_sha: 'target',
+    head_branch: 'main',
+    event: 'push',
+    status: 'completed',
+    conclusion: 'success',
+  }));
+
+  assert.equal(
+    classifyApproval(assessRuns(successfulRuns, 'target')),
+    'approved',
+  );
+
+  const failedRuns = successfulRuns.map((run, index) =>
+    index === 2 ? { ...run, conclusion: 'failure' } : run,
+  );
+  assert.equal(classifyApproval(assessRuns(failedRuns, 'target')), 'rejected');
+
+  const cancelledRuns = successfulRuns.map((run, index) =>
+    index === 3 ? { ...run, conclusion: 'cancelled' } : run,
+  );
+  assert.equal(
+    classifyApproval(assessRuns(cancelledRuns, 'target')),
+    'rejected',
+  );
+
+  assert.equal(
+    classifyApproval(assessRuns(successfulRuns.slice(1), 'target')),
+    'pending',
+  );
+
+  const pendingRuns = successfulRuns.map((run, index) =>
+    index === 4
+      ? { ...run, status: 'in_progress', conclusion: null }
+      : run,
+  );
+  assert.equal(classifyApproval(assessRuns(pendingRuns, 'target')), 'pending');
+});
+
 test('release gate parses only exact Git refs', async () => {
   const releaseGate = await import('../scripts/verify-ci.mjs');
   const { approvalRefs, parseRemoteRefs } = releaseGate;
