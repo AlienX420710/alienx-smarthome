@@ -46,6 +46,26 @@ for (const file of workflowFiles) {
       fail(`${file}: action must be pinned to a full commit SHA: ${action}`);
   }
 
+  // Every checkout is read-only; the approval publisher uses a step-scoped API token.
+  for (const block of text.split(/(?=^      - )/m)) {
+    if (
+      /uses: actions\/checkout@/.test(block) &&
+      !/^          persist-credentials: false\s*$/m.test(block)
+    )
+      fail(`${file}: checkout must disable persisted credentials`);
+  }
+  if (
+    ['production-integrity.yml', 'release-approval.yml'].includes(name) &&
+    !text.includes(
+      'github.event.workflow_run.head_repository.full_name == github.repository',
+    )
+  )
+    fail(`${file}: workflow-run repository origin validation is required`);
+  if (name === 'safari.yml' && !text.includes('npm run test:webkit'))
+    fail(
+      `${file}: real WebKit interactions are required alongside SafariDriver`,
+    );
+
   const lines = text.split('\n');
   for (let index = 0; index < lines.length; index += 1) {
     const permissions = lines[index].match(/^(\s*)permissions:\s*$/);

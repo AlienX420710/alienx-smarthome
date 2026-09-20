@@ -1,0 +1,67 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const { execFileSync, spawnSync } = require('node:child_process');
+
+function auditMutation(mutate) {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'alienx-workflow-audit-'));
+  try {
+    fs.cpSync('.github', path.join(root, '.github'), { recursive: true });
+    for (const file of ['package.json', 'package-lock.json'])
+      fs.copyFileSync(file, path.join(root, file));
+    execFileSync('git', ['init', '-q', root]);
+    execFileSync('git', ['add', '.'], { cwd: root });
+    mutate(root);
+    return spawnSync(
+      process.execPath,
+      [path.resolve('scripts/security-audit.mjs')],
+      { cwd: root, encoding: 'utf8' },
+    );
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+}
+function change(root, file, from, to) {
+  const target = path.join(root, '.github/workflows', file);
+  const source = fs.readFileSync(target, 'utf8');
+  assert.ok(
+    source.includes(from),
+    'mutation must exercise a real configured protection',
+  );
+  fs.writeFileSync(target, source.replace(from, to));
+}
+test('workflow security audit accepts the committed policy', () => {
+  const result = auditMutation(() => {});
+  assert.equal(result.status, 0, result.stderr);
+});
+for (const [name, file, from, to, error] of [
+  [
+    'persisted checkout credentials',
+    'quality.yml',
+    'persist-credentials: false',
+    'persist-credentials: true',
+    /checkout must disable/,
+  ],
+  [
+    'foreign workflow origin',
+    'production-integrity.yml',
+    'github.event.workflow_run.head_repository.full_name == github.repository &&',
+    '',
+    /origin validation is required/,
+  ],
+  [
+    'SafariDriver without WebKit',
+    'safari.yml',
+    'npm run test:webkit',
+    'node tests/safari.cjs',
+    /real WebKit interactions are required/,
+  ],
+]) {
+  test(`workflow security audit rejects ${name}`, () => {
+    const result = auditMutation((root) => change(root, file, from, to));
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, error);
+  });
+}

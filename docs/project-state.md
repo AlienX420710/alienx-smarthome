@@ -1,6 +1,6 @@
 # AlienX SmartHome — canonical project state
 
-Maintained by Codex at the owner's direction. Last editorial update: 2026-09-14.
+Maintained by Codex at the owner's direction. Last editorial update: 2026-09-20.
 This is the authoritative repository index for recorded status, verified evidence,
 and outstanding work. It is not a claim that every current deployment or audit
 item is verified. Owner decisions govern intent; code and dated evidence establish
@@ -17,6 +17,27 @@ found it.
 | [release-runbook.md](release-runbook.md)     | Release, incident, and rollback procedures                                      |
 | [audit-remediation.md](audit-remediation.md) | Chronological remediation evidence; earlier open statements may be superseded   |
 | [ai-audit.md](ai-audit.md)                   | Claude-authored historical audit of `1fa56cc`, with later editorial corrections |
+
+## Active closeout — 2026-09-20
+
+PR #36 was corrected with pinned Prettier and merged only after all five mandatory
+PR gates passed at `10b067077d0c0ce075414c80246111f834ab6c81`. The merge revision
+is `f532099632ea0c093629ff08b1b46f4a645d6b45`; its five main gates, Release Approval, Cloudflare build, Smoke and Integrity all
+passed; evidence is recorded in
+[the closeout evidence note](security-closeout-2026-09-20.md).
+
+The follow-up adds read-only checkout credential enforcement, workflow origin
+validation, real WebKit interactions alongside SafariDriver, and committed keyboard
+regressions. It repairs Tab-selected command activation and visible focus. These
+changes require exact-revision CI and production evidence before verification.
+AX-005/006/008 are not closed by writing these changes. The daily 05:00
+America/Chicago real production email check remains pending implementation and
+configuration; a direct unrelated provider send would not meet acceptance.
+
+AlienX is evolving into a technical proof-of-concept and public storefront for a
+possible future smart-home/automation business. Do not claim AlienX LLC already
+exists. The owner identifies +1 920-215-4208 as the AlienX Google Voice business
+contact. Final Work/About/business content (AX-010) stays last.
 
 ## Last recorded runtime verification
 

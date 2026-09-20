@@ -510,6 +510,9 @@
       render();
       links()[active]?.scrollIntoView({ block: 'nearest' });
     }
+    // Native result buttons must activate the button reached by Tab, not the
+    // search input's independently tracked arrow-key selection.
+    if (e.target !== input()) return;
     if (e.key === 'Enter' && l[active]) {
       e.preventDefault();
       l[active].click();
