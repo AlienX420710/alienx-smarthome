@@ -1,8 +1,4 @@
-import {
-  assessRuns,
-  approvalRefs,
-  classifyApproval,
-} from './verify-ci.mjs';
+import { assessRuns, approvalRefs, classifyApproval } from './verify-ci.mjs';
 
 const sha = process.env.APPROVAL_SHA ?? '';
 const token = process.env.GITHUB_TOKEN ?? '';
