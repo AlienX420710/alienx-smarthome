@@ -56,4 +56,4 @@ jobs:
         run: npx wrangler deploy --dry-run
 
       - name: Dependency audit
-        run: npm audit --audit-level=high
+        run: npm run audit

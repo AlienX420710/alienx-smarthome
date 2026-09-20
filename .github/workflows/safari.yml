@@ -39,7 +39,7 @@ jobs:
         run: npm run build
 
       - name: Start Cloudflare preview
-        run: npx wrangler dev --port 4321 > /tmp/alienx-safari.log 2>&1 &
+        run: npx wrangler dev --port 4321 --host 127.0.0.1 --upstream-protocol http > /tmp/alienx-safari.log 2>&1 &
 
       - name: Wait for preview
         run: |
@@ -51,6 +51,12 @@ jobs:
           done
           cat /tmp/alienx-safari.log
           exit 1
+
+      - name: Enable full keyboard navigation on macOS
+        run: |
+          defaults write -g AppleKeyboardUIMode -int 3
+          defaults write -g WebKitTabToLinksPreferenceKey -bool true
+          defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
 
       - name: Enable Safari WebDriver
         run: sudo safaridriver --enable

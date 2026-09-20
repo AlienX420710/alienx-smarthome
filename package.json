@@ -28,7 +28,7 @@
     "build": "node scripts/optimize-images.mjs && astro build",
     "cf-typegen": "wrangler types && node scripts/scope-worker-types.mjs",
     "check": "npm test && npm run security:audit && npm run typecheck && npm run build && wrangler deploy --dry-run",
-    "audit": "npm audit --audit-level=high",
+    "audit": "npm audit --audit-level=low",
     "deploy": "node scripts/verify-ci.mjs && wrangler deploy",
     "dev": "node scripts/optimize-images.mjs && astro dev",
     "preview": "npm run build && wrangler dev",

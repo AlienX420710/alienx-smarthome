@@ -263,6 +263,9 @@ import { SITE_TITLE } from '../consts';
       event.target instanceof Element &&
       event.target.closest('[data-command-trigger]')
     ) {
+      // WebKit does not focus buttons on pointer activation by default.
+      // Establish the opener so Escape can restore focus consistently.
+      event.target.closest<HTMLElement>('[data-command-trigger]')?.focus();
       document.dispatchEvent(
         new KeyboardEvent('keydown', {
           key: 'k',

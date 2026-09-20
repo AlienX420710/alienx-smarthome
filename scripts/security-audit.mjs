@@ -32,14 +32,25 @@ for (const file of workflowFiles) {
 
   if (!/^permissions:\s*$/m.test(text))
     fail(`${file}: missing explicit top-level permissions block`);
-  if (/^\s*pull_request_target\s*:/m.test(text))
+  if (
+    text
+      .split('\n')
+      .some((line) => /\bpull_request_target\b/.test(line.split('#')[0]))
+  )
     fail(`${file}: pull_request_target is prohibited`);
   if (/^\s*permissions:\s*write-all\s*$/m.test(text))
     fail(`${file}: write-all permissions are prohibited`);
 
-  for (const match of text.matchAll(/^\s*uses:\s*['"]?([^\s#'"]+)/gm)) {
+  for (const match of text.matchAll(
+    /^\s*(?:-\s+)?uses:\s*['"]?([^\s#'"]+)/gm,
+  )) {
     const action = match[1];
-    if (action.startsWith('./') || action.startsWith('docker://')) continue;
+    if (action.startsWith('./')) continue;
+    if (action.startsWith('docker://')) {
+      if (!/@sha256:[a-f0-9]{64}$/i.test(action))
+        fail(`${file}: container action must use a SHA-256 digest`);
+      continue;
+    }
     const separator = action.lastIndexOf('@');
     const ref = separator >= 0 ? action.slice(separator + 1) : '';
     if (!/^[a-f0-9]{40}$/i.test(ref))
@@ -68,16 +79,23 @@ for (const file of workflowFiles) {
 
   const lines = text.split('\n');
   for (let index = 0; index < lines.length; index += 1) {
-    const permissions = lines[index].match(/^(\s*)permissions:\s*$/);
+    const policyLine = lines[index].split('#')[0].trimEnd();
+    if (
+      /^\s*['"]?permissions['"]?\s*:/.test(policyLine) &&
+      !/^\s*permissions:\s*$/.test(policyLine)
+    )
+      fail(`${file}: permissions must use an explicit block mapping`);
+    const permissions = policyLine.match(/^(\s*)permissions:\s*$/);
     if (!permissions) continue;
     const parentIndent = permissions[1].length;
     for (let child = index + 1; child < lines.length; child += 1) {
-      const line = lines[child];
+      const line = lines[child].split('#')[0].trimEnd();
       if (!line.trim()) continue;
       const indent = indentOf(line);
       if (indent <= parentIndent) break;
       if (indent !== parentIndent + 2) continue;
       const scope = line.trim().match(/^([\w-]+):\s*(read|write|none)\s*$/);
+      if (!scope) fail(`${file}: unsupported permission declaration`);
       if (!scope || scope[2] !== 'write') continue;
       const allowed = allowedWritePermissions.get(name);
       if (!allowed?.has(scope[1]))
@@ -89,6 +107,11 @@ for (const file of workflowFiles) {
 for (const file of trackedFiles) {
   if (/(^|\/)\.env(?:\.|$)/i.test(file) && !/(^|\/)\.env\.example$/i.test(file))
     fail(`${file}: tracked environment file is prohibited`);
+  if (
+    /(^|\/)\.dev\.vars(?:\.|$)/i.test(file) &&
+    !/(^|\/)\.dev\.vars\.example$/i.test(file)
+  )
+    fail(`${file}: tracked Worker secret file is prohibited`);
   if (/\.(?:pem|key|p12|pfx)$/i.test(file))
     fail(`${file}: tracked key/certificate container is prohibited`);
   if (/(^|\/)(?:id_rsa|id_ed25519|credentials\.json)$/i.test(file))
@@ -98,6 +121,7 @@ for (const file of trackedFiles) {
   try {
     info = await stat(join(root, file));
   } catch {
+    fail(`${file}: tracked file could not be inspected`);
     continue;
   }
   if (info.size > 2 * 1024 * 1024) continue;
@@ -106,6 +130,7 @@ for (const file of trackedFiles) {
   try {
     text = await readFile(join(root, file), 'utf8');
   } catch {
+    fail(`${file}: tracked file could not be read`);
     continue;
   }
   if (text.includes('\u0000')) continue;
@@ -117,6 +142,7 @@ for (const file of trackedFiles) {
     /\bgithub_pat_[A-Za-z0-9_]{20,}\b/,
     /\bxox[baprs]-[A-Za-z0-9-]{20,}\b/,
     /\bsk_live_[A-Za-z0-9]{16,}\b/,
+    /\bre_[A-Za-z0-9_]{20,}\b/,
   ];
   if (secretPatterns.some((pattern) => pattern.test(text)))
     fail(`${file}: credential-like material detected`);
@@ -163,8 +189,11 @@ const qualityWorkflow = await readFile(
   join(workflowDirectory, 'quality.yml'),
   'utf8',
 );
-if (!/npm audit --audit-level=high/.test(qualityWorkflow))
-  fail('.github/workflows/quality.yml: high-severity npm audit is required');
+if (
+  !/npm run audit/.test(qualityWorkflow) ||
+  packageJson.scripts?.audit !== 'npm audit --audit-level=low'
+)
+  fail('.github/workflows/quality.yml: all-severity npm audit is required');
 
 if (failures.length) {
   console.error('Repository security audit failed:');
