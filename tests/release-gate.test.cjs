@@ -74,9 +74,7 @@ test('release approval classifies failed, pending, and successful evidence fail-
   );
 
   const pendingRuns = successfulRuns.map((run, index) =>
-    index === 4
-      ? { ...run, status: 'in_progress', conclusion: null }
-      : run,
+    index === 4 ? { ...run, status: 'in_progress', conclusion: null } : run,
   );
   assert.equal(classifyApproval(assessRuns(pendingRuns, 'target')), 'pending');
 });
