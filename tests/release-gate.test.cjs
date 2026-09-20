@@ -38,9 +38,8 @@ test('release gate requires exact main push evidence and the latest run', async 
 });
 
 test('release approval classifies failed, pending, and successful evidence fail-closed', async () => {
-  const { required, assessRuns, classifyApproval } = await import(
-    '../scripts/verify-ci.mjs'
-  );
+  const { required, assessRuns, classifyApproval } =
+    await import('../scripts/verify-ci.mjs');
   const successfulRuns = required.map((file, id) => ({
     id,
     path: `.github/workflows/${file}`,
