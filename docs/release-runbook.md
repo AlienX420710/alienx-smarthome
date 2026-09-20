@@ -1,6 +1,8 @@
-# Main-only release and incident runbook
+# Release and incident runbook
 
-All changes stay on `main`; this project does not require a feature branch or PR.
+Use scoped PRs for authorized changes. The owner has granted standing permission
+to open/update them and merge after all five mandatory exact-head gates pass.
+Keep main as the production branch and verify the resulting deployed main SHA.
 
 ## Before release
 

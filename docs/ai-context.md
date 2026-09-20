@@ -5,11 +5,13 @@ This Codex-maintained primer owns architecture and implementation guidance for
 any coding assistant. The canonical register owns current recorded status;
 [ai-audit.md](ai-audit.md) is historical supporting material, not its replacement.
 
-## Main-only working rule
+## PR-based working rule
 
-Work directly on `main`. Do not create branches or pull requests unless the
-maintainer explicitly requests them. Preserve unrelated changes; never
-force-reset `main`. See [release-runbook.md](release-runbook.md) for rollback.
+The owner grants standing permission for scoped branches/PRs, fixes, and safe
+exact-head verified merges within authorized work. Do not request confirmation
+for each routine PR. Keep main as the production branch, preserve unrelated
+changes, and never force-reset it. See [AGENTS.md](../AGENTS.md) and
+[release-runbook.md](release-runbook.md).
 
 ## Latest recorded verification — 2026-09-12
 

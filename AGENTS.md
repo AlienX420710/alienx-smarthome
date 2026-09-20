@@ -6,9 +6,15 @@ versioned repository record, not an assistant's memory or reputation.
 
 ## Read order and authority
 
-1. Follow the maintainer's current explicit requirements. Work directly on
-   `main`; do not create branches or PRs unless explicitly requested. Preserve
-   unrelated edits and never force-reset main.
+1. Follow the maintainer's current explicit requirements. The owner granted
+   standing authorization on 2026-09-20 to create scoped branches and PRs,
+   push fixes, and merge safely after all mandatory checks pass for the exact
+   current PR head. Do not ask again for these routine steps within authorized
+   work. Keep `main` as the production branch; preserve unrelated edits and
+   never force-reset it. Verify the resulting main SHA through Release Approval,
+   Cloudflare Build, Production Smoke, and Production Integrity. This permission
+   does not authorize bypassing protections, weakening gates, or overriding tool
+   approval rejections; use a permitted safer path and report genuine blockers.
 2. Read [project-state.md](docs/project-state.md): canonical recorded status,
    evidence boundaries, decisions, and outstanding findings.
 3. Read [ai-context.md](docs/ai-context.md): architecture and implementation

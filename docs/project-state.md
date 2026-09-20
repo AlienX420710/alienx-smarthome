@@ -18,6 +18,13 @@ found it.
 | [audit-remediation.md](audit-remediation.md) | Chronological remediation evidence; earlier open statements may be superseded   |
 | [ai-audit.md](ai-audit.md)                   | Claude-authored historical audit of `1fa56cc`, with later editorial corrections |
 
+## Standing workflow authorization — 2026-09-20
+
+The owner authorizes scoped branches/PRs, ongoing fixes and safe exact-head
+verified merges without repeated confirmation within authorized work. See
+[AGENTS.md](../AGENTS.md). This replaces the older main-only editing rule;
+security gates and independent tool approval controls still apply.
+
 ## Active closeout — 2026-09-20
 
 PR #36 was corrected with pinned Prettier and merged only after all five mandatory
