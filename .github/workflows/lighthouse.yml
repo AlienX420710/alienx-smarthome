@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   lighthouse:
-    name: Lighthouse quality gate
+    name: Performance, accessibility, best practices, and SEO
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

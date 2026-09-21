@@ -1,6 +1,6 @@
 # AlienX SmartHome — canonical project state
 
-Maintained by Codex at the owner's direction. Last editorial update: 2026-09-20.
+Maintained by Codex at the owner's direction. Last editorial update: 2026-09-21.
 This is the authoritative repository index for recorded status, verified evidence,
 and outstanding work. It is not a claim that every current deployment or audit
 item is verified. Owner decisions govern intent; code and dated evidence establish
@@ -36,6 +36,14 @@ passed; evidence is recorded in
 PR #37 subsequently merged to `1506c90b6e79e71542402ce93a851cd28ab1a713`;
 its five gates, exact approval, Cloudflare build, Smoke and Integrity passed.
 See the same evidence note for run/job IDs.
+
+PR #38 passed all five gates plus CodeQL at
+`b625d27da78235fd091c0526036d7e3912931005` (including 32 WebKit cases) and
+merged to `b7a04bf8fdb13f8c4a6c616047ea80af459b5331`. Its production release
+verification is pending in this record. The next scoped change makes the actual
+main alert inventory part of Quality instead of equating scan completion with
+zero findings. It also supplies an importable desired main ruleset; no account
+setting change is claimed.
 
 The follow-up adds read-only checkout credential enforcement, workflow origin
 validation, real WebKit interactions alongside SafariDriver, and committed keyboard

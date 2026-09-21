@@ -39,8 +39,8 @@
     "test:webkit": "playwright test tests/interactions.spec.cjs tests/keyboard.spec.cjs --browser=webkit --reporter=line",
     "test:a11y": "playwright test tests/accessibility.spec.cjs --reporter=line",
     "test:lighthouse": "node scripts/lighthouse.mjs",
-    "format": "prettier --write src public/*.js public/*.css scripts tests .github README.md docs/*.md *.config.*",
-    "format:check": "prettier --check src public/*.js public/*.css scripts tests .github README.md docs/*.md *.config.*"
+    "format": "prettier --write src public/*.js public/*.css scripts tests .github *.md docs/*.md *.config.*",
+    "format:check": "prettier --check src public/*.js public/*.css scripts tests .github *.md docs/*.md *.config.*"
   },
   "overrides": {
     "sharp": "0.35.4"

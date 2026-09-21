@@ -17,6 +17,13 @@ All five repository workflows must succeed for the exact current PR head:
 | AlienX Lighthouse Quality                  | Committed performance, accessibility, best-practices and SEO thresholds                                                                       |
 | AlienX Safari Compatibility                | Native SafariDriver and real Playwright WebKit navigation and keyboard interactions                                                           |
 
+On main pushes, Quality also requires current CodeQL analyses for Actions and
+JavaScript/TypeScript plus zero open code-scanning alerts across all severities
+and tools. Its separate job uses only `contents: read` and `security-events: read`,
+with no dependency install, cache, stored credentials or alert-dismissal access.
+Missing scans, API failures, incomplete pagination and a changed main fail closed.
+The live inventory job is main-only; the five PR gates remain mandatory.
+
 Missing, pending, skipped, cancelled, timed-out or failed required evidence is
 not approval. Investigate the actual cause of failures. Do not skip tests, lower
 thresholds, remove required checks or rerun repeatedly to manufacture a pass.
@@ -53,3 +60,9 @@ or enabled configuration alone does not establish operational verification.
 required PR/check protection, alert delivery, recovery drills and real email
 delivery require their own evidence; keep unavailable verification explicitly
 open. Hold AX-010 content work until the security/reliability closeout is complete.
+
+The importable [main ruleset](.github/rulesets/main.json) specifies PRs, strict
+up-to-date required checks, resolved review threads, no bypass, and no deletion
+or force-push. It is a desired configuration, not evidence of enabled settings.
+Import it through repository Settings → Rules → Rulesets; retain existing
+protections and verify the live result before closing AX-011.
