@@ -29,7 +29,7 @@ const { eyebrow, title, summary, href, tags, outcome } = Astro.props;
       <li>{tag}</li>
     ))}
   </ul>
-  <a href={href}>
+  <a tabindex="0" href={href}>
     Open build <span aria-hidden="true">↗</span>
   </a>
 </article>

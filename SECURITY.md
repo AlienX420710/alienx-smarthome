@@ -31,3 +31,10 @@ Third-party services and infrastructure are outside the project's direct control
 ## Supported versions
 
 Only the current `main` branch is actively maintained. Security fixes are applied to the current production codebase.
+
+## Enforcement and verification
+
+[QUALITY.md](QUALITY.md) defines the mandatory PR and production release gates.
+[docs/project-state.md](docs/project-state.md) records revision-specific findings
+and evidence. Reporting policy and automated checks do not imply that every
+account control, delivery path, or recovery procedure has been verified.

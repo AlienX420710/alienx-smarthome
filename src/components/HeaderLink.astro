@@ -10,6 +10,7 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
 ---
 
 <a
+  tabindex="0"
   href={href}
   data-astro-reload={reload}
   aria-current={isActive ? 'page' : undefined}

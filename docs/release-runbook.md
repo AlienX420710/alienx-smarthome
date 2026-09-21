@@ -115,3 +115,12 @@ the Cloudflare operator. Do not mark recovery proven without such a drill.
 - Inquiry 502/503: preserve entered data and use a fresh verification token. The
   client retains the same inquiry key while content is unchanged; provider
   idempotency prevents duplicate accepted retries within its retention window.
+
+## Trusted workflow controllers
+
+Release Approval and Production Integrity check out the immutable
+`github.workflow_sha` that defines their trusted workflow, not an event-supplied
+source revision. The candidate/deployment revision stays in `APPROVAL_SHA` or
+`EXPECTED_REVISION` and must still pass exact-SHA checks. Integrity disables both
+explicit and automatic setup-node package caching. Do not reintroduce a cache
+or event-supplied code execution into these workflow-run controllers.

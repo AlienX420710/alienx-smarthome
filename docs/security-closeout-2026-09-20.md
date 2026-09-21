@@ -103,3 +103,68 @@ Do not use test Turnstile keys or a CI bypass in production. Any dedicated synth
 entry point needs explicit authentication, bounded replay-safe fixed-recipient
 behavior, and the same production mail implementation. Do not claim this schedule
 is active until configuration and a real first delivery have been verified.
+
+## PR #37 dependency release
+
+PR #37 was merged after all five required PR workflows succeeded at
+`ec96535f6f65714f8533f579146404f79ce2e981`. Main revision
+`1506c90b6e79e71542402ce93a851cd28ab1a713` passed all five push workflows:
+Quality `35528738043`, Responsive `35528738045`, Accessibility `35528738049`,
+Lighthouse `35528738083`, and Safari `35528738053`.
+
+- Release Approval run `35528981610`, job `106126081880`, published approval
+  for that full SHA at 18:25:05Z.
+- Cloudflare Workers Builds check `106126195222` succeeded for the same SHA;
+  build ID `5695ba83-38bf-41ac-8e07-69da4072ba33`.
+- Smoke run `35528738061`, job `106125419839`, verified that exact healthy
+  revision at 18:25:38Z and passed both production hosts.
+- Integrity run `35529022002`, job `106126190016`, followed Smoke, confirmed
+  that revision three times per host, and passed eight routes on each host
+  at 18:26:05Z and 18:26:09Z.
+
+## WebKit and policy repair follow-up
+
+At PR #38 head `c2b7b2f11e856268509ac784e97b025d446a758d`, four required gates
+passed but WebKit failed. Its job `106124418608` showed native links skipped by
+plain Tab; button and custom-stage tests succeeded. macOS global keyboard
+settings alone did not enable ordinary link traversal in Playwright's WKWebView.
+The repair gives rendered links explicit `tabindex="0"`, preserving source order,
+and retains plain Tab/Shift+Tab assertions. It also tests every visible page link.
+WebKit's HTMLAnchorElement implementation honors explicit element focus support
+before its platform tabs-to-links preference:
+<https://github.com/WebKit/WebKit/blob/main/Source/WebCore/html/HTMLAnchorElement.cpp>.
+
+The contact keyboard test also reached submission with an empty status. Native
+select behavior differs by platform; the repair uses keyboard type-ahead and
+asserts actual values before submitting, preserving the no-pointer requirement.
+These follow-up changes await exact-head CI; no WebKit pass is claimed yet.
+
+Security/quality policy reconciliation adds `QUALITY.md`, corrects stale audit
+threshold and assistant guidance, and explicitly tracks the live merge-protection
+gap as AX-011. GitHub returned no open non-PR issues during this inspection.
+Policy text alone does not close account controls or operational findings.
+
+## CodeQL alerts supplied by the owner — 2026-09-21
+
+The Security tab screenshot shows three open high-severity alerts on main:
+#4 cache poisoning in Production Integrity, #3 privileged untrusted checkout
+in Release Approval, and #2 incomplete URL substring sanitization in the CSP
+integrity contract. These are code-scanning alerts, not GitHub Issues. The earlier
+empty Issues API response did not establish an empty security-alert inventory.
+
+The proposed repair checks out `github.workflow_sha` for the trusted approval
+and integrity controller code. Event `head_sha` remains data identifying the
+candidate: approval still checks current main and five exact-SHA gates, while
+Integrity still requires successful Smoke and the exact deployed revision.
+Integrity disables setup-node package caching, including automatic caching.
+Repository-origin guards and read-only checkout credentials remain mandatory.
+Mutation tests reject event-supplied controller checkouts and package caching.
+
+The CSP contract uses explicit Set membership for trusted script sources and
+regressions reject lookalike domains and URLs containing the allowed origin as
+path text. No CSP allowance or acceptance threshold is broadened.
+
+These repairs are not alert closure evidence. The connector rejects the
+code-scanning alerts endpoint; a green CodeQL workflow alone must not be
+reported as zero open alerts. Retain this boundary until a fresh scan and the
+Security tab/API establish resolution. No alerts were manually dismissed.

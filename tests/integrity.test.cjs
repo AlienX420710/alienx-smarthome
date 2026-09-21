@@ -38,6 +38,14 @@ test('CSP requires effective frame header and a complete resource policy', async
     ),
     policy + ";script-src-elem 'unsafe-inline'",
     policy + ';default-src *',
+    policy.replaceAll(
+      'https://challenges.cloudflare.com',
+      'https://challenges.cloudflare.com.evil.example',
+    ),
+    policy.replace(
+      "script-src 'self' https://challenges.cloudflare.com",
+      "script-src 'self' https://evil.example/https://challenges.cloudflare.com",
+    ),
   ])
     assert.throws(() => assertCsp(header, html(weakened)));
 });

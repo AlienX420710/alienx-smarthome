@@ -39,6 +39,27 @@ test('workflow security audit accepts the committed policy', () => {
 });
 for (const [name, file, from, to, error] of [
   [
+    'event-supplied approval controller',
+    'release-approval.yml',
+    'ref: ${{ github.workflow_sha }}',
+    'ref: ${{ github.event.workflow_run.head_sha }}',
+    /trusted workflow controller checkout is required/,
+  ],
+  [
+    'event-supplied integrity controller',
+    'production-integrity.yml',
+    'ref: ${{ github.workflow_sha }}',
+    'ref: ${{ github.event.workflow_run.head_sha }}',
+    /trusted workflow controller checkout is required/,
+  ],
+  [
+    'privileged package cache',
+    'production-integrity.yml',
+    'package-manager-cache: false',
+    'cache: npm',
+    /must not use package caches/,
+  ],
+  [
     'persisted checkout credentials',
     'quality.yml',
     'persist-credentials: false',

@@ -57,6 +57,12 @@ for (const route of routes) {
       await page.keyboard.press('Enter');
       await expect(page.locator('#main-content')).toBeFocused();
       await page.goto(base + route);
+      for (const link of await page.locator('a[href]').all()) {
+        if (!(await link.isVisible())) continue;
+        await tabTo(page, link);
+        await visibleFocus(link);
+      }
+      await page.goto(base + route);
       const nav = page.getByRole('navigation', { name: 'Primary navigation' });
       const links = nav.locator('.internal-links a');
       for (const link of await links.all()) {
@@ -195,13 +201,17 @@ test('Contact fields, consent, validation and retry are keyboard operable', asyn
     await visibleFocus(field);
     await page.keyboard.type(value);
   }
-  for (const id of ['contact-method', 'project-type']) {
+  for (const [id, key, value] of [
+    ['contact-method', 'e', 'email'],
+    ['project-type', 'w', 'website-design'],
+  ]) {
     const select = page.locator('#' + id);
     await tabTo(page, select);
     await visibleFocus(select);
-    await page.keyboard.press('Home');
-    await page.keyboard.press('ArrowDown');
+    // Native select type-ahead works on macOS and Linux without pointer input.
+    await page.keyboard.press(key);
     await page.keyboard.press('Enter');
+    await expect(select).toHaveValue(value);
   }
   await tabTo(page, page.locator('#message'));
   await page.keyboard.type(

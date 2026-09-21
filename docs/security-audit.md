@@ -1,6 +1,7 @@
 # Security Audit
 
-Last audited: 2026-09-14.
+Policy reconciled: 2026-09-20. Revision-specific results are in
+[project-state.md](project-state.md); proposed PR changes are not production evidence.
 
 ## Scope
 
@@ -10,7 +11,7 @@ This audit covers tracked repository content, GitHub Actions workflow configurat
 
 - Production dependencies and development dependencies use exact versions rather than mutable ranges.
 - `package-lock.json` is the locked install source used by CI through `npm ci`.
-- The Quality workflow runs `npm audit --audit-level=high`; the audited baseline reported zero npm vulnerabilities.
+- The Quality workflow runs `npm run audit` (`npm audit --audit-level=low`), including development dependencies.
 - Dependabot is configured for both npm and GitHub Actions on a weekly schedule.
 - Repository workflows use explicit top-level permission blocks.
 - Official actions inspected in the repository are pinned to full commit SHAs rather than tags.
@@ -25,12 +26,16 @@ This audit covers tracked repository content, GitHub Actions workflow configurat
 - third-party or official GitHub Actions referenced by mutable tags/branches instead of full 40-character commit SHAs;
 - a workflow without an explicit top-level `permissions` block;
 - `permissions: write-all`, `pull_request_target`, or an unexpected write permission;
-- tracked environment/credential/key container files;
+- tracked environment/credential/key container files, including Worker `.dev.vars`;
+- tracked files that cannot be inspected or read;
+- read-only checkouts that retain Git credentials;
+- missing repository-origin checks in Release Approval or Production Integrity;
+- removal of the real Playwright WebKit suite;
 - common private-key or high-confidence token formats in tracked text files;
 - non-exact npm dependency versions;
 - root dependency drift between `package.json` and `package-lock.json`;
 - loss of npm or GitHub Actions Dependabot coverage;
-- removal of the high-severity npm audit from the Quality workflow.
+- removal or lowering of the all-severity npm audit from the Quality workflow.
 
 The write-permission allowlist is intentionally narrow. Adding another workflow write scope requires an explicit audit change rather than silently expanding repository privileges.
 
@@ -49,3 +54,19 @@ Scheduled and manual Integrity runs remain available for ongoing production veri
 - GitHub and Cloudflare secret stores should remain the only locations for deployment/service credentials; secret values should never be committed to the repository.
 - GitHub's managed code-scanning/CodeQL check remains a separate control from the repository-owned Quality workflow.
 - Dependency upgrades should continue through reviewed changes with the full Quality, Responsive, Accessibility/Theme, Lighthouse, and Safari gates before release approval.
+
+## Security and quality policy relationship
+
+[SECURITY.md](../SECURITY.md) defines private vulnerability reporting and scope.
+[QUALITY.md](../QUALITY.md) defines merge/release acceptance and evidence.
+Neither policy authorizes a bypass or treats configuration presence as operational
+verification. Regex-based source checks enforce the repository conventions but
+are not a general YAML security parser.
+
+The 2026-09-20 live ruleset comparison found that Cleaning-by-Cassi requires a
+pull request and five successful GitHub Actions checks on an up-to-date branch.
+AlienX's inspected ruleset only protects deletion and non-fast-forward updates.
+Equivalent mandatory PR/check enforcement remains an account-administration gap;
+repository CI and deployment rejection do not substitute for merge protection.
+No account setting is recorded as changed or verified without an API/dashboard
+result. Do not close this gap merely because a PR was voluntarily checked.

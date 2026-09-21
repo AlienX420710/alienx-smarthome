@@ -72,6 +72,19 @@ for (const file of workflowFiles) {
     )
   )
     fail(`${file}: workflow-run repository origin validation is required`);
+  if (['production-integrity.yml', 'release-approval.yml'].includes(name)) {
+    if (!text.includes('ref: ${{ github.workflow_sha }}'))
+      fail(`${file}: trusted workflow controller checkout is required`);
+    if (/ref:.*github\.event\.workflow_run\./.test(text))
+      fail(`${file}: workflow-run source must not be executed`);
+  }
+  if (
+    name === 'production-integrity.yml' &&
+    (!text.includes('package-manager-cache: false') ||
+      /^\s*cache:\s*\S/m.test(text) ||
+      /uses:\s*actions\/cache/.test(text))
+  )
+    fail(`${file}: privileged verification must not use package caches`);
   if (name === 'safari.yml' && !text.includes('npm run test:webkit'))
     fail(
       `${file}: real WebKit interactions are required alongside SafariDriver`,
