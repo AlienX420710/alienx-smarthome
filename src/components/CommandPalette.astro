@@ -482,6 +482,18 @@
     }
   };
   const key = (e: KeyboardEvent) => {
+    const overlay = document.querySelector<HTMLDialogElement>(
+      '#alienx-command-overlay',
+    );
+    if (e.key === 'Tab' && overlay?.open) {
+      // This informational dialog has one control. Keep both tab directions
+      // inside it rather than letting focus escape to browser chrome/body.
+      e.preventDefault();
+      overlay
+        .querySelector<HTMLButtonElement>('button[data-command-overlay-close]')
+        ?.focus();
+      return;
+    }
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
       open();
@@ -510,6 +522,9 @@
       render();
       links()[active]?.scrollIntoView({ block: 'nearest' });
     }
+    // Native result buttons must activate the button reached by Tab, not the
+    // search input's independently tracked arrow-key selection.
+    if (e.target !== input()) return;
     if (e.key === 'Enter' && l[active]) {
       e.preventDefault();
       l[active].click();

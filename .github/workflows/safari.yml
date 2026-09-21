@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -37,7 +39,7 @@ jobs:
         run: npm run build
 
       - name: Start Cloudflare preview
-        run: npx wrangler dev --port 4321 > /tmp/alienx-safari.log 2>&1 &
+        run: npx wrangler dev --port 4321 --host 127.0.0.1 --upstream-protocol http > /tmp/alienx-safari.log 2>&1 &
 
       - name: Wait for preview
         run: |
@@ -50,16 +52,32 @@ jobs:
           cat /tmp/alienx-safari.log
           exit 1
 
+      - name: Enable full keyboard navigation on macOS
+        run: |
+          defaults write -g AppleKeyboardUIMode -int 3
+          defaults write -g WebKitTabToLinksPreferenceKey -bool true
+          defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
+
       - name: Enable Safari WebDriver
         run: sudo safaridriver --enable
 
       - name: Run Safari compatibility checks
         run: node tests/safari.cjs
 
+      - name: Install Playwright WebKit
+        if: success() || failure()
+        run: npx playwright install webkit
+
+      - name: Run WebKit navigation and keyboard interactions
+        if: success() || failure()
+        run: npm run test:webkit
+
       - name: Upload Safari diagnostics on failure
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: safari-preview-log
-          path: /tmp/alienx-safari.log
+          path: |
+            /tmp/alienx-safari.log
+            test-results
           if-no-files-found: ignore

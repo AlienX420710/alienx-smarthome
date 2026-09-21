@@ -5,11 +5,13 @@ This Codex-maintained primer owns architecture and implementation guidance for
 any coding assistant. The canonical register owns current recorded status;
 [ai-audit.md](ai-audit.md) is historical supporting material, not its replacement.
 
-## Main-only working rule
+## PR-based working rule
 
-Work directly on `main`. Do not create branches or pull requests unless the
-maintainer explicitly requests them. Preserve unrelated changes; never
-force-reset `main`. See [release-runbook.md](release-runbook.md) for rollback.
+The owner grants standing permission for scoped branches/PRs, fixes, and safe
+exact-head verified merges within authorized work. Do not request confirmation
+for each routine PR. Keep main as the production branch, preserve unrelated
+changes, and never force-reset it. See [AGENTS.md](../AGENTS.md) and
+[release-runbook.md](release-runbook.md).
 
 ## Latest recorded verification — 2026-09-12
 
@@ -115,7 +117,7 @@ npm test                  # unit tests; counts are revision-specific
 npm run typecheck         # astro check + tsc --noEmit — must be 0/0/0
 npm run build             # optimize-images.mjs then astro build
 npm run check             # test + typecheck + build + wrangler deploy --dry-run
-npm audit --audit-level=high
+npm run audit             # npm audit --audit-level=low
 npm run format            # apply formatting
 npm run format:check      # validate formatting without edits
 ```
@@ -139,8 +141,8 @@ blocker and do not substitute a partial local result for successful CI.
   `scriptDirective.hashes` adds manual allowances. A processed-script edit
   does not automatically require editing that array. For manually authorized
   content, match the exact emitted script bytes to its hash and update only
-  the affected allowance. The three existing manual hashes lack a documented
-  source mapping; establishing that mapping remains open, not assumed done.
+  the affected allowance. AX-004 removed three obsolete manual hashes after clean-build mapping;
+  require emitted-byte evidence before adding any new allowance.
   Inspect the generated CSP and test browser behavior using built output;
   Astro's CSP feature is not supported in dev mode. The main resource policy
   and the middleware's separate `frame-ancestors` header both need checking.
@@ -165,8 +167,9 @@ not a second mutable task list.
 - The isolate-local rate limiter is a deliberate bounded fallback, not a
   strict global quota; the Cloudflare Rate Limiting binding supplements it
   but is itself eventually consistent per edge location.
-- No full git-history secret scan has been performed in this audit pass
-  (only the current shallow-cloned tree was reviewed).
+- Quality checks out full history and scans reachable Git objects for credential
+  patterns. See AX-007 for scope and limits; pattern scanning is not proof that
+  every possible secret format is absent.
 
 ## Working conventions observed in this codebase
 

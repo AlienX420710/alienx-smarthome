@@ -1,6 +1,6 @@
 # AlienX SmartHome — canonical project state
 
-Maintained by Codex at the owner's direction. Last editorial update: 2026-09-14.
+Maintained by Codex at the owner's direction. Last editorial update: 2026-09-20.
 This is the authoritative repository index for recorded status, verified evidence,
 and outstanding work. It is not a claim that every current deployment or audit
 item is verified. Owner decisions govern intent; code and dated evidence establish
@@ -17,6 +17,38 @@ found it.
 | [release-runbook.md](release-runbook.md)     | Release, incident, and rollback procedures                                      |
 | [audit-remediation.md](audit-remediation.md) | Chronological remediation evidence; earlier open statements may be superseded   |
 | [ai-audit.md](ai-audit.md)                   | Claude-authored historical audit of `1fa56cc`, with later editorial corrections |
+
+## Standing workflow authorization — 2026-09-20
+
+The owner authorizes scoped branches/PRs, ongoing fixes and safe exact-head
+verified merges without repeated confirmation within authorized work. See
+[AGENTS.md](../AGENTS.md). This replaces the older main-only editing rule;
+security gates and independent tool approval controls still apply.
+
+## Active closeout — 2026-09-20
+
+PR #36 was corrected with pinned Prettier and merged only after all five mandatory
+PR gates passed at `10b067077d0c0ce075414c80246111f834ab6c81`. The merge revision
+is `f532099632ea0c093629ff08b1b46f4a645d6b45`; its five main gates, Release Approval, Cloudflare build, Smoke and Integrity all
+passed; evidence is recorded in
+[the closeout evidence note](security-closeout-2026-09-20.md).
+
+PR #37 subsequently merged to `1506c90b6e79e71542402ce93a851cd28ab1a713`;
+its five gates, exact approval, Cloudflare build, Smoke and Integrity passed.
+See the same evidence note for run/job IDs.
+
+The follow-up adds read-only checkout credential enforcement, workflow origin
+validation, real WebKit interactions alongside SafariDriver, and committed keyboard
+regressions. It repairs Tab-selected command activation and visible focus. These
+changes require exact-revision CI and production evidence before verification.
+AX-005/006/008 are not closed by writing these changes. The daily 05:00
+America/Chicago real production email check remains pending implementation and
+configuration; a direct unrelated provider send would not meet acceptance.
+
+AlienX is evolving into a technical proof-of-concept and public storefront for a
+possible future smart-home/automation business. Do not claim AlienX LLC already
+exists. The owner identifies +1 920-215-4208 as the AlienX Google Voice business
+contact. Final Work/About/business content (AX-010) stays last.
 
 ## Last recorded runtime verification
 
@@ -115,6 +147,27 @@ audit finding. Reconcile newly revisited baseline items before claiming closure.
 | AX-008 | P2 / owner-needed               | Automated accessibility and an owner email test do not establish assistive-technology coverage.                                        | Record actual screen-reader, keyboard, and touch-device test scope and outcomes; resolve resulting defects.                                   |
 | AX-009 | P3 / open                       | Remaining style ownership/dead-CSS cleanup is not closed by formatting.                                                                | Identify specific redundant rules/components and verify affected routes/themes after scoped cleanup.                                          |
 | AX-010 | P3 / owner-needed               | Work/About need authentic owner-supplied material.                                                                                     | Owner-approved factual content; no invented clients, results, or biography.                                                                   |
+
+### Policy enforcement follow-up — 2026-09-20
+
+AX-011 (P1 / open): the inspected AlienX ruleset protects deletion and
+non-fast-forward updates, but does not require PRs or the five successful checks.
+Cleaning-by-Cassi has both requirements with strict up-to-date checks. Close
+only after live AlienX settings show equivalent enforcement, with no bypass.
+The connector cannot administer those settings; no change is claimed.
+
+AX-013 (P1 / repair pending CI): owner screenshot on 2026-09-21 shows CodeQL
+alerts #2, #3 and #4 open on main (URL substring sanitization, privileged
+checkout, and cache poisoning). These are distinct from GitHub Issues.
+See the closeout note for repairs and the alert-API access limitation. Close
+only with fresh scan and actual resolved-alert evidence; never manual dismissal
+solely to obtain a zero count.
+
+AX-012 (P2 / implementation pending CI): security/quality policy reconciliation
+adds `QUALITY.md`, corrects stale dependency-audit and assistant instructions,
+and links acceptance to exact-revision evidence. No open non-PR GitHub issues
+were returned during this inspection. Close only after the committed policy,
+required automated enforcement and remaining exceptions are reconciled.
 
 AX-005 uses GitHub's short-lived workflow token to publish the dedicated
 `alienx-ci-approved-main` or `alienx-ci-rejected-main` ref after the five

@@ -1,7 +1,8 @@
 # Copilot instructions for alienx-smarthome
 
-Work directly on `main`. Do not create branches or pull requests unless the
-maintainer explicitly requests them. Preserve unrelated changes and never
+Follow the standing scoped-PR authorization in `AGENTS.md`. The owner authorizes
+routine branches, fixes, and safe merges after the five exact-head gates pass;
+do not request confirmation for every PR. Preserve unrelated changes and never
 force-reset `main`; use a new revert commit when a code rollback is needed.
 
 Read `AGENTS.md` and `docs/project-state.md` first. Codex maintains the canonical
@@ -38,7 +39,7 @@ npm run format:check
 npm test                  # unit tests — expect all passing
 npm run typecheck         # astro check + tsc --noEmit — expect 0/0/0
 npm run build
-npm audit --audit-level=high
+npm run audit             # all severities, including development dependencies
 ```
 
 `npm run check` runs test + typecheck + build + a Cloudflare deploy dry run
@@ -63,8 +64,8 @@ from "verified in production," and that convention should continue.
   `scriptDirective.hashes` supplies additional allowances. Do not assume
   every script edit needs a manual hash change. For manually authorized
   content, identify the exact emitted bytes and verify the matching hash
-  before updating it. The existing three manual hashes have no documented
-  source mapping; do not guess what they authorize or remove them blindly.
+  before updating it. AX-004 removed three obsolete hashes after clean-build
+  verification; do not restore them without evidence that emitted code needs them.
   Verify the emitted policy and browser behavior against built/deployed
   output, not `astro dev`. See the CSP guidance in `docs/ai-context.md`.
 - `wrangler.json` — the `INQUIRY_RATE_LIMITER` namespace ID is reserved for

@@ -71,11 +71,12 @@ export function assertCsp(header, html) {
         return false;
     }
     const scripts = policy.get('script-src');
+    const scriptSources = new Set(scripts ?? []);
     const styles = policy.get('style-src');
     const hash = /^'sha(?:256|384|512)-[A-Za-z0-9+/]+={0,2}'$/;
     if (
-      !scripts?.includes("'self'") ||
-      !scripts.includes('https://challenges.cloudflare.com') ||
+      !scriptSources.has("'self'") ||
+      !scriptSources.has('https://challenges.cloudflare.com') ||
       !scripts.some((value) => hash.test(value))
     )
       return false;

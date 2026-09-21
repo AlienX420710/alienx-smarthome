@@ -183,6 +183,7 @@ a {
 a:hover {
   color: var(--accent-dark);
 }
+[tabindex='0']:focus-visible,
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,

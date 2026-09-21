@@ -40,5 +40,9 @@ export default defineConfig({
       },
     },
   },
-  adapter: cloudflare(),
+  // Allow restricted local runtimes to build without an inspector port probe.
+  adapter: cloudflare({
+    inspectorPort:
+      process.env.ALIENX_DISABLE_INSPECTOR === '1' ? false : undefined,
+  }),
 });
