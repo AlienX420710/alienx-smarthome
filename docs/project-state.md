@@ -83,6 +83,21 @@ contact. Final Work/About/business content (AX-010) stays last.
 
 ## Last recorded runtime verification
 
+PR #46 auto-merged after all five gates at
+`42e6dfe5d21cb2db6b1f50b2e3d185cc0cee14f3`, producing main
+`f67c91c0022a231dc0fd6764f129dbef710b993e`. All five main workflows passed.
+Release Approval `36264768556` published this SHA; Workers Build check
+`108467336806`, Smoke `36264370166` and Integrity `36264812095` succeeded.
+Integrity job `108467347256` passed eight routes on both production hosts at
+19:05 UTC on September 26. AX-015's code/deployment acceptance is verified at
+this SHA; this is not a real Turnstile/email-delivery test.
+
+The [four-directory comparison](directory-parity-review.md) against Cleaning
+`ee9f3e8898fcab7d250983d7ca733a29e87dc946` implements the next AX-014 tranche:
+header enforcement, CodeQL warning/error sanitization, and offline npm deploy
+rehearsal. Local/CI and production acceptance for that follow-up remain separate
+from the verified PR #46 release. Daily email and operational drills stay open.
+
 On 2026-09-26, dependency/documentation closeout PR #44 merged to
 `0b979ce0d77d421aea2b75edbd28dab545ff4d59`. All five main gates passed.
 Release Approval run `36263211611` published approval for that exact SHA;
@@ -101,13 +116,13 @@ Auto-merge was initially disabled; a subsequent GitHub API read confirmed it
 enabled, and native auto-merge was activated for PR #46. The connected tool did
 not change the repository setting. Future-PR automatic enrollment remains separate.
 
-AX-015 (P2 / implemented, production verification pending): contact protection
+AX-015 (P2 / verified at f67c91c): contact protection
 must not silently lose its edge rate limit or accept malformed trap/provider
 success values. The status endpoint also reports missing edge protection as
 degraded instead of advertising a usable fallback. Local clean install, 71 unit tests, repository security audit,
 Astro/TypeScript checks, build, Worker dry run, formatting and dependency audit
 passed (zero dependency vulnerabilities). GitHub browser gates and exact-SHA
-production acceptance are still required for this change. All tests use mocked
+production acceptance subsequently passed as recorded above. All tests use mocked
 providers and send no real email.
 
 ### Earlier runtime verification — 2026-09-14

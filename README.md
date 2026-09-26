@@ -187,6 +187,11 @@ Lighthouse needs Chrome/Chromium. `node tests/safari.cjs` needs macOS and enable
 
 ## 🔧 Maintenance and operations
 
+The [directory parity review](docs/directory-parity-review.md) records applicable
+Cleaning-by-Cassi improvements without replacing AlienX's stronger controls.
+See the [inquiry contract](docs/inquiry-security-contract.md) and
+[real-device protocol](docs/device-validation.md) for acceptance boundaries.
+
 Start with the [canonical project state](docs/project-state.md) for dated
 verification and outstanding findings. The [release runbook](docs/release-runbook.md)
 covers promotion, incident triage, and rollback. Historical audits are evidence

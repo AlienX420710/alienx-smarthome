@@ -1,5 +1,42 @@
 import { parse } from 'parse5';
 
+export function assertSecurityHeaders(headers) {
+  const required = {
+    'strict-transport-security': /max-age=31536000.*includeSubDomains/i,
+    'x-content-type-options': /^nosniff$/i,
+    'x-frame-options': /^DENY$/i,
+    'referrer-policy': /^strict-origin-when-cross-origin$/i,
+    'cross-origin-opener-policy': /^same-origin$/i,
+    'cross-origin-resource-policy': /^same-origin$/i,
+    'x-permitted-cross-domain-policies': /^none$/i,
+  };
+  for (const [name, pattern] of Object.entries(required)) {
+    if (!pattern.test(headers.get(name) ?? ''))
+      throw Error(`Missing/incorrect ${name}`);
+  }
+  const permissions = new Map();
+  for (const entry of (headers.get('permissions-policy') ?? '').split(',')) {
+    if (entry.split('=').length !== 2)
+      throw Error('Malformed Permissions-Policy directive');
+    const [name, value] = entry.trim().split('=');
+    if (permissions.has(name))
+      throw Error('Duplicate Permissions-Policy directive');
+    permissions.set(name, value?.trim());
+  }
+  for (const name of [
+    'camera',
+    'microphone',
+    'geolocation',
+    'payment',
+    'usb',
+    'browsing-topics',
+    'display-capture',
+  ]) {
+    if (permissions.get(name) !== '()')
+      throw Error(`Missing/incorrect Permissions-Policy ${name}`);
+  }
+}
+
 export function headElements(html) {
   const document = parse(html);
   const root = document.childNodes.find((node) => node.tagName === 'html');

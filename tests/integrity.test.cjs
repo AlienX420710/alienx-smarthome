@@ -3,6 +3,52 @@ const assert = require('node:assert/strict');
 const { readFileSync } = require('node:fs');
 const path = require('node:path');
 
+test('static header policy covers every required defense and rejects removals', async () => {
+  const { assertSecurityHeaders } =
+    await import('../scripts/integrity-contract.mjs');
+  const headers = new Headers();
+  for (const line of readFileSync(
+    path.join(__dirname, '../public/_headers'),
+    'utf8',
+  ).split('\n')) {
+    const entry = line.trim().match(/^([^:]+):\s*(.+)$/);
+    if (entry) headers.set(entry[1], entry[2]);
+  }
+  assert.doesNotThrow(() => assertSecurityHeaders(headers));
+  for (const name of headers.keys()) {
+    if (name === 'content-security-policy') continue;
+    const changed = new Headers(headers);
+    changed.delete(name);
+    assert.throws(() => assertSecurityHeaders(changed), undefined, name);
+  }
+  for (const feature of [
+    'camera',
+    'microphone',
+    'geolocation',
+    'payment',
+    'usb',
+    'browsing-topics',
+    'display-capture',
+  ]) {
+    const changed = new Headers(headers);
+    changed.set(
+      'permissions-policy',
+      headers
+        .get('permissions-policy')
+        .replace(`${feature}=()`, `${feature}=(*)`),
+    );
+    assert.throws(() => assertSecurityHeaders(changed), /Permissions-Policy/);
+  }
+  for (const name of [
+    'cross-origin-opener-policy',
+    'cross-origin-resource-policy',
+  ]) {
+    const changed = new Headers(headers);
+    changed.set(name, 'unsafe-none');
+    assert.throws(() => assertSecurityHeaders(changed));
+  }
+});
+
 test('static assets retain frame protection independently of Worker middleware', () => {
   const headers = readFileSync(
     path.join(__dirname, '../public/_headers'),

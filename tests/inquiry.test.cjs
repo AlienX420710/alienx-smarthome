@@ -51,7 +51,15 @@ function harness(
   let verifies = 0,
     emails = 0;
   const sent = [];
+  const logs = [];
+  const logger = Object.fromEntries(
+    ['info', 'warn', 'error'].map((name) => [
+      name,
+      (...args) => logs.push(args),
+    ]),
+  );
   const middleware = load('src/middleware.ts', {
+    console: logger,
     mockBindings: {
       TURNSTILE_SECRET: 'test',
       TURNSTILE_HOSTNAMES: 'example.test',
@@ -64,16 +72,19 @@ function harness(
     },
   }).onRequest;
   const endpoint = load('src/pages/api/inquiry.ts', {
+    console: logger,
     env: { RESEND_API_KEY: 'test' },
     fetch: async (_url, options) => {
       emails++;
       sent.push(options);
+      if (provider instanceof Error) throw provider;
       return Response.json(provider);
     },
   }).POST;
   return {
     counts: () => ({ verifies, emails }),
     sent,
+    logs,
     endpoint,
     async send(body, path = '/api/inquiry', headers = {}) {
       const request = new Request('https://example.test' + path, {
@@ -230,5 +241,34 @@ test('rate limit blocks the ninth attempt', async () => {
   for (let i = 0; i < 8; i++)
     assert.equal((await h.send({ ...valid, website: '' })).status, 403);
   assert.equal((await h.send(valid)).status, 429);
+  assert.deepEqual(h.counts(), { verifies: 0, emails: 0 });
+});
+test('mail transport exception details are excluded from logs and responses', async () => {
+  const h = harness(Error('private-provider-token'));
+  const response = await h.send(valid);
+  assert.equal(response.status, 502);
+  assert.equal(
+    JSON.stringify(h.logs).includes('private-provider-token'),
+    false,
+  );
+  assert.equal(
+    (await response.text()).includes('private-provider-token'),
+    false,
+  );
+});
+test('middleware applies full headers to accepted and rejected inquiries', async () => {
+  const { assertSecurityHeaders } =
+    await import('../scripts/integrity-contract.mjs');
+  const h = harness();
+  assertSecurityHeaders((await h.send(valid)).headers);
+  assertSecurityHeaders((await h.send({ ...valid, faxNumber: 'bot' })).headers);
+});
+test('rate-limited inquiries provide bounded retry guidance', async () => {
+  const h = harness(undefined, {
+    INQUIRY_RATE_LIMITER: { limit: async () => ({ success: false }) },
+  });
+  const response = await h.send(valid);
+  assert.equal(response.status, 429);
+  assert.equal(response.headers.get('retry-after'), '600');
   assert.deepEqual(h.counts(), { verifies: 0, emails: 0 });
 });
