@@ -65,11 +65,11 @@ are not a general YAML security parser.
 
 The 2026-09-20 live ruleset comparison found that Cleaning-by-Cassi requires a
 pull request and five successful GitHub Actions checks on an up-to-date branch.
-AlienX's inspected ruleset only protects deletion and non-fast-forward updates.
-Equivalent mandatory PR/check enforcement remains an account-administration gap;
-repository CI and deployment rejection do not substitute for merge protection.
-No account setting is recorded as changed or verified without an API/dashboard
-result. Do not close this gap merely because a PR was voluntarily checked.
+At that time AlienX's inspected ruleset only protected deletion and
+non-fast-forward updates. A fresh API inspection on 2026-09-26 verified that
+ruleset `23059349` now also requires PRs and all five checks on an up-to-date
+branch, with no bypass. See AX-011 in the canonical register for enforcement
+evidence. This records an observed setting change, not a Codex administration action.
 
 ## Live code-scanning policy
 

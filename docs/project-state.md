@@ -54,8 +54,11 @@ the destination URL and heading without removing theme assertions. It also
 reveals the current mobile navigation link on load, client navigation and resize,
 without scrolling the document or focusing the link. Committed Chromium/WebKit
 regressions check actual clipping bounds at 320px and 393px, reload, history and
-resize. These follow-up changes still require exact-head browser CI and release
-verification; they are not yet claimed deployed.
+resize. Final head `0fd014b0aef33a2efcb20c68ff7070eda470c7aa` passed all
+five gates, including 118 Chromium and 34 WebKit cases, and merged to
+`e3b8e89ca12de966dc6fdd161a56350f11248b30`. Release Approval `36245835298`,
+Cloudflare check `108414808621`, Smoke `36245570267`, and post-Smoke Integrity
+`36245861265` verified that exact production revision on 2026-09-26.
 
 At follow-up head `9cc72093685442bf0e3eaf58154b925676b4b5c5`, Chromium
 passed both mobile navigation regressions and the theme test, but run
@@ -68,7 +71,7 @@ the retained name. No form validation or retry assertion was removed.
 The follow-up adds read-only checkout credential enforcement, workflow origin
 validation, real WebKit interactions alongside SafariDriver, and committed keyboard
 regressions. It repairs Tab-selected command activation and visible focus. These
-changes require exact-revision CI and production evidence before verification.
+changes are included in the verified PR #38/#39 releases above.
 AX-005/006/008 are not closed by writing these changes. The daily 05:00
 America/Chicago real production email check remains pending implementation and
 configuration; a direct unrelated provider send would not meet acceptance.
@@ -178,24 +181,26 @@ audit finding. Reconcile newly revisited baseline items before claiming closure.
 
 ### Policy enforcement follow-up — 2026-09-20
 
-AX-011 (P1 / open): the inspected AlienX ruleset protects deletion and
-non-fast-forward updates, but does not require PRs or the five successful checks.
-Cleaning-by-Cassi has both requirements with strict up-to-date checks. Close
-only after live AlienX settings show equivalent enforcement, with no bypass.
-The connector cannot administer those settings; no change is claimed.
+AX-011 (P1 / verified 2026-09-26): live ruleset `23059349` now requires a
+pull request and all five GitHub Actions checks with strict up-to-date checking,
+in addition to deletion/non-fast-forward protection. Its bypass list is empty
+and the connected user cannot bypass it. GitHub rejected the attempted PR #42
+merge after main advanced because the new combined revision lacked checks.
+This is observed account enforcement; Codex did not change account settings.
 
-AX-013 (P1 / repair pending CI): owner screenshot on 2026-09-21 shows CodeQL
-alerts #2, #3 and #4 open on main (URL substring sanitization, privileged
-checkout, and cache poisoning). These are distinct from GitHub Issues.
-See the closeout note for repairs and the alert-API access limitation. Close
-only with fresh scan and actual resolved-alert evidence; never manual dismissal
-solely to obtain a zero count.
+AX-013 (P1 / verified at e3b8e89): Quality job `108414014042` required fresh
+Actions and JavaScript/TypeScript CodeQL analyses for
+`e3b8e89ca12de966dc6fdd161a56350f11248b30` and verified zero open alerts on
+main at 2026-09-26 13:34:40 UTC. This is actual alert inventory evidence for
+the repairs to alerts #2/#3/#4, not an inference from scan completion. No alerts
+were dismissed. The mandatory main Quality job continuously enforces this check.
 
-AX-012 (P2 / implementation pending CI): security/quality policy reconciliation
-adds `QUALITY.md`, corrects stale dependency-audit and assistant instructions,
-and links acceptance to exact-revision evidence. No open non-PR GitHub issues
-were returned during this inspection. Close only after the committed policy,
-required automated enforcement and remaining exceptions are reconciled.
+AX-012 (P2 / verified at e3b8e89): committed security/quality policies,
+all-severity dependency audit, history scanning, workflow mutation tests, live
+alert policy, and exact-SHA release enforcement passed at the revision above.
+Live mandatory PR/check enforcement is recorded under AX-011. Operational
+exceptions remain explicitly tracked under AX-005/006/008 and the daily email
+verification requirement; policy reconciliation does not close those items.
 
 AX-005 uses GitHub's short-lived workflow token to publish the dedicated
 `alienx-ci-approved-main` or `alienx-ci-rejected-main` ref after the five
