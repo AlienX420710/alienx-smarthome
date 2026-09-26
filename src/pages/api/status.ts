@@ -38,7 +38,9 @@ export const GET: APIRoute = async ({ request }) => {
     },
     inquiry: {
       status:
-        turnstileConfigured && bindings.RESEND_API_KEY
+        turnstileConfigured &&
+        bindings.RESEND_API_KEY &&
+        bindings.INQUIRY_RATE_LIMITER
           ? 'configured'
           : 'degraded',
       detail:
@@ -77,7 +79,7 @@ export const GET: APIRoute = async ({ request }) => {
       checks,
       rateLimiting: bindings.INQUIRY_RATE_LIMITER
         ? 'edge-location'
-        : 'isolate-fallback',
+        : 'unavailable',
       summary: `${operational} live · ${configured} configured`,
       runtime: 'Cloudflare Workers',
     },

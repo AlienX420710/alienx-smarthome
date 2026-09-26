@@ -97,11 +97,14 @@ and removes provider-controlled verification details from logs. Its new mocked
 regressions do not establish real Turnstile acceptance or inbox delivery.
 README and release-runbook coverage now describes the actual WebKit/keyboard,
 CodeQL inventory, production sequencing and safe native auto-merge controls.
-Auto-merge was disabled when inspected; documentation is not a settings change.
+Auto-merge was initially disabled; a subsequent GitHub API read confirmed it
+enabled, and native auto-merge was activated for PR #46. The connected tool did
+not change the repository setting. Future-PR automatic enrollment remains separate.
 
 AX-015 (P2 / implemented, production verification pending): contact protection
 must not silently lose its edge rate limit or accept malformed trap/provider
-success values. Local clean install, 70 unit tests, repository security audit,
+success values. The status endpoint also reports missing edge protection as
+degraded instead of advertising a usable fallback. Local clean install, 71 unit tests, repository security audit,
 Astro/TypeScript checks, build, Worker dry run, formatting and dependency audit
 passed (zero dependency vulnerabilities). GitHub browser gates and exact-SHA
 production acceptance are still required for this change. All tests use mocked

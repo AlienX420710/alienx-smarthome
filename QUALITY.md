@@ -64,5 +64,8 @@ open. Hold AX-010 content work until the security/reliability closeout is comple
 The importable [main ruleset](.github/rulesets/main.json) specifies PRs, strict
 up-to-date required checks, resolved review threads, no bypass, and no deletion
 or force-push. It is a desired configuration, not evidence of enabled settings.
-Import it through repository Settings → Rules → Rulesets; retain existing
-protections and verify the live result before closing AX-011.
+AX-011 records verified live enforcement of PRs and all five strict checks with
+no bypass. Review-thread resolution in this template is additional desired
+hardening, not an observed enabled rule. For native auto-merge, follow the
+[safe auto-merge runbook](docs/release-runbook.md#safe-auto-merge); retain all
+protections and verify the merged SHA through the complete production chain.
