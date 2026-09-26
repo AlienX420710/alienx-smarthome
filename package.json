@@ -2,9 +2,9 @@
   "name": "alienx-smarthome",
   "description": "Public-facing technology showcase for AlienX SmartHome.",
   "dependencies": {
-    "@astrojs/cloudflare": "14.3.1",
+    "@astrojs/cloudflare": "14.3.3",
     "@astrojs/sitemap": "3.7.4",
-    "astro": "7.3.2",
+    "astro": "7.3.4",
     "typescript": "6.0.3"
   },
   "devDependencies": {
@@ -14,10 +14,10 @@
     "lighthouse": "13.5.0",
     "parse5": "8.0.1",
     "prettier": "3.9.6",
-    "prettier-plugin-astro": "1.0.0",
+    "prettier-plugin-astro": "1.0.1",
     "selenium-webdriver": "4.49.0",
     "sharp": "0.35.4",
-    "wrangler": "4.131.2"
+    "wrangler": "4.136.3"
   },
   "engines": {
     "node": ">=22"

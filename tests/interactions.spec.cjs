@@ -55,7 +55,9 @@ test('skip link and command dialogs retain keyboard focus', async ({
   ).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.locator('#main-content')).toBeFocused();
-  await page.getByRole('button', { name: 'Open command palette' }).click();
+  // Stay on the keyboard after skipping. A pointer click back at the header
+  // races WebKit's still-running anchor scroll; pointer opening has its own test.
+  await page.keyboard.press('ControlOrMeta+k');
   const input = page.getByRole('searchbox', { name: 'Search AlienX commands' });
   await input.fill('/help');
   await input.press('Enter');
@@ -66,9 +68,7 @@ test('skip link and command dialogs retain keyboard focus', async ({
   await page.keyboard.press('Tab');
   await page.keyboard.press('Escape');
   await expect(page.locator('#alienx-command-overlay')).toBeHidden();
-  await expect(
-    page.getByRole('button', { name: 'Open command palette' }),
-  ).toBeFocused();
+  await expect(page.locator('#main-content')).toBeFocused();
 });
 
 test('museum renders seven exhibits, supports keyboard, and respects motion off', async ({
