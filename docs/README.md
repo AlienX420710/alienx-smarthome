@@ -18,6 +18,10 @@ release procedures, remediation history, and historical audit material.
 
 ## Research and implementation notes
 
+- [Security comparison — September 26](security-comparison-2026-09-26.md) —
+  current Cleaning-by-Cassi comparison, external header observations and scoped
+  follow-up acceptance.
+
 - [Front-end pattern notes](frontend-pattern-notes.md) — research guidance and
   the Lab-versus-production adoption rules.
 - [Front-end runtime audit](frontend-runtime-audit.md) — JavaScript ownership,
