@@ -278,6 +278,12 @@ test('theme commands persist across client navigation and reload', async ({
     'data-alienx-theme',
     'dark',
   );
+  // Shared theme state cannot prove navigation finished. Wait for the actual
+  // destination before its transition closes the old page's command dialog.
+  await expect(page).toHaveURL(/\/technology\/?$/);
+  await expect(page.locator('main h1')).toHaveText(
+    'Built from the web outward.',
+  );
   for (const next of ['system', 'light']) {
     await page.getByRole('button', { name: 'Open command palette' }).click();
     const input = page.getByRole('searchbox', {
@@ -301,3 +307,57 @@ test('theme commands persist across client navigation and reload', async ({
     'light',
   );
 });
+
+for (const width of [320, 393]) {
+  test(`current page stays visible in the mobile navigation at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 852 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.route('**/api/status', (route) =>
+      route.fulfill({ json: status }),
+    );
+    const rail = page.locator('.internal-links');
+    const current = rail.locator('[aria-current="page"]');
+    async function expectCurrentVisible(name) {
+      await expect(current).toHaveText(name);
+      // toBeVisible alone accepts a link clipped by its scroll container.
+      await expect
+        .poll(async () => {
+          const outer = await rail.boundingBox();
+          const link = await current.boundingBox();
+          return (
+            !!outer &&
+            !!link &&
+            link.x >= outer.x - 1 &&
+            link.x + link.width <= outer.x + outer.width + 1
+          );
+        })
+        .toBe(true);
+    }
+    for (const [route, name] of [
+      ['status', 'Status'],
+      ['contact', 'Start a project'],
+    ]) {
+      await page.goto(`${base}/${route}/`);
+      await expectCurrentVisible(name);
+      expect(await page.evaluate(() => window.scrollY)).toBe(0);
+      await expect(current).not.toBeFocused();
+      await page.reload();
+      await expectCurrentVisible(name);
+    }
+    // Use the footer so Playwright does not reveal the header link for us.
+    await page
+      .getByRole('navigation', { name: 'Footer navigation' })
+      .getByRole('link', { name: 'About Me', exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/about\/?$/);
+    await expectCurrentVisible('About Me');
+    await page.goBack();
+    await expect(page).toHaveURL(/\/contact\/?$/);
+    await expectCurrentVisible('Start a project');
+    await page.setViewportSize({ width: 1280, height: 852 });
+    await page.setViewportSize({ width, height: 852 });
+    await expectCurrentVisible('Start a project');
+  });
+}
