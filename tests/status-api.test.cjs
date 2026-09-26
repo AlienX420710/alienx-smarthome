@@ -42,9 +42,32 @@ for (const configured of [false, true]) {
     assert.equal(data.buildRevision, 'test-revision');
     assert.equal(
       data.rateLimiting,
-      configured ? 'edge-location' : 'isolate-fallback',
+      configured ? 'edge-location' : 'unavailable',
     );
     assert.equal(response.headers.get('cache-control'), 'no-store');
     assert.equal(JSON.stringify(data).includes('TURNSTILE_SECRET'), false);
   });
 }
+test('missing mandatory edge limiter degrades otherwise configured inquiry', async () => {
+  const context = {
+    exports: {},
+    Response,
+    crypto,
+    __ALIENX_BUILD_SHA__: 'test-revision',
+    env: {
+      TURNSTILE_SECRET: 'test',
+      TURNSTILE_HOSTNAMES: 'example.test',
+      RESEND_API_KEY: 'test',
+    },
+  };
+  vm.runInNewContext(code, context);
+  const response = await context.exports.GET({
+    request: new Request('https://example.test/api/status'),
+  });
+  const data = await response.json();
+  assert.equal(response.status, 503);
+  assert.equal(data.ok, false);
+  assert.equal(data.status, 'degraded');
+  assert.equal(data.checks.inquiry.status, 'degraded');
+  assert.equal(data.rateLimiting, 'unavailable');
+});

@@ -158,12 +158,22 @@ export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
       limit(options: { key: string }): Promise<{ success: boolean }>;
     };
   };
-  if (bindings.INQUIRY_RATE_LIMITER) {
+  if (!bindings.INQUIRY_RATE_LIMITER) {
+    return json(
+      {
+        error: 'Inquiry protection is unavailable. Please try again later.',
+        requestId,
+      },
+      503,
+      requestId,
+    );
+  }
+  {
     try {
       const result = await bindings.INQUIRY_RATE_LIMITER.limit({
         key: `alienx-inquiry:${ip}`,
       });
-      if (!result.success)
+      if (result.success !== true)
         return json(
           {
             error: 'Too many inquiries. Please try again later.',
@@ -204,10 +214,7 @@ export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
     );
   }
 
-  if (
-    typeof payload.faxNumber === 'string' &&
-    payload.faxNumber.trim() !== ''
-  ) {
+  if (Object.hasOwn(payload, 'faxNumber') && payload.faxNumber !== '') {
     return json(
       {
         error: 'We could not verify this inquiry. Please try again.',
@@ -247,18 +254,17 @@ export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
       hostname?: string;
       'error-codes'?: string[];
     };
-    const errorCodes = result['error-codes'] ?? [];
+    const errorCodes = Array.isArray(result['error-codes'])
+      ? result['error-codes']
+      : [];
     if (
-      !result.success ||
+      result.success !== true ||
       result.action !== EXPECTED_ACTION ||
       !result.hostname ||
       !expectedHostnames.has(result.hostname)
     ) {
       console.warn('Turnstile validation rejected inquiry.', {
         requestId,
-        action: result.action,
-        hostname: result.hostname,
-        errorCodes,
       });
       if (
         errorCodes.includes('timeout-or-duplicate') ||
@@ -285,12 +291,9 @@ export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
         requestId,
       );
     }
-  } catch (error) {
-    console.error(
-      'Turnstile validation failed:',
-      error instanceof Error ? error.message : 'Unknown error',
-      { requestId },
-    );
+  } catch {
+    // Never log provider payloads, tokens, or transport exception messages.
+    console.error('Turnstile validation unavailable.', { requestId });
     return json(
       {
         error: 'Security verification could not be completed.',

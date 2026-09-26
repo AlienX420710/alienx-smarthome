@@ -14,7 +14,7 @@
 [![Safari](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/safari.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/safari.yml)
 [![Lighthouse](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/lighthouse.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/lighthouse.yml)
 [![Production Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-integrity.yml/badge.svg?branch=main)](https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-integrity.yml)
-[![Astro 7.3.2](https://img.shields.io/badge/Astro-7.3.2-2563EB?logo=astro&logoColor=white)](https://astro.build)
+[![Astro](https://img.shields.io/badge/Astro-SSR-2563EB?logo=astro&logoColor=white)](https://astro.build)
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020?logo=cloudflare&logoColor=211631)](https://workers.cloudflare.com)
 
 ### Technology built to do something.
@@ -29,7 +29,7 @@ Web engineering, automation, infrastructure, and interactive browser experiences
 
 ## ✨ Welcome
 
-AlienX SmartHome is an engineering showcase, not a Home Assistant dashboard or a home-control application. The site combines browser experiments, an interactive stack explanation, a public configuration-status endpoint, and a protected project inquiry form.
+AlienX SmartHome is an engineering showcase and technical proof-of-concept for a future smart-home/automation business, not a Home Assistant dashboard or a home-control application. AlienX LLC is not represented as an established company. The site combines browser experiments, an interactive stack explanation, a public configuration-status endpoint, and a protected project inquiry form.
 
 | Explore the experience                  | Built with safeguards                                   |
 | :-------------------------------------- | :------------------------------------------------------ |
@@ -40,9 +40,11 @@ AlienX SmartHome is an engineering showcase, not a Home Assistant dashboard or a
 
 Only **`main`** is maintained and deployed. Start with the Codex-maintained [project state and findings register](docs/project-state.md); assistants must also read [AGENTS.md](AGENTS.md). [Audit progress](docs/audit-remediation.md) records repair history. The [release runbook](docs/release-runbook.md) covers acceptance checks, incident triage, and rollback.
 
-`npm run deploy` now checks five required CI workflows for the exact current main
-revision before invoking Wrangler. Cloudflare must use this deploy command for
-the gate to apply; the account-level setting still needs operator confirmation.
+GitHub requires five up-to-date PR checks. Release Approval publishes exact-main
+evidence consumed by `npm run deploy` before Wrangler can deploy. Production Smoke
+then proves the live SHA; Production Integrity follows successful Smoke. See the
+[safe auto-merge setup](docs/release-runbook.md#safe-auto-merge) and the canonical
+register for dated evidence and remaining operational verification.
 
 ## 🧭 Explore AlienX
 
@@ -61,7 +63,8 @@ Requests pass origin/content-type/body-size checks, honeypot and rate controls, 
 - Turnstile tokens are checked for hostname and the `contact` action.
 - Requests have bounded sizes and timeouts. Failed submissions preserve entered values and refresh verification.
 - Unchanged retries retain a payload-bound idempotency key. Resend retains idempotency records for 24 hours.
-- Edge rate counters are shared within each Cloudflare location, not a strict global quota. A bounded isolate-local limit supplements them.
+- Edge rate counters are shared within each Cloudflare location, not a strict global quota. A bounded isolate-local limit supplements them. A missing or unavailable edge binding rejects submissions; it cannot silently disable that layer.
+- Honeypots must be absent or exactly empty. Verification must return boolean `true`, the expected hostname, and the expected action. Provider rejection details and transport exception messages are not logged by the verification boundary.
 - Success requires provider acceptance with an email ID. **Acceptance is not proof of inbox delivery.** Visiting the noindex follow-up page directly is not a receipt.
 - Browser and API regression tests mock verification/email delivery; they send no email.
 
@@ -114,18 +117,19 @@ There is no shared `src/layouts/` directory. Some legacy page overrides remain i
 
 ## ✅ Automated checks
 
-| Workflow              | When                            | Scope                                                                                                  |
-| :-------------------- | :------------------------------ | :----------------------------------------------------------------------------------------------------- |
-| Quality               | Push / PR to main               | Clean install, formatting, API tests, build, Astro/TypeScript, Worker dry run, dependency audit        |
-| Responsive            | Push / PR; manual               | Candidate security/SEO contract; 84 route/viewport combinations plus interaction regressions           |
-| Accessibility & Theme | Push / PR; manual               | Built local preview: 48 route/theme/OS cases, axe WCAG checks, Lighthouse accessibility ≥95            |
-| Lighthouse            | Push / PR; manual               | Built local preview: accessibility, best practices, SEO ≥95; performance ≥85                           |
-| Safari                | Push / PR; manual               | Built local preview in actual macOS Safari WebDriver                                                   |
-| Production Integrity  | Push, six-hour schedule; manual | Both live hosts: separate frame/resource CSP, headers, redirects, SEO; pushes require the deployed SHA |
-| Production Smoke      | Push, hourly; manual            | Live host/API health; pushes also require the exact Git revision                                       |
-| Browser Diagnostics   | Manual only                     | Isolated local WebKit loads, CSS/JS/header comparisons, screenshots and traces; not a release gate     |
-| CodeQL                | GitHub security analysis        | JavaScript/TypeScript and workflow analysis                                                            |
-| Workers Build         | Cloudflare Git integration      | Production build and deployment                                                                        |
+| Workflow              | When                                             | Scope                                                                                                                                                                                  |
+| :-------------------- | :----------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Quality               | Push / PR to main                                | Clean install, formatting, committed tests, build/type checks, Worker dry run, all-severity dependency audit, history credential scan; main requires fresh CodeQL and zero open alerts |
+| Responsive            | Push / PR; manual                                | Candidate security/SEO contract; 84 route/viewport combinations plus interaction regressions                                                                                           |
+| Accessibility & Theme | Push / PR; manual                                | Built local preview: 48 route/theme/OS cases, axe WCAG checks, Lighthouse accessibility ≥95                                                                                            |
+| Lighthouse            | Push / PR; manual                                | Built local preview: accessibility, best practices, SEO ≥95; performance ≥85                                                                                                           |
+| Safari                | Push / PR; manual                                | Actual macOS Safari WebDriver plus real Playwright WebKit navigation, interactions and keyboard regressions                                                                            |
+| Release Approval      | Required workflow completion                     | Publishes approval/rejection only for the current exact main SHA                                                                                                                       |
+| Production Integrity  | Successful push Smoke; six-hour schedule; manual | Both live hosts: separate frame/resource CSP, headers, redirects, SEO and exact revision; trusted controller with repository-origin validation                                         |
+| Production Smoke      | Push, hourly; manual                             | Live host/API health; pushes also require the exact Git revision                                                                                                                       |
+| Browser Diagnostics   | Manual only                                      | Isolated local WebKit loads, CSS/JS/header comparisons, screenshots and traces; not a release gate                                                                                     |
+| CodeQL                | GitHub security analysis                         | JavaScript/TypeScript and workflow analysis                                                                                                                                            |
+| Workers Build         | Cloudflare Git integration                       | Production build and deployment                                                                                                                                                        |
 
 The five pre-deployment gates remain Quality, Responsive, Accessibility,
 Lighthouse, and Safari. Lighthouse collects three fixed samples per route:
@@ -137,7 +141,7 @@ uses an unconfigured local preview, never sends inquiries, and deliberately
 alters isolated browser responses to investigate loading failures. Its results
 do not replace production security, Safari, or accessibility acceptance.
 
-GitHub CodeQL is separate security analysis. Cloudflare Builds is a separate deployment integration: neither a passing CodeQL run nor a healthy old deployment proves a new release succeeded. Independent deployment gating and notification recipients still require account-owner configuration. See the runbook before declaring a release accepted.
+GitHub CodeQL is separate security analysis; Quality additionally checks the live main alert inventory. Cloudflare Builds is a separate deployment integration: neither a passing CodeQL run nor a healthy old deployment proves a new release succeeded. Monitored notification receipt, a live rollback drill, and daily production email delivery verification remain acceptance work. An A+ header score is not a complete security audit. See the runbook before declaring a release accepted.
 
 ## 🚀 Local development
 
@@ -162,6 +166,7 @@ For an explicitly approved real integration test, copy `.dev.vars.example` to `.
 | `npm run audit`                           | Audit the full dependency tree, including test tools          |
 | `npm run preview`                         | Build and start the local Cloudflare runtime                  |
 | `npm run test:browser`                    | Responsive and interactive Chromium checks                    |
+| `npm run test:webkit`                     | WebKit navigation, interaction and keyboard regressions       |
 | `npm run test:a11y`                       | Theme/OS and accessibility matrix                             |
 | `npm run test:lighthouse`                 | Existing Lighthouse score gates against local preview         |
 | `npm run format` / `npm run format:check` | Format maintained source / check formatting                   |
