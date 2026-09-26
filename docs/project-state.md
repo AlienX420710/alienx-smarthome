@@ -57,6 +57,14 @@ regressions check actual clipping bounds at 320px and 393px, reload, history and
 resize. These follow-up changes still require exact-head browser CI and release
 verification; they are not yet claimed deployed.
 
+At follow-up head `9cc72093685442bf0e3eaf58154b925676b4b5c5`, Chromium
+passed both mobile navigation regressions and the theme test, but run
+`36244932069` failed the contact retry case (117/118 passed). Its retained
+trace proves the Name field was filled before the returning page swap and was
+empty at submit, correctly triggering validation. The test now waits for both
+destination URLs/headings and the initialized form before typing, and asserts
+the retained name. No form validation or retry assertion was removed.
+
 The follow-up adds read-only checkout credential enforcement, workflow origin
 validation, real WebKit interactions alongside SafariDriver, and committed keyboard
 regressions. It repairs Tab-selected command activation and visible focus. These

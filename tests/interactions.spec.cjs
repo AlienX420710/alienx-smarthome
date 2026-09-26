@@ -219,11 +219,21 @@ test('Contact retries preserve input and submit the honeypot after navigation', 
     .getByRole('navigation', { name: 'Primary navigation' })
     .getByRole('link', { name: 'About Me', exact: true })
     .click();
+  await expect(page).toHaveURL(/\/about\/?$/);
+  await expect(page.locator('main h1')).toHaveText(
+    'From smart home to smart technology.',
+  );
   await page
     .getByRole('navigation', { name: 'Primary navigation' })
     .getByRole('link', { name: 'Start a project', exact: true })
     .first()
     .click();
+  await expect(page).toHaveURL(/\/contact\/?$/);
+  await expect(page.locator('main h1')).toHaveText('I want this.');
+  await expect(page.locator('#inquiry-form')).toHaveAttribute(
+    'data-bound',
+    'true',
+  );
   await page.locator('#name').fill('Test Person');
   await expect(page.locator('[name=faxNumber]')).toHaveCount(0);
   const trap = page.locator('[name=inquiryReference]');
@@ -237,6 +247,7 @@ test('Contact retries preserve input and submit the honeypot after navigation', 
   await page.locator('#message').fill('This is a mocked inquiry test.');
   await page.locator('#consent').check();
   await expect(page.locator('[name=website]')).toHaveValue('mock-token');
+  await expect(page.locator('#name')).toHaveValue('Test Person');
   await page.locator('#submit-button').click();
   await expect(page.locator('#form-status')).toHaveText(
     'Mock provider unavailable',
