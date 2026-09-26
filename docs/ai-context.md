@@ -164,9 +164,10 @@ not a second mutable task list.
   live result above; it does not turn those tests into live verification.
   Future release records should correlate approved submissions with provider
   evidence without committing inquiry contents or credentials.
-- The isolate-local rate limiter is a deliberate bounded fallback, not a
+- The isolate-local rate limiter is a deliberate bounded additional layer, not a
   strict global quota; the Cloudflare Rate Limiting binding supplements it
-  but is itself eventually consistent per edge location.
+  but is itself eventually consistent per edge location. The binding is mandatory;
+  missing configuration fails closed before Turnstile or email provider calls.
 - Quality checks out full history and scans reachable Git objects for credential
   patterns. See AX-007 for scope and limits; pattern scanning is not proof that
   every possible secret format is absent.

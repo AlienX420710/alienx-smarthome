@@ -83,6 +83,32 @@ contact. Final Work/About/business content (AX-010) stays last.
 
 ## Last recorded runtime verification
 
+On 2026-09-26, dependency/documentation closeout PR #44 merged to
+`0b979ce0d77d421aea2b75edbd28dab545ff4d59`. All five main gates passed.
+Release Approval run `36263211611` published approval for that exact SHA;
+Workers Build check `108462927230`, Smoke run `36262936469`, and post-Smoke
+Integrity run `36263245611` succeeded. No open AlienX PRs remained immediately
+after this release. This does not close the separate negative deployment drill,
+notification receipt, rollback, daily email delivery, or physical-device work.
+
+The next contact hardening change makes the edge limiter mandatory, rejects
+malformed/whitespace honeypots and truthy non-boolean verification success,
+and removes provider-controlled verification details from logs. Its new mocked
+regressions do not establish real Turnstile acceptance or inbox delivery.
+README and release-runbook coverage now describes the actual WebKit/keyboard,
+CodeQL inventory, production sequencing and safe native auto-merge controls.
+Auto-merge was disabled when inspected; documentation is not a settings change.
+
+AX-015 (P2 / implemented, production verification pending): contact protection
+must not silently lose its edge rate limit or accept malformed trap/provider
+success values. Local clean install, 70 unit tests, repository security audit,
+Astro/TypeScript checks, build, Worker dry run, formatting and dependency audit
+passed (zero dependency vulnerabilities). GitHub browser gates and exact-SHA
+production acceptance are still required for this change. All tests use mocked
+providers and send no real email.
+
+### Earlier runtime verification — 2026-09-14
+
 Verified on 2026-09-14 at `4a51a7ef9cdad8a44f71bad157a13333809471c2`:
 
 - All five required exact-SHA release gates passed on the merged `main` revision:
@@ -257,8 +283,8 @@ security or present tutorial projects as authentic client work.
   may be used to prove required gates before promotion, then should be cleaned
   up after merge. Do not accumulate long-lived feature branches.
 - **Two rate limits:** isolate-local state bounds local abuse/memory; the
-  Cloudflare binding adds edge-location counters. Both currently apply when
-  configured. Neither promises a strict global quota. A global counter requires
+  Cloudflare binding adds mandatory edge-location counters. Missing binding
+  configuration fails closed. Neither promises a strict global quota. A global counter requires
   a separate justified design decision, not a documentation-only claim.
 - **Verification before promotion:** five exact-SHA workflows feed the gate.
   Production Smoke and Integrity are post-deployment checks; Integrity follows

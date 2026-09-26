@@ -43,7 +43,11 @@ const valid = {
   message: 'A local regression test.',
   website: 'test-token',
 };
-function harness(provider = { id: 'mock-id' }, bindings = {}) {
+function harness(
+  provider = { id: 'mock-id' },
+  bindings = {},
+  verification = { success: true, action: 'contact', hostname: 'example.test' },
+) {
   let verifies = 0,
     emails = 0;
   const sent = [];
@@ -51,15 +55,12 @@ function harness(provider = { id: 'mock-id' }, bindings = {}) {
     mockBindings: {
       TURNSTILE_SECRET: 'test',
       TURNSTILE_HOSTNAMES: 'example.test',
+      INQUIRY_RATE_LIMITER: { limit: async () => ({ success: true }) },
       ...bindings,
     },
     fetch: async () => {
       verifies++;
-      return Response.json({
-        success: true,
-        action: 'contact',
-        hostname: 'example.test',
-      });
+      return Response.json(verification);
     },
   }).onRequest;
   const endpoint = load('src/pages/api/inquiry.ts', {
@@ -166,6 +167,39 @@ test('edge limiter rejection and outage fail closed before providers', async () 
     assert.equal((await h.send(valid)).status, expected);
     assert.deepEqual(h.counts(), { verifies: 0, emails: 0 });
   }
+});
+test('missing edge binding fails closed before either provider', async () => {
+  const h = harness(undefined, { INQUIRY_RATE_LIMITER: undefined });
+  assert.equal((await h.send(valid)).status, 503);
+  assert.deepEqual(h.counts(), { verifies: 0, emails: 0 });
+});
+for (const faxNumber of [' ', '\t', null, false, 0, [], {}]) {
+  test(`malformed honeypot ${JSON.stringify(faxNumber)} rejects before providers`, async () => {
+    const h = harness();
+    assert.equal((await h.send({ ...valid, faxNumber })).status, 403);
+    assert.deepEqual(h.counts(), { verifies: 0, emails: 0 });
+  });
+}
+test('empty honeypot permits otherwise verified inquiries', async () => {
+  assert.equal((await harness().send({ ...valid, faxNumber: '' })).status, 200);
+});
+for (const success of ['true', 1, {}, false, null]) {
+  test(`non-boolean verification ${JSON.stringify(success)} never sends email`, async () => {
+    const h = harness(
+      undefined,
+      {},
+      { success, action: 'contact', hostname: 'example.test' },
+    );
+    assert.equal((await h.send(valid)).status, 403);
+    assert.deepEqual(h.counts(), { verifies: 1, emails: 0 });
+  });
+}
+test('truthy malformed edge response never reaches providers', async () => {
+  const h = harness(undefined, {
+    INQUIRY_RATE_LIMITER: { limit: async () => ({ success: 'true' }) },
+  });
+  assert.equal((await h.send(valid)).status, 429);
+  assert.deepEqual(h.counts(), { verifies: 0, emails: 0 });
 });
 test('retry key shape is bounded and validated', async () => {
   const h = harness();

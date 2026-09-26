@@ -4,6 +4,35 @@ Use scoped PRs for authorized changes. The owner has granted standing permission
 to open/update them and merge after all five mandatory exact-head gates pass.
 Keep main as the production branch and verify the resulting deployed main SHA.
 
+## Safe auto-merge
+
+In repository **Settings → General → Pull Requests**, enable **Allow auto-merge**.
+This permits native auto-merge; it does not enroll every existing or future PR.
+Enable auto-merge on each eligible PR while its required checks are pending.
+Automatic enrollment for all future PRs is separate work, not an effect of the
+checkbox. Do not substitute a custom merge script that bypasses protections.
+
+Keep the main ruleset active with PRs required, an empty bypass list, no force
+pushes/deletions, strict up-to-date branches, and these five checks attributed
+to GitHub Actions:
+
+- `Build, type check, audit`
+- `Safari / WebKit compatibility`
+- `Light, dark, and accessibility checks`
+- `Responsive viewport matrix`
+- `Performance, accessibility, best practices, and SEO`
+
+Do not enable a merge queue without implementing and validating `merge_group`
+checks. A merge is not production acceptance: the merged SHA must still pass
+Release Approval → Workers Build → Production Smoke → Production Integrity.
+Rebase/update a stale PR and let its checks run again; never bypass the strict
+branch requirement. Unresolved conflicts or required reviews must block merging.
+The observed ruleset on 2026-09-26 requires zero human approvals; CI success is
+not a claim of independent human review. For future automated enrollment, keep
+privileged automation isolated from PR code and prove push workflows still run.
+
+Reference: [GitHub native auto-merge](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-auto-merge-for-pull-requests-in-your-repository).
+
 ## Before release
 
 Run `npm ci`, `npm test`, `npm run check`, and `npm run audit` on Node 22.
