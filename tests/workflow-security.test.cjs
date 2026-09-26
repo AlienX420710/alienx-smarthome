@@ -39,6 +39,13 @@ test('workflow security audit accepts the committed policy', () => {
 });
 for (const [name, file, from, to, error] of [
   [
+    'removal of live security policy',
+    'quality.yml',
+    'node scripts/verify-code-scanning.mjs',
+    'echo disabled',
+    /live code-scanning policy is required/,
+  ],
+  [
     'event-supplied approval controller',
     'release-approval.yml',
     'ref: ${{ github.workflow_sha }}',

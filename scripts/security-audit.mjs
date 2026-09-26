@@ -207,6 +207,8 @@ if (
   packageJson.scripts?.audit !== 'npm audit --audit-level=low'
 )
   fail('.github/workflows/quality.yml: all-severity npm audit is required');
+if (!qualityWorkflow.includes('node scripts/verify-code-scanning.mjs'))
+  fail('.github/workflows/quality.yml: live code-scanning policy is required');
 
 if (failures.length) {
   console.error('Repository security audit failed:');

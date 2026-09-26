@@ -70,3 +70,23 @@ Equivalent mandatory PR/check enforcement remains an account-administration gap;
 repository CI and deployment rejection do not substitute for merge protection.
 No account setting is recorded as changed or verified without an API/dashboard
 result. Do not close this gap merely because a PR was voluntarily checked.
+
+## Live code-scanning policy
+
+The follow-up Quality job queries GitHub with only `contents: read` and
+`security-events: read` on main pushes. It requires current Actions and
+JavaScript/TypeScript analyses for the exact main SHA, complete open-alert
+pagination across every tool/severity, and an unchanged main revision before
+and after inspection. Missing analysis, API errors and any open alert fail
+Quality and therefore prevent release approval. The job has no dependency
+install, cache, persisted checkout token, or alert-write permission.
+
+The five PR workflows remain mandatory. The live inventory job is main-only
+because it audits the default-branch Security tab; a skipped PR instance is
+not represented as live inventory verification. Regression tests cover stale
+and missing analyses, errors, pagination, any-severity findings, and main changes.
+
+The desired main ruleset is in `.github/rulesets/main.json`. Its Lighthouse
+context is normalized to Cleaning-by-Cassi's `Performance, accessibility, best
+practices, and SEO`. Repository rules must be applied through authorized account
+administration; committing this file alone does not enable protection.

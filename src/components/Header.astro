@@ -265,6 +265,24 @@ import { SITE_TITLE } from '../consts';
 </style>
 
 <script>
+  function revealCurrentPage() {
+    const rail = document.querySelector<HTMLElement>('.internal-links');
+    const current = rail?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!rail || !current || rail.scrollWidth <= rail.clientWidth) return;
+    const railBounds = rail.getBoundingClientRect();
+    const currentBounds = current.getBoundingClientRect();
+    // Move only the horizontal rail, never the document or keyboard focus.
+    rail.scrollTo({
+      left: rail.scrollLeft + currentBounds.left - railBounds.left,
+      behavior: 'instant',
+    });
+  }
+
+  revealCurrentPage();
+  document.addEventListener('astro:page-load', revealCurrentPage);
+  window.addEventListener('resize', revealCurrentPage);
+  void document.fonts.ready.then(revealCurrentPage);
+
   document.addEventListener('click', (event) => {
     if (
       event.target instanceof Element &&

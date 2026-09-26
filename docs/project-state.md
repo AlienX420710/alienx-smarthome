@@ -1,6 +1,6 @@
 # AlienX SmartHome — canonical project state
 
-Maintained by Codex at the owner's direction. Last editorial update: 2026-09-20.
+Maintained by Codex at the owner's direction. Last editorial update: 2026-09-26.
 This is the authoritative repository index for recorded status, verified evidence,
 and outstanding work. It is not a claim that every current deployment or audit
 item is verified. Owner decisions govern intent; code and dated evidence establish
@@ -36,6 +36,34 @@ passed; evidence is recorded in
 PR #37 subsequently merged to `1506c90b6e79e71542402ce93a851cd28ab1a713`;
 its five gates, exact approval, Cloudflare build, Smoke and Integrity passed.
 See the same evidence note for run/job IDs.
+
+PR #38 passed all five gates plus CodeQL at
+`b625d27da78235fd091c0526036d7e3912931005` (including 32 WebKit cases) and
+merged to `b7a04bf8fdb13f8c4a6c616047ea80af459b5331`. Its production release
+verification passed: Release Approval run `35553154283`, Cloudflare check
+`106191690320`, Smoke run `35552889730`, and Integrity run `35553204406`
+all establish this exact main revision. The next scoped change makes the actual
+main alert inventory part of Quality instead of equating scan completion with
+zero findings. It also supplies an importable desired main ruleset; no account
+setting change is claimed.
+
+PR #39's initial head `83d3bdcfc908416be233b839504c90c5396d16aa` passed
+four mandatory gates but failed Safari run `35553121693`: the theme test
+opened its dialog before client navigation finished. The follow-up waits for
+the destination URL and heading without removing theme assertions. It also
+reveals the current mobile navigation link on load, client navigation and resize,
+without scrolling the document or focusing the link. Committed Chromium/WebKit
+regressions check actual clipping bounds at 320px and 393px, reload, history and
+resize. These follow-up changes still require exact-head browser CI and release
+verification; they are not yet claimed deployed.
+
+At follow-up head `9cc72093685442bf0e3eaf58154b925676b4b5c5`, Chromium
+passed both mobile navigation regressions and the theme test, but run
+`36244932069` failed the contact retry case (117/118 passed). Its retained
+trace proves the Name field was filled before the returning page swap and was
+empty at submit, correctly triggering validation. The test now waits for both
+destination URLs/headings and the initialized form before typing, and asserts
+the retained name. No form validation or retry assertion was removed.
 
 The follow-up adds read-only checkout credential enforcement, workflow origin
 validation, real WebKit interactions alongside SafariDriver, and committed keyboard
