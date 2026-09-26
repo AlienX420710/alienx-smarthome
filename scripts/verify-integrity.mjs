@@ -1,4 +1,8 @@
-import { assertCsp, assertSeo } from './integrity-contract.mjs';
+import {
+  assertCsp,
+  assertSeo,
+  assertSecurityHeaders,
+} from './integrity-contract.mjs';
 
 const candidate = process.argv.includes('--candidate');
 const origins = candidate
@@ -109,27 +113,21 @@ for (const origin of origins) {
     try {
       assertCsp(response.headers.get('content-security-policy'), html);
       assertSeo(html, route);
+      assertSecurityHeaders(response.headers);
     } catch (error) {
       throw new Error(`${origin}${route}: ${error.message}`);
-    }
-    const required = {
-      'strict-transport-security': /max-age=31536000.*includeSubDomains/i,
-      'x-content-type-options': /^nosniff$/i,
-      'x-frame-options': /^DENY$/i,
-      'referrer-policy': /^strict-origin-when-cross-origin$/i,
-      'permissions-policy': /geolocation=\(\).*payment=\(\)/i,
-    };
-    for (const [name, pattern] of Object.entries(required)) {
-      if (!pattern.test(response.headers.get(name) ?? ''))
-        throw new Error(`${route}: missing/incorrect ${name}`);
     }
     if (/localhost|127\.0\.0\.1|workers\.dev/i.test(html))
       throw new Error(`${route}: development hostname leaked`);
   }
   for (const path of ['/robots.txt', '/sitemap-index.xml']) {
-    if (!(await request(productionUrl(origin, path))).ok)
-      throw new Error(`${origin}${path}: unavailable`);
+    const response = await request(productionUrl(origin, path));
+    if (!response.ok) throw new Error(`${origin}${path}: unavailable`);
+    assertSecurityHeaders(response.headers);
   }
+  assertSecurityHeaders(
+    (await request(productionUrl(origin, '/api/status'))).headers,
+  );
   if (!candidate) {
     const response = await request(origin.replace('https:', 'http:') + '/', {
       redirect: 'manual',

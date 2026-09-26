@@ -10,6 +10,48 @@ const analysis = (language, id = 1) => ({
   results_count: 0,
   tool: { name: 'CodeQL' },
 });
+test('warnings and malformed analysis records fail closed without echoing provider details', async () => {
+  const { assessAnalyses } =
+    await import('../scripts/verify-code-scanning.mjs');
+  for (const warning of ['private diagnostic', true, {}, ['warning']]) {
+    assert.throws(
+      () => assessAnalyses([{ ...analysis('actions'), warning }], sha),
+      (error) =>
+        error.message === 'CodeQL analysis reported a warning requiring review',
+    );
+  }
+  for (const record of [null, [], 'invalid'])
+    assert.throws(
+      () => assessAnalyses([record], sha),
+      /Invalid CodeQL analysis record/,
+    );
+});
+test('transport and JSON failures never expose exception contents', async () => {
+  const { verifyCodeScanning } =
+    await import('../scripts/verify-code-scanning.mjs');
+  for (const jsonFailure of [false, true]) {
+    await assert.rejects(
+      verifyCodeScanning({
+        sha,
+        token: 'private-token',
+        fetcher: async () => {
+          if (!jsonFailure) throw Error('private-token');
+          return {
+            ok: true,
+            json: async () => {
+              throw Error('private-token');
+            },
+          };
+        },
+      }),
+      (error) =>
+        error.message ===
+        (jsonFailure
+          ? 'Invalid code-scanning evidence JSON'
+          : 'Code-scanning evidence transport failed'),
+    );
+  }
+});
 test('code-scanning policy requires both fresh language analyses', async () => {
   const { assessAnalyses } =
     await import('../scripts/verify-code-scanning.mjs');

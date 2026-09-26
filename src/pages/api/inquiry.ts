@@ -328,10 +328,9 @@ export const POST: APIRoute = async ({ locals }) => {
         text: plainText,
       }),
     });
-  } catch (error) {
+  } catch {
     console.error('Resend email request failed.', {
       requestId,
-      error: error instanceof Error ? error.message : 'Unknown error',
     });
     return json(
       { error: 'We could not send your message. Please try again.', requestId },

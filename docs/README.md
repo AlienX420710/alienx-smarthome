@@ -18,6 +18,13 @@ release procedures, remediation history, and historical audit material.
 
 ## Research and implementation notes
 
+- [Directory parity review](directory-parity-review.md) — applicable differences
+  across Cleaning's docs, scripts, source and tests; adoption and evidence limits.
+- [Inquiry security contract](inquiry-security-contract.md) — request boundary,
+  abuse controls, retries and mail acceptance semantics.
+- [Real-device validation](device-validation.md) — physical keyboard, screen reader
+  and touch acceptance protocol; not a claim of completed device testing.
+
 - [Security comparison — September 26](security-comparison-2026-09-26.md) —
   current Cleaning-by-Cassi comparison, external header observations and scoped
   follow-up acceptance.

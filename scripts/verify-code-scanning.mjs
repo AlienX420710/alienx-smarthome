@@ -9,6 +9,8 @@ export function assessAnalyses(analyses, sha) {
     throw Error('Invalid code-scanning analysis response');
   const latest = new Map();
   for (const analysis of analyses) {
+    if (!analysis || typeof analysis !== 'object' || Array.isArray(analysis))
+      throw Error('Invalid CodeQL analysis record');
     if (analysis.tool?.name !== 'CodeQL' || analysis.ref !== ref) continue;
     if (
       typeof analysis.category !== 'string' ||
@@ -25,6 +27,11 @@ export function assessAnalyses(analyses, sha) {
     (analysis) => analysis.commit_sha === sha,
   );
   for (const analysis of current) {
+    if (
+      analysis.warning != null &&
+      (typeof analysis.warning !== 'string' || analysis.warning.trim())
+    )
+      throw Error('CodeQL analysis reported a warning requiring review');
     if (typeof analysis.error !== 'string' || analysis.error.length)
       throw Error('CodeQL analysis reported an error or missing error status');
     if (
@@ -61,21 +68,30 @@ export async function verifyCodeScanning({
   if (!token) throw Error('Read-only code-scanning token is required');
   const api = `https://api.github.com/repos/${repository}`;
   const request = async (path) => {
-    const response = await fetcher(api + path, {
-      headers: {
-        Accept: 'application/vnd.github+json',
-        Authorization: `Bearer ${token}`,
-        'X-GitHub-Api-Version': '2022-11-28',
-        'User-Agent': 'AlienX-security-policy',
-      },
-      redirect: 'error',
-      signal: AbortSignal.timeout(15000),
-    });
+    let response;
+    try {
+      response = await fetcher(api + path, {
+        headers: {
+          Accept: 'application/vnd.github+json',
+          Authorization: `Bearer ${token}`,
+          'X-GitHub-Api-Version': '2022-11-28',
+          'User-Agent': 'AlienX-security-policy',
+        },
+        redirect: 'error',
+        signal: AbortSignal.timeout(15000),
+      });
+    } catch {
+      throw Error('Code-scanning evidence transport failed');
+    }
     if (!response.ok)
       throw Error(
         `Code-scanning evidence request failed: HTTP ${response.status}`,
       );
-    return response.json();
+    try {
+      return await response.json();
+    } catch {
+      throw Error('Invalid code-scanning evidence JSON');
+    }
   };
   const list = async (path) => {
     const result = [];

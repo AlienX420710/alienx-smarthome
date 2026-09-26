@@ -13,7 +13,11 @@ const securityHeaders = {
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'Permissions-Policy': 'geolocation=(), payment=()',
+  'Permissions-Policy':
+    'camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=(), display-capture=()',
+  'Cross-Origin-Opener-Policy': 'same-origin',
+  'Cross-Origin-Resource-Policy': 'same-origin',
+  'X-Permitted-Cross-Domain-Policies': 'none',
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
 };
 
@@ -39,6 +43,9 @@ const json = (
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'no-store',
+        ...(status === 429
+          ? { 'Retry-After': String(RATE_WINDOW_MS / 1000) }
+          : {}),
         ...(requestId ? { 'X-Request-ID': requestId } : {}),
       },
     }),
