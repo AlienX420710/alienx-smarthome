@@ -14,7 +14,7 @@
     "lighthouse": "13.4.1",
     "parse5": "8.0.1",
     "prettier": "3.9.6",
-    "prettier-plugin-astro": "1.0.0",
+    "prettier-plugin-astro": "1.0.1",
     "selenium-webdriver": "4.49.0",
     "sharp": "0.35.4",
     "wrangler": "4.131.2"
