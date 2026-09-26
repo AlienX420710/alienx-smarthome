@@ -211,6 +211,14 @@ negative-path requirement rather than weakening or simulating it away.
 
 ## Post-security roadmap — frontend research
 
+The [September 26 security comparison](security-comparison-2026-09-26.md)
+records fresh MDN observations (AlienX A+ 125, Cleaning A+ 140; both 12/12),
+SSL.org/OWASP guidance, current source/deployment differences and scoped adoption
+criteria. AX-014 (P2 / evaluation pending) tracks header coverage/hardening,
+analysis-warning handling and command-chain rehearsal identified there. The daily
+production email check remains separate unfinished work. Neither a score nor
+Cleaning's completion notes closes AlienX's operational findings.
+
 The owner-supplied research pass is now recorded in
 [frontend-pattern-notes.md](frontend-pattern-notes.md). The eight references
 were reviewed as pattern sources, with a native-first implementation hierarchy,
