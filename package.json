@@ -17,7 +17,7 @@
     "prettier-plugin-astro": "1.0.1",
     "selenium-webdriver": "4.49.0",
     "sharp": "0.35.4",
-    "wrangler": "4.136.3"
+    "wrangler": "4.137.0"
   },
   "engines": {
     "node": ">=22"
