@@ -47,6 +47,22 @@ the owner received a failure notification.
 
 ## Missing-email response and acceptance
 
+### Owner clarification — September 27
+
+The owner requires a real, complete form submission for manual and daily tests:
+populate every legitimate required and optional field, leave only the honeypot
+empty, retain real production Turnstile/rate-limit validation, confirm the success
+page and correlate the unique test marker/request ID with provider delivery.
+Use clearly labeled synthetic data and the owner's business mailbox; create no
+fictional customer record or third-party contact. Do not inject a token, bypass a
+challenge, or count a direct Resend send as end-to-end success.
+
+The current Worker heartbeat does not meet that requirement. Neither does the
+manual provider test delivered September 27 at 07:56 Chicago. A blocked challenge
+or missing browser capability must be reported as blocked, not as a successful
+daily test. Full-form daily execution remains unimplemented; do not claim the
+existing delivery-only monitor covers it.
+
 Read-only Resend inspection on September 27 at 07:38 Chicago found no matching
 daily message. The sender's source follows Cassi's scheduled-handler design, but
 source parity does not establish deployed cron activation or successful invocation.

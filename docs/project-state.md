@@ -1,6 +1,6 @@
 # AlienX SmartHome — canonical project state
 
-Maintained by Codex at the owner's direction. Last editorial update: 2026-09-26.
+Maintained by Codex at the owner's direction. Last editorial update: 2026-09-27.
 This is the authoritative repository index for recorded status, verified evidence,
 and outstanding work. It is not a claim that every current deployment or audit
 item is verified. Owner decisions govern intent; code and dated evidence establish
@@ -83,6 +83,13 @@ exists. The owner identifies +1 920-215-4208 as the AlienX Google Voice business
 contact. Final Work/About/business content (AX-010) stays last.
 
 ## Last recorded runtime verification
+
+September 27 follow-up: production `/api/status` reported
+`6fc7e81b13dee61db159e11d0bb48dbeb484f3d4` operational at 16:27 UTC.
+This confirms the deployed revision and configuration presence, not form submission
+or delivery. [Beta closeout](beta-closeout.md) records the current release blockers,
+branch cleanup inventory, PR #50 trace failure and full-form acceptance requirement.
+Beta closeout and the first GitHub release are not approved by this observation.
 
 PR #48 auto-merged to `c22f0be50ede32e9cba5d3d5c3e58cd0b7e76823` after
 all five gates at `e164b9c72ed869f3301c91a22f8808bcc7f587ba`.

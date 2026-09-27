@@ -18,6 +18,8 @@ release procedures, remediation history, and historical audit material.
 
 ## Research and implementation notes
 
+- [Beta closeout](beta-closeout.md) — first-release acceptance and branch cleanup.
+
 - [Production email health](email-health.md) — DST-safe production-path schedule,
   connected-account delivery monitoring and acceptance boundaries; no new secret.
 - [Cassi commit inventory](cassi-commit-inventory.md) — reciprocal reachable-history
