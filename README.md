@@ -128,6 +128,11 @@ There is no shared `src/layouts/` directory. Some legacy page overrides remain i
 
 ## ✅ Automated checks
 
+The [daily email health monitor](docs/email-health.md) schedules a production-path
+message at 05:00 America/Chicago, including DST. A separate scheduled CI workflow
+requires provider-confirmed delivery. Account activation and first live acceptance
+are tracked in project state; scheduled code alone is not verified delivery.
+
 | Workflow              | When                                             | Scope                                                                                                                                                                                  |
 | :-------------------- | :----------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Quality               | Push / PR to main                                | Clean install, formatting, committed tests, build/type checks, Worker dry run, all-severity dependency audit, history credential scan; main requires fresh CodeQL and zero open alerts |

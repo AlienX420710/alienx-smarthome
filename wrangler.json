@@ -5,7 +5,10 @@
     "nodejs_compat",
     "disable_nodejs_process_v2"
   ],
-  "main": "@astrojs/cloudflare/entrypoints/server",
+  "main": "./src/worker.ts",
+  "triggers": {
+    "crons": ["0 10 * * *", "0 11 * * *"]
+  },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS"

@@ -39,6 +39,27 @@ test('workflow security audit accepts the committed policy', () => {
 });
 for (const [name, file, from, to, error] of [
   [
+    'email monitor PR execution',
+    'email-health.yml',
+    '  workflow_dispatch:',
+    '  pull_request:',
+    /email evidence credentials require/,
+  ],
+  [
+    'email monitor untrusted checkout',
+    'email-health.yml',
+    'ref: ${{ github.workflow_sha }}',
+    'ref: ${{ github.sha }}',
+    /email evidence credentials require/,
+  ],
+  [
+    'email monitor branch restriction removed',
+    'email-health.yml',
+    "if: github.ref == 'refs/heads/main'",
+    'if: always()',
+    /email evidence credentials require/,
+  ],
+  [
     'removal of live security policy',
     'quality.yml',
     'node scripts/verify-code-scanning.mjs',

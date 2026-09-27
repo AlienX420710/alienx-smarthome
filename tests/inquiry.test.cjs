@@ -5,6 +5,12 @@ const vm = require('node:vm');
 const ts = require('typescript');
 // Load the actual handlers with provider bindings replaced; no network or email.
 function load(file, extra = {}) {
+  if (file === 'src/pages/api/inquiry.ts') {
+    extra = {
+      ...extra,
+      sendProductionMail: load('src/lib/mail.ts', extra).sendProductionMail,
+    };
+  }
   const source = fs
     .readFileSync(file, 'utf8')
     .replace(/^import .*;\n/gm, '')
