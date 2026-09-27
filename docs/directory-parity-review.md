@@ -66,12 +66,12 @@ security requirement; avoid a wholesale frontend rewrite during closeout.
 
 Cleaning's shared mail transport and DST-safe scheduled Worker are applicable
 patterns, but copying its cron alone would not satisfy AlienX's requirement.
-Still required: an AlienX production-path sender, fixed authorized business
-recipient, 05:00 America/Chicago guard, stable daily idempotency, bounded retry,
-CI success/failure evidence, and independently correlated delivery events.
-No replacement email, scheduler, new credential, or public bypass endpoint was
-created by this comparison. Notification receipt, account controls, live rollback
-and real-device results remain separately unverified.
+The later [email-health implementation](email-health.md) adds AlienX's shared
+production-path transport, fixed business destination, timezone guard, stable
+daily idempotency, bounded retry and independent CI delivery verifier.
+Monitor credential configuration, first live scheduled delivery and due CI evidence
+remain pending; no public bypass endpoint exists. Notification receipt, account
+controls, live rollback and real-device results remain separately unverified.
 
 References: [Cloudflare static headers](https://developers.cloudflare.com/workers/static-assets/headers/),
 [MDN COOP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cross-Origin-Opener-Policy),

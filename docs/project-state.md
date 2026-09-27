@@ -73,8 +73,9 @@ validation, real WebKit interactions alongside SafariDriver, and committed keybo
 regressions. It repairs Tab-selected command activation and visible focus. These
 changes are included in the verified PR #38/#39 releases above.
 AX-005/006/008 are not closed by writing these changes. The daily 05:00
-America/Chicago real production email check remains pending implementation and
-configuration; a direct unrelated provider send would not meet acceptance.
+America/Chicago real production email check was pending at this release;
+the AX-017 implementation and remaining live acceptance are tracked below.
+A direct unrelated provider send would not meet acceptance.
 
 AlienX is evolving into a technical proof-of-concept and public storefront for a
 possible future smart-home/automation business. Do not claim AlienX LLC already
@@ -82,6 +83,20 @@ exists. The owner identifies +1 920-215-4208 as the AlienX Google Voice business
 contact. Final Work/About/business content (AX-010) stays last.
 
 ## Last recorded runtime verification
+
+PR #48 auto-merged to `c22f0be50ede32e9cba5d3d5c3e58cd0b7e76823` after
+all five gates at `e164b9c72ed869f3301c91a22f8808bcc7f587ba`.
+All five main gates passed. Release Approval `36295256930`, Workers Build check
+`108552863111`, Smoke `36294943469` and Integrity `36295278337` succeeded.
+Live `/api/status` reported this exact SHA operational at 2026-09-27 04:48 UTC.
+The main code-scanning policy check `108551945792` also passed. No open PRs
+remained at this observation. This is evidence for PR #48, not later code.
+
+Resend account inspection on September 27 confirmed the AlienX sending domain
+verified, sending enabled and tracking disabled. Recent inquiry records included
+a provider-delivered message sent September 26 at 19:33 UTC. No message contents
+or private provider IDs are committed. This is historical provider delivery
+evidence, not a live form test or mailbox-placement proof for the current SHA.
 
 PR #47 merged to `cf464ed512d799d1282c41894ac5ff18e4cacbd6`.
 The exact-SHA Release Approval run [36280365353](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36280365353),
@@ -226,6 +241,29 @@ work; P3 = longer-term cleanup. Open means not implemented/verified here;
 owner-needed requires evidence or action outside repository editing. This is
 the currently triaged backlog, not a replacement inventory of every baseline
 audit finding. Reconcile newly revisited baseline items before claiming closure.
+
+### Operational closeout additions — September 27 UTC
+
+- **AX-016 (P1 / open): edge TLS configuration.** SSL.org's September 27 scan
+  reported TLS 1.0/1.1 accepted, plus cipher/compression heuristics. Set minimum
+  TLS 1.2 with TLS 1.3 retained, then verify both production hosts reject old
+  protocols and reassess remaining cipher findings. Header scores do not close
+  this finding. A later local OpenSSL retest could not resolve the hostname;
+  that environment error is not evidence of TLS rejection. No Cloudflare
+  administrator setting change or clean rescan is claimed.
+- **AX-017 (P2 / implemented, live acceptance pending): daily production email.**
+  See [email health](email-health.md): shared production mail transport, DST-safe
+  05:00 Chicago Worker cron, stable daily idempotency, bounded retries and a
+  separate CI provider-delivery verifier. Required account configuration is the
+  dedicated Actions monitor credential and monitored failure notifications.
+  First scheduled delivery, due CI success and notification receipt remain open.
+  Mocked tests and historical delivered inquiries do not close those criteria.
+
+AX-005's real rejection drill, AX-006's notification/rollback evidence and
+AX-008's assistive-technology/device results remain open. This register must not
+be described as an audit-wide production-readiness sign-off while they or AX-016
+and AX-017 acceptance remain unresolved. AX-009 and AX-010 retain their separate
+maintenance/content scope.
 
 | ID     | Priority / status               | Finding and source                                                                                                                     | Acceptance evidence                                                                                                                           |
 | ------ | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |

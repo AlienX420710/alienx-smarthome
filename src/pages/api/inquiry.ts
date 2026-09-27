@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
+import { sendProductionMail } from '../../lib/mail';
 export const prerender = false;
 const MAX_NAME_LENGTH = 100,
   MIN_NAME_LENGTH = 2,
@@ -10,8 +11,6 @@ const MAX_NAME_LENGTH = 100,
   MAX_TIMEZONE_LENGTH = 80,
   MAX_MESSAGE_LENGTH = 4000,
   MIN_MESSAGE_LENGTH = 10;
-const TO_ADDRESS = 'alienx@alienxsmarthome.com',
-  FROM_ADDRESS = 'AlienX SmartHome <contact@alienxsmarthome.com>';
 const CONTACT_METHODS = new Set(['email', 'phone', 'text', 'either']),
   CONTACT_TIMES = new Set(['morning', 'afternoon', 'evening', 'anytime']),
   PROJECT_TYPES = new Set([
@@ -311,22 +310,11 @@ export const POST: APIRoute = async ({ locals }) => {
     ).join('');
   let response: Response;
   try {
-    response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      signal: AbortSignal.timeout(15000),
-      headers: {
-        Authorization: `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-        'Idempotency-Key': idempotencyKey,
-      },
-      body: JSON.stringify({
-        from: FROM_ADDRESS,
-        to: [TO_ADDRESS],
-        reply_to: email,
-        subject: `New AlienX inquiry — ${name}${company ? ` / ${company}` : ''}`,
-        html: `<!doctype html><html><body style="margin:0;background:#f4f6fa;font-family:Arial,Helvetica,sans-serif;color:#172033;"><div style="max-width:700px;margin:32px auto;padding:0 16px;"><div style="overflow:hidden;border:1px solid #dfe4ec;border-radius:18px;background:#fff;box-shadow:0 8px 30px rgba(16,24,40,.08);"><div style="padding:24px 28px;background:#080d18;color:#fff;"><div style="font-size:12px;letter-spacing:2px;font-weight:700;color:#9eabc4;">ALIENX / INQUIRY</div><h1 style="margin:10px 0 0;font-size:26px;line-height:1.2;color:#fff;">New conversation started</h1></div><div style="padding:26px 28px;"><table role="presentation" style="width:100%;border-collapse:collapse;">${htmlDetails}</table><div style="margin:18px 0 22px;border-top:1px solid #e7eaf0;"></div><div style="font-size:12px;letter-spacing:1.5px;font-weight:700;color:#667085;margin-bottom:10px;">PROJECT DETAILS</div><div style="font-size:16px;line-height:1.7;color:#344054;">${safeMessage}</div>${safeWebsite ? `<div style="margin-top:20px;font-size:13px;"><a href="${safeWebsite}" style="color:#315bdc;text-decoration:none;">Open submitted website →</a></div>` : ''}</div></div><p style="margin:16px 0;text-align:center;font-size:12px;color:#98a2b3;">Submitted through alienxsmarthome.com · ${escapeHtml(requestId)}</p></div></body></html>`,
-        text: plainText,
-      }),
+    response = await sendProductionMail(resendApiKey, idempotencyKey, {
+      reply_to: email,
+      subject: `New AlienX inquiry — ${name}${company ? ` / ${company}` : ''}`,
+      html: `<!doctype html><html><body style="margin:0;background:#f4f6fa;font-family:Arial,Helvetica,sans-serif;color:#172033;"><div style="max-width:700px;margin:32px auto;padding:0 16px;"><div style="overflow:hidden;border:1px solid #dfe4ec;border-radius:18px;background:#fff;box-shadow:0 8px 30px rgba(16,24,40,.08);"><div style="padding:24px 28px;background:#080d18;color:#fff;"><div style="font-size:12px;letter-spacing:2px;font-weight:700;color:#9eabc4;">ALIENX / INQUIRY</div><h1 style="margin:10px 0 0;font-size:26px;line-height:1.2;color:#fff;">New conversation started</h1></div><div style="padding:26px 28px;"><table role="presentation" style="width:100%;border-collapse:collapse;">${htmlDetails}</table><div style="margin:18px 0 22px;border-top:1px solid #e7eaf0;"></div><div style="font-size:12px;letter-spacing:1.5px;font-weight:700;color:#667085;margin-bottom:10px;">PROJECT DETAILS</div><div style="font-size:16px;line-height:1.7;color:#344054;">${safeMessage}</div>${safeWebsite ? `<div style="margin-top:20px;font-size:13px;"><a href="${safeWebsite}" style="color:#315bdc;text-decoration:none;">Open submitted website →</a></div>` : ''}</div></div><p style="margin:16px 0;text-align:center;font-size:12px;color:#98a2b3;">Submitted through alienxsmarthome.com · ${escapeHtml(requestId)}</p></div></body></html>`,
+      text: plainText,
     });
   } catch {
     console.error('Resend email request failed.', {
@@ -358,7 +346,7 @@ export const POST: APIRoute = async ({ locals }) => {
   if (
     !resendResult ||
     typeof resendResult.id !== 'string' ||
-    !resendResult.id
+    !resendResult.id.trim()
   ) {
     console.error('Resend returned success without an email ID.', {
       requestId,

@@ -89,6 +89,17 @@ for (const file of workflowFiles) {
     fail(
       `${file}: real WebKit interactions are required alongside SafariDriver`,
     );
+  if (
+    name === 'email-health.yml' &&
+    (!text.includes('ref: ${{ github.workflow_sha }}') ||
+      !text.includes("if: github.ref == 'refs/heads/main'") ||
+      !text.includes('package-manager-cache: false') ||
+      /\bpull_request\b/.test(text) ||
+      /^\s*cache:\s*\S/m.test(text))
+  )
+    fail(
+      `${file}: email evidence credentials require a trusted main controller without PR execution or package caches`,
+    );
 
   const lines = text.split('\n');
   for (let index = 0; index < lines.length; index += 1) {

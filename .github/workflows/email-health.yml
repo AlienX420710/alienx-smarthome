@@ -1,0 +1,37 @@
+name: AlienX Email Delivery Health
+
+on:
+  schedule:
+    - cron: '25 10,11 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-email-health
+  cancel-in-progress: false
+
+jobs:
+  delivery:
+    name: Production daily email delivery
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout trusted monitor
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          package-manager-cache: false
+
+      - name: Require provider delivery evidence
+        env:
+          RESEND_MONITOR_API_KEY: ${{ secrets.RESEND_MONITOR_API_KEY }}
+        run: node scripts/verify-email-health.mjs
