@@ -29,6 +29,17 @@ Web engineering, automation, infrastructure, and interactive browser experiences
 
 ## ✨ Welcome
 
+Security maintenance: [current findings](docs/project-state.md) ·
+[Cleaning by Cassi commit inventory](docs/cassi-commit-inventory.md) ·
+[adoption decisions](docs/directory-parity-review.md) ·
+[inquiry contract](docs/inquiry-security-contract.md) ·
+[docs index](docs/README.md).
+
+The reciprocal Cassi inventory records exact reference revisions, observed refs,
+main versus unmerged history, changed-file counts and reproducible patch digests.
+Its path-based review areas guide comparison; they do not mean every historical
+change was manually audited, imported, or verified in AlienX production.
+
 AlienX SmartHome is an engineering showcase and technical proof-of-concept for a future smart-home/automation business, not a Home Assistant dashboard or a home-control application. AlienX LLC is not represented as an established company. The site combines browser experiments, an interactive stack explanation, a public configuration-status endpoint, and a protected project inquiry form.
 
 | Explore the experience                  | Built with safeguards                                   |
@@ -189,6 +200,10 @@ Lighthouse needs Chrome/Chromium. `node tests/safari.cjs` needs macOS and enable
 
 The [directory parity review](docs/directory-parity-review.md) records applicable
 Cleaning-by-Cassi improvements without replacing AlienX's stronger controls.
+The [Cassi commit inventory](docs/cassi-commit-inventory.md) provides the
+reproducible reference-history ledger and regeneration instructions. Keep history,
+adoption decisions, and AlienX release evidence separate; reference branch-only
+or PR-only changes are not deployed features.
 See the [inquiry contract](docs/inquiry-security-contract.md) and
 [real-device protocol](docs/device-validation.md) for acceptance boundaries.
 

@@ -83,6 +83,22 @@ contact. Final Work/About/business content (AX-010) stays last.
 
 ## Last recorded runtime verification
 
+PR #47 merged to `cf464ed512d799d1282c41894ac5ff18e4cacbd6`.
+The exact-SHA Release Approval run [36280365353](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36280365353),
+Production Smoke [36280044743](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36280044743)
+and post-Smoke Production Integrity [36280388392](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36280388392)
+were read back successfully on 2026-09-27 UTC. These supersede the earlier
+preflight-only wording for the AX-014 header, analysis-warning and offline
+deployment-rehearsal tranche. They do not close real email, rollback, device or
+negative Cloudflare deployment drills.
+
+The [Cassi inventory](cassi-commit-inventory.md) now records the reciprocal
+reference-history scope and regeneration procedure. It is automated triage,
+not a replacement for the [current-source adoption review](directory-parity-review.md)
+or evidence of AlienX security closure.
+
+### Prior release — PR #46
+
 PR #46 auto-merged after all five gates at
 `42e6dfe5d21cb2db6b1f50b2e3d185cc0cee14f3`, producing main
 `f67c91c0022a231dc0fd6764f129dbef710b993e`. All five main workflows passed.
@@ -95,8 +111,9 @@ this SHA; this is not a real Turnstile/email-delivery test.
 The [four-directory comparison](directory-parity-review.md) against Cleaning
 `ee9f3e8898fcab7d250983d7ca733a29e87dc946` implements the next AX-014 tranche:
 header enforcement, CodeQL warning/error sanitization, and offline npm deploy
-rehearsal. Local/CI and production acceptance for that follow-up remain separate
-from the verified PR #46 release. Daily email and operational drills stay open.
+rehearsal. Its later production evidence is recorded under PR #47 above;
+the PR #46 results alone did not establish that follow-up. Daily email and
+operational drills stay open.
 
 On 2026-09-26, dependency/documentation closeout PR #44 merged to
 `0b979ce0d77d421aea2b75edbd28dab545ff4d59`. All five main gates passed.
@@ -258,8 +275,9 @@ negative-path requirement rather than weakening or simulating it away.
 The [September 26 security comparison](security-comparison-2026-09-26.md)
 records fresh MDN observations (AlienX A+ 125, Cleaning A+ 140; both 12/12),
 SSL.org/OWASP guidance, current source/deployment differences and scoped adoption
-criteria. AX-014 (P2 / evaluation pending) tracks header coverage/hardening,
-analysis-warning handling and command-chain rehearsal identified there. The daily
+criteria. AX-014's header hardening, analysis-warning handling and offline
+command-chain rehearsal tranche is implemented in PR #47, with exact-SHA
+production evidence above. Broader operational acceptance remains separate. The daily
 production email check remains separate unfinished work. Neither a score nor
 Cleaning's completion notes closes AlienX's operational findings.
 
