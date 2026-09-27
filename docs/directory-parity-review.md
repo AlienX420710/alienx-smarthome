@@ -6,6 +6,11 @@ inspected read-only. This is a security/reliability comparison of the four
 requested directories, not a requirement that their files or business features
 be identical, nor a claim of a complete line-by-line audit of both applications.
 
+The reciprocal [Cassi commit inventory](cassi-commit-inventory.md) adds a
+reproducible reachable-history ledger for this reference. Its automated review-area
+links route historical changes here; the table below owns actual adoption decisions.
+An inventory row is not proof that its change is needed, merged, or deployed.
+
 | Directory  | Applicable gap                                                                                                                   | Disposition in this change                                                                                                                                                                                                                            |
 | ---------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/docs`    | Cleaning has explicit request and physical-device validation contracts.                                                          | Add AlienX-specific contracts/protocol and link them from the engineering index. Record PR #46's verified production evidence. Keep operational unknowns visible.                                                                                     |

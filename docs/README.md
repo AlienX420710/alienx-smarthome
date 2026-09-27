@@ -18,6 +18,9 @@ release procedures, remediation history, and historical audit material.
 
 ## Research and implementation notes
 
+- [Cassi commit inventory](cassi-commit-inventory.md) — reciprocal reachable-history
+  ledger: exact reference main, observed refs, main/branch/PR scope, file counts,
+  raw patch digests and automated review areas. Not a manual security certification.
 - [Directory parity review](directory-parity-review.md) — applicable differences
   across Cleaning's docs, scripts, source and tests; adoption and evidence limits.
 - [Inquiry security contract](inquiry-security-contract.md) — request boundary,
@@ -46,3 +49,13 @@ release procedures, remediation history, and historical audit material.
 Historical documents must not be used as current release approval. Reconcile
 their findings with [project state](project-state.md) and the relevant
 revision-specific CI or production evidence.
+
+## Maintaining the cross-repository record
+
+1. Regenerate the Cassi inventory from a fresh mirror using its documented command.
+2. Inspect applicable current source changes; record adopt/retain/defer decisions
+   in the directory parity review, not as automatic conclusions from file names.
+3. Validate AlienX changes independently. Record exact-SHA acceptance and remaining
+   operational limits in project state; link that record from the README.
+
+Never replace AlienX's security controls merely to match reference naming or scores.

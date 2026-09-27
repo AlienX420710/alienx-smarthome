@@ -1,5 +1,17 @@
 # Audit remediation
 
+## Reciprocal reference inventory — 2026-09-27 UTC
+
+Added [cassi-commit-inventory.md](cassi-commit-inventory.md), generated from a fresh
+public mirror of Cleaning by Cassi at `ee9f3e8898fcab7d250983d7ca733a29e87dc946`.
+The ledger separates main, branch-only, retained PR and other-ref reachability,
+hashes raw first-parent diffs, and links automated review areas to local contracts.
+README and the docs index expose the ledger alongside actual adoption decisions.
+Fixture tests cover root/merge history, reference scopes, raw digest reproducibility,
+Markdown escaping, shallow-history rejection and sanitized failures. This is
+documentation tooling, not a new security scanner or a manual audit of every
+historical change. Production email and operational drills remain open.
+
 Source: AlienX-SmartHome-Audit.md, baseline d55378c.
 See also: [ai-audit.md](ai-audit.md) for a point-in-time full audit and
 [ai-context.md](ai-context.md) for assistant onboarding — this file is the
