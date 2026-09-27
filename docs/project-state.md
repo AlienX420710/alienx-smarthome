@@ -254,9 +254,14 @@ audit finding. Reconcile newly revisited baseline items before claiming closure.
 - **AX-017 (P2 / implemented, live acceptance pending): daily production email.**
   See [email health](email-health.md): shared production mail transport, DST-safe
   05:00 Chicago Worker cron, stable daily idempotency, bounded retries and a
-  separate CI provider-delivery verifier. Required account configuration is the
-  dedicated Actions monitor credential and monitored failure notifications.
-  First scheduled delivery, due CI success and notification receipt remain open.
+  separate connected-Resend delivery monitor in ChatGPT, matching Cassi at the
+  owner's September 27 direction. No additional Actions secret is required.
+  The extra credential-dependent workflow is removed; release CI remains separate
+  and does not establish delivery. The enabled ChatGPT monitor was updated on
+  September 27 without changing its schedule. Read-only Resend inspection at
+  07:38 Chicago found no health message for September 27. The cause of the missing
+  scheduled send is not yet established; Cloudflare invocation logs are needed.
+  First scheduled delivery and notification receipt remain open.
   Mocked tests and historical delivered inquiries do not close those criteria.
 
 AX-005's real rejection drill, AX-006's notification/rollback evidence and

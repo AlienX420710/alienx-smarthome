@@ -41,7 +41,7 @@ export async function sendDailyHealth(
   // Stable payload/key across retries and deploys, within provider's 24h retention.
   const message = {
     subject: `AlienX SmartHome — daily email health check — ${date}`,
-    text: `AlienX SmartHome production email health check for ${date}.\n\nThis scheduled 5:00 AM America/Chicago message uses the same production mail credential, sender, business destination and transport as inquiries. Receiving it confirms delivery of this message. It does not test a visitor's Turnstile challenge or form interaction, or guarantee delivery of every inquiry.\n\nNo customer inquiry was created. If missing, inspect the GitHub Email Delivery Health run and Cloudflare scheduled-event logs.`,
+    text: `AlienX SmartHome production email health check for ${date}.\n\nThis scheduled 5:00 AM America/Chicago message uses the same production mail credential, sender, business destination and transport as inquiries. Receiving it confirms delivery of this message. It does not test a visitor's Turnstile challenge or form interaction, or guarantee delivery of every inquiry.\n\nNo customer inquiry was created. If missing, inspect the ChatGPT delivery monitor and Cloudflare scheduled-event logs.`,
   };
   for (let attempt = 0; attempt < 3; attempt++) {
     if (attempt)

@@ -65,12 +65,12 @@ either. A shared page layout is an optional maintainability change, not a
 security requirement; avoid a wholesale frontend rewrite during closeout.
 
 Cleaning's shared mail transport and DST-safe scheduled Worker are applicable
-patterns, but copying its cron alone would not satisfy AlienX's requirement.
+patterns, adopted with the owner's September 27 direction to use her monitoring approach.
 The later [email-health implementation](email-health.md) adds AlienX's shared
 production-path transport, fixed business destination, timezone guard, stable
-daily idempotency, bounded retry and independent CI delivery verifier.
-Monitor credential configuration, first live scheduled delivery and due CI evidence
-remain pending; no public bypass endpoint exists. Notification receipt, account
+daily idempotency, bounded retry and connected-Resend delivery monitoring in ChatGPT.
+No extra Actions credential is required. First live scheduled delivery
+remains pending; no public bypass endpoint exists. Notification receipt, account
 controls, live rollback and real-device results remain separately unverified.
 
 References: [Cloudflare static headers](https://developers.cloudflare.com/workers/static-assets/headers/),
