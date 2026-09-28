@@ -1,5 +1,5 @@
-import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
+// Optional injectable evidence validator; production monitoring uses the connected
+// Resend account in ChatGPT. No environment variable or CI credential is required.
 
 export function expectedHealthDate(now = new Date()) {
   const parts = Object.fromEntries(
@@ -84,24 +84,4 @@ export async function verifyEmailHealth({
     await new Promise((resolve) => setTimeout(resolve, 600));
   }
   throw new Error('Daily health email delivery evidence is missing');
-}
-
-if (
-  process.argv[1] &&
-  import.meta.url === pathToFileURL(resolve(process.argv[1])).href
-) {
-  try {
-    const result = await verifyEmailHealth({
-      token: process.env.RESEND_MONITOR_API_KEY,
-    });
-    console.log(
-      result.status === 'not-due'
-        ? 'Email health not due before 05:00 America/Chicago.'
-        : `Email delivery verified for ${result.date}; provider reports delivered.`,
-    );
-  } catch (error) {
-    // Only locally authored error messages escape verifyEmailHealth.
-    console.error(error.message);
-    process.exitCode = 1;
-  }
 }

@@ -128,10 +128,16 @@ There is no shared `src/layouts/` directory. Some legacy page overrides remain i
 
 ## ✅ Automated checks
 
+[Beta closeout and first-release acceptance](docs/beta-closeout.md) tracks the
+remaining production evidence. Beta is not yet signed off; passing CI alone is
+not full-form delivery, rollback, TLS or real-device verification.
+
 The [daily email health monitor](docs/email-health.md) schedules a production-path
-message at 05:00 America/Chicago, including DST. A separate scheduled CI workflow
-requires provider-confirmed delivery. Account activation and first live acceptance
-are tracked in project state; scheduled code alone is not verified delivery.
+message at 05:00 America/Chicago, including DST, using the existing Worker key.
+ChatGPT checks provider-confirmed delivery through the connected Resend account,
+as in Cleaning by Cassi; no additional key or Actions secret is required.
+Release CI is separate from delivery evidence. First live acceptance remains
+tracked in project state; scheduled code alone is not verified delivery.
 
 | Workflow              | When                                             | Scope                                                                                                                                                                                  |
 | :-------------------- | :----------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

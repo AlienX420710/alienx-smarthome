@@ -1,70 +1,78 @@
 # Production email health
 
-The Worker schedules a fixed-recipient email for **05:00 America/Chicago**.
-Two UTC cron candidates (10:00 and 11:00) cover daylight and standard time; the
-scheduled-time timezone guard sends only at local 05:00. Events over 15 minutes
-late or implausibly in the future do not send. Cloudflare cron timing is best
-effort, not a guarantee of exact arrival time.
+The Worker schedules one fixed-recipient email at **05:00 America/Chicago**,
+using the existing production `RESEND_API_KEY`. No new key, environment variable,
+or GitHub Actions secret is required. At the owner's September 27 direction,
+monitoring follows Cleaning by Cassi: ChatGPT checks the connected Resend account.
 
 ## Production path and safety
 
-`src/worker.ts` keeps Astro's normal fetch handler and adds only a scheduled
-handler. `src/lib/mail.ts` is the shared production transport used by both the
-validated inquiry endpoint and the scheduler. Both use the existing Worker
-`RESEND_API_KEY`, sender and business destination. The caller cannot override the
-sender/destination; redirects are rejected and requests time out after 15 seconds.
-There is no public send trigger or Turnstile exemption. The scheduled message
-creates no customer inquiry and tests no visitor challenge or browser submission.
+`src/worker.ts` preserves Astro's fetch handler and adds a scheduled handler.
+Two UTC cron candidates (10:00 and 11:00) cover daylight and standard time;
+the timezone guard sends only for local 05:00. Events over 15 minutes late or
+over a minute in the future are ignored. Cloudflare scheduling is best effort.
 
-A stable date-only payload and idempotency key deduplicate same-day retries,
-including across deployments within Resend's 24-hour retention. There are at most
-three attempts, retrying transient/provider-acceptance uncertainty and stopping on
-permanent HTTP errors. Missing configuration, exhausted attempts and missing or
-blank provider IDs fail the scheduled invocation. Logs omit message bodies and
-provider-controlled errors. Provider acceptance is not delivery.
+The scheduler and validated inquiry endpoint share `src/lib/mail.ts`, the
+existing Worker credential, sender `AlienX SmartHome <contact@alienxsmarthome.com>`
+and sole destination `alienx@alienxsmarthome.com`. There is no public send trigger,
+caller-selected destination or Turnstile exemption. No customer inquiry is created.
 
-## Independent CI delivery evidence
+Date-only payloads and idempotency keys deduplicate retries across deployments
+within the provider's 24-hour retention. Three bounded attempts retry transient
+errors; permanent HTTP errors stop. Requests reject redirects and time out after
+15 seconds. Success requires a nonempty provider ID; missing configuration and
+exhausted attempts fail the invocation. Logs omit bodies and provider errors.
+Provider acceptance is not delivery.
 
-`AlienX Email Delivery Health` runs at 10:25 and 11:25 UTC and can be dispatched
-manually on main. The pre-05:00 winter run explicitly reports not-due; it is not
-delivery evidence. A due run requires today's exact health subject, fixed sender,
-single business destination, a valid timestamp after local 05:00, nonempty email
-ID and provider `delivered` status. Missing mail, only `sent`, bounce, malformed
-evidence, exhausted pagination, unavailable API or missing credential fails CI.
-Reports publish the date/result, not private mail records. No mail is sent by CI.
+## Independent delivery monitoring
 
-The monitor uses only GET requests, but **do not assume its credential is
-read-only**: provider key permissions must be inspected. Configure a dedicated
-credential capable of listing sent-email delivery evidence in the repository's
-Actions secret `RESEND_MONITOR_API_KEY`. Use the minimum supported provider scope;
-if the provider requires broader access, account for that scope and rotation in
-the operational review. Never copy a key into chat, source or workflow YAML.
-The existing Worker sending key is not extracted or widened for this purpose.
+The enabled AlienX production-health monitor checks at 05:30 America/Chicago
+through ChatGPT's existing Resend connection. It requires the exact dated subject,
+sender display name/address, sole recipient, today's timestamp at or after 05:00,
+and provider `delivered` status. Missing, sent-only, bounced, failed, wrong-identity
+or inaccessible evidence is not success. It paginates when necessary and never
+sends a replacement email that could conceal a failed scheduled invocation.
 
-Secret use is confined to scheduled/manual main runs with an immutable trusted
-controller checkout, read-only GitHub permissions and no dependency installation
-or package cache. It is never exposed to PR code. GitHub Actions can delay
-scheduled jobs; a missing run is not a green delivery check.
+The monitor separately checks the current main SHA, five mandatory release gates,
+Release Approval, Workers Build, Production Smoke and Production Integrity.
+Those CI results do not prove delivery. The extra credential-dependent Actions
+email workflow is removed, not reported as passing. The injectable evidence
+validator in `scripts/verify-email-health.mjs` remains covered by mocked tests;
+it has no environment-variable entrypoint and is not the active monitor.
 
-## Activation and acceptance
+Provider delivery confirms receiving-server acceptance, not inbox placement or
+human receipt. Failure notifications arrive through ChatGPT independently of mail.
+The monitor configuration was updated on September 27; this does not prove that
+the owner received a failure notification.
 
-1. Merge through all five exact-head gates and verify the merged SHA through
-   Release Approval, Workers Build, Smoke and Integrity. Confirm both cron
-   triggers in the deployed Worker configuration.
-2. Configure the dedicated Actions monitor secret and GitHub/Cloudflare failure
-   notifications to a monitored recipient. These are account operations, not
-   settings certified by committing this file.
-3. After the first 05:00 Chicago invocation, correlate scheduled-event success,
-   the provider delivery event and a due CI run. Record mailbox receipt separately;
-   provider delivery does not establish inbox placement or human reading.
-4. Prove a controlled monitor failure produces a received notification. Retain
-   the failure and recovery evidence. Do not suppress failures to close the audit.
+## Missing-email response and acceptance
 
-Current implementation has mocked schedule/transport/monitor regressions, including
-both DST transitions. First live scheduled delivery, the monitor credential,
-alert receipt and live rollback are not yet verified. Historical delivered
-inquiries are separate evidence and cannot certify this new scheduler.
+### Owner clarification — September 27
 
-References: [Cloudflare scheduled handlers](https://developers.cloudflare.com/workers/runtime-apis/handlers/scheduled/),
-[Astro custom entrypoint](https://docs.astro.build/en/guides/integrations-guide/cloudflare/#changed-custom-entrypoint-api),
-[Resend delivery records](https://resend.com/docs/api-reference/emails/list-emails).
+The owner requires a real, complete form submission for manual and daily tests:
+populate every legitimate required and optional field, leave only the honeypot
+empty, retain real production Turnstile/rate-limit validation, confirm the success
+page and correlate the unique test marker/request ID with provider delivery.
+Use clearly labeled synthetic data and the owner's business mailbox; create no
+fictional customer record or third-party contact. Do not inject a token, bypass a
+challenge, or count a direct Resend send as end-to-end success.
+
+The current Worker heartbeat does not meet that requirement. Neither does the
+manual provider test delivered September 27 at 07:56 Chicago. A blocked challenge
+or missing browser capability must be reported as blocked, not as a successful
+daily test. Full-form daily execution remains unimplemented; do not claim the
+existing delivery-only monitor covers it.
+
+Read-only Resend inspection on September 27 at 07:38 Chicago found no matching
+daily message. The sender's source follows Cassi's scheduled-handler design, but
+source parity does not establish deployed cron activation or successful invocation.
+Inspect Cloudflare's deployed cron triggers and scheduled-event logs for 10:00 UTC,
+then correlate the invocation with provider metadata. Do not extract credentials,
+weaken inquiry validation, or send an unrelated test to conceal the failure.
+
+All five exact-head gates and the merged revision's approval/build/smoke/integrity
+chain remain required. Mocked tests cover DST transitions, stale events, fixed
+identity, duplicate prevention and provider failures. First real scheduled delivery,
+failure-notification receipt and live rollback remain unverified.
+
+Reference implementation: [Cleaning by Cassi email health](https://github.com/Cassileigh/cleaning-by-cassi/blob/ee9f3e8898fcab7d250983d7ca733a29e87dc946/docs/email-health.md).

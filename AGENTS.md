@@ -15,6 +15,10 @@ versioned repository record, not an assistant's memory or reputation.
    Cloudflare Build, Production Smoke, and Production Integrity. This permission
    does not authorize bypassing protections, weakening gates, or overriding tool
    approval rejections; use a permitted safer path and report genuine blockers.
+   `main` is the only durable branch. Reuse the existing active PR for scoped
+   corrections; do not accumulate new branches. After verified merge, delete
+   its temporary head branch and verify the remote branch list. Never delete
+   an unmerged head or the approval/rejection tags used by deployment gating.
 2. Read [project-state.md](docs/project-state.md): canonical recorded status,
    evidence boundaries, decisions, and outstanding findings.
 3. Read [ai-context.md](docs/ai-context.md): architecture and implementation
