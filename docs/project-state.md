@@ -1,6 +1,6 @@
 # AlienX SmartHome — canonical project state
 
-Maintained by Codex at the owner's direction. Last editorial update: 2026-09-27.
+Maintained by Codex at the owner's direction. Last editorial update: 2026-09-29.
 This is the authoritative repository index for recorded status, verified evidence,
 and outstanding work. It is not a claim that every current deployment or audit
 item is verified. Owner decisions govern intent; code and dated evidence establish
@@ -24,6 +24,51 @@ The owner authorizes scoped branches/PRs, ongoing fixes and safe exact-head
 verified merges without repeated confirmation within authorized work. See
 [AGENTS.md](../AGENTS.md). This replaces the older main-only editing rule;
 security gates and independent tool approval controls still apply.
+
+## Production baseline — 2026-09-29
+
+Current main is `9eae3c893bd66dcceb615792f618f883d0ed3402`. All five
+mandatory main gates passed. Production Smoke `36602529268` observed the prior
+live revision until the deployment changed, then verified this exact SHA.
+Release Approval `36603112413` published approval for this SHA. Post-Smoke
+Production Integrity `36603223734` obtained stable exact-revision confirmation
+on both production hosts and passed all eight audited routes. This establishes
+the current positive release/deployment baseline; it does not by itself close
+the negative deployment drill, notification/rollback, device, TLS, email, style,
+or authentic-content findings below.
+
+PR #51's bounded Lighthouse runtime retry is now deployed. The required score
+thresholds and three valid samples remain unchanged; transient browser/runtime
+measurement failures may be retried, but exhausted measurement failures still
+fail closed. The same release includes the Undici dependency security update.
+
+Read-only Resend inspection on September 29 found no natural daily heartbeat for
+that date and no `AX-DAILY-2026-09-29` full-form marker. No replacement
+heartbeat, direct-provider substitute, or Turnstile bypass was used. The missing
+heartbeat remains failed live acceptance. The next natural 05:00
+America/Chicago event and a separate real browser full-form submission remain
+required AX-017 evidence.
+
+Remote branch enumeration on September 29 still found ten stale merged heads
+besides protected `main`. The connected GitHub tool exposes branch creation but
+not branch deletion, so cleanup is not claimed. There were no open GitHub issues
+at this observation.
+
+## September 29 closeout follow-up
+
+See [the dated evidence note](closeout-2026-09-29.md) for fresh SSL.org browser
+scans, missing-email evidence, access blockers, scoped CSS cleanup and validation.
+AX-016's TLS 1.0/1.1 rejection portion is verified on both hosts; CBC/RSA scanner
+heuristics remain open. AX-009 has a scoped implementation awaiting final-head
+browser/deployment evidence. AX-010 has factual copy revisions awaiting owner
+editorial acceptance. Neither finding is automatically closed by editing text.
+
+The production-health automation is configured to attempt a real full-form test;
+no successful current-revision full-form delivery was observed. The prepared
+manual submission was blocked by automatic approval review. Cloudflare's
+bot-verification screen prevented account-level drills and cron-log inspection.
+The next natural 05:00 Chicago heartbeat is September 30; today's absence remains
+failed live acceptance. Existing monitor schedules were read back, not recreated.
 
 ## Active closeout — 2026-09-20
 
@@ -251,13 +296,15 @@ audit finding. Reconcile newly revisited baseline items before claiming closure.
 
 ### Operational closeout additions — September 27 UTC
 
-- **AX-016 (P1 / open): edge TLS configuration.** SSL.org's September 27 scan
+- **AX-016 (P1 / protocol rejection verified; cipher follow-up open): edge TLS configuration.** SSL.org's September 27 scan
   reported TLS 1.0/1.1 accepted, plus cipher/compression heuristics. Set minimum
   TLS 1.2 with TLS 1.3 retained, then verify both production hosts reject old
   protocols and reassess remaining cipher findings. Header scores do not close
   this finding. A later local OpenSSL retest could not resolve the hostname;
   that environment error is not evidence of TLS rejection. No Cloudflare
-  administrator setting change or clean rescan is claimed.
+  administrator setting change was claimed at that observation. September 29
+  browser rescans now explicitly report TLS 1.0/1.1 disabled on both hosts;
+  CBC/RSA heuristic findings remain, as recorded in the dated evidence note.
 - **AX-017 (P2 / implemented, live acceptance pending): daily production email.**
   See [email health](email-health.md): shared production mail transport, DST-safe
   05:00 Chicago Worker cron, stable daily idempotency, bounded retries and a

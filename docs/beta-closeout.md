@@ -1,19 +1,22 @@
 # Beta closeout — first release acceptance
 
-Status on September 27, 2026: **not complete; do not publish the first release**.
-The canonical finding IDs remain in [project state](project-state.md). This is an
-acceptance checklist, not a claim of zero vulnerabilities or completed operations.
+Status on September 29, 2026: **acceptance remains incomplete; do not publish the first release**.
+The canonical finding IDs and current deployment evidence live in
+[project state](project-state.md). This checklist distinguishes completed code,
+observed live behavior and external acceptance still needed.
 
-## Current PR failure
+## Current verification
 
-PR #50 head `3d007efc0064119620fc318de565318dcdee8c27` passed Quality,
-Responsive, Accessibility, Safari and CodeQL. Lighthouse run
-[36320028388](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36320028388)
-failed because Chrome returned `NO_NAVSTART` for Status sample 1. All reported
-completed route assessments met thresholds. Missing measurement correctly failed
-the gate. One failed-job rerun was requested after inspecting the logs; no score
-threshold, sample count, runtime-error rejection or browser assertion was weakened.
-The original failure remains evidence. A new head requires fresh exact-head gates.
+Production baseline `9eae3c893bd66dcceb615792f618f883d0ed3402` passed the five
+mandatory main gates, Release Approval, Smoke and Integrity. PR #50/#51 are merged.
+The September 29 browser scans confirm TLS 1.0/1.1 disabled on both hosts;
+cipher heuristics remain open. See [the September 29 evidence](closeout-2026-09-29.md).
+
+PR #52 head `917d1142c2887bf15179737c87b755cef61cd362` passed four required
+workflows, but Lighthouse run `36604881957` failed because Chrome could not
+connect for the first homepage sample. Other completed route assessments passed;
+the homepage lacked the three required valid samples. The failure remains evidence.
+The subsequent cleanup needs fresh exact-head checks; no threshold is weakened.
 
 ## Branch cleanup inventory
 
@@ -32,7 +35,8 @@ yet been verified. Commits remain recoverable through the recorded PR heads.
 | docs/cassi-commit-inventory           | #48       | e164b9c72ed869f3301c91a22f8808bcc7f587ba |
 | security/operational-closeout         | #49       | ba880e9a7d9a7f76888a055a95e538d8f0516b13 |
 
-Retain `fix/cassi-email-monitor` until PR #50 merges safely, then remove it too.
+PR #50 is now merged. Its temporary branch is eligible for verified cleanup.
+Retain the active PR #52 branch until its changes merge safely.
 Do not remove `alienx-ci-approved-main` or `alienx-ci-rejected-main`: these are
 deployment-control tags, not leftover branches. Main's active ruleset still
 requires a PR and five checks, strict up-to-date status, and no bypass actors.
@@ -40,19 +44,30 @@ Do not disable it to achieve a literal main-only editing workflow.
 
 ## Exit evidence required
 
-- [ ] PR #50's final head passes all five mandatory gates; merge verified.
+- [ ] Final PR head passes all five mandatory gates and merges without bypass.
 - [ ] Merged SHA passes Release Approval, Workers Build, Smoke and Integrity.
-- [ ] Remote branch enumeration confirms only main remains after cleanup.
-- [ ] AX-017: real manual and daily full-form submissions populate every legitimate
-      field with the honeypot empty; production verification and delivery correlate.
-      Direct-provider tests and the Worker heartbeat do not satisfy this criterion.
-- [ ] AX-016: both production hosts reject TLS 1.0/1.1; retain a fresh scan.
-- [ ] AX-005: actual deployment rejection evidence, separate from offline mocks.
-- [ ] AX-006: failure-notification receipt and authorized live rollback/recovery.
+- [ ] Remote branch enumeration confirms only main remains after merged-head cleanup.
+- [ ] AX-017: real full-form production submission, Turnstile verification and
+      correlated provider delivery. The prepared September 29 submission was
+      blocked by automatic approval review; it was not sent.
+- [ ] AX-017: first natural daily heartbeat delivered, missing September 29 event
+      investigated through Cloudflare logs, and delivery-monitor notification received.
+      The configured full-form daily attempt has no verified success; the heartbeat does not replace it.
+- [x] AX-016 protocol portion: SSL.org browser scans report TLS 1.0/1.1 disabled
+      on both production hosts on September 29.
+- [ ] AX-016 remaining scope: CBC/RSA heuristics resolved or explicitly dispositioned.
+- [ ] AX-005: real Cloudflare rejection-path evidence, separate from offline mocks.
+- [ ] AX-006: monitored failure-notification receipt and live rollback/recovery evidence.
 - [ ] AX-008: actual assistive-technology and physical-device results recorded.
-- [ ] AX-009/010: remaining style cleanup and authentic owner content resolved or
-      explicitly dispositioned by the owner before a release-readiness claim.
+- [ ] AX-009: scoped duplicate/style-ownership cleanup passes required browser gates
+      and is verified in production; retain unreviewed scope explicitly.
+- [ ] AX-010: owner editorial acceptance of factual Work/About copy. No clients,
+      business incorporation, results, dates or biography details are invented.
 
-Only after these criteria have evidence should beta completion be reported and
-the owner asked to proceed with the first GitHub release. Do not invent a version,
-publish a tag/release early, or describe configuration checks as delivery tests.
+The next natural 05:00 Chicago event is September 30. Neither a replacement send
+nor a future schedule establishes that it has already delivered. Cloudflare's
+bot-verification screen blocked dashboard access in this session; account settings,
+scheduled invocation logs, rollback and negative deployment drills were not changed.
+
+Only after all required acceptance has evidence should beta completion be reported
+and the first GitHub release proposed. Do not invent a version or publish early.

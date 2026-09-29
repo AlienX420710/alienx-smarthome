@@ -60,8 +60,9 @@ challenge, or count a direct Resend send as end-to-end success.
 The current Worker heartbeat does not meet that requirement. Neither does the
 manual provider test delivered September 27 at 07:56 Chicago. A blocked challenge
 or missing browser capability must be reported as blocked, not as a successful
-daily test. Full-form daily execution remains unimplemented; do not claim the
-existing delivery-only monitor covers it.
+daily test. The production-health automation now contains a full-form daily browser
+attempt, as read back September 29. Successful execution and delivery remain
+unverified; a configured prompt does not prove the browser path completed.
 
 Read-only Resend inspection on September 27 at 07:38 Chicago found no matching
 daily message. The sender's source follows Cassi's scheduled-handler design, but
