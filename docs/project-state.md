@@ -1,5 +1,17 @@
 # AlienX SmartHome — canonical project state
 
+## Shared context adoption — September 29, 2026
+
+[Shared project brain](shared-brain.md) connects this register to Cleaning by
+Cassi's existing register without merging deployments or duplicating status.
+[ChatGPT communications](chatgpt-communications.md) is the single cross-project
+handoff log; [shared lessons](shared-lessons.md) records bounded transfer candidates.
+The peer assistant has not yet acknowledged the initial handoff. This is a
+documentation/protocol change, not automatic synchronization or beta acceptance.
+Fresh GitHub inspection confirmed PR #52 merged as
+`5c13040262f1a2ed06a4461ce282725d8df6dec4`; the earlier production baseline
+below remains dated evidence, not proof of deployment of that newer merge.
+
 Maintained by Codex at the owner's direction. Last editorial update: 2026-09-29.
 This is the authoritative repository index for recorded status, verified evidence,
 and outstanding work. It is not a claim that every current deployment or audit
