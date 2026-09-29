@@ -29,26 +29,26 @@ for (const [index, url] of config.ci.collect.url.entries()) {
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
         execFileSync(
-        process.execPath,
-        [
-          'node_modules/lighthouse/cli/index.js',
-          url,
-          `--only-categories=${Object.keys(thresholds).join(',')}`,
-          '--output=json',
-          `--output-path=${output}`,
-          '--chrome-flags=--headless --no-sandbox',
-          '--quiet',
-        ],
-        { stdio: 'inherit', timeout: 120000 },
-      );
+          process.execPath,
+          [
+            'node_modules/lighthouse/cli/index.js',
+            url,
+            `--only-categories=${Object.keys(thresholds).join(',')}`,
+            '--output=json',
+            `--output-path=${output}`,
+            '--chrome-flags=--headless --no-sandbox',
+            '--quiet',
+          ],
+          { stdio: 'inherit', timeout: 120000 },
+        );
         const report = JSON.parse(readFileSync(output, 'utf8'));
         if (report.runtimeError) throw new Error(report.runtimeError.message);
         reports.push(report);
         for (const metric of [
-        'first-contentful-paint',
-        'largest-contentful-paint',
-        'total-blocking-time',
-        'cumulative-layout-shift',
+          'first-contentful-paint',
+          'largest-contentful-paint',
+          'total-blocking-time',
+          'cumulative-layout-shift',
         ]) {
           const audit = report.audits?.[metric];
           if (audit)
@@ -59,9 +59,12 @@ for (const [index, url] of config.ci.collect.url.entries()) {
         break;
       } catch (error) {
         const message = String(error?.message ?? error);
-        const retryable = /NO_NAVSTART|recording the trace over your page load/i.test(message);
+        const retryable =
+          /NO_NAVSTART|recording the trace over your page load/i.test(message);
         if (retryable && attempt < maxAttempts) {
-          console.warn(`${url} sample ${sample}: transient Lighthouse runtime error; retrying once`);
+          console.warn(
+            `${url} sample ${sample}: transient Lighthouse runtime error; retrying once`,
+          );
           continue;
         }
         errors.push(`sample ${sample}: ${message}`);
