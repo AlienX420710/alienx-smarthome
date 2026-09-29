@@ -5,6 +5,10 @@ release procedures, remediation history, and historical audit material.
 
 ## Current sources of truth
 
+- [Shared project brain](shared-brain.md) — cross-project read/write protocol,
+  [ChatGPT communications](chatgpt-communications.md) and
+  [reusable lessons](shared-lessons.md), without duplicating local status.
+
 - [Project state](project-state.md) — canonical findings register, verified
   evidence, owner-required work, and current decisions.
 - [Assistant context](ai-context.md) — architecture, repository layout,
