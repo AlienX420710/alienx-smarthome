@@ -25,38 +25,52 @@ for (const [index, url] of config.ci.collect.url.entries()) {
   // Always collect the fixed set, never stop at the first passing score.
   for (let sample = 1; sample <= runs; sample++) {
     const output = `.lighthouseci/route-${index}-sample-${sample}.json`;
-    try {
-      execFileSync(
-        process.execPath,
-        [
-          'node_modules/lighthouse/cli/index.js',
-          url,
-          `--only-categories=${Object.keys(thresholds).join(',')}`,
-          '--output=json',
-          `--output-path=${output}`,
-          '--chrome-flags=--headless --no-sandbox',
-          '--quiet',
-        ],
-        { stdio: 'inherit', timeout: 120000 },
-      );
-      const report = JSON.parse(readFileSync(output, 'utf8'));
-      if (report.runtimeError) throw new Error(report.runtimeError.message);
-      reports.push(report);
-      for (const metric of [
-        'first-contentful-paint',
-        'largest-contentful-paint',
-        'total-blocking-time',
-        'cumulative-layout-shift',
-      ]) {
-        const audit = report.audits?.[metric];
-        if (audit)
-          console.log(
-            `${url} sample ${sample} ${metric}: ${audit.numericValue} ${audit.numericUnit}`,
+    const maxAttempts = 2;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        execFileSync(
+          process.execPath,
+          [
+            'node_modules/lighthouse/cli/index.js',
+            url,
+            `--only-categories=${Object.keys(thresholds).join(',')}`,
+            '--output=json',
+            `--output-path=${output}`,
+            '--chrome-flags=--headless --no-sandbox',
+            '--quiet',
+          ],
+          { stdio: 'inherit', timeout: 120000 },
+        );
+        const report = JSON.parse(readFileSync(output, 'utf8'));
+        if (report.runtimeError) throw new Error(report.runtimeError.message);
+        reports.push(report);
+        for (const metric of [
+          'first-contentful-paint',
+          'largest-contentful-paint',
+          'total-blocking-time',
+          'cumulative-layout-shift',
+        ]) {
+          const audit = report.audits?.[metric];
+          if (audit)
+            console.log(
+              `${url} sample ${sample} ${metric}: ${audit.numericValue} ${audit.numericUnit}`,
+            );
+        }
+        break;
+      } catch (error) {
+        const message = String(error?.message ?? error);
+        const retryable =
+          /NO_NAVSTART|recording the trace over your page load/i.test(message);
+        if (retryable && attempt < maxAttempts) {
+          console.warn(
+            `${url} sample ${sample}: transient Lighthouse runtime error; retrying once`,
           );
+          continue;
+        }
+        errors.push(`sample ${sample}: ${message}`);
+        console.error(`${url} ${errors.at(-1)}`);
+        break;
       }
-    } catch (error) {
-      errors.push(`sample ${sample}: ${error.message}`);
-      console.error(`${url} ${errors.at(-1)}`);
     }
   }
   try {
