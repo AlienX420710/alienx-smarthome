@@ -43,7 +43,8 @@
     "format:check": "prettier --check src public/*.js public/*.css scripts tests .github *.md docs/*.md *.config.*"
   },
   "overrides": {
-    "sharp": "0.35.4"
+    "sharp": "0.35.4",
+    "undici": "7.29.1"
   },
   "type": "module"
 }
