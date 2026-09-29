@@ -1,5 +1,18 @@
 # AlienX SmartHome — canonical project state
 
+## Lighthouse CLI failure handling — September 29, 2026
+
+PR #53 head `c2c18b6b174b8702d06e9533140741c27ee4f0eb` failed Lighthouse
+run [36645902576](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36645902576):
+homepage sample 2 exited with NO_NAVSTART. The other six complete route sets
+passed their budgets; the incomplete homepage set correctly blocked release.
+The intended one-time trace retry did not activate because inherited CLI stderr
+was absent from the subprocess exception message. The follow-up captures that
+diagnostic for classification and clears a prior attempt's report before launch.
+Real failing-subprocess regressions cover trace and unrelated failures. Sample
+counts, thresholds and the existing retry limit remain unchanged. This repair
+requires fresh exact-head CI; no green result is inferred from the source edit.
+
 ## Shared context adoption — September 29, 2026
 
 [Shared project brain](shared-brain.md) connects this register to Cleaning by

@@ -1,5 +1,8 @@
-import { execFileSync } from 'node:child_process';
-import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import { readFileSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import {
+  runLighthouseCommand,
+  isRetryableTraceError,
+} from './lighthouse-command.mjs';
 import config from '../lighthouse.config.cjs';
 import { assessReports } from './lighthouse-assessment.mjs';
 
@@ -28,19 +31,17 @@ for (const [index, url] of config.ci.collect.url.entries()) {
     const maxAttempts = 2;
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
-        execFileSync(
-          process.execPath,
-          [
-            'node_modules/lighthouse/cli/index.js',
-            url,
-            `--only-categories=${Object.keys(thresholds).join(',')}`,
-            '--output=json',
-            `--output-path=${output}`,
-            '--chrome-flags=--headless --no-sandbox',
-            '--quiet',
-          ],
-          { stdio: 'inherit', timeout: 120000 },
-        );
+        // Never let an earlier attempt's report stand in for this invocation.
+        rmSync(output, { force: true });
+        runLighthouseCommand([
+          'node_modules/lighthouse/cli/index.js',
+          url,
+          `--only-categories=${Object.keys(thresholds).join(',')}`,
+          '--output=json',
+          `--output-path=${output}`,
+          '--chrome-flags=--headless --no-sandbox',
+          '--quiet',
+        ]);
         const report = JSON.parse(readFileSync(output, 'utf8'));
         if (report.runtimeError) throw new Error(report.runtimeError.message);
         reports.push(report);
@@ -59,8 +60,7 @@ for (const [index, url] of config.ci.collect.url.entries()) {
         break;
       } catch (error) {
         const message = String(error?.message ?? error);
-        const retryable =
-          /NO_NAVSTART|recording the trace over your page load/i.test(message);
+        const retryable = isRetryableTraceError(error);
         if (retryable && attempt < maxAttempts) {
           console.warn(
             `${url} sample ${sample}: transient Lighthouse runtime error; retrying once`,
