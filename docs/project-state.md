@@ -1,6 +1,6 @@
 # AlienX SmartHome — canonical project state
 
-Maintained by Codex at the owner's direction. Last editorial update: 2026-09-27.
+Maintained by Codex at the owner's direction. Last editorial update: 2026-09-29.
 This is the authoritative repository index for recorded status, verified evidence,
 and outstanding work. It is not a claim that every current deployment or audit
 item is verified. Owner decisions govern intent; code and dated evidence establish
@@ -24,6 +24,35 @@ The owner authorizes scoped branches/PRs, ongoing fixes and safe exact-head
 verified merges without repeated confirmation within authorized work. See
 [AGENTS.md](../AGENTS.md). This replaces the older main-only editing rule;
 security gates and independent tool approval controls still apply.
+
+## Production baseline — 2026-09-29
+
+Current main is `9eae3c893bd66dcceb615792f618f883d0ed3402`. All five
+mandatory main gates passed. Production Smoke `36602529268` observed the prior
+live revision until the deployment changed, then verified this exact SHA.
+Release Approval `36603112413` published approval for this SHA. Post-Smoke
+Production Integrity `36603223734` obtained stable exact-revision confirmation
+on both production hosts and passed all eight audited routes. This establishes
+the current positive release/deployment baseline; it does not by itself close
+the negative deployment drill, notification/rollback, device, TLS, email, style,
+or authentic-content findings below.
+
+PR #51's bounded Lighthouse runtime retry is now deployed. The required score
+thresholds and three valid samples remain unchanged; transient browser/runtime
+measurement failures may be retried, but exhausted measurement failures still
+fail closed. The same release includes the Undici dependency security update.
+
+Read-only Resend inspection on September 29 found no natural daily heartbeat for
+that date and no `AX-DAILY-2026-09-29` full-form marker. No replacement
+heartbeat, direct-provider substitute, or Turnstile bypass was used. The missing
+heartbeat remains failed live acceptance. The next natural 05:00
+America/Chicago event and a separate real browser full-form submission remain
+required AX-017 evidence.
+
+Remote branch enumeration on September 29 still found ten stale merged heads
+besides protected `main`. The connected GitHub tool exposes branch creation but
+not branch deletion, so cleanup is not claimed. There were no open GitHub issues
+at this observation.
 
 ## Active closeout — 2026-09-20
 
