@@ -1,188 +1,98 @@
-# AlienX SmartHome — Assistant Context Primer
+# AlienX — architecture and maintenance contract
 
-Read [AGENTS.md](../AGENTS.md) and [project-state.md](project-state.md) first.
-This Codex-maintained primer owns architecture and implementation guidance for
-any coding assistant. The canonical register owns current recorded status;
-[ai-audit.md](ai-audit.md) is historical supporting material, not its replacement.
+Read AGENTS.md and [current state](project-state.md). Exact versions belong to
+package.json and the lockfile. Node >=22, npm ci, Astro/TypeScript and Cloudflare
+Workers remain the stack. This is a technology showcase, not a home-control system.
 
-## PR-based working rule
+## Ownership
 
-The owner grants standing permission for scoped branches/PRs, fixes, and safe
-exact-head verified merges within authorized work. Do not request confirmation
-for each routine PR. Keep main as the production branch, preserve unrelated
-changes, and never force-reset it. See [AGENTS.md](../AGENTS.md) and
-[release-runbook.md](release-runbook.md).
+- src/pages/components own routes/UI; middleware owns headers and inquiry abuse
+  prevention; api/inquiry.ts independently revalidates fields. Defense in depth
+  is intentional, not duplicate code to remove.
+- src/lib/mail.ts owns shared mail transport; src/worker.ts preserves HTTP and
+  adds scheduling. ASSETS, IMAGES, SESSION and mandatory INQUIRY_RATE_LIMITER
+  bindings remain separate; namespace 2107100911 is reserved for this site.
+- public/site-preferences.js applies theme/motion before paint and page swaps;
+  contact-security.js owns widget lifecycle; experience.js owns custom exhibits.
+- src/styles/page-themes.css owns shared themes; Technology owns its mobile CSS.
+  Explicit saved themes override OS preference; system mode still works.
+- Scripts own audits, candidate/live verification, bounded Lighthouse and the
+  Git-ref deployment gate. Tests follow .test.cjs / .spec.cjs concern-based naming.
 
-## Latest recorded verification — 2026-09-12
+## Inquiry security contract
 
-The dated runtime and owner-confirmed email evidence now lives in
-[project-state.md](project-state.md#last-recorded-runtime-verification).
-This heading remains for existing links; do not duplicate mutable status here.
+`POST /api/inquiry` and `/api/inquiry/` share the same middleware boundary.
+Origin (when supplied) must match; Origin is not authentication. JSON only,
+16,384 streamed bytes maximum regardless of Content-Length, object payloads,
+and valid bounded retry-key format are enforced before provider verification.
 
-## What this project actually is
+The bounded isolate limiter supplements the mandatory Cloudflare edge-location
+binding. Missing/failing edge protection rejects requests; neither counter
+claims a strict worldwide quota. Exhaustion returns 429 with Retry-After.
+The status API reports missing required edge configuration as degraded.
 
-A public-facing **technology showcase**, not a client product and not a
-functioning smart-home control system. Its purpose is to demonstrate the
-maintainer's full-stack engineering ability. That framing matters for two
-concrete reasons:
+The honeypot must be absent or exactly an empty string. Turnstile requires
+configured secrets/hostnames, a bounded token, boolean success, an allowed
+hostname and action `contact`. A ten-second verification timeout fails closed.
+Only server-owned locals pass verified data to the handler; client headers
+cannot substitute for verification. The handler independently validates fields,
+allowlists and consent and escapes submitted HTML content.
 
-- The **Work** page (`src/pages/work.astro`) explicitly states there are no
-  invented clients or fabricated case studies — it says real projects will
-  replace placeholders as they're completed. Do not write fictional client
-  work, testimonials, or metrics to "fill out" the site. If asked to draft
-  portfolio copy, either wait for real project details or clearly label
-  anything speculative as a draft/example.
-- The engineering _is_ the product. Code quality, security posture, and
-  test coverage aren't incidental — they're the point of the site. Treat
-  changes to `src/middleware.ts`, `src/pages/api/inquiry.ts`, and
-  `astro.config.mjs`'s CSP block as high-stakes even though the app itself
-  is low-traffic.
+Mail goes from the fixed configured sender to the fixed business recipient;
+the submitted email is a reply-to, not a caller-selected business destination.
+The request identity and canonical submitted content determine a stable
+idempotency key, independent of refreshed Turnstile tokens. Provider HTTP
+success and a nonempty email ID are required before application success.
+Transport is bounded to 15 seconds. Logs must not contain arbitrary transport
+exceptions, verification payloads, credentials or inquiry contents.
 
-## Tech stack
+Acceptance is not delivery; neither a success-page visit nor public status proves
+mail reached the receiving server or inbox. Unit/browser tests mock providers
+and send no email. A real inquiry, scheduled production email, delivery event,
+notification receipt and rollback drill require their own evidence. See
+[project state](project-state.md) and [directory comparison](project-state.md#historical-evidence-and-consolidation-map).
 
-- **Framework:** Astro 7.3.4, SSR mode, TypeScript 6.0.3
-- **Deploy target:** Cloudflare Workers via `@astrojs/cloudflare`
-- **Bindings:** `ASSETS` (static files), `IMAGES` (Cloudflare Images),
-  `SESSION` (KV), `INQUIRY_RATE_LIMITER` (Rate Limiting API)
-- **Email:** Resend API (`RESEND_API_KEY` secret, not in repo)
-- **Bot protection:** Cloudflare Turnstile (`TURNSTILE_SECRET`,
-  `TURNSTILE_HOSTNAMES`)
-- **Node:** `>=22` required (see `package.json` `engines`)
-- **Package manager:** npm — lockfile is committed and CI uses `npm ci`.
-  Workflows select Node 22 and use its bundled npm; npm itself is not pinned
-  in CI. The npm 10.9.8 lockfile-repair validation in the remediation log
-  is historical evidence, not a current workflow pin.
+## CSP and source conventions
 
-## Repository layout
+Validate CSP against built/deployed output, not astro dev. Astro generates script
+hashes; manual allowances require exact emitted-byte mapping. AX-004 removed
+obsolete hashes; do not restore them speculatively. Preserve separate frame/resource
+policies and Turnstile allowances. Static assets may bypass middleware: _headers
+and dynamic responses both need validation. No blanket COEP/unsafe-inline or blind
+replacement by Cleaning's host-only policy.
 
-```
-src/
-  pages/            → routes; *.astro are pages, api/*.ts are JSON endpoints
-  components/        → shared Astro components (Header, Footer, BaseHead, CommandPalette, HoneypotField)
-  middleware.ts       → request-level security gate, scoped to POST /api/inquiry
-  lib/status.ts       → shared type + validator for the status API contract
-  consts.ts           → site title/description constants
-  env.d.ts            → ambient types: Locals, Window globals, cloudflare:workers module
-public/
-  contact-security.js → Turnstile widget lifecycle
-  site-preferences.js → theme/motion prefs via localStorage, applied pre-paint
-  experience.js        → animation controller for the /experience page
-scripts/
-  optimize-images.mjs  → runs before dev/build
-  verify-ci.mjs         → Cloudflare-side exact-SHA release-ref verifier before deploy
-  publish-ci-approval.mjs → GitHub-side exact-SHA approval/rejection publisher
-  verify-release.mjs, scope-worker-types.mjs, lighthouse.mjs
-tests/
-  *.test.cjs           → node:test unit tests (fast, no browser)
-  *.spec.cjs            → Playwright Chromium tests (accessibility, responsive, interactions)
-  safari.cjs           → Selenium with macOS Safari WebDriver
-docs/
-  audit-remediation.md  → running log of a prior third-party audit + fixes (read this first)
-  release-runbook.md    → deploy/rollback procedure
-wrangler.json           → Worker config: routes, bindings, rate-limiter namespace
-astro.config.mjs        → CSP policy, Cloudflare adapter, sitemap config
-```
+Use explicit field allowlists, pinned Prettier/Astro formatting, exact dependencies
+and synchronized lockfile, SHA-pinned Actions, minimal explicit permissions,
+read-only checkouts and trusted workflow origins. No pull_request_target, write-all
+or casually widened scopes. Only the audited approval publisher needs ref writes.
+Keep all-severity dependency audit, sanitized repository/history scans and main's
+fresh-analysis/zero-alert policy. Scans are heuristic, not proof no secret existed;
+never print credential matches or rewrite history to hide them.
 
-The deployment gate is split deliberately: GitHub's `release-approval.yml`
-reads exact-SHA results for Quality, Responsive, Accessibility, Lighthouse, and
-Safari with its ephemeral `GITHUB_TOKEN`, then moves the dedicated approved or
-rejected tag ref. Cloudflare's `verify-ci.mjs` does not call the GitHub REST API;
-it checks those refs over normal Git before Wrangler deploys. Preserve this
-separation unless replacing it with an equally fail-closed exact-SHA design.
+## Frontend and media
 
-## Before you touch anything: read `docs/audit-remediation.md`
+Prefer native HTML/CSS, semantic controls and progressive enhancement before JS
+or dependencies. Verify current browser support and licenses before adapting ideas.
+Require keyboard/touch, both themes, reduced motion and Safari behavior; device
+acceptance stays separate. Native dialog/disclosure/form semantics, event delegation
+where helpful, and cleanup on Astro swaps remain the default.
+Derive timers from timestamps; use requestAnimationFrame for animation and pause
+when hidden/disconnected. Keep navigation usable without enhancements and preserve
+ordinary touch scrolling. Status has bounded requests and hidden-page pauses;
+Technology uses delegated/abortable listeners; palette focus restores correctly;
+contact retries preserve request identity without reusing verification tokens.
 
-This repo already has an extensive, self-documented remediation history
-against a prior baseline audit (`AlienX-SmartHome-Audit.md` at commit
-`d55378c`). It tracks, commit by commit, what was fixed, what was
-explicitly validated (with test counts), and what remains open. Two
-important conventions established there that any assistant should keep
-following:
+The image script decodes raster assets before build. Preserve originals and only
+generate derivatives that serve real requests. Do not lazy-load LCP/hero imagery
+by default. Use below-fold native lazy loading, intrinsic dimensions/aspect ratio,
+responsive sources where needed and video posters. Keep CSS/SVG/canvas primitives
+rather than unnecessary raster downloads. Detailed idea sources remain in history.
 
-1. **Never claim something is "done" without stating what was actually
-   run to verify it.** The existing log is scrupulous about distinguishing
-   "local unit tests pass" from "CI passed" from "verified in production"
-   — these are different claims and get stated as such, not blurred
-   together.
-2. **Don't claim audit-wide completion.** The log explicitly says "No
-   audit-wide completion is claimed" and maintains an "Explicitly not
-   closed" section. If you fix something, say what you fixed and how you
-   verified it — don't imply everything is now resolved.
+## Local work
 
-## Commands that matter
-
-```bash
-npm ci                    # reproducible install (CI parity)
-npm test                  # unit tests; counts are revision-specific
-npm run typecheck         # astro check + tsc --noEmit — must be 0/0/0
-npm run build             # optimize-images.mjs then astro build
-npm run check             # test + typecheck + build + wrangler deploy --dry-run
-npm run audit             # npm audit --audit-level=low
-npm run format            # apply formatting
-npm run format:check      # validate formatting without edits
-```
-
-For Quality's local equivalent, run `npm ci`, `npm run format:check`,
-`npm run check`, and `npm run audit`. `check` alone omits formatting and
-dependency auditing. Browser suites remain separate; report any environment
-blocker and do not substitute a partial local result for successful CI.
-
-## Security-sensitive files — treat changes here with extra scrutiny
-
-- `src/middleware.ts` — the entire contact-form abuse-prevention pipeline
-  lives here (content-type/origin/size checks, honeypot, Turnstile,
-  rate limiting). It only activates for `POST /api/inquiry`; don't widen
-  its scope without understanding why it's currently narrow (everything
-  else just gets security headers applied).
-- `src/pages/api/inquiry.ts` — every field is re-validated here even
-  though middleware already ran; this defense-in-depth is intentional,
-  not redundant cruft to be "simplified away."
-- `astro.config.mjs` — Astro generates CSP hashes for processed scripts;
-  `scriptDirective.hashes` adds manual allowances. A processed-script edit
-  does not automatically require editing that array. For manually authorized
-  content, match the exact emitted script bytes to its hash and update only
-  the affected allowance. AX-004 removed three obsolete manual hashes after clean-build mapping;
-  require emitted-byte evidence before adding any new allowance.
-  Inspect the generated CSP and test browser behavior using built output;
-  Astro's CSP feature is not supported in dev mode. The main resource policy
-  and the middleware's separate `frame-ancestors` header both need checking.
-  Reference: [Astro CSP configuration](https://docs.astro.build/en/reference/configuration-reference/#securitycsp).
-- `wrangler.json` — the `INQUIRY_RATE_LIMITER` namespace ID (`2107100911`)
-  is reserved for this specific site. Don't reuse it elsewhere or
-  regenerate it casually.
-
-## Verification boundaries
-
-Use [the canonical findings register](project-state.md#findings-register) for
-current priorities and closure criteria. The following are architectural limits,
-not a second mutable task list.
-
-- Cloudflare account-level settings and alerting still require dashboard access;
-  repository code can enforce release evidence only if Workers Builds continues
-  to use `npm run deploy` as its production deploy command.
-- Repository email/Turnstile tests are mocked. See the dated owner-confirmed
-  live result above; it does not turn those tests into live verification.
-  Future release records should correlate approved submissions with provider
-  evidence without committing inquiry contents or credentials.
-- The isolate-local rate limiter is a deliberate bounded additional layer, not a
-  strict global quota; the Cloudflare Rate Limiting binding supplements it
-  but is itself eventually consistent per edge location. The binding is mandatory;
-  missing configuration fails closed before Turnstile or email provider calls.
-- Quality checks out full history and scans reachable Git objects for credential
-  patterns. See AX-007 for scope and limits; pattern scanning is not proof that
-  every possible secret format is absent.
-
-## Working conventions observed in this codebase
-
-- Prettier + `prettier-plugin-astro`, pinned versions — run `npm run
-format` before committing, don't hand-format to "match style."
-- GitHub Actions are pinned to full commit SHAs, not version tags. Follow
-  this convention if adding new workflow steps.
-- Tests are co-located by concern (`inquiry.test.cjs`, `status.test.cjs`,
-  `status-api.test.cjs`, `preferences.test.cjs`, `release-gate.test.cjs`)
-  rather than mirroring the `src/` tree 1:1. Follow the existing pattern
-  when adding new unit tests rather than introducing a new organizing
-  scheme.
-- The project favors explicit allow-lists (`Set` objects) over permissive
-  validation for enumerated form fields. Keep that pattern for any new
-  form fields rather than switching to looser validation.
+Run npm ci, format:check, check, audit and affected browser suites. check includes
+unit tests, types, build and Worker dry run, not formatting/audit/browser coverage.
+npm run cf-typegen regenerates scoped Worker types. ALIENX_DISABLE_INSPECTOR=1
+is the existing local restricted-interface workaround, not a production relaxation.
+Unavailable browser execution is blocked, not passed. Release steps live only in
+[operations](release-runbook.md).
