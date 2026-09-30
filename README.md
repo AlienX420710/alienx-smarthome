@@ -9,14 +9,14 @@ Technology showcase and automation portfolio; no invented clients or results.
 
 ## Maintainer map
 
-| Need                                           | Read                                                                                                        |
-| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| Findings, blockers and dated release evidence  | [Project state](docs/project-state.md)                                                                      |
-| Architecture and request guarantees            | [Architecture](docs/ai-context.md)                                                                          |
-| Release, recovery, email and device procedures | [Operations](docs/release-runbook.md)                                                                       |
-| Assistant working rules                        | [AGENTS.md](AGENTS.md)                                                                                      |
-| Cross-project communication and lessons        | [Shared handoff](https://github.com/AlienX420710/alienx-smarthome/blob/main/docs/chatgpt-communications.md) |
-| Prior audits and comparisons                   | [Pinned history](docs/project-state.md#historical-evidence-and-consolidation-map)                           |
+| Need                                           | Read                                                                               |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Findings, blockers and dated release evidence  | [Project state](docs/project-state.md)                                             |
+| Architecture and request guarantees            | [Architecture](docs/ai-context.md)                                                 |
+| Release, recovery, email and device procedures | [Operations](docs/release-runbook.md)                                              |
+| Assistant working rules                        | [AGENTS.md](AGENTS.md)                                                             |
+| Cross-project coordination                     | [Local working agreement](AGENTS.md#cross-project-coordination); linked issues/PRs |
+| Prior audits and comparisons                   | [Pinned history](docs/project-state.md#historical-evidence-and-consolidation-map)  |
 
 ## Development
 
