@@ -6,23 +6,26 @@ and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
 ## Last verified release
 
-PR #53 merged as `152abcf087f13628bb31c224edd1c73db49cdacc`. All five PR and
-main gates passed. Main Lighthouse [36647380641](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36647380641),
-Release Approval 36647786977, Workers Build check 109674768685,
-[Smoke 36647380659](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36647380659)
-and [Integrity 36647827781](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36647827781)
-passed for that exact SHA on September 29. These results do not certify new edits.
-The stderr fix makes the existing bounded NO_NAVSTART retry recognize CLI errors.
-The original failed run 36645902576 remains evidence; no threshold was lowered.
+September 30 comparison baseline: main `640062d13e9de63b1160137cc01bfd8f3b2d23bf`
+(PR #54). All five main gates and code-scanning inventory passed, including
+[Lighthouse 36709148662](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36709148662).
+Release Approval 36709612323, Workers Build check 109868215082,
+[Smoke 36709148644](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36709148644)
+and [Integrity 36709695999](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36709695999)
+passed. Later Integrity 36715566889 and Smoke 36724396188 also passed.
+Conditional skipped runs do not invalidate those completed runs or add evidence.
+
+PR #53's stderr repair is deployed. Retain historical failures 36645902576 and
+PR #54 Lighthouse 36708014807 attempt 1 (trace collection, not a low-score retry);
+its one fresh-runner rerun passed. No budget or fixed sample count was reduced.
+This release evidence does not certify the unmerged coordination/readiness edits.
 
 ## Beta acceptance — incomplete
 
-September 30 documentation-cleanup validation: 88 tests, types/build/dry-run and
-repository/history scans passed locally. The initial all-severity dependency audit
-failed on moderate `fast-uri` advisory GHSA-hrr3-gc8f-f4qj. The lockfile now resolves
-3.1.8 within AJV's existing range; clean-install audit reports zero vulnerabilities
-and the advisory's encoded-host reproducer passes. Exact-head CI and subsequent
-main deployment evidence remain separate requirements.
+Fresh September 30 comparison: npm ci, all-severity npm audit (zero findings),
+88 unit tests and repository/reachable-history scans passed locally. fast-uri
+3.1.8 remains in the lockfile; its previous advisory is remediated, not open work.
+Build/browser evidence above is exact-main CI, not a new local browser run.
 
 Do not publish the first GitHub release or claim beta completion while required
 acceptance is unresolved. Do not invent a version. Local tests, CI, live revision,
@@ -52,6 +55,48 @@ Branch cleanup is unverified. Re-enumerate remotes, confirm each temporary head 
 merged before deleting it, and retain active PRs and alienx-ci-approved-main /
 alienx-ci-rejected-main tags. Future releases need their own five exact-head gates
 and exact-main approval/build/Smoke/Integrity chain.
+
+## Production-readiness priorities
+
+This is a source/CI comparison, not an account-security certification. Finish the
+following acceptance before calling beta closed; no generic rewrite is required.
+
+| Priority / finding             | Next action and completion evidence                                                                                                                                                                                                            | Responsible role                                                       |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| P1 — AX-017, AX-006            | Correlate a natural scheduled heartbeat with provider delivery and recipient confirmation; verify independent failure-alert receipt. Separately prove the authorized full-form path without bypassing Turnstile or the prior tool rejection.   | Operator/owner with provider access; engineering investigates failures |
+| P1 — AX-005, AX-006            | Exercise fail-closed promotion and compatible recovery on an isolated Worker first; retain deployment versions, SHA/bindings/secret compatibility and notification evidence. A documented runbook or mocked rehearsal alone does not close it. | Cloudflare operator + engineering                                      |
+| P1 — AX-008                    | Execute the existing real-device/VoiceOver/keyboard/touch/zoom protocol and fix actual failures.                                                                                                                                               | Human tester + engineering                                             |
+| P1 — AX-016, AX-012            | Reassess TLS cipher findings and privately verify MFA/recovery, credential scope, WAF and private alerts. Record fixes or justified acceptance; scanner heuristics are not confirmed exploits.                                                 | Account owner/operator                                                 |
+| P1 — AX-010, after reliability | Owner accepts factual Work/About content and public contact/privacy expectations.                                                                                                                                                              | Jordan                                                                 |
+| P2 — AX-011                    | Live ruleset 23059349 still requires strict five-check PRs and forbids bypass for this connection; review-thread resolution is false. Explicitly accept that choice or enable the desired setting through authorized administration.           | Repo maintainer                                                        |
+| P2 — AX-009                    | Limit further CSS/component cleanup to measured defects or dead code; do not treat visual modernization as a security release prerequisite.                                                                                                    | Engineering                                                            |
+| P2 — diagnostics               | Retain attempt-specific Lighthouse reports if improving diagnostics: current rmSync/output reuse discards a first-attempt report. Keep trace failures visible and the one-retry ceiling; this does not invalidate passed main checks.          | Engineering                                                            |
+
+Merge/adopt the coordination protocol through [PR #55](https://github.com/AlienX420710/alienx-smarthome/pull/55)
+and linked Cleaning PR #28 independently. Both were still open at this review.
+Branch cleanup is housekeeping after confirmed merge, not a production blocker.
+
+## Comparison with Cleaning
+
+Peer baseline: Cleaning main `6b154ec319d6728c0764df9f0301c0910fbc4eba`.
+Its [local register](https://github.com/Cassileigh/cleaning-by-cassi/blob/main/docs/project-state.md)
+owns its remaining work; this table records AlienX's adoption decisions.
+
+| Concern      | Comparison and AlienX disposition                                                                                                                                                                                                                     |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Release      | AlienX exact-main deployment is verified; Cleaning main's performance/promotion chain is blocked. Do not copy Cleaning's REST gate or transfer either repo's passing checks.                                                                          |
+| Forms        | Both enforce Turnstile, edge limits, bounded payloads, validation and idempotency. AlienX's JSON inquiry and Cleaning's multipart quote/customer confirmation serve different needs; retain both contracts.                                           |
+| Lighthouse   | AlienX captures CLI stderr; Cleaning's missing-report path was reproduced as ENOENT before retry. Share PR #53 as evidence, leave the repair to independent Cleaning validation. Fixed three-sample versus single-sample policies remain local.       |
+| Mail         | Both schedule 05:00 Chicago using two UTC candidates and bounded retry. AlienX rejects mail redirects and cancels failed response bodies; Cleaning lacks those two explicit behaviors. No automatic transport merge or live test permission transfer. |
+| CSP/status   | AlienX uses generated CSP hashes and a richer status view; Cleaning uses external same-origin styles and generic readiness. Neither architecture difference alone proves a vulnerability. Keep local integrity contracts.                             |
+| Dependencies | Runtime dependency pins match. Wrangler/Prettier versions, parse5 usage and Undici override scope differ; both current audits are clean. No upgrade solely to make versions identical.                                                                |
+| Operations   | Both lack complete current owner/account/device evidence in this review. Shared procedures cannot substitute for each site's receipt/recovery records.                                                                                                |
+
+Review limits: direct read-only requests to both sites' release/status endpoints
+returned HTTP 403 from this execution environment, so no fresh live revision is
+asserted from those requests. CI/provider checks above are separately attributed.
+No provider/mailbox, account, physical-device or complete penetration test was
+performed. No new message, schedule, quote or inquiry was sent.
 
 ## External evidence boundaries
 
@@ -84,7 +129,8 @@ covered by local email rules. AX-20260930-cassi-review-received-01 records recei
 of Cleaning PR #26's review, not a fabricated reply; CBC-20260929-handoff-01
 remains historically unsent (write 403).
 
-AX-20260929-lighthouse-stderr-01 remains pending for independent investigation
+AX-20260929-lighthouse-stderr-01 is reproduced offline as CBC-12; repair and
+independent verification remain pending
 in [Cleaning's register](https://github.com/Cassileigh/cleaning-by-cassi/blob/main/docs/project-state.md#cross-project-coordination).
 AlienX's repair does not prove Cleaning needs or has adopted it. The September 30
 Cleaning homepage score failure is separate from the stderr investigation.
