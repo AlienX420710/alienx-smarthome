@@ -1,488 +1,116 @@
-# AlienX SmartHome — canonical project state
-
-## Lighthouse CLI failure handling — September 29, 2026
-
-PR #53 head `c2c18b6b174b8702d06e9533140741c27ee4f0eb` failed Lighthouse
-run [36645902576](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36645902576):
-homepage sample 2 exited with NO_NAVSTART. The other six complete route sets
-passed their budgets; the incomplete homepage set correctly blocked release.
-The intended one-time trace retry did not activate because inherited CLI stderr
-was absent from the subprocess exception message. The follow-up captures that
-diagnostic for classification and clears a prior attempt's report before launch.
-Real failing-subprocess regressions cover trace and unrelated failures. Sample
-counts, thresholds and the existing retry limit remain unchanged. This repair
-requires fresh exact-head CI; no green result is inferred from the source edit.
-
-## Shared context adoption — September 29, 2026
-
-[Shared project brain](shared-brain.md) connects this register to Cleaning by
-Cassi's existing register without merging deployments or duplicating status.
-[ChatGPT communications](chatgpt-communications.md) is the single cross-project
-handoff log; [shared lessons](shared-lessons.md) records bounded transfer candidates.
-The peer assistant has not yet acknowledged the initial handoff. This is a
-documentation/protocol change, not automatic synchronization or beta acceptance.
-Fresh GitHub inspection confirmed PR #52 merged as
-`5c13040262f1a2ed06a4461ce282725d8df6dec4`; the earlier production baseline
-below remains dated evidence, not proof of deployment of that newer merge.
-
-Maintained by Codex at the owner's direction. Last editorial update: 2026-09-29.
-This is the authoritative repository index for recorded status, verified evidence,
-and outstanding work. It is not a claim that every current deployment or audit
-item is verified. Owner decisions govern intent; code and dated evidence establish
-technical facts. New evidence can correct this record regardless of which assistant
-found it.
-
-## Document ownership
-
-| Document                                     | Owns                                                                            |
-| -------------------------------------------- | ------------------------------------------------------------------------------- |
-| [AGENTS.md](../AGENTS.md)                    | Assistant working rules and evidence precedence                                 |
-| This file                                    | Recorded verification, decisions, and current findings register                 |
-| [ai-context.md](ai-context.md)               | Architecture, commands, implementation cautions                                 |
-| [release-runbook.md](release-runbook.md)     | Release, incident, and rollback procedures                                      |
-| [audit-remediation.md](audit-remediation.md) | Chronological remediation evidence; earlier open statements may be superseded   |
-| [ai-audit.md](ai-audit.md)                   | Claude-authored historical audit of `1fa56cc`, with later editorial corrections |
-
-## Standing workflow authorization — 2026-09-20
-
-The owner authorizes scoped branches/PRs, ongoing fixes and safe exact-head
-verified merges without repeated confirmation within authorized work. See
-[AGENTS.md](../AGENTS.md). This replaces the older main-only editing rule;
-security gates and independent tool approval controls still apply.
-
-## Production baseline — 2026-09-29
-
-Current main is `9eae3c893bd66dcceb615792f618f883d0ed3402`. All five
-mandatory main gates passed. Production Smoke `36602529268` observed the prior
-live revision until the deployment changed, then verified this exact SHA.
-Release Approval `36603112413` published approval for this SHA. Post-Smoke
-Production Integrity `36603223734` obtained stable exact-revision confirmation
-on both production hosts and passed all eight audited routes. This establishes
-the current positive release/deployment baseline; it does not by itself close
-the negative deployment drill, notification/rollback, device, TLS, email, style,
-or authentic-content findings below.
-
-PR #51's bounded Lighthouse runtime retry is now deployed. The required score
-thresholds and three valid samples remain unchanged; transient browser/runtime
-measurement failures may be retried, but exhausted measurement failures still
-fail closed. The same release includes the Undici dependency security update.
-
-Read-only Resend inspection on September 29 found no natural daily heartbeat for
-that date and no `AX-DAILY-2026-09-29` full-form marker. No replacement
-heartbeat, direct-provider substitute, or Turnstile bypass was used. The missing
-heartbeat remains failed live acceptance. The next natural 05:00
-America/Chicago event and a separate real browser full-form submission remain
-required AX-017 evidence.
-
-Remote branch enumeration on September 29 still found ten stale merged heads
-besides protected `main`. The connected GitHub tool exposes branch creation but
-not branch deletion, so cleanup is not claimed. There were no open GitHub issues
-at this observation.
-
-## September 29 closeout follow-up
-
-See [the dated evidence note](closeout-2026-09-29.md) for fresh SSL.org browser
-scans, missing-email evidence, access blockers, scoped CSS cleanup and validation.
-AX-016's TLS 1.0/1.1 rejection portion is verified on both hosts; CBC/RSA scanner
-heuristics remain open. AX-009 has a scoped implementation awaiting final-head
-browser/deployment evidence. AX-010 has factual copy revisions awaiting owner
-editorial acceptance. Neither finding is automatically closed by editing text.
-
-The production-health automation is configured to attempt a real full-form test;
-no successful current-revision full-form delivery was observed. The prepared
-manual submission was blocked by automatic approval review. Cloudflare's
-bot-verification screen prevented account-level drills and cron-log inspection.
-The next natural 05:00 Chicago heartbeat is September 30; today's absence remains
-failed live acceptance. Existing monitor schedules were read back, not recreated.
-
-## Active closeout — 2026-09-20
-
-PR #36 was corrected with pinned Prettier and merged only after all five mandatory
-PR gates passed at `10b067077d0c0ce075414c80246111f834ab6c81`. The merge revision
-is `f532099632ea0c093629ff08b1b46f4a645d6b45`; its five main gates, Release Approval, Cloudflare build, Smoke and Integrity all
-passed; evidence is recorded in
-[the closeout evidence note](security-closeout-2026-09-20.md).
-
-PR #37 subsequently merged to `1506c90b6e79e71542402ce93a851cd28ab1a713`;
-its five gates, exact approval, Cloudflare build, Smoke and Integrity passed.
-See the same evidence note for run/job IDs.
-
-PR #38 passed all five gates plus CodeQL at
-`b625d27da78235fd091c0526036d7e3912931005` (including 32 WebKit cases) and
-merged to `b7a04bf8fdb13f8c4a6c616047ea80af459b5331`. Its production release
-verification passed: Release Approval run `35553154283`, Cloudflare check
-`106191690320`, Smoke run `35552889730`, and Integrity run `35553204406`
-all establish this exact main revision. The next scoped change makes the actual
-main alert inventory part of Quality instead of equating scan completion with
-zero findings. It also supplies an importable desired main ruleset; no account
-setting change is claimed.
-
-PR #39's initial head `83d3bdcfc908416be233b839504c90c5396d16aa` passed
-four mandatory gates but failed Safari run `35553121693`: the theme test
-opened its dialog before client navigation finished. The follow-up waits for
-the destination URL and heading without removing theme assertions. It also
-reveals the current mobile navigation link on load, client navigation and resize,
-without scrolling the document or focusing the link. Committed Chromium/WebKit
-regressions check actual clipping bounds at 320px and 393px, reload, history and
-resize. Final head `0fd014b0aef33a2efcb20c68ff7070eda470c7aa` passed all
-five gates, including 118 Chromium and 34 WebKit cases, and merged to
-`e3b8e89ca12de966dc6fdd161a56350f11248b30`. Release Approval `36245835298`,
-Cloudflare check `108414808621`, Smoke `36245570267`, and post-Smoke Integrity
-`36245861265` verified that exact production revision on 2026-09-26.
-
-At follow-up head `9cc72093685442bf0e3eaf58154b925676b4b5c5`, Chromium
-passed both mobile navigation regressions and the theme test, but run
-`36244932069` failed the contact retry case (117/118 passed). Its retained
-trace proves the Name field was filled before the returning page swap and was
-empty at submit, correctly triggering validation. The test now waits for both
-destination URLs/headings and the initialized form before typing, and asserts
-the retained name. No form validation or retry assertion was removed.
-
-The follow-up adds read-only checkout credential enforcement, workflow origin
-validation, real WebKit interactions alongside SafariDriver, and committed keyboard
-regressions. It repairs Tab-selected command activation and visible focus. These
-changes are included in the verified PR #38/#39 releases above.
-AX-005/006/008 are not closed by writing these changes. The daily 05:00
-America/Chicago real production email check was pending at this release;
-the AX-017 implementation and remaining live acceptance are tracked below.
-A direct unrelated provider send would not meet acceptance.
-
-AlienX is evolving into a technical proof-of-concept and public storefront for a
-possible future smart-home/automation business. Do not claim AlienX LLC already
-exists. The owner identifies +1 920-215-4208 as the AlienX Google Voice business
-contact. Final Work/About/business content (AX-010) stays last.
-
-## Last recorded runtime verification
-
-September 27 follow-up: production `/api/status` reported
-`6fc7e81b13dee61db159e11d0bb48dbeb484f3d4` operational at 16:27 UTC.
-This confirms the deployed revision and configuration presence, not form submission
-or delivery. [Beta closeout](beta-closeout.md) records the current release blockers,
-branch cleanup inventory, PR #50 trace failure and full-form acceptance requirement.
-Beta closeout and the first GitHub release are not approved by this observation.
-
-PR #48 auto-merged to `c22f0be50ede32e9cba5d3d5c3e58cd0b7e76823` after
-all five gates at `e164b9c72ed869f3301c91a22f8808bcc7f587ba`.
-All five main gates passed. Release Approval `36295256930`, Workers Build check
-`108552863111`, Smoke `36294943469` and Integrity `36295278337` succeeded.
-Live `/api/status` reported this exact SHA operational at 2026-09-27 04:48 UTC.
-The main code-scanning policy check `108551945792` also passed. No open PRs
-remained at this observation. This is evidence for PR #48, not later code.
-
-Resend account inspection on September 27 confirmed the AlienX sending domain
-verified, sending enabled and tracking disabled. Recent inquiry records included
-a provider-delivered message sent September 26 at 19:33 UTC. No message contents
-or private provider IDs are committed. This is historical provider delivery
-evidence, not a live form test or mailbox-placement proof for the current SHA.
-
-PR #47 merged to `cf464ed512d799d1282c41894ac5ff18e4cacbd6`.
-The exact-SHA Release Approval run [36280365353](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36280365353),
-Production Smoke [36280044743](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36280044743)
-and post-Smoke Production Integrity [36280388392](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36280388392)
-were read back successfully on 2026-09-27 UTC. These supersede the earlier
-preflight-only wording for the AX-014 header, analysis-warning and offline
-deployment-rehearsal tranche. They do not close real email, rollback, device or
-negative Cloudflare deployment drills.
-
-The [Cassi inventory](cassi-commit-inventory.md) now records the reciprocal
-reference-history scope and regeneration procedure. It is automated triage,
-not a replacement for the [current-source adoption review](directory-parity-review.md)
-or evidence of AlienX security closure.
-
-### Prior release — PR #46
-
-PR #46 auto-merged after all five gates at
-`42e6dfe5d21cb2db6b1f50b2e3d185cc0cee14f3`, producing main
-`f67c91c0022a231dc0fd6764f129dbef710b993e`. All five main workflows passed.
-Release Approval `36264768556` published this SHA; Workers Build check
-`108467336806`, Smoke `36264370166` and Integrity `36264812095` succeeded.
-Integrity job `108467347256` passed eight routes on both production hosts at
-19:05 UTC on September 26. AX-015's code/deployment acceptance is verified at
-this SHA; this is not a real Turnstile/email-delivery test.
-
-The [four-directory comparison](directory-parity-review.md) against Cleaning
-`ee9f3e8898fcab7d250983d7ca733a29e87dc946` implements the next AX-014 tranche:
-header enforcement, CodeQL warning/error sanitization, and offline npm deploy
-rehearsal. Its later production evidence is recorded under PR #47 above;
-the PR #46 results alone did not establish that follow-up. Daily email and
-operational drills stay open.
-
-On 2026-09-26, dependency/documentation closeout PR #44 merged to
-`0b979ce0d77d421aea2b75edbd28dab545ff4d59`. All five main gates passed.
-Release Approval run `36263211611` published approval for that exact SHA;
-Workers Build check `108462927230`, Smoke run `36262936469`, and post-Smoke
-Integrity run `36263245611` succeeded. No open AlienX PRs remained immediately
-after this release. This does not close the separate negative deployment drill,
-notification receipt, rollback, daily email delivery, or physical-device work.
-
-The next contact hardening change makes the edge limiter mandatory, rejects
-malformed/whitespace honeypots and truthy non-boolean verification success,
-and removes provider-controlled verification details from logs. Its new mocked
-regressions do not establish real Turnstile acceptance or inbox delivery.
-README and release-runbook coverage now describes the actual WebKit/keyboard,
-CodeQL inventory, production sequencing and safe native auto-merge controls.
-Auto-merge was initially disabled; a subsequent GitHub API read confirmed it
-enabled, and native auto-merge was activated for PR #46. The connected tool did
-not change the repository setting. Future-PR automatic enrollment remains separate.
-
-AX-015 (P2 / verified at f67c91c): contact protection
-must not silently lose its edge rate limit or accept malformed trap/provider
-success values. The status endpoint also reports missing edge protection as
-degraded instead of advertising a usable fallback. Local clean install, 71 unit tests, repository security audit,
-Astro/TypeScript checks, build, Worker dry run, formatting and dependency audit
-passed (zero dependency vulnerabilities). GitHub browser gates and exact-SHA
-production acceptance subsequently passed as recorded above. All tests use mocked
-providers and send no real email.
-
-### Earlier runtime verification — 2026-09-14
-
-Verified on 2026-09-14 at `4a51a7ef9cdad8a44f71bad157a13333809471c2`:
-
-- All five required exact-SHA release gates passed on the merged `main` revision:
-  Quality, Responsive Compatibility, Accessibility & Theme Compatibility,
-  Lighthouse Quality, and Safari Compatibility.
-- Quality included the permanent repository security audit and completed green.
-  The locked install reported zero npm vulnerabilities for this revision.
-- The dedicated `alienx-ci-approved-main` ref advanced to this exact SHA only
-  after the required gates succeeded. Cloudflare Workers Builds then completed
-  successfully and deployed Worker version
-  `88813d39-79f3-45d6-8c73-27ea9f28270d`.
-- Production Smoke waited until the pushed revision was actually live, then
-  passed the exact-revision check, both production-host checks, and the public
-  status endpoint.
-- Production Integrity is now triggered by successful Production Smoke rather
-  than independently racing the deployment. Its first run for this revision
-  checked out the verified SHA, required three stable revision confirmations,
-  and passed all eight audited routes on both `alienxsmarthome.com` and
-  `www.alienxsmarthome.com`.
-- The release therefore verifies the positive exact-SHA promotion path and the
-  Smoke → Integrity production sequencing without weakening any quality gate.
-
-AX-005's successful-promotion acceptance path is verified at this revision.
-The architecture remains fail-closed, but a deliberately failed required-gate
-release has not yet been staged solely to re-demonstrate rejection behavior.
-AX-006 and AX-008 still require owner/device evidence. AX-004 and AX-007 are
-verified at `e69c280`; AX-009 is the next scoped repository cleanup, and
-AX-010 remains longer-term work.
-
-### Security follow-up closure — 2026-09-14 (verified at e69c280)
-
-AX-004 and AX-007 are closed by repository evidence at
-`e69c280fe6fd2a7eabb547fb4b7f8fff11ec0ced`. A clean Astro 7.3.2 build
-found no emitted inline script matching the three manual CSP hashes, so those
-allowances were removed without broadening the remaining policy. The same
-revision passed the required browser gates, Cloudflare deployment, Production
-Smoke, and post-Smoke Production Integrity.
-
-The historical credential scanner walks all reachable Git objects, ignores
-binary and oversized content for value matching, uses eight sanitized detector
-classes, and never prints matched secret values. Its verified preflight passed
-with no credential-like findings. The follow-up Quality integration makes the
-full-history scan part of every required Quality run instead of leaving it as a
-standalone opt-in workflow.
-
-### Earlier dependency release
-
-The dependency/Lighthouse release `44de4b9a8e769959f05b5ebb2aa1c99b784234d3`
-passed all seven workflows, CodeQL, and Cloudflare Builds on 2026-09-13.
-Production reported that exact revision as operational. It passed 32 unit
-tests, responsive/Safari checks, and the 48-case accessibility matrix. Status
-Lighthouse performance samples were 0.94, 1, and 1 (median 1, threshold 0.85).
-No retry of that Lighthouse run was needed. All dependency PRs were closed and
-only protected main remained. TypeScript 7 was excluded for checker compatibility.
-
-Historical inquiry evidence follows; it is not a fresh email test of that release.
-
-Evidence recorded on 2026-09-12 for
-`dfeffab4c826a45041780769b7472ada099ff22b`:
-
-- All seven repository workflows passed: 30 unit tests, 92 browser
-  interaction/layout cases, 48 accessibility/theme cases, Safari, Lighthouse,
-  and production checks.
-- Lighthouse passed on attempt two, not attempt one. The first run missed
-  homepage and Status performance thresholds; the cause is not established.
-- Production `/api/status` reported that exact revision as operational.
-  Configuration presence is not an email-delivery test.
-- After retrying the Cloudflare build, the owner reported that a real test
-  email worked. This is owner-confirmed production submission/delivery evidence,
-  not a new provider-record correlation or an automated live-email check.
-
-These results apply to that revision and observation, not every later commit.
-The older audit's 29-test count remains historical. Account gate enforcement
-is not established merely by a successful build. No audit-wide completion is claimed.
-
-## Findings register
-
-Priorities: P1 = significant verification gap; P2 = reliability or maintenance
-work; P3 = longer-term cleanup. Open means not implemented/verified here;
-owner-needed requires evidence or action outside repository editing. This is
-the currently triaged backlog, not a replacement inventory of every baseline
-audit finding. Reconcile newly revisited baseline items before claiming closure.
-
-### Operational closeout additions — September 27 UTC
-
-- **AX-016 (P1 / protocol rejection verified; cipher follow-up open): edge TLS configuration.** SSL.org's September 27 scan
-  reported TLS 1.0/1.1 accepted, plus cipher/compression heuristics. Set minimum
-  TLS 1.2 with TLS 1.3 retained, then verify both production hosts reject old
-  protocols and reassess remaining cipher findings. Header scores do not close
-  this finding. A later local OpenSSL retest could not resolve the hostname;
-  that environment error is not evidence of TLS rejection. No Cloudflare
-  administrator setting change was claimed at that observation. September 29
-  browser rescans now explicitly report TLS 1.0/1.1 disabled on both hosts;
-  CBC/RSA heuristic findings remain, as recorded in the dated evidence note.
-- **AX-017 (P2 / implemented, live acceptance pending): daily production email.**
-  See [email health](email-health.md): shared production mail transport, DST-safe
-  05:00 Chicago Worker cron, stable daily idempotency, bounded retries and a
-  separate connected-Resend delivery monitor in ChatGPT, matching Cassi at the
-  owner's September 27 direction. No additional Actions secret is required.
-  The extra credential-dependent workflow is removed; release CI remains separate
-  and does not establish delivery. The enabled ChatGPT monitor was updated on
-  September 27 without changing its schedule. Read-only Resend inspection at
-  07:38 Chicago found no health message for September 27. The cause of the missing
-  scheduled send is not yet established; Cloudflare invocation logs are needed.
-  First scheduled delivery and notification receipt remain open.
-  Mocked tests and historical delivered inquiries do not close those criteria.
-
-AX-005's real rejection drill, AX-006's notification/rollback evidence and
-AX-008's assistive-technology/device results remain open. This register must not
-be described as an audit-wide production-readiness sign-off while they or AX-016
-and AX-017 acceptance remain unresolved. AX-009 and AX-010 retain their separate
-maintenance/content scope.
-
-| ID     | Priority / status               | Finding and source                                                                                                                     | Acceptance evidence                                                                                                                           |
-| ------ | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| AX-001 | P1 / verified at d8bf0d3        | Former integrity check accepted any CSP header, allowing a frame-only header to hide a missing resource policy; repaired and verified. | Separate frame and resource-policy checks; regressions reject missing script policy, weakened directives, and frame-only policy.              |
-| AX-002 | P2 / verified at d8bf0d3        | Candidate and exact-revision production checks are separated; production sequencing was hardened again at 4a51a7e.                     | Candidate checks stay pre-deploy; Smoke proves exact live SHA; Integrity runs after successful Smoke on that same SHA.                        |
-| AX-003 | P2 / verified at d8bf0d3        | Fixed three-sample Lighthouse measurement implemented and reverified.                                                                  | Fixed sample count and documented aggregation, all reports retained, unchanged thresholds; inspect variability rather than rerun until green. |
-| AX-004 | P2 / verified at e69c280        | Three manual CSP hashes lacked documented source mapping; a clean Astro 7.3.2 build proved all three obsolete and they were removed.   | Clean-build mapping found no emitted inline script requiring them; all required browser gates and deployed Integrity passed without them.     |
-| AX-005 | P1 / promotion verified 4a51a7e | Exact-SHA approval refs replace Cloudflare-side GitHub REST polling; successful promotion and consumption are now verified.            | Required workflows publish the approval ref and Cloudflare consumes the same SHA fail-closed; retain a negative rejection-path exercise.      |
-| AX-006 | P2 / owner-needed               | Alert recipients and rollback recovery remain unverified.                                                                              | Confirm monitored failure notification receipt and record an authorized rollback drill with revision/version evidence.                        |
-| AX-007 | P2 / verified at e69c280        | Full reachable-history credential scanning is implemented with sanitized output and recorded in repository CI.                         | `security-history-audit.mjs` scans reachable text blobs with eight detector classes, suppresses values, and passed the verified preflight.    |
-| AX-008 | P2 / owner-needed               | Automated accessibility and an owner email test do not establish assistive-technology coverage.                                        | Record actual screen-reader, keyboard, and touch-device test scope and outcomes; resolve resulting defects.                                   |
-| AX-009 | P3 / open                       | Remaining style ownership/dead-CSS cleanup is not closed by formatting.                                                                | Identify specific redundant rules/components and verify affected routes/themes after scoped cleanup.                                          |
-| AX-010 | P3 / owner-needed               | Work/About need authentic owner-supplied material.                                                                                     | Owner-approved factual content; no invented clients, results, or biography.                                                                   |
-
-### Policy enforcement follow-up — 2026-09-20
-
-AX-011 (P1 / verified 2026-09-26): live ruleset `23059349` now requires a
-pull request and all five GitHub Actions checks with strict up-to-date checking,
-in addition to deletion/non-fast-forward protection. Its bypass list is empty
-and the connected user cannot bypass it. GitHub rejected the attempted PR #42
-merge after main advanced because the new combined revision lacked checks.
-This is observed account enforcement; Codex did not change account settings.
-
-AX-013 (P1 / verified at e3b8e89): Quality job `108414014042` required fresh
-Actions and JavaScript/TypeScript CodeQL analyses for
-`e3b8e89ca12de966dc6fdd161a56350f11248b30` and verified zero open alerts on
-main at 2026-09-26 13:34:40 UTC. This is actual alert inventory evidence for
-the repairs to alerts #2/#3/#4, not an inference from scan completion. No alerts
-were dismissed. The mandatory main Quality job continuously enforces this check.
-
-AX-012 (P2 / verified at e3b8e89): committed security/quality policies,
-all-severity dependency audit, history scanning, workflow mutation tests, live
-alert policy, and exact-SHA release enforcement passed at the revision above.
-Live mandatory PR/check enforcement is recorded under AX-011. Operational
-exceptions remain explicitly tracked under AX-005/006/008 and the daily email
-verification requirement; policy reconciliation does not close those items.
-
-AX-005 uses GitHub's short-lived workflow token to publish the dedicated
-`alienx-ci-approved-main` or `alienx-ci-rejected-main` ref after the five
-required workflows. Cloudflare checks those refs with `git ls-remote` before
-Wrangler deploys; no long-lived GitHub token is stored in Cloudflare. The
-successful approval/promotion path is verified at 4a51a7e. Preserve the
-negative-path requirement rather than weakening or simulating it away.
-
-## Post-security roadmap — frontend research
-
-The [September 26 security comparison](security-comparison-2026-09-26.md)
-records fresh MDN observations (AlienX A+ 125, Cleaning A+ 140; both 12/12),
-SSL.org/OWASP guidance, current source/deployment differences and scoped adoption
-criteria. AX-014's header hardening, analysis-warning handling and offline
-command-chain rehearsal tranche is implemented in PR #47, with exact-SHA
-production evidence above. Broader operational acceptance remains separate. The daily
-production email check remains separate unfinished work. Neither a score nor
-Cleaning's completion notes closes AlienX's operational findings.
-
-The owner-supplied research pass is now recorded in
-[frontend-pattern-notes.md](frontend-pattern-notes.md). The eight references
-were reviewed as pattern sources, with a native-first implementation hierarchy,
-Safari/touch/accessibility/reduced-motion requirements, performance rules, and
-an Experience-page idea bank. The research is not permission to bulk-import
-teaching demos.
-
-Current implementation order after the security pass:
-
-1. Preserve the verified AX-004 CSP cleanup and AX-007 historical-secret scan;
-   keep the history scan in the required Quality path so regressions fail closed.
-2. Keep AX-006 alert/rollback verification and AX-008 real assistive-technology
-   testing visible as owner/device-required work; do not fabricate closure.
-3. Audit existing production components against `frontend-pattern-notes.md` and
-   apply only production-safe improvements that solve a concrete usability,
-   semantics, responsiveness, lifecycle, or performance problem.
-4. Keep experimental interaction ideas in `/lab` until their behavior earns a
-   production role. Candidate families include native controls, container
-   queries, `:has()` state, progressive effects, range-driven comparisons,
-   compact SVG visualization, progress/state components, live filtering,
-   carefully scoped View Transitions, and explicit drag/draw experiments.
-5. Complete AX-009 style ownership/dead-CSS cleanup as part of scoped component
-   modernization rather than a blind stylesheet purge.
-6. AX-010 remains blocked on authentic owner-supplied Work/About material.
-
-Before adopting any example, verify its license and attribution requirements,
-current browser support (including Safari), semantic HTML, keyboard and touch
-access, light/dark contrast, and reduced-motion behavior. Evaluate Astro
-navigation lifecycle compatibility, CSP requirements, third-party requests,
-dependency cost, and performance. Prefer small, reusable changes; do not weaken
-security or present tutorial projects as authentic client work.
-
-## Decisions to preserve
-
-- **Main only as the durable branch:** temporary scoped preflight branches/PRs
-  may be used to prove required gates before promotion, then should be cleaned
-  up after merge. Do not accumulate long-lived feature branches.
-- **Two rate limits:** isolate-local state bounds local abuse/memory; the
-  Cloudflare binding adds mandatory edge-location counters. Missing binding
-  configuration fails closed. Neither promises a strict global quota. A global counter requires
-  a separate justified design decision, not a documentation-only claim.
-- **Verification before promotion:** five exact-SHA workflows feed the gate.
-  Production Smoke and Integrity are post-deployment checks; Integrity follows
-  successful Smoke and must not become a pre-deployment dependency.
-- **Evidence levels stay separate:** local checks, CI results, deployed revision,
-  provider acceptance, and owner-confirmed receipt are distinct observations.
-- **Do not weaken gates for green:** format and preflight the final changed files,
-  prove required checks on the scoped change, then promote and monitor the exact
-  merged SHA through Cloudflare, Smoke, and Integrity.
-
-## Maintaining the record
-
-### Security hardening and production sequencing — 2026-09-14 (verified at 4a51a7e)
-
-The security-hardening release added a permanent repository security audit and
-changed Production Integrity from an independent push race to a successful
-Production Smoke `workflow_run`. On the merged main SHA, all five required gates
-passed; the exact approval ref advanced to the same SHA; Cloudflare deployed it;
-Smoke verified the live revision and both hosts; only then did Integrity start.
-Integrity required stable revision confirmation and passed all eight routes on
-both production hosts on its first attempt. This is the current release-pipeline
-baseline.
-
-### Dependency and build maintenance — 2026-09-13 (verified at 44de4b9)
-
-The maintenance change updated Astro to 7.3.2 and the Cloudflare adapter
-to 14.3.1, with current compatible tooling and SHA-pinned Actions v7 releases.
-TypeScript 7.0.2 is deliberately not adopted: @astrojs/check 0.9.10 declares
-support for TypeScript 5/6 only. TypeScript 6.0.3 is the compatible upgrade.
-
-### Integrity contract repair — 2026-09-13 (verified at d8bf0d3)
-
-AX-001 has a parsed-HTML contract requiring both a frame-ancestors response
-header and a complete resource policy. Candidate and production use the same
-checks. AX-002 separates candidate security/SEO validation from live production
-verification; the 2026-09-14 hardening further sequences Integrity after
-successful exact-revision Smoke.
-
-Keep finding IDs stable. Add revision and dated evidence when moving an item
-to implemented or verified; retain remaining limits. A historical report or
-assistant suggestion is input for review, not automatic closure or authority.
-Record new release observations here and detailed repair history in the
-remediation log. Do not copy live status lists into every onboarding document.
+# AlienX — current state
+
+Consolidated September 30, 2026. This file alone owns findings and dated release
+evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
+and [operations](release-runbook.md) owns procedures. Do not duplicate status.
+
+## Last verified release
+
+PR #53 merged as `152abcf087f13628bb31c224edd1c73db49cdacc`. All five PR and
+main gates passed. Main Lighthouse [36647380641](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36647380641),
+Release Approval 36647786977, Workers Build check 109674768685,
+[Smoke 36647380659](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36647380659)
+and [Integrity 36647827781](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36647827781)
+passed for that exact SHA on September 29. These results do not certify new edits.
+The stderr fix makes the existing bounded NO_NAVSTART retry recognize CLI errors.
+The original failed run 36645902576 remains evidence; no threshold was lowered.
+
+## Beta acceptance — incomplete
+
+September 30 documentation-cleanup validation: 88 tests, types/build/dry-run and
+repository/history scans passed locally. The all-severity dependency audit failed
+on moderate `fast-uri` advisory GHSA-hrr3-gc8f-f4qj. Dependency remediation and a
+clean audit remain required before this new revision can pass release gates;
+historical green results above do not override this finding.
+
+Do not publish the first GitHub release or claim beta completion while required
+acceptance is unresolved. Do not invent a version. Local tests, CI, live revision,
+provider acceptance/delivery, inbox receipt and human/device acceptance differ.
+
+| ID     | Disposition                                                | Evidence or remaining acceptance                                                                                                                           |
+| ------ | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AX-001 | Verified at d8bf0d3                                        | Parsed frame/resource CSP checks reject missing and weakened policy.                                                                                       |
+| AX-002 | Verified at d8bf0d3 / 4a51a7e                              | Candidate and exact-revision post-Smoke Integrity remain separate.                                                                                         |
+| AX-003 | Verified; PR #53 repair deployed                           | Three fixed Lighthouse samples, median performance, minimum other scores; no retry-until-green.                                                            |
+| AX-004 | Verified at e69c280                                        | Three obsolete manual CSP hashes removed after emitted-byte mapping.                                                                                       |
+| AX-005 | Positive promotion verified; negative drill open           | Real Cloudflare rejection evidence still needed; offline mocks are not account execution.                                                                  |
+| AX-006 | Owner/account evidence open                                | Monitored failure-notification receipt and authorized compatible rollback/recovery evidence.                                                               |
+| AX-007 | Verified at e69c280                                        | Required sanitized reachable-history scan; heuristic, not exhaustive certification.                                                                        |
+| AX-008 | Physical-device evidence open                              | Actual screen reader, keyboard, touch, zoom and theme outcomes; resolve discovered defects.                                                                |
+| AX-009 | Partial cleanup deployed through PR #52/#53                | Theme extraction/Technology ownership cleanup passed later gates; unreviewed dead-CSS/style scope remains open.                                            |
+| AX-010 | Owner editorial acceptance open; last                      | Factual Work/About copy is deployed; no invented clients, results, incorporation or biography.                                                             |
+| AX-011 | Enforcement verified September 26                          | Ruleset 23059349 requires PR/five Actions checks, strict freshness, no bypass. Desired review-thread setting not confirmed live.                           |
+| AX-012 | Verified at e3b8e89                                        | Security/quality policies, all-severity audit, workflow/history gates; operational exceptions remain.                                                      |
+| AX-013 | Verified at e3b8e89                                        | Exact-main fresh Actions/JS/TS analyses and zero open code-scanning alerts; private Dependabot/secret inventory is separate.                               |
+| AX-014 | Repository tranche verified in PR #47                      | Headers/static checks, sanitized analysis errors/warnings and offline deployment rehearsal; account scope remains open.                                    |
+| AX-015 | Verified at f67c91c                                        | Mandatory edge limiter, strict honeypot/Turnstile success and safe logs; not live email proof.                                                             |
+| AX-016 | Protocol rejection verified September 29; cipher work open | Both hosts reject TLS 1.0/1.1 and accept 1.2/1.3. Reassess/disposition CBC/RSA heuristics; static-homepage BREACH heuristic is not confirmed exploitation. |
+| AX-017 | Implemented; live acceptance open                          | Investigate missing natural heartbeat, prove scheduled delivery, distinct full-form delivery and notification receipt. No replacement sends.               |
+
+Branch cleanup is unverified. Re-enumerate remotes, confirm each temporary head is
+merged before deleting it, and retain active PRs and alienx-ci-approved-main /
+alienx-ci-rejected-main tags. Future releases need their own five exact-head gates
+and exact-main approval/build/Smoke/Integrity chain.
+
+## External evidence boundaries
+
+September 29 SSL.org browser scans on both hosts showed trusted matching
+certificates, complete chains and old-protocol rejection. CBC/RSA results remain
+heuristics, not confirmed timing attacks. See the pinned scan record below.
+Cloudflare bot verification blocked account inspection; no cron activation,
+negative deployment or rollback was certified. The prepared manual inquiry was
+rejected by automatic approval review and was not sent. Cleanup does not override
+that rejection. September 29 provider inspection found no natural heartbeat.
+No September 30 email evidence has been inspected for this docs consolidation.
+The existing 05:30 health/full-form and 06:00 heartbeat-watch monitors were observed
+enabled; configured prompts are not successful execution. Do not duplicate them.
+
+## Next work and shared checkpoint
+
+Resolve live TLS/mail and operational/device evidence first. Modernize components
+only for concrete semantics, responsiveness, lifecycle or measured performance.
+Experiments stay in /lab until useful and tested; no bulk tutorial imports.
+AlienX is a showcase and possible future business, not an established LLC.
+
+Both assistants use [one communication file](chatgpt-communications.md). Cleaning
+PR #26 records review of the three initial AX messages and a write-403-blocked
+outgoing reply. Its source review has now been read here, not fabricated. Cleaning's
+local Lighthouse investigation remains open. No automatic chat synchronization.
+Consolidation preserves IDs, evidence and history; it does not close external work.
+
+## Historical evidence and consolidation map
+
+The pre-cleanup snapshot is pinned to `152abcf087f13628bb31c224edd1c73db49cdacc`. These are historical documents,
+not current instructions. Git history is unchanged; every removed file is
+recoverable. Read the relevant evidence instead of restoring whole audits to
+startup context. The current register retains unresolved findings and failures.
+
+| Previous document                   | Preserved snapshot                                                                                                                            | Current owner                                                                                               |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `README.md`                         | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/README.md)                         | [Repository index](../README.md)                                                                            |
+| `ai-audit.md`                       | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/ai-audit.md)                       | This register; detailed history remains in the snapshot                                                     |
+| `ai-context.md`                     | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/ai-context.md)                     | [ai-context.md](ai-context.md)                                                                              |
+| `audit-remediation.md`              | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/audit-remediation.md)              | This register; detailed history remains in the snapshot                                                     |
+| `beta-closeout.md`                  | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/beta-closeout.md)                  | This register; detailed history remains in the snapshot                                                     |
+| `cassi-commit-inventory.md`         | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/cassi-commit-inventory.md)         | This register; detailed history remains in the snapshot                                                     |
+| `chatgpt-communications.md`         | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/chatgpt-communications.md)         | [chatgpt-communications.md](chatgpt-communications.md)                                                      |
+| `closeout-2026-09-29.md`            | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/closeout-2026-09-29.md)            | This register; detailed history remains in the snapshot                                                     |
+| `device-validation.md`              | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/device-validation.md)              | [Operations](release-runbook.md)                                                                            |
+| `directory-parity-review.md`        | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/directory-parity-review.md)        | This register; detailed history remains in the snapshot                                                     |
+| `email-health.md`                   | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/email-health.md)                   | [Operations](release-runbook.md)                                                                            |
+| `frontend-pattern-notes.md`         | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/frontend-pattern-notes.md)         | [Contract](ai-context.md)                                                                                   |
+| `frontend-runtime-audit.md`         | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/frontend-runtime-audit.md)         | [Contract](ai-context.md)                                                                                   |
+| `inquiry-security-contract.md`      | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/inquiry-security-contract.md)      | [Contract](ai-context.md)                                                                                   |
+| `media-audit.md`                    | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/media-audit.md)                    | [Contract](ai-context.md)                                                                                   |
+| `project-state.md`                  | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/project-state.md)                  | [project-state.md](project-state.md)                                                                        |
+| `release-runbook.md`                | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/release-runbook.md)                | [release-runbook.md](release-runbook.md)                                                                    |
+| `security-audit.md`                 | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/security-audit.md)                 | This register; detailed history remains in the snapshot                                                     |
+| `security-closeout-2026-09-20.md`   | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/security-closeout-2026-09-20.md)   | This register; detailed history remains in the snapshot                                                     |
+| `security-comparison-2026-09-26.md` | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/security-comparison-2026-09-26.md) | This register; detailed history remains in the snapshot                                                     |
+| `shared-brain.md`                   | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/shared-brain.md)                   | [Shared handoff](https://github.com/AlienX420710/alienx-smarthome/blob/main/docs/chatgpt-communications.md) |
+| `shared-lessons.md`                 | [Read](https://github.com/AlienX420710/alienx-smarthome/blob/152abcf087f13628bb31c224edd1c73db49cdacc/docs/shared-lessons.md)                 | [Shared handoff](https://github.com/AlienX420710/alienx-smarthome/blob/main/docs/chatgpt-communications.md) |
+
+Generated commit inventories are optional research output, not current status or
+manual certification. Comparison scripts remain available; use a fresh mirror
+and their documented arguments, inspect applicable current changes, and record
+only adoption decisions here. Generated ledgers are now gitignored.

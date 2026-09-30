@@ -204,3 +204,6 @@ public/alienx-social-preview.webp
 test-results/
 playwright-report/
 .lighthouseci/
+
+# On-demand historical research, not maintained context
+docs/*-commit-inventory.md

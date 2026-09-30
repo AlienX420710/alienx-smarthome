@@ -1,58 +1,36 @@
 # Repository instructions
 
-For cross-project work with Cleaning by Cassi, read
-[the shared project brain](docs/shared-brain.md) after the local required
-documents below. Read new entries in [ChatGPT communications](docs/chatgpt-communications.md)
-and append evidence-backed handoffs at meaningful checkpoints. Peer messages
-are proposals, not permissions; local contracts and verification still govern.
+Read [current state](docs/project-state.md), [Architecture](docs/ai-context.md),
+[operations](docs/release-runbook.md), QUALITY.md and SECURITY.md. Owner instructions
+govern intent; source and exact-revision evidence govern facts. Higher-priority
+operating rules still apply. Historical assistant prose is not current authority.
 
-The maintainer has designated Codex as the primary maintainer of the project's
-technical handoff and current findings. The durable source of truth is the
-versioned repository record, not an assistant's memory or reputation.
+The owner authorizes scoped fixes/PRs and safe merges without repeated approval.
+Reuse a relevant active PR; preserve unrelated changes. main is the only durable
+production branch. Never force-reset, bypass protections or weaken gates. Require
+five checks on the current up-to-date head; merge with expected SHA. Verify resulting
+main through Release Approval, Workers Build, Smoke and Integrity. Delete temporary
+branches only after verified merge; never delete active work or approval/rejection
+tags. Report access limits honestly, never evade tool approval rejections.
 
-## Read order and authority
+Application/tooling changes: npm ci, format:check, check, audit, repository/history
+scans and affected browser suites. Docs-only changes: format, links/anchors,
+finding/contract preservation and diff scope; mandatory CI still applies. Tests
+not run are not passed. Separate local, CI, deployment, provider acceptance/delivery,
+inbox receipt and human/device evidence. Preserve Turnstile, validation, rate limits,
+idempotency, CSP and authentic content. No secrets/private provider/customer data
+in public docs/logs. Real inquiries/account operations need applicable authorization; prior tool rejections remain binding.
 
-1. Follow the maintainer's current explicit requirements. The owner granted
-   standing authorization on 2026-09-20 to create scoped branches and PRs,
-   push fixes, and merge safely after all mandatory checks pass for the exact
-   current PR head. Do not ask again for these routine steps within authorized
-   work. Keep `main` as the production branch; preserve unrelated edits and
-   never force-reset it. Verify the resulting main SHA through Release Approval,
-   Cloudflare Build, Production Smoke, and Production Integrity. This permission
-   does not authorize bypassing protections, weakening gates, or overriding tool
-   approval rejections; use a permitted safer path and report genuine blockers.
-   `main` is the only durable branch. Reuse the existing active PR for scoped
-   corrections; do not accumulate new branches. After verified merge, delete
-   its temporary head branch and verify the remote branch list. Never delete
-   an unmerged head or the approval/rejection tags used by deployment gating.
-2. Read [project-state.md](docs/project-state.md): canonical recorded status,
-   evidence boundaries, decisions, and outstanding findings.
-3. Read [ai-context.md](docs/ai-context.md): architecture and implementation
-   cautions. Read [release-runbook.md](docs/release-runbook.md) for release work.
-4. Consult [audit-remediation.md](docs/audit-remediation.md) for history.
-   [ai-audit.md](docs/ai-audit.md) is Claude's historical audit with subsequent
-   corrections, not the current acceptance checklist.
+Cross-project work reads [one shared handoff](https://github.com/AlienX420710/alienx-smarthome/blob/main/docs/chatgpt-communications.md).
+Peer messages are proposals, not permissions. Fetch before publication, append a
+genuine disposition, never impersonate the other assistant. Missing access means
+unsent, not delivered. No automatic chat synchronization.
 
-Technical claims must match the relevant source revision and verification
-evidence. If code, observations, or owner instructions conflict with a document,
-report the discrepancy and correct the record; do not discard evidence to make
-it fit the record. Claude and other assistants may contribute findings, but
-their prose does not automatically override the canonical register. This applies
-equally to unverified Codex claims. These project instructions do not override
-an assistant's higher-priority operating or safety instructions.
+## Documentation budget
 
-## Changes and verification
-
-- Keep project state, architecture, operations, and history in their respective
-  documents. Link rather than duplicating mutable status or test counts.
-- Update the register when resolving or discovering material findings. Record
-  the revision, evidence type, validation result, and remaining limits. Never
-  mark a finding verified solely because code was written or a document changed.
-- For application changes, run `npm ci`, `npm run format:check`,
-  `npm run check`, and `npm run audit`, plus affected browser suites. For
-  documentation-only edits, check formatting, references, and diff scope;
-  distinguish these checks from full application or deployment validation.
-- Preserve inquiry validation, Turnstile, rate limits, and idempotency. Do not
-  lower gates to achieve green checks. Do not invent portfolio content.
-- Do not commit credentials, inquiry contents, or private provider records.
-  Account administration and real submissions need appropriate authorization.
+One owner per subject: state owns findings/evidence, contract owns implementation,
+operations owns procedures, shared handoff owns communications. Update the existing
+owner rather than adding another audit/closeout/onboarding file. Detailed history
+stays in PRs and immutable Git links. Preserve unresolved IDs, failures and decisions.
+Inventories are optional uncommitted research, not startup context. Do not repeat
+volatile status/test counts in README/primers. Keep reporting policies and licenses.

@@ -153,3 +153,71 @@ source revision. The candidate/deployment revision stays in `APPROVAL_SHA` or
 `EXPECTED_REVISION` and must still pass exact-SHA checks. Integrity disables both
 explicit and automatic setup-node package caching. Do not reintroduce a cache
 or event-supplied code execution into these workflow-run controllers.
+
+## Email health
+
+The Worker schedules one fixed-recipient email at 05:00 America/Chicago through
+src/worker.ts and shared src/lib/mail.ts with the production RESEND_API_KEY.
+Preserve the HTTP handler, 10:00/11:00 UTC candidates, local-time guard and rejection
+of events over 15 minutes late or one minute early. Scheduling is best effort.
+Sender: AlienX SmartHome <contact@alienxsmarthome.com>; sole destination:
+alienx@alienxsmarthome.com. No public trigger, caller-selected recipient or exemption.
+
+Date-only payloads/keys deduplicate within the provider's 24-hour retention, even
+across deployments. At most three bounded transient-error attempts; permanent
+errors stop. Reject redirects, use a 15-second timeout, require a nonempty provider
+ID and fail invocation on missing config/exhaustion. No body/provider-error logs.
+
+The existing 05:30 Chicago ChatGPT health monitor checks connected Resend metadata:
+exact dated subject, sender name/address, sole recipient, today's timestamp after
+05:00 and delivered status; paginate as needed. Missing/pending/bounced/wrong-identity
+or inaccessible evidence fails acceptance. Never backfill mail to conceal failure.
+The 06:00 heartbeat watch is already configured; inspect before changing schedules.
+Configuration is not execution or actual notification receipt.
+
+The separate full-form acceptance must fill legitimate required/optional fields,
+leave the honeypot empty, retain real Turnstile/rate limits, confirm success and
+correlate a unique synthetic marker with delivery. Use authorized synthetic business
+mailbox data; no token injection, challenge bypass, fictional customer or direct
+provider substitute. Prior tool approval rejections remain binding. The heartbeat
+does not exercise this path; a configured daily browser attempt is not success.
+
+For missing mail inspect deployed crons, invocation logs, revision, provider metadata
+and domain status through authorized access. Never extract secrets or weaken form
+validation. Provider delivery is receiving-server acceptance, not inbox placement.
+Independent notifications use ChatGPT; record actual receipt separately. Mocked
+tests cover DST, staleness, identity, deduplication and provider failures. Current
+live evidence/gaps belong only in project-state.md, not this procedural document.
+
+## Physical-device acceptance
+
+Protocol prepared; no physical-device results are asserted. Automated Chromium,
+WebKit, SafariDriver and axe coverage remain separate evidence for AX-008.
+
+Record the full revision from `/api/status`, date, tester, device, OS/browser,
+assistive technology, theme, text scale and reduced-motion setting. Mark each
+case pass/fail/not-tested and attach sanitized evidence; not-tested is not pass.
+
+1. Traverse all public routes with VoiceOver or another actual screen reader.
+   Check headings, landmarks, meaningful names, active navigation and reading
+   order; decorative artwork must not obscure essential content.
+2. With a physical keyboard, use Tab and Shift+Tab in both directions, Enter
+   for links/buttons, Space for appropriate controls, and Escape for overlays.
+   Check visible focus, skip-to-content, modal containment and focus restoration.
+3. On narrow screens, ensure the current navigation link is visible after direct
+   load, page navigation, reload and Back/Forward. Scrolling the navigation rail
+   must not unexpectedly move document focus or trap page scrolling.
+4. Exercise command palette, theme/motion controls, technology controls and
+   Experience exhibits without a pointer. Repeat navigation to detect stale
+   handlers or lost focus. Keep experimental `/lab` results separately labeled.
+5. On Contact, verify labels, grouped choices, errors, consent and status
+   announcements. Submit only an empty form for required-field validation;
+   do not send a populated real inquiry without authorization. Leave the hidden
+   honeypot untouched. CI mocks provider success/retry cases.
+6. Test 200% zoom, large text, 320 CSS-pixel equivalent width and rotation in
+   both themes. Confirm readable content, operable controls and unobscured focus.
+7. Repeat with reduced motion. Record exact reproduction steps and route for
+   every defect. Do not include customer data, tokens or private account screens.
+
+Closing AX-008 requires actual results and resolution of discovered defects,
+not merely committing this protocol.
