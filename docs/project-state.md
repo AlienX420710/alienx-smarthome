@@ -18,10 +18,11 @@ The original failed run 36645902576 remains evidence; no threshold was lowered.
 ## Beta acceptance — incomplete
 
 September 30 documentation-cleanup validation: 88 tests, types/build/dry-run and
-repository/history scans passed locally. The all-severity dependency audit failed
-on moderate `fast-uri` advisory GHSA-hrr3-gc8f-f4qj. Dependency remediation and a
-clean audit remain required before this new revision can pass release gates;
-historical green results above do not override this finding.
+repository/history scans passed locally. The initial all-severity dependency audit
+failed on moderate `fast-uri` advisory GHSA-hrr3-gc8f-f4qj. The lockfile now resolves
+3.1.8 within AJV's existing range; clean-install audit reports zero vulnerabilities
+and the advisory's encoded-host reproducer passes. Exact-head CI and subsequent
+main deployment evidence remain separate requirements.
 
 Do not publish the first GitHub release or claim beta completion while required
 acceptance is unresolved. Do not invent a version. Local tests, CI, live revision,
