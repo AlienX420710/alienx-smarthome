@@ -228,7 +228,6 @@ for (const [width, height] of viewports)
         `Main heading is transparent on ${route}`,
       ).toBeGreaterThan(0);
 
-
       expect(errors, `Runtime errors at ${width}x${height}`).toEqual([]);
     });
   }
