@@ -2,12 +2,7 @@ const { Builder } = require('selenium-webdriver');
 const safari = require('selenium-webdriver/safari');
 
 const baseURL = 'http://127.0.0.1:4321';
-const routes = [
-  '/',
-  '/status/',
-  '/about/',
-  '/contact/',
-];
+const routes = ['/', '/status/', '/about/', '/contact/'];
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
