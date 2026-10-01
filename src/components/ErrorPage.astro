@@ -33,12 +33,16 @@ const pageTitle = `${code} // ${title} // AlienX SmartHome`;
           <span>CONNECTION TERMINATED</span>
         </div>
 
-        <p class="terminal__prompt" aria-hidden="true">&gt; SYSTEM RESPONSE</p>
+        <p class="terminal__prompt" aria-hidden="true">
+          &gt; SYSTEM RESPONSE
+        </p>
         <h1 id="error-title">
           <span>ERROR</span>
           <strong>{code}</strong>
         </h1>
-        <p class="terminal__title" data-error-title>{title}</p>
+        <p class="terminal__title" data-error-title>
+          {title}
+        </p>
         <p class="terminal__message">{message}</p>
 
         <p class="terminal__status">
@@ -47,8 +51,12 @@ const pageTitle = `${code} // ${title} // AlienX SmartHome`;
         </p>
 
         <nav class="terminal__actions" aria-label="Error recovery">
-          <a tabindex="0" href="/">[ RETURN HOME ]</a>
-          <a tabindex="0" href="/contact">[ CONTACT ALIENX ]</a>
+          <a tabindex="0" href="/">
+            [ RETURN HOME ]
+          </a>
+          <a tabindex="0" href="/contact">
+            [ CONTACT ALIENX ]
+          </a>
         </nav>
       </section>
     </main>
