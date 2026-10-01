@@ -84,8 +84,6 @@ const productionUrl = (origin, route) => {
 
 const routes = [
   '/',
-  '/work/',
-  '/technology/',
   '/status/',
   '/about/',
   '/contact/',

@@ -3,8 +3,6 @@ module.exports = {
     collect: {
       url: [
         'http://127.0.0.1:4321/',
-        'http://127.0.0.1:4321/work/',
-        'http://127.0.0.1:4321/technology/',
         'http://127.0.0.1:4321/status/',
         'http://127.0.0.1:4321/about/',
         'http://127.0.0.1:4321/contact/',

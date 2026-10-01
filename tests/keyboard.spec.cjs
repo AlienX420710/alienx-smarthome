@@ -2,8 +2,6 @@ const { test, expect } = require('@playwright/test');
 const base = 'http://127.0.0.1:4321';
 const routes = [
   '/',
-  '/work/',
-  '/technology/',
   '/status/',
   '/about/',
   '/contact/',
@@ -130,20 +128,6 @@ test('Tab-focused command activates itself with Enter and Space; dialogs contain
   await expect(trigger).toBeFocused();
 });
 
-test('Technology buttons can be reached and operated without a pointer', async ({
-  page,
-}) => {
-  await page.goto(base + '/technology/');
-  for (const button of await page.locator('[data-layer]').all()) {
-    await tabTo(page, button);
-    await visibleFocus(button);
-    await page.keyboard.press('Space');
-    await expect(button).toHaveAttribute('aria-pressed', 'true');
-    await page.keyboard.press('Enter');
-    await expect(button).toHaveAttribute('aria-pressed', 'true');
-  }
-});
-
 test('Contact fields, consent, validation and retry are keyboard operable', async ({
   page,
 }) => {
@@ -216,8 +200,6 @@ test('Keyboard navigation preserves real page URLs through header and footer', a
 }) => {
   await page.goto(base);
   for (const [name, path] of [
-    ['Work', '/work'],
-    ['Technology', '/technology'],
     ['Status', '/status'],
     ['Start a project', '/contact'],
     ['About Me', '/about'],

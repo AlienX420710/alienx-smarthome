@@ -4,8 +4,6 @@ const safari = require('selenium-webdriver/safari');
 const baseURL = 'http://127.0.0.1:4321';
 const routes = [
   '/',
-  '/work/',
-  '/technology/',
   '/status/',
   '/about/',
   '/contact/',

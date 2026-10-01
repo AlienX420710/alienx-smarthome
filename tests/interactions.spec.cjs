@@ -15,36 +15,6 @@ const status = {
   ),
 };
 
-test('Technology layers work after leaving and returning', async ({ page }) => {
-  await page.goto(base + '/technology/');
-  for (let visit = 0; visit < 2; visit++) {
-    const application = page.locator('[data-layer=application]');
-    await application.click();
-    await expect(application).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('[data-layer=interface]')).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    );
-    await expect(page.locator('#layer-detail')).toContainText(
-      'Request handling',
-    );
-    await page
-      .getByRole('navigation', { name: 'Primary navigation' })
-      .getByRole('link', { name: 'About Me', exact: true })
-      .click();
-    await expect(page).toHaveURL(/\/about\/?$/);
-    await page
-      .getByRole('navigation', { name: 'Primary navigation' })
-      .getByRole('link', { name: 'Technology', exact: true })
-      .first()
-      .click();
-    await expect(page.locator('[data-layer=interface]')).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
-  }
-});
-
 test('skip link and command dialogs retain keyboard focus', async ({
   page,
 }) => {

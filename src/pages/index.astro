@@ -2,10 +2,44 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 import { SITE_TITLE } from '../consts';
 
 const description =
   'AlienX designs and engineers websites that communicate clearly, work across devices, and connect the interface to the systems behind it.';
+
+const projects = [
+  {
+    eyebrow: 'WEB PLATFORM',
+    title: 'AlienX SmartHome',
+    summary:
+      'The production Astro and Cloudflare platform behind this site: responsive UI, theme support, accessibility gates, security headers, and exact-revision deployment.',
+    href: '/',
+    tags: ['Astro', 'Cloudflare', 'TypeScript', 'Accessibility'],
+    outcome:
+      'A production website whose engineering is visible in the product itself.',
+  },
+  {
+    eyebrow: 'INTERACTION SYSTEM',
+    title: 'Browser-native experience',
+    summary:
+      'The strongest Lab and Experience concepts now live directly in the homepage: semantic controls, modern CSS, responsive composition, progressive enhancement, and purposeful interaction.',
+    href: '#proof-title',
+    tags: ['HTML', 'CSS', 'Browser APIs', 'Progressive enhancement'],
+    outcome:
+      'Technical proof is part of the customer journey instead of a separate destination.',
+  },
+  {
+    eyebrow: 'RELEASE ENGINEERING',
+    title: 'Exact-revision release gate',
+    summary:
+      'A fail-closed release architecture that approves the exact main revision only after Quality, Responsive, Accessibility, Lighthouse, and Safari gates succeed.',
+    href: '/status',
+    tags: ['GitHub Actions', 'Cloudflare Workers', 'CI/CD', 'Smoke tests'],
+    outcome:
+      'The deployed revision has to match the revision that passed the release gates.',
+  },
+];
 ---
 
 <!doctype html>
@@ -244,6 +278,92 @@ const description =
         </div>
       </section>
 
+      <section class="portfolio" aria-labelledby="portfolio-title">
+        <div class="section-heading">
+          <p class="eyebrow">REAL WORK // NO PLACEHOLDER METRICS</p>
+          <h2 id="portfolio-title">The work is already running.</h2>
+          <p>
+            AlienX uses its own production platform as inspectable proof. The
+            interface, browser behavior, delivery pipeline, and operational
+            controls are part of the portfolio—not a mockup of what might be
+            built later.
+          </p>
+        </div>
+        <div class="portfolio-grid">
+          {projects.map((project) => <ProjectCard {...project} />)}
+        </div>
+      </section>
+
+      <section class="engineering" aria-labelledby="engineering-title">
+        <div class="section-heading">
+          <p class="eyebrow">ENGINEERING DEPTH</p>
+          <h2 id="engineering-title">
+            The website is the front door. The system can go much deeper.
+          </h2>
+          <p>
+            The useful parts of the former Technology page live here now. A
+            project can stay focused on a high-quality website or extend into
+            application logic, integrations, automation, and infrastructure when
+            the business needs it.
+          </p>
+        </div>
+
+        <div class="engineering-grid">
+          <article>
+            <span>01 // FRONTEND</span>
+            <h3>Interfaces with structure and intent.</h3>
+            <p>
+              Semantic HTML, modern CSS, TypeScript, responsive composition,
+              components, browser APIs, progressive enhancement, and interaction
+              design.
+            </p>
+          </article>
+          <article>
+            <span>02 // BACKEND + APIs</span>
+            <h3>Reliable behavior behind the interface.</h3>
+            <p>
+              Validation, request handling, typed boundaries, webhooks,
+              integrations, authentication flows, data contracts, and
+              failure-aware server logic.
+            </p>
+          </article>
+          <article>
+            <span>03 // AUTOMATION</span>
+            <h3>Connect work that should not require another click.</h3>
+            <p>
+              Event-driven workflows can connect websites, APIs, email,
+              databases, business tools, and AI-assisted tasks around a real
+              process.
+            </p>
+          </article>
+          <article>
+            <span>04 // INFRASTRUCTURE</span>
+            <h3>Ship it, run it, and know when it breaks.</h3>
+            <p>
+              Cloud and edge deployment, DNS, environments, caching,
+              observability, source control, CI/CD, and self-hosted systems.
+            </p>
+          </article>
+          <article>
+            <span>05 // PERFORMANCE</span>
+            <h3>Speed is part of how the product feels.</h3>
+            <p>
+              Rendering cost, payload, network behavior, responsive assets, and
+              unnecessary client-side work are treated as engineering decisions.
+            </p>
+          </article>
+          <article>
+            <span>06 // SECURITY + ACCESSIBILITY</span>
+            <h3>Quality constraints belong in the implementation.</h3>
+            <p>
+              Inputs, secrets, permissions, dependencies, semantics, focus,
+              keyboard behavior, contrast, and motion all receive explicit
+              boundaries and verification.
+            </p>
+          </article>
+        </div>
+      </section>
+
       <section class="process" aria-labelledby="process-title">
         <div class="section-heading">
           <p class="eyebrow">HOW THE WORK MOVES</p>
@@ -314,6 +434,9 @@ const description =
     --home-text: #eef2ff;
     --home-muted: #a0abc0;
     --home-soft: #8794aa;
+    --page-heading: var(--home-heading);
+    --page-muted: var(--home-muted);
+    --page-border: var(--home-border);
     background:
       radial-gradient(
         circle at 82% 8%,
@@ -598,6 +721,8 @@ const description =
   .why,
   .proof,
   .outcomes,
+  .portfolio,
+  .engineering,
   .process {
     padding: 6.5rem 0;
     border-top: 1px solid var(--home-border);
@@ -628,6 +753,8 @@ const description =
   .reason-grid,
   .proof-grid,
   .outcome-grid,
+  .portfolio-grid,
+  .engineering-grid,
   .process-grid {
     display: grid;
     gap: 1rem;
@@ -635,8 +762,44 @@ const description =
   }
 
   .reason-grid,
-  .outcome-grid {
+  .outcome-grid,
+  .engineering-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .portfolio-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .engineering-grid article {
+    min-height: 250px;
+    padding: 2rem;
+    border: 1px solid var(--home-border);
+    border-radius: 24px;
+    background: linear-gradient(
+      145deg,
+      rgba(18, 23, 36, 0.9),
+      rgba(8, 11, 18, 0.9)
+    );
+  }
+
+  .engineering-grid article > span {
+    color: var(--home-accent);
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+  }
+
+  .engineering-grid h3 {
+    margin: 2.25rem 0 0.75rem;
+    font-size: 1.45rem;
+    letter-spacing: -0.02em;
+  }
+
+  .engineering-grid p {
+    margin: 0;
+    color: var(--home-muted);
+    line-height: 1.65;
   }
 
   .reason-card,
@@ -839,6 +1002,11 @@ const description =
       grid-column: 1;
     }
 
+    .portfolio-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .engineering-grid,
     .process-grid {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -870,6 +1038,7 @@ const description =
 
     .reason-grid,
     .outcome-grid,
+    .engineering-grid,
     .process-grid {
       grid-template-columns: 1fr;
     }
@@ -883,6 +1052,8 @@ const description =
     .why,
     .proof,
     .outcomes,
+    .portfolio,
+    .engineering,
     .process {
       padding: 5rem 0;
     }
@@ -973,6 +1144,7 @@ const description =
     :global(html:where(:not([data-alienx-theme]))) .reason-card,
     :global(html:where(:not([data-alienx-theme]))) .proof-grid article,
     :global(html:where(:not([data-alienx-theme]))) .outcome-grid article,
+    :global(html:where(:not([data-alienx-theme]))) .engineering-grid article,
     :global(html:where(:not([data-alienx-theme]))) .process-grid li {
       background: linear-gradient(145deg, #f8fafc, #f1f4f8);
       box-shadow: 0 12px 35px rgba(42, 55, 80, 0.05);
@@ -1072,6 +1244,7 @@ const description =
   :global(html[data-alienx-theme='light']) .reason-card,
   :global(html[data-alienx-theme='light']) .proof-grid article,
   :global(html[data-alienx-theme='light']) .outcome-grid article,
+  :global(html[data-alienx-theme='light']) .engineering-grid article,
   :global(html[data-alienx-theme='light']) .process-grid li {
     background: linear-gradient(145deg, #f8fafc, #f1f4f8);
     box-shadow: 0 12px 35px rgba(42, 55, 80, 0.05);
