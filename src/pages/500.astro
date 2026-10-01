@@ -1,0 +1,13 @@
+---
+import ErrorPage from '../components/ErrorPage.astro';
+
+interface Props {
+  error: unknown;
+}
+---
+
+<ErrorPage
+  code={500}
+  title="System fault"
+  message="AlienX encountered an unexpected error while processing this request."
+/>

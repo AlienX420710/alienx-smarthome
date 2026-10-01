@@ -9,6 +9,7 @@ const routes = [
   '/status/',
   '/about/',
   '/contact/',
+  '/__alienx_missing_error_test__/',
   '/contact/success/',
 ];
 test.use({

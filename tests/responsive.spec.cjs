@@ -9,6 +9,7 @@ const routes = [
   '/status/',
   '/about/',
   '/contact/',
+  '/__alienx_missing_error_test__/',
 ];
 const viewports = [
   [320, 568],
@@ -51,7 +52,14 @@ for (const [width, height] of viewports)
       page.on('console', (m) => {
         if (m.type() === 'error') {
           const text = m.text();
-          if (!text.includes('frame-ancestors') || !text.includes('meta')) {
+          const expected404Navigation =
+            route === '/__alienx_missing_error_test__/' &&
+            text.includes('Failed to load resource') &&
+            text.includes('404');
+          if (
+            !expected404Navigation &&
+            (!text.includes('frame-ancestors') || !text.includes('meta'))
+          ) {
             errors.push(`console: ${text}`);
           }
         }

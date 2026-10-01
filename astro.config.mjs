@@ -20,7 +20,14 @@ export default defineConfig({
   site: 'https://alienxsmarthome.com',
   integrations: [
     sitemap({
-      filter: (page) => !new URL(page).pathname.startsWith('/contact/success'),
+      filter: (page) => {
+        const pathname = new URL(page).pathname.replace(/\/$/, '');
+        return (
+          !pathname.startsWith('/contact/success') &&
+          pathname !== '/404' &&
+          pathname !== '/500'
+        );
+      },
     }),
   ],
   security: {
