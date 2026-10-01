@@ -82,13 +82,7 @@ const productionUrl = (origin, route) => {
   return url;
 };
 
-const routes = [
-  '/',
-  '/status/',
-  '/about/',
-  '/contact/',
-  '/contact/success/',
-];
+const routes = ['/', '/status/', '/about/', '/contact/', '/contact/success/'];
 for (const origin of origins) {
   const before = await waitForExpectedRevision(origin);
   for (const route of routes) {
