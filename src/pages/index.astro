@@ -290,7 +290,9 @@ const projects = [
           </p>
         </div>
         <div class="portfolio-grid">
-          {projects.map((project) => <ProjectCard {...project} />)}
+          {projects.map((project) => (
+            <ProjectCard {...project} />
+          ))}
         </div>
       </section>
 
