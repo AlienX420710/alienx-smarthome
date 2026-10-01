@@ -10,11 +10,13 @@ test.use({
   reducedMotion: 'reduce',
 });
 
-for (const [path, status, title] of [
-  ['/__alienx_missing_error_test__/', 404, 'Signal not found'],
-  ['/500/', 500, 'System fault'],
+for (const [path, code, directStatus, title] of [
+  ['/__alienx_missing_error_test__/', 404, 404, 'Signal not found'],
+  // Astro promotes 500.astro to HTTP 500 only when a runtime rendering error
+  // invokes the special error page. A direct /500/ visit is a normal preview.
+  ['/500/', 500, 200, 'System fault'],
 ]) {
-  test(`${status} error page is branded, private from indexing, and self-contained`, async ({
+  test(`${code} error page is branded, private from indexing, and self-contained`, async ({
     page,
   }) => {
     const remoteRequests = [];
@@ -32,9 +34,9 @@ for (const [path, status, title] of [
     });
 
     expect(response).not.toBeNull();
-    expect(response.status()).toBe(status);
+    expect(response.status()).toBe(directStatus);
     await expect(page.locator('main h1')).toHaveText(
-      new RegExp(`ERROR\\s*${status}`, 'i'),
+      new RegExp(`ERROR\\s*${code}`, 'i'),
     );
     await expect(page.locator('[data-error-title]')).toHaveText(title);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
