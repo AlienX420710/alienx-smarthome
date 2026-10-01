@@ -2,156 +2,298 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { SITE_TITLE } from '../consts';
+
+const description =
+  'AlienX designs and engineers websites that communicate clearly, work across devices, and connect the interface to the systems behind it.';
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead title={SITE_TITLE} description={description} />
   </head>
   <body>
     <Header />
     <main id="main-content" tabindex="-1">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero__copy">
-          <p class="eyebrow">ALIENX // TECHNOLOGY</p>
+          <p class="eyebrow">WEBSITES // BUILT AS SYSTEMS</p>
           <h1 id="hero-title">
-            Technology built to <span>do something.</span>
+            A website should make <span>choosing you</span> easier.
           </h1>
           <p class="hero__lede">
-            AlienX builds websites, applications, automation, and
-            infrastructure—using the web as both a tool and a medium for
-            experimentation.
+            AlienX designs and engineers websites that explain your value
+            quickly, feel intentional on every screen, and give customers a
+            clear next step.
           </p>
           <div class="hero__actions">
-            <a tabindex="0" class="button button--primary" href="/experience">
-              Explore AlienX
-            </a>
-            <a tabindex="0" class="button button--ghost" href="/contact">
+            <a class="button button--primary" href="/contact">
               Start a project
             </a>
+            <a class="button button--ghost" href="#why-alienx">
+              Why AlienX
+            </a>
           </div>
+          <ul class="hero__signals" aria-label="AlienX website priorities">
+            <li>Clear message</li>
+            <li>Responsive by default</li>
+            <li>Accessible interaction</li>
+            <li>Production-ready delivery</li>
+          </ul>
         </div>
-        <div
-          class="hero__visual"
-          aria-label="Interactive AlienX technology visualization"
-        >
+
+        <div class="hero__visual" aria-label="AlienX website delivery system">
           <div class="orb orb--one"></div>
           <div class="orb orb--two"></div>
           <div class="system-panel">
             <div class="panel-topline">
-              <span>ALIENX SYSTEM</span>
-              <span class="status">
-                <i></i> ONLINE
-              </span>
+              <span>ALIENX // WEBSITE SYSTEM</span>
+              <span class="status"><i></i> READY</span>
             </div>
+
             <div class="system-core" aria-hidden="true">
               <div class="core-ring core-ring--outer"></div>
               <div class="core-ring core-ring--inner"></div>
               <div class="core-center">X</div>
             </div>
-            <div class="system-label">WEB · AUTOMATION · INFRASTRUCTURE</div>
-            <div class="system-lines" aria-hidden="true">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
+
+            <dl class="system-readout">
+              <div>
+                <dt>MESSAGE</dt>
+                <dd>Clear</dd>
+              </div>
+              <div>
+                <dt>INTERFACE</dt>
+                <dd>Responsive</dd>
+              </div>
+              <div>
+                <dt>QUALITY</dt>
+                <dd>Verified</dd>
+              </div>
+              <div>
+                <dt>DELIVERY</dt>
+                <dd>Production</dd>
+              </div>
+            </dl>
+
+            <p class="system-label">STRATEGY · DESIGN · ENGINEERING · DELIVERY</p>
           </div>
         </div>
       </section>
 
       <section
-        id="capabilities"
-        class="capabilities"
-        aria-labelledby="capabilities-title"
+        id="why-alienx"
+        class="why"
+        aria-labelledby="why-alienx-title"
       >
         <div class="section-heading">
-          <p class="eyebrow">WHAT ALIENX BUILDS</p>
-          <h2 id="capabilities-title">
-            One technical foundation. A lot of directions.
+          <p class="eyebrow">WHY ALIENX</p>
+          <h2 id="why-alienx-title">
+            Design and engineering stay connected.
           </h2>
           <p>
-            The goal isn't to fit every project into one category. It's to
-            understand the problem, choose the right tools, and build the thing
-            properly.
+            A useful website is more than a polished first screen. The message,
+            interaction, performance, accessibility, forms, deployment, and
+            failure states all have to work together.
           </p>
         </div>
-        <div class="capability-grid">
-          <a
-            tabindex="0"
-            class="capability-card capability-card--large"
-            href="/technology"
-          >
-            <span class="capability-number">01</span>
-            <h3>Web development</h3>
+
+        <div class="reason-grid">
+          <article class="reason-card reason-card--lead">
+            <span class="reason-number">01</span>
+            <h3>The message comes first.</h3>
             <p>
-              Websites and applications with thoughtful frontend, backend,
-              performance, and accessibility engineering.
+              Visitors should understand what you do, why it matters, and what
+              to do next without hunting through the site.
             </p>
-            <span class="card-arrow" aria-hidden="true">
-              ↗
-            </span>
-          </a>
-          <a tabindex="0" class="capability-card" href="/technology">
-            <span class="capability-number">02</span>
-            <h3>Automation</h3>
+          </article>
+          <article class="reason-card">
+            <span class="reason-number">02</span>
+            <h3>Custom where it matters.</h3>
             <p>
-              Connect services, APIs, workflows, and systems so repetitive work
-              happens automatically.
+              Structure, responsive behavior, interaction, and content hierarchy
+              are built around the job the site needs to do—not around a generic
+              demo.
             </p>
-            <span class="card-arrow" aria-hidden="true">
-              ↗
-            </span>
-          </a>
-          <a tabindex="0" class="capability-card" href="/technology">
-            <span class="capability-number">03</span>
-            <h3>Infrastructure</h3>
+          </article>
+          <article class="reason-card">
+            <span class="reason-number">03</span>
+            <h3>Quality is part of the build.</h3>
             <p>
-              Servers, networking, deployment, self-hosting, and the systems
-              underneath the interface.
+              Semantic HTML, keyboard behavior, reduced motion, responsive
+              layouts, performance checks, and accessibility are engineering
+              constraints from the start.
             </p>
-            <span class="card-arrow" aria-hidden="true">
-              ↗
-            </span>
-          </a>
-          <a tabindex="0" class="capability-card" href="/technology">
-            <span class="capability-number">04</span>
-            <h3>Smart technology</h3>
+          </article>
+          <article class="reason-card">
+            <span class="reason-number">04</span>
+            <h3>The system behind the page matters.</h3>
             <p>
-              Home Assistant, connected devices, and automation remain part of
-              the story that started AlienX—but they're one part of a much
-              larger technical direction.
+              Forms, APIs, automation, deployment, security boundaries, and
+              observability are treated as part of the product instead of
+              invisible afterthoughts.
             </p>
-            <span class="card-arrow" aria-hidden="true">
-              ↗
-            </span>
-          </a>
+          </article>
         </div>
       </section>
 
       <section class="proof" aria-labelledby="proof-title">
-        <div>
-          <p class="eyebrow">THE APPROACH</p>
-          <h2 id="proof-title">The website is part of the proof.</h2>
-        </div>
-        <div class="proof-copy">
+        <div class="proof__heading">
+          <p class="eyebrow">THE SITE IS PART OF THE PROOF</p>
+          <h2 id="proof-title">You can inspect how AlienX builds.</h2>
           <p>
-            AlienX isn't presented as a static brochure. The site itself
-            demonstrates browser engineering, interaction design, performance,
-            accessibility, and the ability to turn technical ideas into
-            something people can experience.
+            The strongest ideas from the former Lab and Experience sections now
+            live here as engineering principles instead of separate destinations.
           </p>
-          <a tabindex="0" class="text-link" href="/experience">
-            See what the browser can do <span aria-hidden="true">→</span>
+        </div>
+
+        <div class="proof-grid">
+          <article>
+            <span>01 // BROWSER NATIVE</span>
+            <h3>Use the platform before adding complexity.</h3>
+            <p>
+              Native controls, semantic structure, modern CSS, container-aware
+              layouts, and progressive enhancement provide durable interaction
+              without unnecessary runtime weight.
+            </p>
+          </article>
+          <article>
+            <span>02 // REAL USERS</span>
+            <h3>Every interaction has to survive real input.</h3>
+            <p>
+              Pointer, touch, keyboard, focus, reduced motion, responsive
+              layouts, and theme behavior are treated as product behavior—not
+              optional polish.
+            </p>
+          </article>
+          <article>
+            <span>03 // PRODUCTION</span>
+            <h3>The launch path gets engineered too.</h3>
+            <p>
+              This site uses source control, automated quality gates, browser
+              testing, deployment checks, and runtime status signals so the
+              implementation is inspectable beyond the screenshot.
+            </p>
+          </article>
+        </div>
+
+        <div class="proof-links">
+          <a
+            class="text-link"
+            href="https://github.com/AlienX420710/alienx-smarthome"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Inspect the source <span aria-hidden="true">↗</span>
+          </a>
+          <a class="text-link" href="/status">
+            View system status <span aria-hidden="true">→</span>
           </a>
         </div>
       </section>
+
+      <section class="outcomes" aria-labelledby="outcomes-title">
+        <div class="section-heading">
+          <p class="eyebrow">WHAT GETS BUILT</p>
+          <h2 id="outcomes-title">
+            Start with the website. Grow into the system.
+          </h2>
+          <p>
+            The public site can be the front door, while the same engineering
+            foundation supports forms, integrations, applications, automation,
+            and infrastructure when the project needs more.
+          </p>
+        </div>
+
+        <div class="outcome-grid">
+          <article>
+            <span>WEBSITE</span>
+            <h3>A clear public front door.</h3>
+            <p>
+              Responsive pages, information architecture, interaction, content
+              presentation, SEO fundamentals, accessibility, and a clear path
+              to contact.
+            </p>
+          </article>
+          <article>
+            <span>INTERACTION</span>
+            <h3>More than a static brochure.</h3>
+            <p>
+              Purposeful browser interaction can explain a product, demonstrate
+              capability, guide a visitor, or make a brand memorable without
+              turning usability into a gimmick.
+            </p>
+          </article>
+          <article>
+            <span>INTEGRATION</span>
+            <h3>The page can connect to real work.</h3>
+            <p>
+              Forms, APIs, webhooks, data flows, email, and business systems can
+              turn a website action into a reliable workflow.
+            </p>
+          </article>
+          <article>
+            <span>OPERATIONS</span>
+            <h3>Delivery does not end at publish.</h3>
+            <p>
+              Deployment, DNS, CI/CD, observability, performance, and security
+              boundaries determine whether the finished site keeps behaving
+              like the one that was approved.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="process" aria-labelledby="process-title">
+        <div class="section-heading">
+          <p class="eyebrow">HOW THE WORK MOVES</p>
+          <h2 id="process-title">From “we need a website” to a working system.</h2>
+        </div>
+        <ol class="process-grid">
+          <li>
+            <span>01</span>
+            <h3>Understand</h3>
+            <p>
+              Define the audience, the decision they need to make, the content
+              required to support it, and the technical constraints.
+            </p>
+          </li>
+          <li>
+            <span>02</span>
+            <h3>Structure</h3>
+            <p>
+              Build the information hierarchy and interaction model before
+              decoration starts hiding weak decisions.
+            </p>
+          </li>
+          <li>
+            <span>03</span>
+            <h3>Engineer</h3>
+            <p>
+              Implement the interface and the systems behind it with responsive,
+              accessible, maintainable primitives.
+            </p>
+          </li>
+          <li>
+            <span>04</span>
+            <h3>Verify</h3>
+            <p>
+              Test the browser behavior, performance, accessibility, deployment,
+              and production path before calling the job finished.
+            </p>
+          </li>
+        </ol>
+      </section>
+
       <section class="cta" aria-labelledby="cta-title">
-        <p class="eyebrow">NEXT</p>
-        <h2 id="cta-title">Have something worth building?</h2>
-        <p>Bring the idea. We'll figure out the technology.</p>
-        <a tabindex="0" class="button button--primary" href="/contact">
+        <p class="eyebrow">YOUR WEBSITE SHOULD DO A JOB</p>
+        <h2 id="cta-title">Give customers fewer reasons to leave confused.</h2>
+        <p>
+          If the current site is not explaining the business, earning trust, or
+          making the next step obvious, that is the problem to solve first.
+        </p>
+        <a class="button button--primary" href="/contact">
           Start a project
         </a>
       </section>
@@ -163,65 +305,89 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 <style>
   :global(body) {
     --home-accent: var(--brand-green);
-    background: #05070c;
-    color: #eef2ff;
+    --home-bg: #05070c;
+    --home-surface: #0d111b;
+    --home-surface-soft: #101624;
+    --home-border: #192033;
+    --home-heading: #f6f8ff;
+    --home-text: #eef2ff;
+    --home-muted: #a0abc0;
+    --home-soft: #8794aa;
+    background:
+      radial-gradient(
+        circle at 82% 8%,
+        rgba(57, 255, 90, 0.08),
+        transparent 28rem
+      ),
+      var(--home-bg);
+    color: var(--home-text);
   }
+
   main {
     width: min(1180px, calc(100% - 40px));
     max-width: none;
     padding: 0 0 6rem;
   }
+
+  .eyebrow {
+    margin: 0 0 1.15rem;
+    color: var(--home-soft);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: var(--home-heading);
+  }
+
   .hero {
-    min-height: min(760px, calc(100vh - 80px));
+    min-height: min(780px, calc(100vh - 80px));
     display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-columns: 1.08fr 0.92fr;
     gap: 4rem;
     align-items: center;
     padding: 5rem 0 6rem;
   }
+
   .hero__copy {
     position: relative;
     z-index: 2;
   }
-  .eyebrow {
-    margin: 0 0 1.25rem;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.22em;
-    color: #a7b2c7;
-  }
-  h1,
-  h2,
-  h3 {
-    color: #f6f8ff;
-  }
+
   h1 {
-    font-size: clamp(3.4rem, 7vw, 6.8rem);
-    letter-spacing: -0.055em;
-    line-height: 0.92;
     max-width: 850px;
     margin-bottom: 2rem;
+    font-size: clamp(3.6rem, 7.4vw, 7rem);
+    letter-spacing: -0.058em;
+    line-height: 0.91;
   }
+
   h1 span {
     color: var(--home-accent);
   }
+
   .hero__lede {
-    max-width: 650px;
-    font-size: clamp(1.05rem, 2vw, 1.35rem);
-    line-height: 1.55;
-    color: #b0b9cc;
+    max-width: 680px;
+    color: var(--home-muted);
+    font-size: clamp(1.08rem, 2vw, 1.36rem);
+    line-height: 1.6;
   }
+
   .hero__actions {
     display: flex;
-    gap: 0.8rem;
     flex-wrap: wrap;
+    gap: 0.8rem;
     margin-top: 2rem;
   }
+
   .button {
+    min-height: 48px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
     padding: 0 1.25rem;
     border-radius: 999px;
     font-size: 0.9rem;
@@ -232,132 +398,176 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
       background 180ms ease,
       border-color 180ms ease;
   }
+
   .button:hover {
     transform: translateY(-2px);
   }
+
   .button--primary {
-    color: #fff;
     background: #16803b;
+    color: #fff;
   }
+
   .button--ghost {
-    color: #eef2ff;
     border: 1px solid #293149;
     background: #0d111b;
+    color: #eef2ff;
   }
+
+  .hero__signals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .hero__signals li {
+    padding: 0.42rem 0.65rem;
+    border: 1px solid var(--home-border);
+    border-radius: 999px;
+    color: var(--home-soft);
+    font-size: 0.72rem;
+  }
+
   .hero__visual {
     position: relative;
-    min-height: 520px;
+    min-height: 540px;
     display: grid;
     place-items: center;
   }
+
   .system-panel {
     position: relative;
     z-index: 2;
-    width: min(460px, 100%);
+    width: min(470px, 100%);
     padding: 1.5rem;
     border: 1px solid rgba(57, 255, 90, 0.22);
     border-radius: 28px;
     background: linear-gradient(
       145deg,
-      rgba(24, 38, 29, 0.9),
-      rgba(9, 12, 21, 0.86)
+      rgba(24, 38, 29, 0.92),
+      rgba(9, 12, 21, 0.9)
     );
     box-shadow:
       0 30px 100px rgba(0, 0, 0, 0.5),
       inset 0 1px rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(20px);
   }
+
   .panel-topline {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+    color: #8f9ab2;
     font-size: 0.63rem;
     letter-spacing: 0.12em;
-    color: #8f9ab2;
   }
+
   .status {
     color: #b7c0d4;
   }
+
   .status i {
-    display: inline-block;
     width: 6px;
     height: 6px;
+    display: inline-block;
     margin-right: 5px;
     border-radius: 50%;
     background: var(--home-accent);
     box-shadow: 0 0 12px var(--home-accent);
   }
+
   .system-core {
     position: relative;
-    width: 230px;
-    height: 230px;
-    margin: 4rem auto 2.5rem;
+    width: 220px;
+    height: 220px;
     display: grid;
     place-items: center;
+    margin: 3.2rem auto 2.25rem;
   }
+
   .core-ring {
     position: absolute;
     inset: 0;
     border: 1px solid rgba(57, 255, 90, 0.38);
     border-radius: 50%;
   }
+
   .core-ring--outer {
-    animation: spin 18s linear infinite;
     border-top-color: rgba(57, 255, 90, 0.85);
     border-right-color: transparent;
+    animation: spin 18s linear infinite;
   }
+
   .core-ring--inner {
     inset: 28px;
-    animation: spin-reverse 12s linear infinite;
     border-bottom-color: rgba(154, 255, 170, 0.85);
     border-left-color: transparent;
+    animation: spin-reverse 12s linear infinite;
   }
+
   .core-center {
-    width: 92px;
-    height: 92px;
+    width: 88px;
+    height: 88px;
     display: grid;
     place-items: center;
     border: 1px solid rgba(57, 255, 90, 0.55);
     border-radius: 50%;
-    color: #effff2;
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: -0.08em;
     background: radial-gradient(
       circle,
       rgba(57, 255, 90, 0.22),
       rgba(5, 7, 12, 0.8)
     );
     box-shadow: 0 0 60px rgba(57, 255, 90, 0.2);
+    color: #effff2;
+    font-size: 2rem;
+    font-weight: 700;
   }
+
+  .system-readout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+    margin: 0;
+  }
+
+  .system-readout div {
+    padding: 0.8rem;
+    border: 1px solid rgba(57, 255, 90, 0.12);
+    border-radius: 12px;
+    background: rgba(4, 8, 13, 0.38);
+  }
+
+  .system-readout dt {
+    color: #6f7b90;
+    font-size: 0.58rem;
+    letter-spacing: 0.13em;
+  }
+
+  .system-readout dd {
+    margin: 0.25rem 0 0;
+    color: #dce5f5;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
   .system-label {
+    margin: 1.35rem 0 0;
     text-align: center;
-    color: #a7b2c7;
-    font-size: 0.65rem;
-    letter-spacing: 0.16em;
+    color: #7f8ba0;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
   }
-  .system-lines {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 2rem;
-  }
-  .system-lines span {
-    display: block;
-    height: 3px;
-    flex: 1;
-    border-radius: 999px;
-    background: rgba(57, 255, 90, 0.2);
-  }
-  .system-lines span:first-child {
-    flex: 1.7;
-    background: rgba(57, 255, 90, 0.65);
-  }
+
   .orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(2px);
     opacity: 0.7;
+    filter: blur(2px);
   }
+
   .orb--one {
     width: 280px;
     height: 280px;
@@ -370,6 +580,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
     );
     animation: drift 9s ease-in-out infinite;
   }
+
   .orb--two {
     width: 240px;
     height: 240px;
@@ -382,129 +593,190 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
     );
     animation: drift 11s ease-in-out infinite reverse;
   }
-  .capabilities {
-    padding: 5rem 0;
-    border-top: 1px solid #151b29;
+
+  .why,
+  .proof,
+  .outcomes,
+  .process {
+    padding: 6.5rem 0;
+    border-top: 1px solid var(--home-border);
   }
+
   .section-heading {
-    max-width: 760px;
+    max-width: 790px;
   }
+
   .section-heading h2,
-  .proof h2,
+  .proof__heading h2,
   .cta h2 {
-    font-size: clamp(2.4rem, 5vw, 4.5rem);
-    letter-spacing: -0.045em;
-    line-height: 1;
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
+    font-size: clamp(2.55rem, 5vw, 4.8rem);
+    letter-spacing: -0.048em;
+    line-height: 0.98;
   }
+
   .section-heading > p:last-child,
+  .proof__heading > p:last-child,
   .cta > p {
-    color: #9ca7bc;
-    max-width: 620px;
+    max-width: 720px;
+    color: var(--home-muted);
+    font-size: 1.04rem;
+    line-height: 1.7;
   }
-  .capability-grid {
+
+  .reason-grid,
+  .proof-grid,
+  .outcome-grid,
+  .process-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
     gap: 1rem;
     margin-top: 3rem;
   }
-  .capability-card {
-    container-type: inline-size;
-    position: relative;
-    min-height: 250px;
-    padding: 2rem;
-    border: 1px solid #192033;
+
+  .reason-grid,
+  .outcome-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .reason-card,
+  .proof-grid article,
+  .outcome-grid article,
+  .process-grid li {
+    border: 1px solid var(--home-border);
     border-radius: 24px;
     background: linear-gradient(
       145deg,
       rgba(18, 23, 36, 0.9),
       rgba(8, 11, 18, 0.9)
     );
-    text-decoration: none;
-    transition:
-      transform 200ms ease,
-      border-color 200ms ease,
-      background 200ms ease;
   }
-  .capability-card:hover {
-    transform: translateY(-4px);
-    border-color: #2d7040;
-    background: linear-gradient(
-      145deg,
-      rgba(23, 36, 28, 0.95),
-      rgba(8, 11, 18, 0.95)
-    );
+
+  .reason-card {
+    min-height: 260px;
+    padding: 2rem;
   }
-  .capability-card--large {
-    min-height: 310px;
+
+  .reason-card--lead {
+    background:
+      radial-gradient(
+        circle at 10% 0,
+        rgba(57, 255, 90, 0.1),
+        transparent 55%
+      ),
+      linear-gradient(145deg, rgba(20, 31, 25, 0.96), rgba(8, 11, 18, 0.94));
   }
-  .capability-number {
-    color: #8e9ab0;
-    font-size: 0.72rem;
+
+  .reason-number {
+    color: var(--home-soft);
+    font-size: 0.7rem;
     letter-spacing: 0.15em;
   }
-  .capability-card h3 {
-    margin-top: 3.5rem;
-    font-size: 1.5rem;
+
+  .reason-card h3,
+  .proof-grid h3,
+  .outcome-grid h3,
+  .process-grid h3 {
+    margin: 3rem 0 0.75rem;
+    font-size: 1.45rem;
+    letter-spacing: -0.02em;
   }
-  .capability-card p {
-    max-width: 600px;
-    color: #a0abc0;
-    font-size: 0.95rem;
-    line-height: 1.6;
+
+  .reason-card p,
+  .proof-grid p,
+  .outcome-grid p,
+  .process-grid p {
+    margin: 0;
+    color: var(--home-muted);
+    line-height: 1.65;
   }
-  .card-arrow {
-    position: absolute;
-    right: 2rem;
-    bottom: 1.8rem;
-    color: var(--home-accent);
-    font-size: 1.25rem;
-  }
-  @container (max-width: 360px) {
-    .capability-card {
-      min-height: 230px;
-      padding: 1.5rem;
-    }
-    .capability-card h3 {
-      margin-top: 2.75rem;
-    }
-    .card-arrow {
-      right: 1.5rem;
-      bottom: 1.4rem;
-    }
-  }
+
   .proof {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 0.8fr 1.2fr;
     gap: 4rem;
-    padding: 7rem 0;
-    border-top: 1px solid #151b29;
   }
-  .proof-copy {
-    align-self: end;
+
+  .proof__heading {
+    align-self: start;
+    position: sticky;
+    top: 2rem;
   }
-  .proof-copy p {
-    max-width: 620px;
-    color: #a0abc0;
-    font-size: 1.1rem;
-    line-height: 1.7;
+
+  .proof-grid {
+    grid-template-columns: 1fr;
+    margin-top: 0;
   }
+
+  .proof-grid article {
+    padding: 2rem;
+  }
+
+  .proof-grid article > span,
+  .outcome-grid article > span {
+    color: var(--home-accent);
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+  }
+
+  .proof-grid h3 {
+    margin-top: 1.5rem;
+  }
+
+  .proof-links {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
   .text-link {
     display: inline-flex;
-    gap: 0.55rem;
-    margin-top: 1.5rem;
-    color: #eef2ff;
+    gap: 0.5rem;
+    color: var(--home-text);
     font-weight: 700;
     text-decoration: none;
   }
+
   .text-link:hover {
     color: var(--home-accent);
   }
+
+  .outcome-grid article {
+    min-height: 250px;
+    padding: 2rem;
+  }
+
+  .outcome-grid h3 {
+    margin-top: 2.25rem;
+  }
+
+  .process-grid {
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0;
+    list-style: none;
+  }
+
+  .process-grid li {
+    min-height: 260px;
+    padding: 1.5rem;
+  }
+
+  .process-grid li > span {
+    color: var(--home-accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .process-grid h3 {
+    margin-top: 3rem;
+  }
+
   .cta {
-    margin: 1rem 0 0;
+    margin-top: 1rem;
     padding: clamp(3rem, 7vw, 7rem);
-    text-align: center;
-    border: 1px solid #192033;
+    border: 1px solid var(--home-border);
     border-radius: 32px;
     background:
       radial-gradient(
@@ -513,20 +785,25 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
         transparent 55%
       ),
       #090d16;
+    text-align: center;
   }
+
   .cta > p {
     margin: 0 auto 2rem;
   }
+
   @keyframes spin {
     to {
       transform: rotate(360deg);
     }
   }
+
   @keyframes spin-reverse {
     to {
       transform: rotate(-360deg);
     }
   }
+
   @keyframes drift {
     0%,
     100% {
@@ -536,73 +813,121 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
       transform: translate3d(18px, -14px, 0);
     }
   }
-  @media (prefers-reduced-motion: reduce) {
-    .core-ring,
-    .orb {
-      animation: none;
-    }
-    .button,
-    .capability-card {
-      transition: none;
-    }
-  }
-  @media (max-width: 800px) {
+
+  @media (max-width: 900px) {
     main {
-      width: min(100% - 28px, 680px);
+      width: min(100% - 28px, 760px);
     }
+
     .hero {
       grid-template-columns: 1fr;
       gap: 2rem;
       padding-top: 3rem;
     }
+
     .hero__visual {
-      min-height: 400px;
+      min-height: 440px;
     }
+
     .proof {
       grid-template-columns: 1fr;
+      gap: 2.5rem;
     }
-    .proof {
-      gap: 2rem;
+
+    .proof__heading {
+      position: static;
+    }
+
+    .proof-links {
+      grid-column: 1;
+    }
+
+    .process-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
-  @media (max-width: 520px) {
+
+  @media (max-width: 620px) {
+    h1 {
+      font-size: clamp(3.15rem, 15vw, 5.2rem);
+    }
+
+    .hero__visual {
+      min-height: 390px;
+    }
+
     .system-core {
-      width: 190px;
-      height: 190px;
+      width: 180px;
+      height: 180px;
+      margin-block: 2.4rem 1.8rem;
     }
+
     .core-center {
-      width: 78px;
-      height: 78px;
+      width: 72px;
+      height: 72px;
     }
+
     .panel-topline {
       flex-direction: column;
     }
-    .capability-card--large {
-      min-height: 250px;
+
+    .reason-grid,
+    .outcome-grid,
+    .process-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .reason-card,
+    .outcome-grid article,
+    .process-grid li {
+      min-height: auto;
+    }
+
+    .why,
+    .proof,
+    .outcomes,
+    .process {
+      padding: 5rem 0;
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .core-ring,
+    .orb {
+      animation: none;
+    }
+
+    .button {
+      transition: none;
+    }
+  }
+
   @media (prefers-color-scheme: light) {
     :global(html:where(:not([data-alienx-theme]))) :global(body) {
       --home-accent: var(--brand-green-dark);
-      background: #fff;
-      color: #222939;
+      --home-bg: #ffffff;
+      --home-surface: #f7f9fb;
+      --home-surface-soft: #eef3f0;
+      --home-border: #dfe5ee;
+      --home-heading: #0f1219;
+      --home-text: #202838;
+      --home-muted: #60739f;
+      --home-soft: #64738d;
+      background:
+        radial-gradient(
+          circle at 82% 8%,
+          rgba(22, 163, 74, 0.08),
+          transparent 28rem
+        ),
+        var(--home-bg);
     }
-    :global(html:where(:not([data-alienx-theme]))) .eyebrow {
-      color: #52627a;
-    }
-    :global(html:where(:not([data-alienx-theme]))) h1,
-    :global(html:where(:not([data-alienx-theme]))) h2,
-    :global(html:where(:not([data-alienx-theme]))) h3 {
-      color: #0f1219;
-    }
-    :global(html:where(:not([data-alienx-theme]))) .hero__lede {
-      color: #60739f;
-    }
+
     :global(html:where(:not([data-alienx-theme]))) .button--ghost {
-      color: #1d2433;
       border-color: #c8d0df;
       background: #f4f6fa;
+      color: #1d2433;
     }
+
     :global(html:where(:not([data-alienx-theme]))) .system-panel {
       border-color: rgba(22, 163, 74, 0.24);
       background: linear-gradient(
@@ -614,53 +939,59 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
         0 30px 100px rgba(53, 94, 63, 0.14),
         inset 0 1px rgba(255, 255, 255, 0.9);
     }
+
     :global(html:where(:not([data-alienx-theme]))) .panel-topline,
-    :global(html:where(:not([data-alienx-theme]))) .system-label {
+    :global(html:where(:not([data-alienx-theme]))) .system-label,
+    :global(html:where(:not([data-alienx-theme]))) .hero__signals li {
       color: #687797;
     }
+
     :global(html:where(:not([data-alienx-theme]))) .status {
       color: #52617d;
     }
+
     :global(html:where(:not([data-alienx-theme]))) .core-center {
-      color: #17451f;
       background: radial-gradient(
         circle,
         rgba(22, 163, 74, 0.16),
         rgba(255, 255, 255, 0.82)
       );
       box-shadow: 0 0 60px rgba(22, 163, 74, 0.14);
+      color: #17451f;
     }
-    :global(html:where(:not([data-alienx-theme])))
-      .section-heading
-      > p:last-child,
-    :global(html:where(:not([data-alienx-theme]))) .cta > p,
-    :global(html:where(:not([data-alienx-theme]))) .proof-copy p {
-      color: #60739f;
+
+    :global(html:where(:not([data-alienx-theme]))) .system-readout div {
+      border-color: rgba(22, 163, 74, 0.13);
+      background: rgba(255, 255, 255, 0.65);
     }
-    :global(html:where(:not([data-alienx-theme]))) .capabilities,
-    :global(html:where(:not([data-alienx-theme]))) .proof {
-      border-top-color: #e1e6ef;
-    }
-    :global(html:where(:not([data-alienx-theme]))) .capability-card {
-      border-color: #dfe5ee;
-      background: linear-gradient(145deg, #f8fafc, #f1f4f8);
-      box-shadow: 0 12px 35px rgba(42, 55, 80, 0.06);
-    }
-    :global(html:where(:not([data-alienx-theme]))) .capability-card:hover {
-      border-color: #75b887;
-      background: linear-gradient(145deg, #f3faf5, #eef5f0);
-    }
-    :global(html:where(:not([data-alienx-theme]))) .capability-number {
+
+    :global(html:where(:not([data-alienx-theme]))) .system-readout dt {
       color: #687797;
     }
-    :global(html:where(:not([data-alienx-theme]))) .capability-card p {
-      color: #60739f;
+
+    :global(html:where(:not([data-alienx-theme]))) .system-readout dd {
+      color: #213126;
     }
-    :global(html:where(:not([data-alienx-theme]))) .text-link {
-      color: #1d2433;
+
+    :global(html:where(:not([data-alienx-theme]))) .reason-card,
+    :global(html:where(:not([data-alienx-theme]))) .proof-grid article,
+    :global(html:where(:not([data-alienx-theme]))) .outcome-grid article,
+    :global(html:where(:not([data-alienx-theme]))) .process-grid li {
+      background: linear-gradient(145deg, #f8fafc, #f1f4f8);
+      box-shadow: 0 12px 35px rgba(42, 55, 80, 0.05);
     }
+
+    :global(html:where(:not([data-alienx-theme]))) .reason-card--lead {
+      background:
+        radial-gradient(
+          circle at 10% 0,
+          rgba(22, 163, 74, 0.08),
+          transparent 55%
+        ),
+        linear-gradient(145deg, #f5faf6, #eef5f0);
+    }
+
     :global(html:where(:not([data-alienx-theme]))) .cta {
-      border-color: #dfe5ee;
       background:
         radial-gradient(
           circle at 50% 0%,
@@ -670,27 +1001,32 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
         #f7f9fb;
     }
   }
+
   :global(html[data-alienx-theme='light']) :global(body) {
     --home-accent: var(--brand-green-dark);
-    background: #fff;
-    color: #222939;
+    --home-bg: #ffffff;
+    --home-surface: #f7f9fb;
+    --home-surface-soft: #eef3f0;
+    --home-border: #dfe5ee;
+    --home-heading: #0f1219;
+    --home-text: #202838;
+    --home-muted: #60739f;
+    --home-soft: #64738d;
+    background:
+      radial-gradient(
+        circle at 82% 8%,
+        rgba(22, 163, 74, 0.08),
+        transparent 28rem
+      ),
+      var(--home-bg);
   }
-  :global(html[data-alienx-theme='light']) .eyebrow {
-    color: #52627a;
-  }
-  :global(html[data-alienx-theme='light']) h1,
-  :global(html[data-alienx-theme='light']) h2,
-  :global(html[data-alienx-theme='light']) h3 {
-    color: #0f1219;
-  }
-  :global(html[data-alienx-theme='light']) .hero__lede {
-    color: #60739f;
-  }
+
   :global(html[data-alienx-theme='light']) .button--ghost {
-    color: #1d2433;
     border-color: #c8d0df;
     background: #f4f6fa;
+    color: #1d2433;
   }
+
   :global(html[data-alienx-theme='light']) .system-panel {
     border-color: rgba(22, 163, 74, 0.24);
     background: linear-gradient(
@@ -702,51 +1038,59 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
       0 30px 100px rgba(53, 94, 63, 0.14),
       inset 0 1px rgba(255, 255, 255, 0.9);
   }
+
   :global(html[data-alienx-theme='light']) .panel-topline,
-  :global(html[data-alienx-theme='light']) .system-label {
+  :global(html[data-alienx-theme='light']) .system-label,
+  :global(html[data-alienx-theme='light']) .hero__signals li {
     color: #687797;
   }
+
   :global(html[data-alienx-theme='light']) .status {
     color: #52617d;
   }
+
   :global(html[data-alienx-theme='light']) .core-center {
-    color: #17451f;
     background: radial-gradient(
       circle,
       rgba(22, 163, 74, 0.16),
       rgba(255, 255, 255, 0.82)
     );
     box-shadow: 0 0 60px rgba(22, 163, 74, 0.14);
+    color: #17451f;
   }
-  :global(html[data-alienx-theme='light']) .section-heading > p:last-child,
-  :global(html[data-alienx-theme='light']) .cta > p,
-  :global(html[data-alienx-theme='light']) .proof-copy p {
-    color: #60739f;
+
+  :global(html[data-alienx-theme='light']) .system-readout div {
+    border-color: rgba(22, 163, 74, 0.13);
+    background: rgba(255, 255, 255, 0.65);
   }
-  :global(html[data-alienx-theme='light']) .capabilities,
-  :global(html[data-alienx-theme='light']) .proof {
-    border-top-color: #e1e6ef;
-  }
-  :global(html[data-alienx-theme='light']) .capability-card {
-    border-color: #dfe5ee;
-    background: linear-gradient(145deg, #f8fafc, #f1f4f8);
-    box-shadow: 0 12px 35px rgba(42, 55, 80, 0.06);
-  }
-  :global(html[data-alienx-theme='light']) .capability-card:hover {
-    border-color: #75b887;
-    background: linear-gradient(145deg, #f3faf5, #eef5f0);
-  }
-  :global(html[data-alienx-theme='light']) .capability-number {
+
+  :global(html[data-alienx-theme='light']) .system-readout dt {
     color: #687797;
   }
-  :global(html[data-alienx-theme='light']) .capability-card p {
-    color: #60739f;
+
+  :global(html[data-alienx-theme='light']) .system-readout dd {
+    color: #213126;
   }
-  :global(html[data-alienx-theme='light']) .text-link {
-    color: #1d2433;
+
+  :global(html[data-alienx-theme='light']) .reason-card,
+  :global(html[data-alienx-theme='light']) .proof-grid article,
+  :global(html[data-alienx-theme='light']) .outcome-grid article,
+  :global(html[data-alienx-theme='light']) .process-grid li {
+    background: linear-gradient(145deg, #f8fafc, #f1f4f8);
+    box-shadow: 0 12px 35px rgba(42, 55, 80, 0.05);
   }
+
+  :global(html[data-alienx-theme='light']) .reason-card--lead {
+    background:
+      radial-gradient(
+        circle at 10% 0,
+        rgba(22, 163, 74, 0.08),
+        transparent 55%
+      ),
+      linear-gradient(145deg, #f5faf6, #eef5f0);
+  }
+
   :global(html[data-alienx-theme='light']) .cta {
-    border-color: #dfe5ee;
     background:
       radial-gradient(
         circle at 50% 0%,
@@ -754,10 +1098,5 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
         transparent 55%
       ),
       #f7f9fb;
-  }
-  :global(html:where([data-alienx-theme='light'])) :global(body) {
-    --home-accent: var(--brand-green-dark);
-    background: #fff;
-    color: #222939;
   }
 </style>
