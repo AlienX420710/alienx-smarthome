@@ -1,0 +1,268 @@
+---
+import BaseHead from './BaseHead.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+
+interface Props {
+  code: number;
+  title: string;
+  message: string;
+}
+
+const { code, title, message } = Astro.props;
+const pageTitle = `${code} // ${title} // AlienX SmartHome`;
+---
+
+<!doctype html>
+<html lang="en" data-alienx-page="error">
+  <head>
+    <BaseHead
+      title={pageTitle}
+      description={message}
+      robots="noindex, nofollow, noarchive"
+      canonical={false}
+    />
+  </head>
+  <body>
+    <Header />
+    <main id="main-content" tabindex="-1" class="error-shell">
+      <section class="terminal" aria-labelledby="error-title">
+        <div class="terminal__scanlines" aria-hidden="true"></div>
+        <div class="terminal__topline" aria-hidden="true">
+          <span>ALIENX://HTTP/{code}</span>
+          <span>CONNECTION TERMINATED</span>
+        </div>
+
+        <p class="terminal__prompt" aria-hidden="true">&gt; SYSTEM RESPONSE</p>
+        <h1 id="error-title">
+          <span>ERROR</span>
+          <strong>{code}</strong>
+        </h1>
+        <p class="terminal__title" data-error-title>{title}</p>
+        <p class="terminal__message">{message}</p>
+
+        <p class="terminal__status">
+          <span class="terminal__status-light" aria-hidden="true"></span>
+          REQUEST ENDED SAFELY
+        </p>
+
+        <nav class="terminal__actions" aria-label="Error recovery">
+          <a tabindex="0" href="/">[ RETURN HOME ]</a>
+          <a tabindex="0" href="/contact">[ CONTACT ALIENX ]</a>
+        </nav>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .error-shell {
+    width: min(1120px, calc(100% - 2rem));
+    min-height: min(720px, calc(100vh - 12rem));
+    display: grid;
+    place-items: center;
+    padding: clamp(1rem, 4vw, 4rem) 0;
+  }
+
+  .terminal {
+    isolation: isolate;
+    position: relative;
+    width: 100%;
+    min-height: 560px;
+    overflow: hidden;
+    padding: clamp(1.4rem, 5vw, 4rem);
+    border: 1px solid rgba(57, 255, 90, 0.35);
+    border-radius: 28px;
+    background:
+      radial-gradient(
+        circle at 50% 18%,
+        rgba(17, 88, 30, 0.78),
+        transparent 48%
+      ),
+      linear-gradient(145deg, #041607, #010502 72%);
+    box-shadow:
+      0 30px 100px rgba(0, 0, 0, 0.42),
+      inset 0 1px rgba(255, 255, 255, 0.04),
+      0 0 60px rgba(57, 255, 90, 0.08);
+    color: rgba(169, 255, 178, 0.92);
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+      monospace;
+    text-shadow:
+      0 0 11px rgba(51, 255, 51, 0.48),
+      0 0 2px rgba(255, 255, 255, 0.65);
+  }
+
+  .terminal::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      180deg,
+      transparent 0,
+      rgba(0, 0, 0, 0.26) 2px,
+      transparent 4px
+    );
+  }
+
+  .terminal__scanlines {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(57, 255, 90, 0.08) 2%,
+      rgba(57, 255, 90, 0.34) 3%,
+      rgba(57, 255, 90, 0.08) 4%,
+      transparent 9%
+    );
+    background-repeat: no-repeat;
+    animation: scan 7.5s linear infinite;
+  }
+
+  .terminal__topline {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(128, 255, 128, 0.18);
+    color: rgba(169, 255, 178, 0.68);
+    font-size: clamp(0.68rem, 1.5vw, 0.82rem);
+    letter-spacing: 0.12em;
+  }
+
+  .terminal__prompt {
+    margin: clamp(3rem, 8vw, 5rem) 0 0.8rem;
+    color: rgba(169, 255, 178, 0.68);
+    font-size: clamp(0.78rem, 1.5vw, 0.95rem);
+    letter-spacing: 0.12em;
+  }
+
+  h1 {
+    display: flex;
+    align-items: baseline;
+    gap: clamp(0.7rem, 2vw, 1.4rem);
+    margin: 0;
+    color: rgba(169, 255, 178, 0.92);
+    font-family: inherit;
+    font-size: clamp(2.5rem, 8vw, 6.6rem);
+    letter-spacing: -0.06em;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  h1 strong {
+    color: #fff;
+    font-weight: 700;
+    text-shadow:
+      0 0 18px rgba(255, 255, 255, 0.22),
+      0 0 35px rgba(57, 255, 90, 0.18);
+  }
+
+  .terminal__title {
+    margin: 1.3rem 0 0;
+    color: #fff;
+    font-size: clamp(1.15rem, 3vw, 1.8rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .terminal__message {
+    max-width: 760px;
+    margin: 0.85rem 0 0;
+    color: rgba(169, 255, 178, 0.86);
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .terminal__message::before {
+    content: '> ';
+    color: #fff;
+  }
+
+  .terminal__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 2rem;
+    color: rgba(169, 255, 178, 0.68);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+  }
+
+  .terminal__status-light {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--brand-green);
+    box-shadow: 0 0 14px rgba(57, 255, 90, 0.85);
+  }
+
+  .terminal__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin-top: 2.25rem;
+  }
+
+  .terminal__actions a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    color: #fff;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+
+  .terminal__actions a:hover,
+  .terminal__actions a:focus-visible {
+    color: var(--brand-green);
+  }
+
+  @keyframes scan {
+    0% {
+      background-position: 0 -100vh;
+    }
+    35%,
+    100% {
+      background-position: 0 100vh;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .error-shell {
+      width: min(100% - 1rem, 1120px);
+      min-height: auto;
+      padding: 0.5rem 0 1.5rem;
+    }
+
+    .terminal {
+      min-height: 500px;
+      border-radius: 20px;
+    }
+
+    .terminal__topline {
+      flex-direction: column;
+    }
+
+    h1 {
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .terminal__scanlines {
+      animation: none;
+      background-position: 0 50%;
+    }
+  }
+</style>
