@@ -221,7 +221,7 @@ test('theme commands persist across client navigation and reload', async ({
   );
   // Shared theme state cannot prove navigation finished. Wait for the actual
   // destination before its transition closes the old page's command dialog.
-  await expect(page).toHaveURL(new RegExp(`${base}/?const { test, expect } = require('@playwright/test');
+  await expect(page).toHaveURL(new RegExp(`^${base}/?const { test, expect } = require('@playwright/test');
 const base = 'http://127.0.0.1:4321';
 test.use({ screenshot: 'only-on-failure', trace: 'retain-on-failure' });
 const status = {
@@ -442,8 +442,6 @@ test('theme commands persist across client navigation and reload', async ({
     'data-alienx-theme',
     'dark',
   );
-  // Shared theme state cannot prove navigation finished. Wait for the actual
-  // destination before its transition closes the old page's command dialog.
 ));
   await expect(page.locator('main h1')).toContainText(
     'A website should make choosing you easier.',
