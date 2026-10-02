@@ -49,7 +49,7 @@ provider acceptance/delivery, inbox receipt and human/device acceptance differ.
 | AX-006 | Owner/account evidence open                                | Monitored failure-notification receipt and authorized compatible rollback/recovery evidence.                                                               |
 | AX-007 | Verified at e69c280                                        | Required sanitized reachable-history scan; heuristic, not exhaustive certification.                                                                        |
 | AX-008 | Physical-device evidence open                              | Actual screen reader, keyboard, touch, zoom and theme outcomes; resolve discovered defects.                                                                |
-| AX-009 | Partial cleanup plus route consolidation deployed          | PR #77 retired standalone Work/Experience/Lab/Technology routes and owned assets; unreviewed measured dead-CSS/style scope remains open.                    |
+| AX-009 | Partial cleanup plus route consolidation deployed          | PR #77 retired standalone Work/Experience/Lab/Technology routes and owned assets; unreviewed measured dead-CSS/style scope remains open.                   |
 | AX-010 | Owner editorial acceptance open; last                      | Factual consolidated homepage/About copy is deployed; no invented clients, results, incorporation or biography.                                            |
 | AX-011 | Enforcement verified September 26                          | Ruleset 23059349 requires PR/five Actions checks, strict freshness, no bypass. Desired review-thread setting not confirmed live.                           |
 | AX-012 | Verified at e3b8e89                                        | Security/quality policies, all-severity audit, workflow/history gates; operational exceptions remain.                                                      |
@@ -57,7 +57,7 @@ provider acceptance/delivery, inbox receipt and human/device acceptance differ.
 | AX-014 | Repository tranche verified in PR #47                      | Headers/static checks, sanitized analysis errors/warnings and offline deployment rehearsal; account scope remains open.                                    |
 | AX-015 | Verified at f67c91c                                        | Mandatory edge limiter, strict honeypot/Turnstile success and safe logs; not live email proof.                                                             |
 | AX-016 | Protocol rejection verified September 29; cipher work open | Both hosts reject TLS 1.0/1.1 and accept 1.2/1.3. Reassess/disposition CBC/RSA heuristics; static-homepage BREACH heuristic is not confirmed exploitation. |
-| AX-017 | Transport repaired; live acceptance open                   | PR #78 repaired pre-provider failure; PR #79 simplified transport on main. Natural heartbeat/full-form delivery/receipt remain unproved.                    |
+| AX-017 | Transport repaired; live acceptance open                   | PR #78 repaired pre-provider failure; PR #79 simplified transport on main. Natural heartbeat/full-form delivery/receipt remain unproved.                   |
 
 Branch cleanup is unverified. Re-enumerate remotes, confirm each temporary head is
 merged before deleting it, and retain active PRs and alienx-ci-approved-main /
