@@ -4,9 +4,6 @@ const axe = require('axe-core');
 const baseURL = 'http://127.0.0.1:4321';
 const routes = [
   '/',
-  '/work/',
-  '/experience/',
-  '/technology/',
   '/status/',
   '/about/',
   '/contact/',

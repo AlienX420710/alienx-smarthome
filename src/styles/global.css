@@ -30,9 +30,6 @@ html[data-alienx-page='home'] {
 html[data-alienx-page='work'] {
   --page-gradient-x: 28%;
 }
-html[data-alienx-page='experience'] {
-  --page-gradient-x: 50%;
-}
 html[data-alienx-page='technology'] {
   --page-gradient-x: 72%;
 }
@@ -254,7 +251,6 @@ hr {
 }
 html[data-alienx-page='home'] body,
 html[data-alienx-page='work'] body,
-html[data-alienx-page='experience'] body,
 html[data-alienx-page='technology'] body,
 html[data-alienx-page='about'] body {
   background:
@@ -272,9 +268,6 @@ html[data-alienx-page='home'] h3,
 html[data-alienx-page='work'] h1,
 html[data-alienx-page='work'] h2,
 html[data-alienx-page='work'] h3,
-html[data-alienx-page='experience'] h1,
-html[data-alienx-page='experience'] h2,
-html[data-alienx-page='experience'] h3,
 html[data-alienx-page='technology'] h1,
 html[data-alienx-page='technology'] h2,
 html[data-alienx-page='technology'] h3,
@@ -286,14 +279,12 @@ html[data-alienx-page='about'] h3 {
 }
 html[data-alienx-page='home'] .eyebrow,
 html[data-alienx-page='work'] .eyebrow,
-html[data-alienx-page='experience'] .eyebrow,
 html[data-alienx-page='technology'] .eyebrow,
 html[data-alienx-page='about'] .eyebrow {
   color: #6f7b91;
 }
 html[data-alienx-page='home'] .hero__lede,
 html[data-alienx-page='work'] .lede,
-html[data-alienx-page='experience'] .lede,
 html[data-alienx-page='technology'] .lede,
 html[data-alienx-page='about'] .lede {
   color: #9ca8bd;
@@ -316,7 +307,6 @@ html[data-alienx-page='about'] article:hover {
 @media (prefers-color-scheme: light) {
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] body,
   html:where(:not([data-alienx-theme]))[data-alienx-page='work'] body,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='experience'] body,
   html:where(:not([data-alienx-theme]))[data-alienx-page='technology'] body,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] body {
     background:
@@ -334,9 +324,6 @@ html[data-alienx-page='about'] article:hover {
   html:where(:not([data-alienx-theme]))[data-alienx-page='work'] h1,
   html:where(:not([data-alienx-theme]))[data-alienx-page='work'] h2,
   html:where(:not([data-alienx-theme]))[data-alienx-page='work'] h3,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='experience'] h1,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='experience'] h2,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='experience'] h3,
   html:where(:not([data-alienx-theme]))[data-alienx-page='technology'] h1,
   html:where(:not([data-alienx-theme]))[data-alienx-page='technology'] h2,
   html:where(:not([data-alienx-theme]))[data-alienx-page='technology'] h3,
@@ -347,14 +334,12 @@ html[data-alienx-page='about'] article:hover {
   }
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] .eyebrow,
   html:where(:not([data-alienx-theme]))[data-alienx-page='work'] .eyebrow,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='experience'] .eyebrow,
   html:where(:not([data-alienx-theme]))[data-alienx-page='technology'] .eyebrow,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] .eyebrow {
     color: #71809a;
   }
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] .hero__lede,
   html:where(:not([data-alienx-theme]))[data-alienx-page='work'] .lede,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='experience'] .lede,
   html:where(:not([data-alienx-theme]))[data-alienx-page='technology'] .lede,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] .lede {
     color: #61718c;
@@ -371,9 +356,6 @@ html[data-alienx-theme='light'][data-alienx-page='home'] h3,
 html[data-alienx-theme='light'][data-alienx-page='work'] h1,
 html[data-alienx-theme='light'][data-alienx-page='work'] h2,
 html[data-alienx-theme='light'][data-alienx-page='work'] h3,
-html[data-alienx-theme='light'][data-alienx-page='experience'] h1,
-html[data-alienx-theme='light'][data-alienx-page='experience'] h2,
-html[data-alienx-theme='light'][data-alienx-page='experience'] h3,
 html[data-alienx-theme='light'][data-alienx-page='technology'] h1,
 html[data-alienx-theme='light'][data-alienx-page='technology'] h2,
 html[data-alienx-theme='light'][data-alienx-page='technology'] h3,
@@ -384,14 +366,12 @@ html[data-alienx-theme='light'][data-alienx-page='about'] h3 {
 }
 html[data-alienx-theme='light'][data-alienx-page='home'] .eyebrow,
 html[data-alienx-theme='light'][data-alienx-page='work'] .eyebrow,
-html[data-alienx-theme='light'][data-alienx-page='experience'] .eyebrow,
 html[data-alienx-theme='light'][data-alienx-page='technology'] .eyebrow,
 html[data-alienx-theme='light'][data-alienx-page='about'] .eyebrow {
   color: #71809a;
 }
 html[data-alienx-theme='light'][data-alienx-page='home'] .hero__lede,
 html[data-alienx-theme='light'][data-alienx-page='work'] .lede,
-html[data-alienx-theme='light'][data-alienx-page='experience'] .lede,
 html[data-alienx-theme='light'][data-alienx-page='technology'] .lede,
 html[data-alienx-theme='light'][data-alienx-page='about'] .lede {
   color: #61718c;
@@ -403,7 +383,6 @@ html[data-alienx-theme='light'][data-alienx-page='about'] article {
 }
 html:where([data-alienx-theme='light'])[data-alienx-page='home'] body,
 html:where([data-alienx-theme='light'])[data-alienx-page='work'] body,
-html:where([data-alienx-theme='light'])[data-alienx-page='experience'] body,
 html:where([data-alienx-theme='light'])[data-alienx-page='technology'] body,
 html:where([data-alienx-theme='light'])[data-alienx-page='about'] body {
   background:
@@ -417,7 +396,6 @@ html:where([data-alienx-theme='light'])[data-alienx-page='about'] body {
 }
 html[data-alienx-theme='dark'][data-alienx-page='home'] body,
 html[data-alienx-theme='dark'][data-alienx-page='work'] body,
-html[data-alienx-theme='dark'][data-alienx-page='experience'] body,
 html[data-alienx-theme='dark'][data-alienx-page='technology'] body,
 html[data-alienx-theme='dark'][data-alienx-page='about'] body {
   background:
@@ -435,9 +413,6 @@ html[data-alienx-theme='dark'][data-alienx-page='home'] h3,
 html[data-alienx-theme='dark'][data-alienx-page='work'] h1,
 html[data-alienx-theme='dark'][data-alienx-page='work'] h2,
 html[data-alienx-theme='dark'][data-alienx-page='work'] h3,
-html[data-alienx-theme='dark'][data-alienx-page='experience'] h1,
-html[data-alienx-theme='dark'][data-alienx-page='experience'] h2,
-html[data-alienx-theme='dark'][data-alienx-page='experience'] h3,
 html[data-alienx-theme='dark'][data-alienx-page='technology'] h1,
 html[data-alienx-theme='dark'][data-alienx-page='technology'] h2,
 html[data-alienx-theme='dark'][data-alienx-page='technology'] h3,
@@ -448,7 +423,6 @@ html[data-alienx-theme='dark'][data-alienx-page='about'] h3 {
 }
 html[data-alienx-theme='light'][data-alienx-page='home'] body,
 html[data-alienx-theme='light'][data-alienx-page='work'] body,
-html[data-alienx-theme='light'][data-alienx-page='experience'] body,
 html[data-alienx-theme='light'][data-alienx-page='technology'] body,
 html[data-alienx-theme='light'][data-alienx-page='about'] body {
   background:
@@ -462,7 +436,6 @@ html[data-alienx-theme='light'][data-alienx-page='about'] body {
 }
 html[data-alienx-theme='light'][data-alienx-page='home'] h1,
 html[data-alienx-theme='light'][data-alienx-page='work'] h1,
-html[data-alienx-theme='light'][data-alienx-page='experience'] h1,
 html[data-alienx-theme='light'][data-alienx-page='technology'] h1,
 html[data-alienx-theme='light'][data-alienx-page='about'] h1 {
   color: #0d1420;
