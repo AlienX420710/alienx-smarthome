@@ -97,20 +97,14 @@ test('deployment ref state stays fail-closed while allowing corrected reruns', a
   );
   assert.equal(
     classifyReleaseRefs(
-      refs(
-        [approvalRefs.approved, sha],
-        [approvalRefs.rejected, sha],
-      ),
+      refs([approvalRefs.approved, sha], [approvalRefs.rejected, sha]),
       sha,
     ),
     'rejected',
   );
   assert.equal(
     classifyReleaseRefs(
-      refs(
-        [approvalRefs.approved, other],
-        [approvalRefs.rejected, other],
-      ),
+      refs([approvalRefs.approved, other], [approvalRefs.rejected, other]),
       sha,
     ),
     'pending',
