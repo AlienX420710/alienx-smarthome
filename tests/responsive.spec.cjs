@@ -45,6 +45,22 @@ for (const [width, height] of viewports)
           },
         }),
       );
+      await page.route(
+        'https://challenges.cloudflare.com/turnstile/v0/api.js**',
+        (route) =>
+          route.fulfill({
+            status: 200,
+            contentType: 'application/javascript',
+            body: `
+              window.turnstile = {
+                render() { return 'layout-fixture'; },
+                remove() {},
+                reset() {},
+              };
+              window.alienxTurnstileLoad?.();
+            `,
+          }),
+      );
       page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
       page.on('console', (m) => {
         if (m.type() === 'error') {

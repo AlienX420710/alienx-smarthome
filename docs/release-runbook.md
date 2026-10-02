@@ -209,9 +209,9 @@ case pass/fail/not-tested and attach sanitized evidence; not-tested is not pass.
 3. On narrow screens, ensure the current navigation link is visible after direct
    load, page navigation, reload and Back/Forward. Scrolling the navigation rail
    must not unexpectedly move document focus or trap page scrolling.
-4. Exercise command palette, theme/motion controls, technology controls and
-   Experience exhibits without a pointer. Repeat navigation to detect stale
-   handlers or lost focus. Keep experimental `/lab` results separately labeled.
+4. Exercise command palette, theme/motion controls, homepage section navigation
+   and form controls without a pointer. Repeat navigation to detect stale handlers
+   or lost focus.
 5. On Contact, verify labels, grouped choices, errors, consent and status
    announcements. Submit only an empty form for required-field validation;
    do not send a populated real inquiry without authorization. Leave the hidden

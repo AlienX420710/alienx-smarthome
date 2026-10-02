@@ -68,3 +68,25 @@ owner rather than adding another audit/closeout/onboarding file. Detailed histor
 stays in PRs and immutable Git links. Preserve unresolved IDs, failures and decisions.
 Inventories are optional uncommitted research, not startup context. Do not repeat
 volatile status/test counts in README/primers. Keep reporting policies and licenses.
+
+## Documentation closeout — mandatory
+
+Documentation review is part of completion, not optional cleanup. After implementation
+and again after production verification, re-read the task diff plus AGENTS.md,
+docs/project-state.md, docs/ai-context.md and docs/release-runbook.md. A repository
+task is not complete until durable documentation matches the resulting reality or an
+explicit blocker/follow-up is recorded.
+
+- Update docs/ai-context.md when routes, components, ownership, request contracts,
+  runtime behavior or other durable architecture changes.
+- Update docs/release-runbook.md when release, rollback, monitoring, incident,
+  provider or operator procedures change.
+- Update docs/project-state.md when durable findings, unresolved acceptance,
+  production evidence, deployed revisions or known failures change.
+- Update README.md only when its maintained public/repository summary actually changes.
+- Search durable docs and customer-facing follow-up pages for removed or renamed
+  routes, assets, controls and contracts whenever deleting or consolidating them.
+- Evidence created only after merge requires a post-merge documentation update; do
+  not call the task done while project-state still names an older release as current.
+- Every PR/task handoff must say either `Docs: updated <owners>` or
+  `Docs: no durable update required — <reason>`. A blank or generic N/A is not enough.
