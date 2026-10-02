@@ -83,8 +83,8 @@ where helpful, and cleanup on Astro swaps remain the default.
 Derive timers from timestamps; use requestAnimationFrame for animation and pause
 when hidden/disconnected. Keep navigation usable without enhancements and preserve
 ordinary touch scrolling. Status has bounded requests and hidden-page pauses;
-palette focus restores correctly; contact retries preserve request identity without
-reusing verification tokens.
+visible and physical palette Escape controls dismiss and restore focus correctly;
+contact retries preserve request identity without reusing verification tokens.
 
 The image script decodes raster assets before build. Preserve originals and only
 generate derivatives that serve real requests. Do not lazy-load LCP/hero imagery

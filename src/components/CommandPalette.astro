@@ -9,7 +9,14 @@
   <section class="palette__panel">
     <div class="palette__top">
       <span id="palette-title">ALIENX COMMAND</span>
-      <kbd>ESC</kbd>
+      <button
+        type="button"
+        class="palette__escape"
+        data-palette-close
+        aria-label="Close command palette"
+      >
+        ESC
+      </button>
     </div>
     <input
       id="palette-input"
@@ -77,6 +84,10 @@
     document.querySelector<HTMLDialogElement>('#alienx-palette');
   const input = () =>
     document.querySelector<HTMLInputElement>('#palette-input');
+  const closeControl = () =>
+    document.querySelector<HTMLButtonElement>(
+      '#alienx-palette button[data-palette-close]',
+    );
   const results = () => document.querySelector<HTMLElement>('#palette-results');
   const links = () =>
     results()
@@ -440,7 +451,7 @@
   const trap = (e: KeyboardEvent) => {
     const r = root();
     if (r?.hidden || e.key !== 'Tab') return;
-    const f = [input(), ...links()].filter(
+    const f = [closeControl(), input(), ...links()].filter(
       (x): x is HTMLInputElement | HTMLButtonElement => x !== null,
     );
     if (!f.length) {
@@ -599,6 +610,7 @@
     color: #8e9ab0;
   }
   .palette kbd,
+  .palette__escape,
   .palette__overlay-head button {
     padding: 0.2rem 0.4rem;
     border: 1px solid #303b53;
@@ -606,6 +618,13 @@
     background: transparent;
     color: inherit;
     font: inherit;
+  }
+  .palette__escape {
+    cursor: pointer;
+  }
+  .palette__escape:focus-visible {
+    outline: 2px solid #39ff5a;
+    outline-offset: 2px;
   }
   .palette input {
     box-sizing: border-box;
