@@ -69,13 +69,9 @@ test('command palette Escape control closes by touch', async ({ browser }) => {
   });
   const page = await context.newPage();
   await page.goto(base);
-  await page
-    .getByRole('button', { name: 'Open command palette' })
-    .tap();
+  await page.getByRole('button', { name: 'Open command palette' }).tap();
   await expect(page.locator('#alienx-palette')).toBeVisible();
-  await page
-    .getByRole('button', { name: 'Close command palette' })
-    .tap();
+  await page.getByRole('button', { name: 'Close command palette' }).tap();
   await expect(page.locator('#alienx-palette')).toBeHidden();
   await context.close();
 });
