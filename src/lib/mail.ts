@@ -36,7 +36,12 @@ export async function sendProductionMail(
     to: ['alienx@alienxsmarthome.com'],
   });
 
-  let response = await requestMail(RESEND_ENDPOINT, token, idempotencyKey, body);
+  let response = await requestMail(
+    RESEND_ENDPOINT,
+    token,
+    idempotencyKey,
+    body,
+  );
   if (!SAFE_REDIRECTS.has(response.status)) return response;
 
   const location = response.headers.get('location');
@@ -49,7 +54,12 @@ export async function sendProductionMail(
   }
 
   await response.body?.cancel();
-  response = await requestMail(redirect.toString(), token, idempotencyKey, body);
+  response = await requestMail(
+    redirect.toString(),
+    token,
+    idempotencyKey,
+    body,
+  );
 
   // One same-origin canonicalization hop is enough. Never chase a redirect loop
   // or forward the bearer credential to another origin.
