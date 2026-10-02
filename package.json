@@ -16,7 +16,7 @@
     "prettier": "3.9.6",
     "prettier-plugin-astro": "1.0.1",
     "selenium-webdriver": "4.49.0",
-    "sharp": "0.35.4",
+    "sharp": "0.35.5",
     "wrangler": "4.137.0"
   },
   "engines": {
@@ -43,7 +43,7 @@
     "format:check": "prettier --check src public scripts tests .github *.md docs/*.md *.config.*"
   },
   "overrides": {
-    "sharp": "0.35.4",
+    "sharp": "0.35.5",
     "undici": "7.29.1"
   },
   "type": "module"
