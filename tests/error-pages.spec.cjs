@@ -66,7 +66,6 @@ for (const [path, code, directStatus, title] of [
   });
 }
 
-
 const background = (page) =>
   page.evaluate(() => {
     const style = getComputedStyle(document.body);
