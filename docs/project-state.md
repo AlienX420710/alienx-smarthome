@@ -46,7 +46,7 @@ provider acceptance/delivery, inbox receipt and human/device acceptance differ.
 | AX-003 | Verified; PR #53 repair deployed                           | Three fixed Lighthouse samples, median performance, minimum other scores; no retry-until-green.                                                                         |
 | AX-004 | Verified at e69c280                                        | Three obsolete manual CSP hashes removed after emitted-byte mapping.                                                                                                    |
 | AX-005 | Positive promotion verified; negative drill open           | Real Cloudflare rejection evidence still needed; offline mocks are not account execution.                                                                               |
-| AX-006 | Owner/account evidence open                                | Monitored failure-notification receipt and authorized compatible rollback/recovery evidence.                                                                            |
+| AX-006 | Owner/account evidence open                                | Mail receipt is now proven; failure-notification receipt and authorized compatible rollback/recovery evidence remain open.                                               |
 | AX-007 | Verified at e69c280                                        | Required sanitized reachable-history scan; heuristic, not exhaustive certification.                                                                                     |
 | AX-008 | Physical-device evidence open                              | Actual screen reader, keyboard, touch, zoom and theme outcomes; resolve discovered defects.                                                                             |
 | AX-009 | Partial cleanup plus route consolidation deployed          | PR #77 retired standalone Work/Experience/Lab/Technology routes and owned assets; unreviewed measured dead-CSS/style scope remains open.                                |
@@ -57,7 +57,7 @@ provider acceptance/delivery, inbox receipt and human/device acceptance differ.
 | AX-014 | Repository tranche verified in PR #47                      | Headers/static checks, sanitized analysis errors/warnings and offline deployment rehearsal; account scope remains open.                                                 |
 | AX-015 | Verified at f67c91c                                        | Mandatory edge limiter, strict honeypot/Turnstile success and safe logs; not live email proof.                                                                          |
 | AX-016 | Protocol rejection verified September 29; cipher work open | Both hosts reject TLS 1.0/1.1 and accept 1.2/1.3. Reassess/disposition CBC/RSA heuristics; static-homepage BREACH heuristic is not confirmed exploitation.              |
-| AX-017 | Transport deployed; live acceptance open                   | PR #78 repaired pre-provider failure; PR #79 simplified transport and PR #81 verified that code deployed. Natural heartbeat/full-form delivery/receipt remain unproved. |
+| AX-017 | Mail path proven; failure alert open                       | Natural heartbeat and authorized full-form provider delivery plus recipient receipt are proven; independent failure-alert receipt remains open.                          |
 
 Branch cleanup is unverified. Re-enumerate remotes, confirm each temporary head is
 merged before deleting it, and retain active PRs and alienx-ci-approved-main /
@@ -71,7 +71,7 @@ following acceptance before calling beta closed; no generic rewrite is required.
 
 | Priority / finding             | Next action and completion evidence                                                                                                                                                                                                            | Responsible role                                                       |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| P1 — AX-017, AX-006            | Correlate a natural scheduled heartbeat with provider delivery and recipient confirmation; verify independent failure-alert receipt. Separately prove the authorized full-form path without bypassing Turnstile or the prior tool rejection.   | Operator/owner with provider access; engineering investigates failures |
+| P1 — AX-017, AX-006            | Verify an independent safe failure condition produces the expected ChatGPT/operator alert; heartbeat and authorized full-form delivery/receipt are now proven.                                                                              | Operator/owner with provider access; engineering investigates failures |
 | P1 — AX-005, AX-006            | Exercise fail-closed promotion and compatible recovery on an isolated Worker first; retain deployment versions, SHA/bindings/secret compatibility and notification evidence. A documented runbook or mocked rehearsal alone does not close it. | Cloudflare operator + engineering                                      |
 | P1 — AX-008                    | Execute the existing real-device/VoiceOver/keyboard/touch/zoom protocol and fix actual failures.                                                                                                                                               | Human tester + engineering                                             |
 | P1 — AX-016, AX-012            | Reassess TLS cipher findings and privately verify MFA/recovery, credential scope, WAF and private alerts. Record fixes or justified acceptance; scanner heuristics are not confirmed exploits.                                                 | Account owner/operator                                                 |
@@ -116,10 +116,15 @@ negative deployment or rollback was certified. The prepared manual inquiry was
 rejected by automatic approval review and was not sent. Cleanup does not override
 that rejection. September 29 provider inspection found no natural heartbeat. October 1 provider
 inspection confirmed the sending domain is verified and historical inquiry delivery
-through September 26, but found no genuine post-repair production form send during
-the verification window. The existing 05:30 health/full-form and 06:00 heartbeat-watch
-monitors were observed enabled; configured prompts are not successful execution.
-Do not duplicate them.
+through September 26. On October 2, the natural 05:00 America/Chicago heartbeat
+produced a provider event at 10:01:06.243Z marked delivered, and the site owner
+confirmed inbox receipt. An authorized production inquiry produced a provider event
+at 03:48:49.978Z marked delivered, and the site owner confirmed receipt of that same
+customer-facing message. The heartbeat was not replaced by a manual send. The
+remaining AX-017 evidence gap is an independently observed safe failure condition
+producing the expected ChatGPT/operator alert. The existing 05:30 health/full-form
+and 06:00 heartbeat-watch monitors were observed enabled; configured prompts are not
+successful execution. Do not duplicate them.
 
 ## Next work and coordination
 
