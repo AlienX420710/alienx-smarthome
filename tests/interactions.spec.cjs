@@ -45,7 +45,8 @@ test('command button opens palette and clear keeps it usable', async ({
   page,
 }) => {
   await page.goto(base);
-  await page.getByRole('button', { name: 'Open command palette' }).click();
+  const trigger = page.getByRole('button', { name: 'Open command palette' });
+  await trigger.click();
   const input = page.getByRole('searchbox', { name: 'Search AlienX commands' });
   await expect(input).toBeFocused();
   await input.fill('/clear');
@@ -53,10 +54,30 @@ test('command button opens palette and clear keeps it usable', async ({
   await expect(input).toBeVisible();
   await expect(input).toBeFocused();
   await expect(input).toHaveValue('');
-  await input.press('Escape');
-  await expect(
-    page.getByRole('button', { name: 'Open command palette' }),
-  ).toBeFocused();
+  const closeControl = page.getByRole('button', {
+    name: 'Close command palette',
+  });
+  await closeControl.click();
+  await expect(page.locator('#alienx-palette')).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
+
+test('command palette Escape control closes by touch', async ({ browser }) => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+  });
+  const page = await context.newPage();
+  await page.goto(base);
+  await page
+    .getByRole('button', { name: 'Open command palette' })
+    .tap();
+  await expect(page.locator('#alienx-palette')).toBeVisible();
+  await page
+    .getByRole('button', { name: 'Close command palette' })
+    .tap();
+  await expect(page.locator('#alienx-palette')).toBeHidden();
+  await context.close();
 });
 
 test('Status refresh repeats and stops after navigation', async ({ page }) => {
