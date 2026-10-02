@@ -42,10 +42,10 @@ test('system choice clears explicit theme before a navigation swap', () => {
   const next = { documentElement: { dataset: { alienxTheme: 'light' } } };
   handlers['astro:before-swap']({
     newDocument: next,
-    to: new URL('https://example.test/experience/'),
+    to: new URL('https://example.test/technology/'),
   });
   assert.equal(next.documentElement.dataset.alienxTheme, undefined);
-  assert.equal(next.documentElement.dataset.alienxPage, 'experience');
+  assert.equal(next.documentElement.dataset.alienxPage, 'technology');
 });
 test('explicit theme survives navigation even when preference storage is blocked', () => {
   const { window, handlers } = boot({}, true);

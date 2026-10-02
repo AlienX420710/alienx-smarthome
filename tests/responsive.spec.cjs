@@ -3,9 +3,6 @@ const { test, expect } = require('@playwright/test');
 const baseURL = 'http://127.0.0.1:4321';
 const routes = [
   '/',
-  '/work/',
-  '/experience/',
-  '/technology/',
   '/status/',
   '/about/',
   '/contact/',
@@ -230,14 +227,6 @@ for (const [width, height] of viewports)
         result.heading.opacity,
         `Main heading is transparent on ${route}`,
       ).toBeGreaterThan(0);
-
-      if (route === '/technology/' && width <= 600) {
-        expect(result.heading.text).toContain('Built from the web outward.');
-        expect(
-          result.heading.top,
-          `Technology hero heading is pushed too far below the header: ${JSON.stringify(result.heading)}`,
-        ).toBeLessThanOrEqual(result.header.height + 120);
-      }
 
       expect(errors, `Runtime errors at ${width}x${height}`).toEqual([]);
     });

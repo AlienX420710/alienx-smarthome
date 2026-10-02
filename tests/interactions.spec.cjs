@@ -15,36 +15,6 @@ const status = {
   ),
 };
 
-test('Technology layers work after leaving and returning', async ({ page }) => {
-  await page.goto(base + '/technology/');
-  for (let visit = 0; visit < 2; visit++) {
-    const application = page.locator('[data-layer=application]');
-    await application.click();
-    await expect(application).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('[data-layer=interface]')).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    );
-    await expect(page.locator('#layer-detail')).toContainText(
-      'Request handling',
-    );
-    await page
-      .getByRole('navigation', { name: 'Primary navigation' })
-      .getByRole('link', { name: 'About Me', exact: true })
-      .click();
-    await expect(page).toHaveURL(/\/about\/?$/);
-    await page
-      .getByRole('navigation', { name: 'Primary navigation' })
-      .getByRole('link', { name: 'Technology', exact: true })
-      .first()
-      .click();
-    await expect(page.locator('[data-layer=interface]')).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
-  }
-});
-
 test('skip link and command dialogs retain keyboard focus', async ({
   page,
 }) => {
@@ -69,46 +39,6 @@ test('skip link and command dialogs retain keyboard focus', async ({
   await page.keyboard.press('Escape');
   await expect(page.locator('#alienx-command-overlay')).toBeHidden();
   await expect(page.locator('#main-content')).toBeFocused();
-});
-
-test('museum renders seven exhibits, supports keyboard, and respects motion off', async ({
-  page,
-}) => {
-  await page.addInitScript(() => localStorage.setItem('alienx-motion', 'off'));
-  await page.goto(base + '/experience/');
-  await expect(page.locator('#museum article')).toHaveCount(7);
-  const light = page.locator('[data-light-stage]');
-  await expect(light).toHaveAttribute('tabindex', '0');
-  await light.focus();
-  await page.keyboard.press('ArrowRight');
-  await page.keyboard.press('Space');
-  const spatial = page.locator('[data-spatial-stage]');
-  await spatial.focus();
-  await page.keyboard.press('ArrowRight');
-  await expect(page.locator('[data-space-readout]')).toHaveText('X 3° / Y 0°');
-  await page.keyboard.press('Escape');
-  await expect(page.locator('[data-space-readout]')).toHaveText('X 0° / Y 0°');
-  const before = await page
-    .locator('[data-physics-canvas]')
-    .evaluate((canvas) => canvas.toDataURL());
-  await page.waitForTimeout(150);
-  expect(
-    await page
-      .locator('[data-physics-canvas]')
-      .evaluate((canvas) => canvas.toDataURL()),
-  ).toBe(before);
-  await page
-    .getByRole('navigation', { name: 'Footer navigation' })
-    .getByRole('link', { name: 'About Me', exact: true })
-    .click();
-  await page
-    .getByRole('navigation', { name: 'Footer navigation' })
-    .getByRole('link', { name: 'Experience', exact: true })
-    .click();
-  await expect(page.locator('#museum article')).toHaveCount(7);
-  await expect(page.locator('[data-capabilities] .capability-row')).toHaveCount(
-    6,
-  );
 });
 
 test('command button opens palette and clear keeps it usable', async ({
@@ -283,7 +213,7 @@ test('theme commands persist across client navigation and reload', async ({
   );
   await page
     .getByRole('navigation', { name: 'Primary navigation' })
-    .getByRole('link', { name: 'Technology', exact: true })
+    .getByRole('link', { name: 'Home', exact: true })
     .click();
   await expect(page.locator('html')).toHaveAttribute(
     'data-alienx-theme',
@@ -291,9 +221,9 @@ test('theme commands persist across client navigation and reload', async ({
   );
   // Shared theme state cannot prove navigation finished. Wait for the actual
   // destination before its transition closes the old page's command dialog.
-  await expect(page).toHaveURL(/\/technology\/?$/);
-  await expect(page.locator('main h1')).toHaveText(
-    'Built from the web outward.',
+  await expect(page).toHaveURL(base + '/');
+  await expect(page.locator('main h1')).toContainText(
+    'A website should make choosing you easier.',
   );
   for (const next of ['system', 'light']) {
     await page.getByRole('button', { name: 'Open command palette' }).click();

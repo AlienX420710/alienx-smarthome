@@ -2,10 +2,6 @@ const { test, expect } = require('@playwright/test');
 const base = 'http://127.0.0.1:4321';
 const routes = [
   '/',
-  '/work/',
-  '/experience/',
-  '/lab/',
-  '/technology/',
   '/status/',
   '/about/',
   '/contact/',
@@ -132,41 +128,6 @@ test('Tab-focused command activates itself with Enter and Space; dialogs contain
   await expect(trigger).toBeFocused();
 });
 
-test('Technology buttons can be reached and operated without a pointer', async ({
-  page,
-}) => {
-  await page.goto(base + '/technology/');
-  for (const button of await page.locator('[data-layer]').all()) {
-    await tabTo(page, button);
-    await visibleFocus(button);
-    await page.keyboard.press('Space');
-    await expect(button).toHaveAttribute('aria-pressed', 'true');
-    await page.keyboard.press('Enter');
-    await expect(button).toHaveAttribute('aria-pressed', 'true');
-  }
-});
-
-test('Lab radio group, range and disclosures work with keyboard controls', async ({
-  page,
-}) => {
-  await page.goto(base + '/lab/');
-  await tabTo(page, page.locator('#mode-web'));
-  await page.keyboard.press('ArrowRight');
-  await expect(page.locator('#mode-auto')).toBeChecked();
-  const range = page.locator('#signal-range');
-  await tabTo(page, range);
-  await page.keyboard.press('ArrowRight');
-  await expect(range).toHaveValue('73');
-  for (const summary of await page.locator('summary').all()) {
-    await tabTo(page, summary);
-    await visibleFocus(summary);
-    await page.keyboard.press('Enter');
-    await expect(summary.locator('..')).toHaveAttribute('open', '');
-    await page.keyboard.press('Space');
-    await expect(summary.locator('..')).not.toHaveAttribute('open', '');
-  }
-});
-
 test('Contact fields, consent, validation and retry are keyboard operable', async ({
   page,
 }) => {
@@ -234,45 +195,11 @@ test('Contact fields, consent, validation and retry are keyboard operable', asyn
   await expect.poll(() => submissions).toBe(2);
 });
 
-test('Experience stages and reset controls are reachable and operable by keyboard', async ({
-  page,
-}) => {
-  await page.addInitScript(() => localStorage.setItem('alienx-motion', 'off'));
-  await page.goto(base + '/experience/');
-  const physics = page.locator('[data-physics-stage]');
-  await tabTo(page, physics);
-  await visibleFocus(physics);
-  const canvas = page.locator('[data-physics-canvas]');
-  const before = await canvas.evaluate((el) => el.toDataURL());
-  await page.keyboard.press('ArrowRight');
-  expect(await canvas.evaluate((el) => el.toDataURL())).not.toBe(before);
-  await page.keyboard.press('Enter');
-  await page.keyboard.press('Space');
-  const reset = page.locator('[data-physics-reset]');
-  await tabTo(page, reset);
-  await page.keyboard.press('Enter');
-  const light = page.locator('[data-light-stage]');
-  await tabTo(page, light);
-  await visibleFocus(light);
-  await page.keyboard.press('Space');
-  const spatial = page.locator('[data-spatial-stage]');
-  await tabTo(page, spatial);
-  await visibleFocus(spatial);
-  await page.keyboard.press('ArrowRight');
-  await expect(page.locator('[data-space-readout]')).toHaveText('X 3° / Y 0°');
-  await page.keyboard.press('Escape');
-  await expect(page.locator('[data-space-readout]')).toHaveText('X 0° / Y 0°');
-});
-
 test('Keyboard navigation preserves real page URLs through header and footer', async ({
   page,
 }) => {
   await page.goto(base);
   for (const [name, path] of [
-    ['Work', '/work'],
-    ['Experience', '/experience'],
-    ['Lab', '/lab'],
-    ['Technology', '/technology'],
     ['Status', '/status'],
     ['Start a project', '/contact'],
     ['About Me', '/about'],
