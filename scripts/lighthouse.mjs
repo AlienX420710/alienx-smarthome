@@ -1,4 +1,4 @@
-import { readFileSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { readFileSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import {
   runLighthouseCommand,
   isRetryableTraceError,
@@ -17,6 +17,11 @@ const thresholds = accessibilityOnly
       ]),
     );
 mkdirSync('.lighthouseci', { recursive: true });
+// Separate invocations as well as attempts, so no stale report can be consumed
+// and a later run cannot overwrite earlier diagnostic evidence.
+const outputDirectory = mkdtempSync(
+  `.lighthouseci/${accessibilityOnly ? 'accessibility' : 'quality'}-`,
+);
 const runs = accessibilityOnly ? 1 : config.ci.collect.numberOfRuns;
 if (!Number.isInteger(runs) || runs < 1)
   throw new Error('Invalid sample count');
@@ -27,12 +32,10 @@ for (const [index, url] of config.ci.collect.url.entries()) {
   const errors = [];
   // Always collect the fixed set, never stop at the first passing score.
   for (let sample = 1; sample <= runs; sample++) {
-    const output = `.lighthouseci/route-${index}-sample-${sample}.json`;
     const maxAttempts = 2;
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      const output = `${outputDirectory}/route-${index}-sample-${sample}-attempt-${attempt}.json`;
       try {
-        // Never let an earlier attempt's report stand in for this invocation.
-        rmSync(output, { force: true });
         runLighthouseCommand([
           'node_modules/lighthouse/cli/index.js',
           url,
@@ -60,6 +63,11 @@ for (const [index, url] of config.ci.collect.url.entries()) {
         break;
       } catch (error) {
         const message = String(error?.message ?? error);
+        // Preserve CLI/trace diagnostics even if Lighthouse produced no report.
+        writeFileSync(`${output}.error.txt`, message);
+        console.error(
+          `${url} sample ${sample} attempt ${attempt}: ${message} (diagnostics: ${output})`,
+        );
         const retryable = isRetryableTraceError(error);
         if (retryable && attempt < maxAttempts) {
           console.warn(
@@ -98,5 +106,8 @@ for (const [index, url] of config.ci.collect.url.entries()) {
     console.error(`${url}: ${error.message}`);
   }
 }
-writeFileSync('.lighthouseci/summary.json', JSON.stringify(summary, null, 2));
+writeFileSync(
+  `${outputDirectory}/summary.json`,
+  JSON.stringify(summary, null, 2),
+);
 if (failed) process.exitCode = 1;

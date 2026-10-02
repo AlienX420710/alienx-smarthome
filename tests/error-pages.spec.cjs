@@ -94,7 +94,14 @@ for (const mode of [
     await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
     const expected = await background(page);
 
-    for (const path of ['/__alienx_missing_error_test__/', '/500/']) {
+    for (const path of [
+      '/__alienx_missing_error_test__/',
+      '/500/',
+      '/work/',
+      '/experience/',
+      '/technology/',
+      '/lab/',
+    ]) {
       await page.goto(base + path, { waitUntil: 'domcontentloaded' });
       await expect(page.locator('html')).toHaveAttribute(
         'data-alienx-page',

@@ -17,9 +17,6 @@
     const path = new URL(url).pathname.replace(/\/$/, '') || '/';
     const routedPage = {
       '/': 'home',
-      '/work': 'work',
-      '/experience': 'experience',
-      '/technology': 'technology',
       '/status': 'status',
       '/about': 'about',
       '/contact': 'contact',

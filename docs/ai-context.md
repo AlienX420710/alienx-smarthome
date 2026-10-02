@@ -15,7 +15,9 @@ Workers remain the stack. This is a technology showcase, not a home-control syst
 - public/site-preferences.js applies theme/motion before paint and page swaps;
   contact-security.js owns the Turnstile widget lifecycle.
 - The homepage owns the consolidated Work, Experience, Lab and Technology customer
-  journey; those former standalone routes and route-specific assets are retired.
+  journey; those former standalone routes, route classifications and exclusive
+  theme selectors are retired. Requests to retired routes keep the server-declared
+  error identity, including after preference application.
 - src/styles/global.css owns the primary site shell background, including branded
   error pages; their terminal treatment stays page-specific. src/styles/page-themes.css
   owns shared route theme overrides. Explicit saved themes override OS preference;
