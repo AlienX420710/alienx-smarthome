@@ -36,12 +36,7 @@ export async function sendProductionMail(
     to: ['alienx@alienxsmarthome.com'],
   });
 
-  let response = await requestMail(
-    RESEND_ENDPOINT,
-    token,
-    idempotencyKey,
-    body,
-  );
+  let response = await requestMail(RESEND_ENDPOINT, token, idempotencyKey, body);
   if (!SAFE_REDIRECTS.has(response.status)) return response;
 
   const location = response.headers.get('location');
