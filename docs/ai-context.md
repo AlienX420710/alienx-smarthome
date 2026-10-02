@@ -13,9 +13,11 @@ Workers remain the stack. This is a technology showcase, not a home-control syst
   adds scheduling. ASSETS, IMAGES, SESSION and mandatory INQUIRY_RATE_LIMITER
   bindings remain separate; namespace 2107100911 is reserved for this site.
 - public/site-preferences.js applies theme/motion before paint and page swaps;
-  contact-security.js owns widget lifecycle; experience.js owns custom exhibits.
-- src/styles/page-themes.css owns shared themes; Technology owns its mobile CSS.
-  Explicit saved themes override OS preference; system mode still works.
+  contact-security.js owns the Turnstile widget lifecycle.
+- The homepage owns the consolidated Work, Experience, Lab and Technology customer
+  journey; those former standalone routes and route-specific assets are retired.
+- src/styles/page-themes.css owns shared themes. Explicit saved themes override OS
+  preference; system mode still works.
 - Scripts own audits, candidate/live verification, bounded Lighthouse and the
   Git-ref deployment gate. Tests follow .test.cjs / .spec.cjs concern-based naming.
 
@@ -42,9 +44,11 @@ Mail goes from the fixed configured sender to the fixed business recipient;
 the submitted email is a reply-to, not a caller-selected business destination.
 The request identity and canonical submitted content determine a stable
 idempotency key, independent of refreshed Turnstile tokens. Provider HTTP
-success and a nonempty email ID are required before application success.
-Transport is bounded to 15 seconds. Logs must not contain arbitrary transport
-exceptions, verification payloads, credentials or inquiry contents.
+success and a nonempty email ID are required before application success. The shared
+transport performs one direct POST to https://api.resend.com/emails using the
+platform's normal fetch redirect behavior and a 15-second timeout; do not add custom
+redirect policy without concrete provider evidence. Logs must not contain arbitrary
+transport exceptions, verification payloads, credentials or inquiry contents.
 
 Acceptance is not delivery; neither a success-page visit nor public status proves
 mail reached the receiving server or inbox. Unit/browser tests mock providers
@@ -79,8 +83,8 @@ where helpful, and cleanup on Astro swaps remain the default.
 Derive timers from timestamps; use requestAnimationFrame for animation and pause
 when hidden/disconnected. Keep navigation usable without enhancements and preserve
 ordinary touch scrolling. Status has bounded requests and hidden-page pauses;
-Technology uses delegated/abortable listeners; palette focus restores correctly;
-contact retries preserve request identity without reusing verification tokens.
+palette focus restores correctly; contact retries preserve request identity without
+reusing verification tokens.
 
 The image script decodes raster assets before build. Preserve originals and only
 generate derivatives that serve real requests. Do not lazy-load LCP/hero imagery
