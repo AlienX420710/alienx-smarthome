@@ -13,8 +13,8 @@ Automatic enrollment for all future PRs is separate work, not an effect of the
 checkbox. Do not substitute a custom merge script that bypasses protections.
 
 Keep the main ruleset active with PRs required, an empty bypass list, no force
-pushes/deletions, strict up-to-date branches, and these five checks attributed
-to GitHub Actions:
+pushes/deletions, strict up-to-date branches, required conversation resolution,
+and these five checks attributed to GitHub Actions:
 
 - `Build, type check, audit`
 - `Safari / WebKit compatibility`
@@ -30,6 +30,10 @@ branch requirement. Unresolved conflicts or required reviews must block merging.
 The observed ruleset on 2026-09-26 requires zero human approvals; CI success is
 not a claim of independent human review. For future automated enrollment, keep
 privileged automation isolated from PR code and prove push workflows still run.
+
+For unsupported GitHub administration operations, follow the no-interactive-login
+rule in AGENTS.md: give the owner the exact settings steps and verify the saved
+result through the connector. Do not initiate browser authentication.
 
 Reference: [GitHub native auto-merge](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-auto-merge-for-pull-requests-in-your-repository).
 
@@ -49,11 +53,14 @@ and SEO must meet 0.95 in every sample. Measurement errors or missing scores
 fail closed. The accessibility-only job runs one sample per route. All raw
 reports and `summary.json` are retained under a unique `quality-*` or
 `accessibility-*` invocation directory in the Lighthouse diagnostics artifact.
-Each report names its route, sample and attempt. A retry preserves the first
-report; each failed attempt also retains an adjacent `.json.error.txt`, even when
-no report was produced. Both workflows upload the full directory on failure.
-Inspect timing metrics and attempt errors before assuming a failure is transient. This is not an
-automatic retry-until-pass policy.
+Each report names its route, sample and attempt. Only recognized trace-capture
+errors (`NO_NAVSTART` or the matching trace-recording failure) may retry, with at
+most three total attempts per sample (two retries). Every retry preserves the
+prior report; each failed attempt also retains an adjacent `.json.error.txt`, even
+when no report was produced. Score failures, missing reports and unrelated errors
+are never retried. Both workflows upload the full directory on failure. Inspect
+timing metrics and attempt errors before assuming a failure is transient. This is
+not an automatic retry-until-pass policy.
 
 ## Release acceptance
 

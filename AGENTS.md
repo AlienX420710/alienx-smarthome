@@ -21,6 +21,17 @@ inbox receipt and human/device evidence. Preserve Turnstile, validation, rate li
 idempotency, CSP and authentic content. No secrets/private provider/customer data
 in public docs/logs. Real inquiries/account operations need applicable authorization; prior tool rejections remain binding.
 
+## GitHub access — no interactive login
+
+The owner prohibits interactive GitHub authentication by the assistant. Do not
+open GitHub browser login, request username/password/OTP or passkey entry, offer
+browser login fallback, or initiate a sign-in handoff. Use the connected GitHub
+integration or an already authenticated, authorized non-interactive interface.
+If access is missing or an operation is unsupported, complete the accessible work,
+explain the specific limitation, and give the owner exact manual GitHub steps.
+After the owner reports completion, verify the result through the connector.
+Do not repeat or propose the failed interactive login workflow.
+
 ## Cross-project coordination
 
 Coordination protocol v1 (2026-09-30). This section is identical in both repos;

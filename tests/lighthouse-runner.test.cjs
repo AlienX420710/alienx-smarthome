@@ -35,7 +35,7 @@ function fixture(t) {
     const output = process.argv.find(arg => arg.startsWith('--output-path=')).slice(14);
     fs.appendFileSync('calls.txt', output + '\\n');
     const scenario = process.env.LIGHTHOUSE_FIXTURE;
-    const first = /attempt-1\\.json$/.test(output);
+    const attempt = Number(output.match(/attempt-(\\d+)\\.json$/)?.[1]);
     if (scenario === 'missing') process.exit(0);
     if (scenario === 'cli-trace' || scenario === 'unrelated') {
       process.stderr.write(scenario === 'cli-trace' ? 'NO_NAVSTART' : 'Chrome unavailable');
@@ -44,7 +44,8 @@ function fixture(t) {
     const report = { categories: Object.fromEntries(
       ['performance', 'accessibility', 'best-practices', 'seo'].map(key => [key, { score: scenario === 'low' ? 0.5 : 1 }])
     ) };
-    if (scenario === 'retry' && first) report.runtimeError = { message: 'NO_NAVSTART' };
+    if (scenario === 'retry' && attempt === 1) report.runtimeError = { message: 'NO_NAVSTART' };
+    if (scenario === 'retry-twice' && attempt < 3) report.runtimeError = { message: 'NO_NAVSTART' };
     fs.writeFileSync(output, JSON.stringify(report));
   `,
   );
@@ -84,6 +85,22 @@ test('trace retry retains both attempt reports and first-attempt errors for ever
   assert.match(result.stderr, /NO_NAVSTART/);
 });
 
+test('trace capture can recover after two consecutive transient failures without changing sample count', (t) => {
+  const f = fixture(t);
+  const result = f.run('retry-twice');
+  assert.equal(result.status, 0, result.stderr);
+  const calls = f.calls();
+  assert.equal(calls.length, 9);
+  assert.equal(new Set(calls).size, 9);
+  for (let index = 0; index < calls.length; index += 3) {
+    assert.match(f.read(calls[index]), /NO_NAVSTART/);
+    assert.match(f.read(`${calls[index]}.error.txt`), /NO_NAVSTART/);
+    assert.match(f.read(calls[index + 1]), /NO_NAVSTART/);
+    assert.match(f.read(`${calls[index + 1]}.error.txt`), /NO_NAVSTART/);
+    assert.equal(JSON.parse(f.read(calls[index + 2])).runtimeError, undefined);
+  }
+});
+
 test('missing reports cannot reuse successful prior-invocation evidence', (t) => {
   const f = fixture(t);
   assert.equal(f.run('success').status, 0);
@@ -99,10 +116,10 @@ test('missing reports cannot reuse successful prior-invocation evidence', (t) =>
     assert.match(f.read(`${path}.error.txt`), /ENOENT/);
 });
 
-test('CLI trace errors retain stderr artifacts and stop after one retry per sample', (t) => {
+test('CLI trace errors retain stderr artifacts and stop after two retries per sample', (t) => {
   const f = fixture(t);
   assert.equal(f.run('cli-trace').status, 1);
-  assert.equal(f.calls().length, 6);
+  assert.equal(f.calls().length, 9);
   for (const path of f.calls())
     assert.match(f.read(`${path}.error.txt`), /NO_NAVSTART/);
 });

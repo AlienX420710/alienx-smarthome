@@ -32,7 +32,9 @@ for (const [index, url] of config.ci.collect.url.entries()) {
   const errors = [];
   // Always collect the fixed set, never stop at the first passing score.
   for (let sample = 1; sample <= runs; sample++) {
-    const maxAttempts = 2;
+    // Trace capture can fail transiently before navigation begins. Allow two
+    // bounded trace-only retries; scores and unrelated failures are never retried.
+    const maxAttempts = 3;
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       const output = `${outputDirectory}/route-${index}-sample-${sample}-attempt-${attempt}.json`;
       try {
@@ -71,7 +73,7 @@ for (const [index, url] of config.ci.collect.url.entries()) {
         const retryable = isRetryableTraceError(error);
         if (retryable && attempt < maxAttempts) {
           console.warn(
-            `${url} sample ${sample}: transient Lighthouse runtime error; retrying once`,
+            `${url} sample ${sample}: transient Lighthouse runtime error; retrying trace capture (${attempt}/${maxAttempts - 1})`,
           );
           continue;
         }
