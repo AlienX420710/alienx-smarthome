@@ -79,7 +79,6 @@ test('release approval classifies failed, pending, and successful evidence fail-
   assert.equal(classifyApproval(assessRuns(pendingRuns, 'target')), 'pending');
 });
 
-
 test('deployment ref state stays fail-closed while allowing corrected reruns', async () => {
   const { approvalRefs, classifyReleaseRefs } =
     await import('../scripts/verify-ci.mjs');
