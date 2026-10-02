@@ -66,8 +66,14 @@ actual browser coverage passed in CI and is not presented as local execution:
   Obsolete mappings could overwrite the server error identity for those URLs;
   unit and four-theme browser coverage now include the retired routes.
 - Retained Lighthouse reports by invocation and attempt, including error text when
-  the CLI writes no report. Fixed sample counts, budgets, trace-only retries and
-  the one-retry ceiling remain unchanged; executable runner tests cover them.
+  the CLI writes no report. Fixed sample counts and score budgets remain unchanged.
+  PR #93's initial Lighthouse run 37078004491 then hit two consecutive
+  `NO_NAVSTART` trace-recording errors on `/about/` sample 2 while Wrangler served
+  the route with HTTP 200 and every completed score met its committed budget. The
+  runner therefore allows at most two retries (three total attempts) only for
+  recognized trace-capture errors. Score failures, missing reports and unrelated
+  errors still fail without retry; executable runner tests cover single-retry
+  recovery, two-retry recovery and the bounded ceiling.
 
 This tranche does not certify all CSS as unused or close account, physical-device,
 owner-content, recovery or alert-receipt acceptance. Issues #58–#62 remain open.
