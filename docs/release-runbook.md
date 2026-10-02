@@ -13,8 +13,8 @@ Automatic enrollment for all future PRs is separate work, not an effect of the
 checkbox. Do not substitute a custom merge script that bypasses protections.
 
 Keep the main ruleset active with PRs required, an empty bypass list, no force
-pushes/deletions, strict up-to-date branches, and these five checks attributed
-to GitHub Actions:
+pushes/deletions, strict up-to-date branches, required conversation resolution,
+and these five checks attributed to GitHub Actions:
 
 - `Build, type check, audit`
 - `Safari / WebKit compatibility`
@@ -30,6 +30,10 @@ branch requirement. Unresolved conflicts or required reviews must block merging.
 The observed ruleset on 2026-09-26 requires zero human approvals; CI success is
 not a claim of independent human review. For future automated enrollment, keep
 privileged automation isolated from PR code and prove push workflows still run.
+
+For unsupported GitHub administration operations, follow the no-interactive-login
+rule in AGENTS.md: give the owner the exact settings steps and verify the saved
+result through the connector. Do not initiate browser authentication.
 
 Reference: [GitHub native auto-merge](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-auto-merge-for-pull-requests-in-your-repository).
 
