@@ -40,7 +40,7 @@
     "test:a11y": "playwright test tests/accessibility.spec.cjs --reporter=line",
     "test:lighthouse": "node scripts/lighthouse.mjs",
     "format": "prettier --write src public scripts tests .github *.md docs/*.md *.config.*",
-    "format:check": "prettier --write docs/project-state.md && git diff --check && git diff -- docs/project-state.md && exit 1"
+    "format:check": "prettier --check src public scripts tests .github *.md docs/*.md *.config.*"
   },
   "overrides": {
     "sharp": "0.35.4",
