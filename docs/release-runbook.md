@@ -100,9 +100,10 @@ first confirms that its SHA is still current `main`.
 Cloudflare verifies those refs using normal Git smart-HTTP (`git ls-remote`) and
 still checks that its checkout SHA matches the Workers build SHA, that the build
 branch is `main`, that the checkout is clean, and that the same SHA remains the
-current `main` immediately before deployment. A rejection ref blocks immediately;
-missing approval waits up to twelve minutes and then fails closed. A newer `main`
-revision blocks a stale deployment.
+current `main` immediately before deployment. A rejection ref never authorizes deployment. Cloudflare keeps polling within the
+existing twelve-minute window so a legitimate exact-SHA rerun can replace a
+temporary rejection with approval; without that approval the build times out and
+fails closed. A newer `main` revision still blocks a stale deployment immediately.
 
 This removes the shared unauthenticated GitHub REST rate-limit dependency that
 previously produced HTTP 403 failures in Cloudflare while preserving exact-SHA,
@@ -165,10 +166,9 @@ alienx@alienxsmarthome.com. No public trigger, caller-selected recipient or exem
 
 Date-only payloads/keys deduplicate within the provider's 24-hour retention, even
 across deployments. At most three bounded transient-error attempts; permanent
-errors stop. Shared mail performs one direct POST to https://api.resend.com/emails
-with normal platform fetch behavior and a 15-second timeout. Require a nonempty
-provider ID and fail invocation on missing config/exhaustion. No body/provider-error
-logs.
+errors stop. Use one direct request to the fixed Resend endpoint with the platform's
+default redirect handling, a 15-second timeout, and a nonempty provider ID; fail on
+missing config/exhaustion. No body/provider-error logs.
 
 The existing 05:30 Chicago ChatGPT health monitor checks connected Resend metadata:
 exact dated subject, sender name/address, sole recipient, today's timestamp after
