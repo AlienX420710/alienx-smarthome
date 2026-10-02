@@ -90,3 +90,7 @@ explicit blocker/follow-up is recorded.
   not call the task done while project-state still names an older release as current.
 - Every PR/task handoff must say either `Docs: updated <owners>` or
   `Docs: no durable update required — <reason>`. A blank or generic N/A is not enough.
+- A documentation-only closeout PR whose sole purpose is recording evidence
+  already produced by the implementation/release does not require another recursive
+  project-state update unless it changes runtime, architecture, procedures or
+  acceptance state itself. Its own required CI/deployment evidence still applies.
