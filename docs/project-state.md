@@ -6,19 +6,21 @@ and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
 ## Last verified release
 
-October 2, 2026: main `1d97fb5f1ebb7fbb4572bec5425db13815077c3a`
-(PR #89) is the latest fully verified production application release. Exact-main
-[Quality 37058594291](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058594291),
-[Responsive 37058594386](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058594386),
-[Accessibility 37058594306](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058594306),
-[Lighthouse 37058594335](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058594335)
-and [Safari 37058594286](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058594286)
-passed. [Push on main 37058593965](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058593965)
-passed CodeQL/current-alert checks; Release Approval 37059051103, Workers Build
-`1203f0ce-abd1-4077-822f-5f04caae2680`,
-[Smoke 37058594320](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058594320)
-and [Integrity 37059126844](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37059126844)
-passed.
+October 2, 2026: main `fea0fdff4797a77afed6dd8e0d9521fa4b80c0ee`
+(PR #91) is the latest fully verified production application release. Exact-main
+[Quality 37075217968](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217968),
+[Responsive 37075217941](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217941),
+[Accessibility 37075217977](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217977),
+[Lighthouse 37075217955](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217955)
+and [Safari 37075217920](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217920)
+passed. [Push on main 37075217613](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217613)
+passed CodeQL, and Quality passed the current-alert policy. Release Approval
+37075477543 and Workers Build `62a334e2-f73d-4bc8-a9a1-3831ff519bea`
+(version `112241cf-cd9b-41b1-b7af-f10c6b90bcec`) succeeded.
+[Push Smoke 37075217950](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217950)
+verified this exact healthy revision at 23:01:20Z, followed by
+[Integrity 37075529551](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075529551).
+The separate skipped integrity invocation from scheduled smoke is not release evidence.
 
 This release includes the working customer inquiry transport with natural heartbeat
 and recipient receipt evidence, the functional command-palette Escape control from
@@ -27,8 +29,10 @@ server-declared `data-alienx-page="error"` state through preference application 
 use the same outer site background as the primary experience in explicit light,
 explicit dark, system light and system dark. The branded error terminal, noindex
 policy, reduced-motion behavior and recovery semantics remain unchanged.
+PR #91 extends the correct error identity to retired route URLs, removes their
+obsolete themes, and preserves Lighthouse diagnostics across attempts/invocations.
 
-## October 2 fresh review and scoped follow-up
+## October 2 fresh review and scoped engineering closeout
 
 Base main `adb8d5d9f5af7a0bfd074e44eaf119ecd5bcff1d` (documentation closeout
 PR #90) passed all five current push workflows, CodeQL/current-alert policy,
@@ -43,15 +47,18 @@ source and reachable-history audits (988 text blobs), zero dependency findings,
 zero type errors/warnings, build and Worker dry run. Direct live inspection from
 this environment was blocked by DNS resolution; CI evidence is separate.
 
-Scoped engineering follow-up for #64/#65 is prepared, pending its own required
-CI and production verification:
+PR #91 completed the scoped engineering work for #64/#65, with all five PR
+gates and the exact-main production chain above. Updated local checks passed
+103 unit tests, formatting, source audit, zero type errors/warnings, build and
+Worker dry run. Local browser installation failed with a truncated archive;
+actual browser coverage passed in CI and is not presented as local execution:
 
-- Remove 76 selector entries used only by retired Work/Experience/Technology
+- Removed 76 selector entries used only by retired Work/Experience/Technology
   page identities (7,275 source CSS bytes), plus three obsolete preference route
   mappings. Active components, theme overrides and reduced-motion rules remain.
   Obsolete mappings could overwrite the server error identity for those URLs;
   unit and four-theme browser coverage now include the retired routes.
-- Retain Lighthouse reports by invocation and attempt, including error text when
+- Retained Lighthouse reports by invocation and attempt, including error text when
   the CLI writes no report. Fixed sample counts, budgets, trace-only retries and
   the one-retry ceiling remain unchanged; executable runner tests cover them.
 
@@ -69,25 +76,25 @@ Do not publish the first GitHub release or claim beta completion while required
 acceptance is unresolved. Do not invent a version. Local tests, CI, live revision,
 provider acceptance/delivery, inbox receipt and human/device acceptance differ.
 
-| ID     | Disposition                                                | Evidence or remaining acceptance                                                                                                                           |
-| ------ | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AX-001 | Verified at d8bf0d3                                        | Parsed frame/resource CSP checks reject missing and weakened policy.                                                                                       |
-| AX-002 | Verified at d8bf0d3 / 4a51a7e                              | Candidate and exact-revision post-Smoke Integrity remain separate.                                                                                         |
-| AX-003 | Verified; PR #53 repair deployed                           | Three fixed Lighthouse samples, median performance, minimum other scores; no retry-until-green.                                                            |
-| AX-004 | Verified at e69c280                                        | Three obsolete manual CSP hashes removed after emitted-byte mapping.                                                                                       |
-| AX-005 | Positive promotion verified; negative drill open           | Real Cloudflare rejection evidence still needed; offline mocks are not account execution.                                                                  |
-| AX-006 | Owner/account evidence open                                | Mail receipt is now proven; failure-notification receipt and authorized compatible rollback/recovery evidence remain open.                                 |
-| AX-007 | Verified at e69c280                                        | Required sanitized reachable-history scan; heuristic, not exhaustive certification.                                                                        |
-| AX-008 | Physical-device evidence open                              | Actual screen reader, keyboard, touch, zoom and theme outcomes; resolve discovered defects.                                                                |
-| AX-009 | Partial cleanup plus route consolidation deployed          | PR #77 retired standalone Work/Experience/Lab/Technology routes and owned assets; unreviewed measured dead-CSS/style scope remains open.                   |
-| AX-010 | Owner editorial acceptance open; last                      | Factual consolidated homepage/About copy is deployed; no invented clients, results, incorporation or biography.                                            |
-| AX-011 | Enforcement verified September 26                          | Ruleset 23059349 requires PR/five Actions checks, strict freshness, no bypass. Desired review-thread setting not confirmed live.                           |
-| AX-012 | Verified at e3b8e89                                        | Security/quality policies, all-severity audit, workflow/history gates; operational exceptions remain.                                                      |
-| AX-013 | Verified at e3b8e89                                        | Exact-main fresh Actions/JS/TS analyses and zero open code-scanning alerts; private Dependabot/secret inventory is separate.                               |
-| AX-014 | Repository tranche verified in PR #47                      | Headers/static checks, sanitized analysis errors/warnings and offline deployment rehearsal; account scope remains open.                                    |
-| AX-015 | Verified at f67c91c                                        | Mandatory edge limiter, strict honeypot/Turnstile success and safe logs; not live email proof.                                                             |
-| AX-016 | Protocol rejection verified September 29; cipher work open | Both hosts reject TLS 1.0/1.1 and accept 1.2/1.3. Reassess/disposition CBC/RSA heuristics; static-homepage BREACH heuristic is not confirmed exploitation. |
-| AX-017 | Mail path proven; failure alert open                       | Natural heartbeat and authorized full-form provider delivery plus recipient receipt are proven; independent failure-alert receipt remains open.            |
+| ID     | Disposition                                                | Evidence or remaining acceptance                                                                                                                                                     |
+| ------ | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| AX-001 | Verified at d8bf0d3                                        | Parsed frame/resource CSP checks reject missing and weakened policy.                                                                                                                 |
+| AX-002 | Verified at d8bf0d3 / 4a51a7e                              | Candidate and exact-revision post-Smoke Integrity remain separate.                                                                                                                   |
+| AX-003 | Verified; PR #53 repair deployed                           | Three fixed Lighthouse samples, median performance, minimum other scores; no retry-until-green.                                                                                      |
+| AX-004 | Verified at e69c280                                        | Three obsolete manual CSP hashes removed after emitted-byte mapping.                                                                                                                 |
+| AX-005 | Positive promotion verified; negative drill open           | Real Cloudflare rejection evidence still needed; offline mocks are not account execution.                                                                                            |
+| AX-006 | Owner/account evidence open                                | Mail receipt is now proven; failure-notification receipt and authorized compatible rollback/recovery evidence remain open.                                                           |
+| AX-007 | Verified at e69c280                                        | Required sanitized reachable-history scan; heuristic, not exhaustive certification.                                                                                                  |
+| AX-008 | Physical-device evidence open                              | Actual screen reader, keyboard, touch, zoom and theme outcomes; resolve discovered defects.                                                                                          |
+| AX-009 | Scoped cleanup verified in PR #91                          | PR #77 consolidated routes; PR #91 removed 76 exclusive retired-route selectors and obsolete mappings. Active/dynamic theme and component behavior remains covered.                  |
+| AX-010 | Owner editorial acceptance open; last                      | Factual consolidated homepage/About copy is deployed; no invented clients, results, incorporation or biography.                                                                      |
+| AX-011 | Enforcement reverified October 2                           | Ruleset 23059349 requires PR/five Actions checks, strict freshness, no bypass. Review-thread resolution remains false; #63 awaits the desired setting or explicit owner disposition. |
+| AX-012 | Verified at e3b8e89                                        | Security/quality policies, all-severity audit, workflow/history gates; operational exceptions remain.                                                                                |
+| AX-013 | Verified at e3b8e89                                        | Exact-main fresh Actions/JS/TS analyses and zero open code-scanning alerts; private Dependabot/secret inventory is separate.                                                         |
+| AX-014 | Repository tranche verified in PR #47                      | Headers/static checks, sanitized analysis errors/warnings and offline deployment rehearsal; account scope remains open.                                                              |
+| AX-015 | Verified at f67c91c                                        | Mandatory edge limiter, strict honeypot/Turnstile success and safe logs; not live email proof.                                                                                       |
+| AX-016 | Protocol rejection verified September 29; cipher work open | Both hosts reject TLS 1.0/1.1 and accept 1.2/1.3. Reassess/disposition CBC/RSA heuristics; static-homepage BREACH heuristic is not confirmed exploitation.                           |
+| AX-017 | Mail path proven; failure alert open                       | Natural heartbeat and authorized full-form provider delivery plus recipient receipt are proven; independent failure-alert receipt remains open.                                      |
 
 Branch cleanup is unverified. Re-enumerate remotes, confirm each temporary head is
 merged before deleting it, and retain active PRs and alienx-ci-approved-main /
@@ -107,8 +114,6 @@ following acceptance before calling beta closed; no generic rewrite is required.
 | P1 — AX-016, AX-012            | Reassess TLS cipher findings and privately verify MFA/recovery, credential scope, WAF and private alerts. Record fixes or justified acceptance; scanner heuristics are not confirmed exploits.                                                 | Account owner/operator                                                 |
 | P1 — AX-010, after reliability | Owner accepts factual Work/About content and public contact/privacy expectations.                                                                                                                                                              | Jordan                                                                 |
 | P2 — AX-011                    | Live ruleset 23059349 still requires strict five-check PRs and forbids bypass for this connection; review-thread resolution is false. Explicitly accept that choice or enable the desired setting through authorized administration.           | Repo maintainer                                                        |
-| P2 — AX-009                    | Limit further CSS/component cleanup to measured defects or dead code; do not treat visual modernization as a security release prerequisite.                                                                                                    | Engineering                                                            |
-| P2 — diagnostics               | Retain attempt-specific Lighthouse reports if improving diagnostics: current rmSync/output reuse discards a first-attempt report. Keep trace failures visible and the one-retry ceiling; this does not invalidate passed main checks.          | Engineering                                                            |
 
 AlienX adopted the coordination protocol through [PR #55](https://github.com/AlienX420710/alienx-smarthome/pull/55)
 on September 30. The linked Cleaning PR #28 remains independently owned;
