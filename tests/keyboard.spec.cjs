@@ -98,6 +98,17 @@ test('Tab-focused command activates itself with Enter and Space; dialogs contain
   await tabTo(page, trigger);
   await page.keyboard.press('Enter');
   const input = page.locator('#palette-input');
+  const closeControl = page.getByRole('button', {
+    name: 'Close command palette',
+  });
+  await page.keyboard.press('Shift+Tab');
+  await expect(closeControl).toBeFocused();
+  await visibleFocus(closeControl);
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#alienx-palette')).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await page.keyboard.press('Space');
+  await expect(input).toBeFocused();
   // /clear is deliberately not the initially indexed result.
   const clear = page
     .locator('button[data-command-index]')
@@ -107,7 +118,11 @@ test('Tab-focused command activates itself with Enter and Space; dialogs contain
   await expect(input).toBeFocused();
   await expect(page.locator('#alienx-command-overlay')).toHaveCount(0);
   await page.keyboard.press('Shift+Tab');
+  await expect(closeControl).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
   await expect(page.locator('button[data-command-index]').last()).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(closeControl).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(input).toBeFocused();
   await tabTo(page, clear);
