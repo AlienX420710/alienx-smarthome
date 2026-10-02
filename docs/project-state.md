@@ -1,28 +1,33 @@
 # AlienX — current state
 
-Consolidated September 30, 2026. This file alone owns findings and dated release
+Updated October 1, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
 ## Last verified release
 
-September 30 comparison baseline: main `640062d13e9de63b1160137cc01bfd8f3b2d23bf`
-(PR #54). All five main gates and code-scanning inventory passed, including
-[Lighthouse 36709148662](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36709148662).
-Release Approval 36709612323, Workers Build check 109868215082,
-[Smoke 36709148644](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36709148644)
-and [Integrity 36709695999](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36709695999)
-passed. Later Integrity 36715566889 and Smoke 36724396188 also passed.
-Conditional skipped runs do not invalidate those completed runs or add evidence.
+October 1, 2026: main `66904544ab918c6e171a7a6f89a843b333bd6f44`
+(PR #83) is the last fully verified production release. Exact-main
+[Quality 36964095438](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964095438),
+[Responsive 36964095367](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964095367),
+[Accessibility 36964095388](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964095388),
+[Lighthouse 36964095348](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964095348)
+and [Safari 36964095338](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964095338)
+passed. [Push on main 36964095064](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964095064)
+passed CodeQL/current-alert checks; Release Approval 36964300735, Workers Build
+`4f0d6e48-9abd-4702-aac7-4a0183ce39d0`,
+[Smoke 36964095289](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964095289)
+and [Integrity 36964464206](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964464206)
+passed.
 
-PR #53's stderr repair is deployed. Retain historical failures 36645902576 and
-PR #54 Lighthouse 36708014807 attempt 1 (trace collection, not a low-score retry);
-its one fresh-runner rerun passed. No budget or fixed sample count was reduced.
-This release evidence does not certify the unmerged coordination/readiness edits.
+PR #83 preserves fail-closed promotion while allowing a corrected exact-SHA rerun
+to replace temporary rejection evidence within the existing bounded deployment
+window. Earlier Workers Build failures for PR #79/#82 were not deployment evidence
+and remain useful fail-closed history.
 
 ## Beta acceptance — incomplete
 
-Fresh September 30 comparison: npm ci, all-severity npm audit (zero findings),
+September 30 local comparison (historical baseline): npm ci, all-severity npm audit (zero findings),
 88 unit tests and repository/reachable-history scans passed locally. fast-uri
 3.1.8 remains in the lockfile; its previous advisory is remediated, not open work.
 Build/browser evidence above is exact-main CI, not a new local browser run.
@@ -41,15 +46,15 @@ provider acceptance/delivery, inbox receipt and human/device acceptance differ.
 | AX-006 | Owner/account evidence open                                | Monitored failure-notification receipt and authorized compatible rollback/recovery evidence.                                                               |
 | AX-007 | Verified at e69c280                                        | Required sanitized reachable-history scan; heuristic, not exhaustive certification.                                                                        |
 | AX-008 | Physical-device evidence open                              | Actual screen reader, keyboard, touch, zoom and theme outcomes; resolve discovered defects.                                                                |
-| AX-009 | Partial cleanup deployed through PR #52/#53                | Theme extraction/Technology ownership cleanup passed later gates; unreviewed dead-CSS/style scope remains open.                                            |
-| AX-010 | Owner editorial acceptance open; last                      | Factual Work/About copy is deployed; no invented clients, results, incorporation or biography.                                                             |
+| AX-009 | Partial cleanup plus route consolidation deployed          | PR #77 retired standalone Work/Experience/Lab/Technology routes and owned assets; unreviewed measured dead-CSS/style scope remains open.                   |
+| AX-010 | Owner editorial acceptance open; last                      | Factual consolidated homepage/About copy is deployed; no invented clients, results, incorporation or biography.                                            |
 | AX-011 | Enforcement verified September 26                          | Ruleset 23059349 requires PR/five Actions checks, strict freshness, no bypass. Desired review-thread setting not confirmed live.                           |
 | AX-012 | Verified at e3b8e89                                        | Security/quality policies, all-severity audit, workflow/history gates; operational exceptions remain.                                                      |
 | AX-013 | Verified at e3b8e89                                        | Exact-main fresh Actions/JS/TS analyses and zero open code-scanning alerts; private Dependabot/secret inventory is separate.                               |
 | AX-014 | Repository tranche verified in PR #47                      | Headers/static checks, sanitized analysis errors/warnings and offline deployment rehearsal; account scope remains open.                                    |
 | AX-015 | Verified at f67c91c                                        | Mandatory edge limiter, strict honeypot/Turnstile success and safe logs; not live email proof.                                                             |
 | AX-016 | Protocol rejection verified September 29; cipher work open | Both hosts reject TLS 1.0/1.1 and accept 1.2/1.3. Reassess/disposition CBC/RSA heuristics; static-homepage BREACH heuristic is not confirmed exploitation. |
-| AX-017 | Implemented; live acceptance open                          | Investigate missing natural heartbeat, prove scheduled delivery, distinct full-form delivery and notification receipt. No replacement sends.               |
+| AX-017 | Transport repaired; live acceptance open                   | Direct Resend transport is deployed through PR #83. Natural heartbeat/full-form delivery/receipt remain unproved.                                           |
 
 Branch cleanup is unverified. Re-enumerate remotes, confirm each temporary head is
 merged before deleting it, and retain active PRs and alienx-ci-approved-main /
@@ -106,16 +111,19 @@ heuristics, not confirmed timing attacks. See the pinned scan record below.
 Cloudflare bot verification blocked account inspection; no cron activation,
 negative deployment or rollback was certified. The prepared manual inquiry was
 rejected by automatic approval review and was not sent. Cleanup does not override
-that rejection. September 29 provider inspection found no natural heartbeat.
-No September 30 email evidence has been inspected for this docs consolidation.
-The existing 05:30 health/full-form and 06:00 heartbeat-watch monitors were observed
-enabled; configured prompts are not successful execution. Do not duplicate them.
+that rejection. September 29 provider inspection found no natural heartbeat. October 1 provider
+inspection confirmed the sending domain is verified and historical inquiry delivery
+through September 26, but found no genuine post-repair production form send during
+the verification window. The existing 05:30 health/full-form and 06:00 heartbeat-watch
+monitors were observed enabled; configured prompts are not successful execution.
+Do not duplicate them.
 
 ## Next work and coordination
 
 Resolve live TLS/mail and operational/device evidence first. Modernize components
 only for concrete semantics, responsiveness, lifecycle or measured performance.
-Experiments stay in /lab until useful and tested; no bulk tutorial imports.
+Work, Experience, Lab and Technology are consolidated into the homepage; do not
+recreate standalone destinations without a concrete customer/navigation need.
 AlienX is a showcase and possible future business, not an established LLC.
 
 Both owners' chat sessions can work on either repo under the local
