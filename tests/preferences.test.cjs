@@ -57,3 +57,23 @@ test('explicit theme survives navigation even when preference storage is blocked
   });
   assert.equal(next.documentElement.dataset.alienxTheme, 'dark');
 });
+
+test('server-declared error page survives unknown-route preference application', () => {
+  const { handlers } = boot();
+  const next = { documentElement: { dataset: { alienxPage: 'error' } } };
+  handlers['astro:before-swap']({
+    newDocument: next,
+    to: new URL('https://example.test/missing-route/'),
+  });
+  assert.equal(next.documentElement.dataset.alienxPage, 'error');
+});
+
+test('known route still overrides a stale server page marker', () => {
+  const { handlers } = boot();
+  const next = { documentElement: { dataset: { alienxPage: 'error' } } };
+  handlers['astro:before-swap']({
+    newDocument: next,
+    to: new URL('https://example.test/about/'),
+  });
+  assert.equal(next.documentElement.dataset.alienxPage, 'about');
+});
