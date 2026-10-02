@@ -8,6 +8,9 @@ export function sendProductionMail(
   const token = apiKey.trim();
   if (!token) throw new Error('Mail configuration is missing');
 
+  // Intentionally use Fetch's default redirect behavior here. This matches the
+  // proven direct Resend transport used by Cleaning By Cassi; do not reintroduce
+  // a custom redirect policy around this provider endpoint.
   return fetch('https://api.resend.com/emails', {
     method: 'POST',
     signal: AbortSignal.timeout(15000),
