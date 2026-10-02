@@ -1,32 +1,32 @@
 # AlienX — current state
 
-Updated October 1, 2026. This file alone owns findings and dated release
+Updated October 2, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
 ## Last verified release
 
-October 1, 2026: main `a12f8c2c7badffa89ee070435aff0e7d133c37a9`
-(PR #81) is the latest fully verified production application release. Exact-main
-[Quality 36964913906](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964913906),
-[Responsive 36964913998](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964913998),
-[Accessibility 36964914230](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964914230),
-[Lighthouse 36964914025](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964914025)
-and [Safari 36964913990](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964913990)
-passed. [Push on main 36964913746](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964913746)
-passed CodeQL/current-alert checks; Release Approval 36965145731, Workers Build
-`0a176224-8b4f-4676-a5e0-c7dd37f44efb`,
-[Smoke 36964914013](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36964914013)
-and [Integrity 36965197437](https://github.com/AlienX420710/alienx-smarthome/actions/runs/36965197437)
+October 2, 2026: main `1d97fb5f1ebb7fbb4572bec5425db13815077c3a`
+(PR #89) is the latest fully verified production application release. Exact-main
+[Quality 37058594291](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058594291),
+[Responsive 37058594386](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058594386),
+[Accessibility 37058594306](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058594306),
+[Lighthouse 37058594335](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058594335)
+and [Safari 37058594286](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058594286)
+passed. [Push on main 37058593965](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058593965)
+passed CodeQL/current-alert checks; Release Approval 37059051103, Workers Build
+`1203f0ce-abd1-4077-822f-5f04caae2680`,
+[Smoke 37058594320](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37058594320)
+and [Integrity 37059126844](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37059126844)
 passed.
 
-This release includes the consolidated post-inquiry success journey, mandatory
-documentation closeout policy/PR checklist, Safari/WebKit keyboard reachability
-repair, deterministic Turnstile isolation in responsive layout tests, and the
-current exact-SHA release-gate behavior from PR #83. Earlier PR #79 deployment
-failure evidence remains historical; the same direct Resend transport is present
-in this verified release. None of this substitutes for a genuine production form
-submission and provider-delivery correlation.
+This release includes the working customer inquiry transport with natural heartbeat
+and recipient receipt evidence, the functional command-palette Escape control from
+PR #88, and PR #89's error-shell correction. Error routes now retain their
+server-declared `data-alienx-page="error"` state through preference application and
+use the same outer site background as the primary experience in explicit light,
+explicit dark, system light and system dark. The branded error terminal, noindex
+policy, reduced-motion behavior and recovery semantics remain unchanged.
 
 ## Beta acceptance — incomplete
 
