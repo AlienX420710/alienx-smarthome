@@ -16,8 +16,10 @@ Workers remain the stack. This is a technology showcase, not a home-control syst
   contact-security.js owns the Turnstile widget lifecycle.
 - The homepage owns the consolidated Work, Experience, Lab and Technology customer
   journey; those former standalone routes and route-specific assets are retired.
-- src/styles/page-themes.css owns shared themes. Explicit saved themes override OS
-  preference; system mode still works.
+- src/styles/global.css owns the primary site shell background, including branded
+  error pages; their terminal treatment stays page-specific. src/styles/page-themes.css
+  owns shared route theme overrides. Explicit saved themes override OS preference;
+  system mode still works.
 - Scripts own audits, candidate/live verification, bounded Lighthouse and the
   Git-ref deployment gate. Tests follow .test.cjs / .spec.cjs concern-based naming.
 
