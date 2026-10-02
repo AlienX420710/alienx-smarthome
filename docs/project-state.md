@@ -57,7 +57,7 @@ provider acceptance/delivery, inbox receipt and human/device acceptance differ.
 | AX-014 | Repository tranche verified in PR #47                      | Headers/static checks, sanitized analysis errors/warnings and offline deployment rehearsal; account scope remains open.                                    |
 | AX-015 | Verified at f67c91c                                        | Mandatory edge limiter, strict honeypot/Turnstile success and safe logs; not live email proof.                                                             |
 | AX-016 | Protocol rejection verified September 29; cipher work open | Both hosts reject TLS 1.0/1.1 and accept 1.2/1.3. Reassess/disposition CBC/RSA heuristics; static-homepage BREACH heuristic is not confirmed exploitation. |
-| AX-017 | Transport repaired; live acceptance open                   | PR #78 repaired the pre-provider inquiry failure and PR #79 simplified transport on main; natural heartbeat plus genuine full-form delivery/receipt remain unproved. |
+| AX-017 | Transport repaired; live acceptance open                   | PR #78 repaired pre-provider failure; PR #79 simplified transport on main. Natural heartbeat/full-form delivery/receipt remain unproved.                    |
 
 Branch cleanup is unverified. Re-enumerate remotes, confirm each temporary head is
 merged before deleting it, and retain active PRs and alienx-ci-approved-main /
