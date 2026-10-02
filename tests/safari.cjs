@@ -6,6 +6,21 @@ const routes = ['/', '/status/', '/about/', '/contact/'];
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+async function waitForStatusChecks(driver, expected = 4, timeoutMs = 10000) {
+  const deadline = Date.now() + timeoutMs;
+  let count = 0;
+  while (Date.now() < deadline) {
+    count = await driver.executeScript(
+      () => document.querySelectorAll('#checks .check').length,
+    );
+    if (count === expected) return;
+    await sleep(200);
+  }
+  throw new Error(
+    `/status/: expected ${expected} status checks, found ${count} after ${timeoutMs}ms`,
+  );
+}
+
 (async () => {
   const options = new safari.Options();
   const driver = await new Builder()
@@ -18,7 +33,8 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     for (const route of routes) {
       await driver.get(`${baseURL}${route}`);
-      await sleep(route === '/status/' ? 1500 : 500);
+      if (route === '/status/') await waitForStatusChecks(driver);
+      else await sleep(500);
 
       const result = await driver.executeScript(() => {
         const root = document.documentElement;

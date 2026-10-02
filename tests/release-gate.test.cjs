@@ -79,6 +79,38 @@ test('release approval classifies failed, pending, and successful evidence fail-
   assert.equal(classifyApproval(assessRuns(pendingRuns, 'target')), 'pending');
 });
 
+test('deployment ref state stays fail-closed while allowing corrected reruns', async () => {
+  const { approvalRefs, classifyReleaseRefs } =
+    await import('../scripts/verify-ci.mjs');
+  const sha = 'a'.repeat(40);
+  const other = 'b'.repeat(40);
+  const refs = (...entries) => new Map(entries);
+
+  assert.equal(classifyReleaseRefs(refs(), sha), 'pending');
+  assert.equal(
+    classifyReleaseRefs(refs([approvalRefs.rejected, sha]), sha),
+    'rejected',
+  );
+  assert.equal(
+    classifyReleaseRefs(refs([approvalRefs.approved, sha]), sha),
+    'approved',
+  );
+  assert.equal(
+    classifyReleaseRefs(
+      refs([approvalRefs.approved, sha], [approvalRefs.rejected, sha]),
+      sha,
+    ),
+    'rejected',
+  );
+  assert.equal(
+    classifyReleaseRefs(
+      refs([approvalRefs.approved, other], [approvalRefs.rejected, other]),
+      sha,
+    ),
+    'pending',
+  );
+});
+
 test('release gate parses only exact Git refs', async () => {
   const releaseGate = await import('../scripts/verify-ci.mjs');
   const { approvalRefs, parseRemoteRefs } = releaseGate;

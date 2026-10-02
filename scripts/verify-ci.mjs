@@ -44,6 +44,14 @@ export function classifyApproval(checks) {
   return 'pending';
 }
 
+export function classifyReleaseRefs(refs, sha) {
+  const approved = refs.get(approvalRefs.approved) === sha;
+  const rejected = refs.get(approvalRefs.rejected) === sha;
+  if (approved && !rejected) return 'approved';
+  if (rejected) return 'rejected';
+  return 'pending';
+}
+
 export function parseRemoteRefs(output) {
   const refs = new Map();
   for (const line of output.trim().split('\n')) {
@@ -100,17 +108,19 @@ export async function verify() {
   while (Date.now() < deadline) {
     const refs = readRefs(approvalRefs.approved, approvalRefs.rejected);
 
-    if (refs.get(approvalRefs.rejected) === sha) {
-      throw Error('Required CI failed; deployment blocked');
-    }
+    const releaseState = classifyReleaseRefs(refs, sha);
 
-    if (refs.get(approvalRefs.approved) === sha) {
+    if (releaseState === 'approved') {
       current();
       console.log(`CI approved main ${sha}`);
       return;
     }
 
-    console.log(`Waiting for exact-revision CI approval for ${sha}`);
+    console.log(
+      releaseState === 'rejected'
+        ? `Exact-revision CI is currently rejected for ${sha}; waiting for corrected rerun evidence`
+        : `Waiting for exact-revision CI approval for ${sha}`,
+    );
     await new Promise((resolve) => setTimeout(resolve, 30000));
   }
 
