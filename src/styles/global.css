@@ -27,12 +27,6 @@
 html[data-alienx-page='home'] {
   --page-gradient-x: 8%;
 }
-html[data-alienx-page='work'] {
-  --page-gradient-x: 28%;
-}
-html[data-alienx-page='technology'] {
-  --page-gradient-x: 72%;
-}
 html[data-alienx-page='about'] {
   --page-gradient-x: 92%;
 }
@@ -253,8 +247,6 @@ hr {
   color: rgb(var(--gray-light));
 }
 html[data-alienx-page='home'] body,
-html[data-alienx-page='work'] body,
-html[data-alienx-page='technology'] body,
 html[data-alienx-page='about'] body,
 html[data-alienx-page='error'] body {
   background:
@@ -269,12 +261,6 @@ html[data-alienx-page='error'] body {
 html[data-alienx-page='home'] h1,
 html[data-alienx-page='home'] h2,
 html[data-alienx-page='home'] h3,
-html[data-alienx-page='work'] h1,
-html[data-alienx-page='work'] h2,
-html[data-alienx-page='work'] h3,
-html[data-alienx-page='technology'] h1,
-html[data-alienx-page='technology'] h2,
-html[data-alienx-page='technology'] h3,
 html[data-alienx-page='about'] h1,
 html[data-alienx-page='about'] h2,
 html[data-alienx-page='about'] h3 {
@@ -282,36 +268,27 @@ html[data-alienx-page='about'] h3 {
   letter-spacing: -0.06em;
 }
 html[data-alienx-page='home'] .eyebrow,
-html[data-alienx-page='work'] .eyebrow,
-html[data-alienx-page='technology'] .eyebrow,
 html[data-alienx-page='about'] .eyebrow {
   color: #6f7b91;
 }
 html[data-alienx-page='home'] .hero__lede,
-html[data-alienx-page='work'] .lede,
-html[data-alienx-page='technology'] .lede,
 html[data-alienx-page='about'] .lede {
   color: #9ca8bd;
 }
-html[data-alienx-page='work'] article,
 html[data-alienx-page='about'] article {
   border-color: #1b2332;
   background: linear-gradient(145deg, #090d16, #060910);
 }
-html[data-alienx-page='work'] .work-section,
 html[data-alienx-page='about'] .journey,
 html[data-alienx-page='about'] .story {
   border-top-color: #1b2332;
 }
-html[data-alienx-page='work'] article:hover,
 html[data-alienx-page='about'] article:hover {
   border-color: #2b374c;
   background: linear-gradient(145deg, #0d1320, #070a11);
 }
 @media (prefers-color-scheme: light) {
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] body,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='work'] body,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='technology'] body,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] body,
   html:where(:not([data-alienx-theme]))[data-alienx-page='error'] body {
     background:
@@ -326,30 +303,19 @@ html[data-alienx-page='about'] article:hover {
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] h1,
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] h2,
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] h3,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='work'] h1,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='work'] h2,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='work'] h3,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='technology'] h1,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='technology'] h2,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='technology'] h3,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] h1,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] h2,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] h3 {
     color: #0d1420;
   }
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] .eyebrow,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='work'] .eyebrow,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='technology'] .eyebrow,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] .eyebrow {
     color: #71809a;
   }
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] .hero__lede,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='work'] .lede,
-  html:where(:not([data-alienx-theme]))[data-alienx-page='technology'] .lede,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] .lede {
     color: #61718c;
   }
-  html:where(:not([data-alienx-theme]))[data-alienx-page='work'] article,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] article {
     border-color: #dfe5ee;
     background: linear-gradient(145deg, #f8fafc, #f1f4f8);
@@ -358,37 +324,24 @@ html[data-alienx-page='about'] article:hover {
 html[data-alienx-theme='light'][data-alienx-page='home'] h1,
 html[data-alienx-theme='light'][data-alienx-page='home'] h2,
 html[data-alienx-theme='light'][data-alienx-page='home'] h3,
-html[data-alienx-theme='light'][data-alienx-page='work'] h1,
-html[data-alienx-theme='light'][data-alienx-page='work'] h2,
-html[data-alienx-theme='light'][data-alienx-page='work'] h3,
-html[data-alienx-theme='light'][data-alienx-page='technology'] h1,
-html[data-alienx-theme='light'][data-alienx-page='technology'] h2,
-html[data-alienx-theme='light'][data-alienx-page='technology'] h3,
 html[data-alienx-theme='light'][data-alienx-page='about'] h1,
 html[data-alienx-theme='light'][data-alienx-page='about'] h2,
 html[data-alienx-theme='light'][data-alienx-page='about'] h3 {
   color: #0d1420;
 }
 html[data-alienx-theme='light'][data-alienx-page='home'] .eyebrow,
-html[data-alienx-theme='light'][data-alienx-page='work'] .eyebrow,
-html[data-alienx-theme='light'][data-alienx-page='technology'] .eyebrow,
 html[data-alienx-theme='light'][data-alienx-page='about'] .eyebrow {
   color: #71809a;
 }
 html[data-alienx-theme='light'][data-alienx-page='home'] .hero__lede,
-html[data-alienx-theme='light'][data-alienx-page='work'] .lede,
-html[data-alienx-theme='light'][data-alienx-page='technology'] .lede,
 html[data-alienx-theme='light'][data-alienx-page='about'] .lede {
   color: #61718c;
 }
-html[data-alienx-theme='light'][data-alienx-page='work'] article,
 html[data-alienx-theme='light'][data-alienx-page='about'] article {
   border-color: #dfe5ee;
   background: linear-gradient(145deg, #f8fafc, #f1f4f8);
 }
 html:where([data-alienx-theme='light'])[data-alienx-page='home'] body,
-html:where([data-alienx-theme='light'])[data-alienx-page='work'] body,
-html:where([data-alienx-theme='light'])[data-alienx-page='technology'] body,
 html:where([data-alienx-theme='light'])[data-alienx-page='about'] body,
 html:where([data-alienx-theme='light'])[data-alienx-page='error'] body {
   background:
@@ -401,8 +354,6 @@ html:where([data-alienx-theme='light'])[data-alienx-page='error'] body {
   color: #253047;
 }
 html[data-alienx-theme='dark'][data-alienx-page='home'] body,
-html[data-alienx-theme='dark'][data-alienx-page='work'] body,
-html[data-alienx-theme='dark'][data-alienx-page='technology'] body,
 html[data-alienx-theme='dark'][data-alienx-page='about'] body,
 html[data-alienx-theme='dark'][data-alienx-page='error'] body {
   background:
@@ -417,20 +368,12 @@ html[data-alienx-theme='dark'][data-alienx-page='error'] body {
 html[data-alienx-theme='dark'][data-alienx-page='home'] h1,
 html[data-alienx-theme='dark'][data-alienx-page='home'] h2,
 html[data-alienx-theme='dark'][data-alienx-page='home'] h3,
-html[data-alienx-theme='dark'][data-alienx-page='work'] h1,
-html[data-alienx-theme='dark'][data-alienx-page='work'] h2,
-html[data-alienx-theme='dark'][data-alienx-page='work'] h3,
-html[data-alienx-theme='dark'][data-alienx-page='technology'] h1,
-html[data-alienx-theme='dark'][data-alienx-page='technology'] h2,
-html[data-alienx-theme='dark'][data-alienx-page='technology'] h3,
 html[data-alienx-theme='dark'][data-alienx-page='about'] h1,
 html[data-alienx-theme='dark'][data-alienx-page='about'] h2,
 html[data-alienx-theme='dark'][data-alienx-page='about'] h3 {
   color: #f8faff;
 }
 html[data-alienx-theme='light'][data-alienx-page='home'] body,
-html[data-alienx-theme='light'][data-alienx-page='work'] body,
-html[data-alienx-theme='light'][data-alienx-page='technology'] body,
 html[data-alienx-theme='light'][data-alienx-page='about'] body,
 html[data-alienx-theme='light'][data-alienx-page='error'] body {
   background:
@@ -443,8 +386,6 @@ html[data-alienx-theme='light'][data-alienx-page='error'] body {
   color: #253047;
 }
 html[data-alienx-theme='light'][data-alienx-page='home'] h1,
-html[data-alienx-theme='light'][data-alienx-page='work'] h1,
-html[data-alienx-theme='light'][data-alienx-page='technology'] h1,
 html[data-alienx-theme='light'][data-alienx-page='about'] h1 {
   color: #0d1420;
 }

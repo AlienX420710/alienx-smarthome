@@ -28,6 +28,36 @@ use the same outer site background as the primary experience in explicit light,
 explicit dark, system light and system dark. The branded error terminal, noindex
 policy, reduced-motion behavior and recovery semantics remain unchanged.
 
+## October 2 fresh review and scoped follow-up
+
+Base main `adb8d5d9f5af7a0bfd074e44eaf119ecd5bcff1d` (documentation closeout
+PR #90) passed all five current push workflows, CodeQL/current-alert policy,
+Release Approval 37060481928, Workers Build
+`527d3078-ae65-4751-bb65-bf4fef611d97` (version
+`9f5872cf-210c-4a78-aeac-23fc02254284`), Smoke 37059979712 and
+Integrity 37060590181; scheduled Integrity 37071337299 also passed.
+Live ruleset 23059349 still requires five strict Actions checks, PRs and no bypass;
+review-thread resolution is false, so #63 remains open.
+Fresh local baseline checks passed: locked install, formatting, 94 unit tests,
+source and reachable-history audits (988 text blobs), zero dependency findings,
+zero type errors/warnings, build and Worker dry run. Direct live inspection from
+this environment was blocked by DNS resolution; CI evidence is separate.
+
+Scoped engineering follow-up for #64/#65 is prepared, pending its own required
+CI and production verification:
+
+- Remove 76 selector entries used only by retired Work/Experience/Technology
+  page identities (7,275 source CSS bytes), plus three obsolete preference route
+  mappings. Active components, theme overrides and reduced-motion rules remain.
+  Obsolete mappings could overwrite the server error identity for those URLs;
+  unit and four-theme browser coverage now include the retired routes.
+- Retain Lighthouse reports by invocation and attempt, including error text when
+  the CLI writes no report. Fixed sample counts, budgets, trace-only retries and
+  the one-retry ceiling remain unchanged; executable runner tests cover them.
+
+This tranche does not certify all CSS as unused or close account, physical-device,
+owner-content, recovery or alert-receipt acceptance. Issues #58–#63 remain open.
+
 ## Beta acceptance — incomplete
 
 September 30 local comparison (historical baseline): npm ci, all-severity npm audit (zero findings),
@@ -80,8 +110,9 @@ following acceptance before calling beta closed; no generic rewrite is required.
 | P2 — AX-009                    | Limit further CSS/component cleanup to measured defects or dead code; do not treat visual modernization as a security release prerequisite.                                                                                                    | Engineering                                                            |
 | P2 — diagnostics               | Retain attempt-specific Lighthouse reports if improving diagnostics: current rmSync/output reuse discards a first-attempt report. Keep trace failures visible and the one-retry ceiling; this does not invalidate passed main checks.          | Engineering                                                            |
 
-Merge/adopt the coordination protocol through [PR #55](https://github.com/AlienX420710/alienx-smarthome/pull/55)
-and linked Cleaning PR #28 independently. Both were still open at this review.
+AlienX adopted the coordination protocol through [PR #55](https://github.com/AlienX420710/alienx-smarthome/pull/55)
+on September 30. The linked Cleaning PR #28 remains independently owned;
+this review does not certify the peer project's current release state.
 Branch cleanup is housekeeping after confirmed merge, not a production blocker.
 
 ## Comparison with Cleaning

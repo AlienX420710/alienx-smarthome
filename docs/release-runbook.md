@@ -47,8 +47,12 @@ The quality audit collects three fixed samples per route and compares median
 performance against the unchanged 0.85 threshold. Accessibility, best practices,
 and SEO must meet 0.95 in every sample. Measurement errors or missing scores
 fail closed. The accessibility-only job runs one sample per route. All raw
-reports and `summary.json` are retained in the Lighthouse diagnostics artifact;
-inspect timing metrics before assuming a failure is transient. This is not an
+reports and `summary.json` are retained under a unique `quality-*` or
+`accessibility-*` invocation directory in the Lighthouse diagnostics artifact.
+Each report names its route, sample and attempt. A retry preserves the first
+report; each failed attempt also retains an adjacent `.json.error.txt`, even when
+no report was produced. Both workflows upload the full directory on failure.
+Inspect timing metrics and attempt errors before assuming a failure is transient. This is not an
 automatic retry-until-pass policy.
 
 ## Release acceptance

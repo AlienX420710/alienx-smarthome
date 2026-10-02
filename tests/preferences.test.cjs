@@ -42,10 +42,10 @@ test('system choice clears explicit theme before a navigation swap', () => {
   const next = { documentElement: { dataset: { alienxTheme: 'light' } } };
   handlers['astro:before-swap']({
     newDocument: next,
-    to: new URL('https://example.test/technology/'),
+    to: new URL('https://example.test/about/'),
   });
   assert.equal(next.documentElement.dataset.alienxTheme, undefined);
-  assert.equal(next.documentElement.dataset.alienxPage, 'technology');
+  assert.equal(next.documentElement.dataset.alienxPage, 'about');
 });
 test('explicit theme survives navigation even when preference storage is blocked', () => {
   const { window, handlers } = boot({}, true);
@@ -53,7 +53,7 @@ test('explicit theme survives navigation even when preference storage is blocked
   const next = { documentElement: { dataset: {} } };
   handlers['astro:before-swap']({
     newDocument: next,
-    to: new URL('https://example.test/technology'),
+    to: new URL('https://example.test/about'),
   });
   assert.equal(next.documentElement.dataset.alienxTheme, 'dark');
 });
@@ -77,3 +77,18 @@ test('known route still overrides a stale server page marker', () => {
   });
   assert.equal(next.documentElement.dataset.alienxPage, 'about');
 });
+
+for (const route of ['work', 'experience', 'technology', 'lab']) {
+  test(`retired ${route} route retains the server error identity`, () => {
+    const { handlers } = boot({ 'alienx-theme': 'light' });
+    for (const suffix of ['', '/']) {
+      const next = { documentElement: { dataset: { alienxPage: 'error' } } };
+      handlers['astro:before-swap']({
+        newDocument: next,
+        to: new URL(`https://example.test/${route}${suffix}`),
+      });
+      assert.equal(next.documentElement.dataset.alienxPage, 'error');
+      assert.equal(next.documentElement.dataset.alienxTheme, 'light');
+    }
+  });
+}
