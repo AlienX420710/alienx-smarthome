@@ -65,3 +65,42 @@ for (const [path, code, directStatus, title] of [
     expect(runtimeErrors).toEqual([]);
   });
 }
+
+const background = (page) =>
+  page.evaluate(() => {
+    const style = getComputedStyle(document.body);
+    return {
+      image: style.backgroundImage,
+      color: style.backgroundColor,
+      size: style.backgroundSize,
+    };
+  });
+
+for (const mode of [
+  { name: 'explicit light', saved: 'light', system: 'dark' },
+  { name: 'explicit dark', saved: 'dark', system: 'light' },
+  { name: 'system light', saved: null, system: 'light' },
+  { name: 'system dark', saved: null, system: 'dark' },
+]) {
+  test(`error shell matches the primary site background in ${mode.name}`, async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: mode.system });
+    await page.addInitScript((saved) => {
+      if (saved) localStorage.setItem('alienx-theme', saved);
+      else localStorage.removeItem('alienx-theme');
+    }, mode.saved);
+
+    await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+    const expected = await background(page);
+
+    for (const path of ['/__alienx_missing_error_test__/', '/500/']) {
+      await page.goto(base + path, { waitUntil: 'domcontentloaded' });
+      await expect(page.locator('html')).toHaveAttribute(
+        'data-alienx-page',
+        'error',
+      );
+      expect(await background(page)).toEqual(expected);
+    }
+  });
+}

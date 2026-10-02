@@ -15,17 +15,18 @@
     else delete root.dataset.alienxTheme;
     if (motion === 'on' || motion === 'off') root.dataset.alienxMotion = motion;
     const path = new URL(url).pathname.replace(/\/$/, '') || '/';
+    const routedPage = {
+      '/': 'home',
+      '/work': 'work',
+      '/experience': 'experience',
+      '/technology': 'technology',
+      '/status': 'status',
+      '/about': 'about',
+      '/contact': 'contact',
+      '/contact/success': 'contact-success',
+    }[path];
     root.dataset.alienxPage =
-      {
-        '/': 'home',
-        '/work': 'work',
-        '/experience': 'experience',
-        '/technology': 'technology',
-        '/status': 'status',
-        '/about': 'about',
-        '/contact': 'contact',
-        '/contact/success': 'contact-success',
-      }[path] || 'default';
+      routedPage || (root.dataset.alienxPage === 'error' ? 'error' : 'default');
   };
   window.__alienxSetTheme = (next) => {
     theme = ['light', 'dark'].includes(next) ? next : 'system';
