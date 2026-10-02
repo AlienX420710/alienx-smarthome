@@ -18,7 +18,6 @@ function load(file, extra = {}) {
     exports: {},
     Response,
     AbortSignal,
-    URL,
     console: { info() {} },
     setTimeout: (fn) => fn(),
     ...extra,
@@ -63,7 +62,7 @@ test('scheduled retries use real shared fixed-recipient transport and stable key
     sends[0].headers['Idempotency-Key'],
     'alienx-daily-email-health/2026-07-15',
   );
-  assert.equal(sends[0].redirect, 'manual');
+  assert.equal('redirect' in sends[0], false);
   assert.deepEqual(JSON.parse(sends[0].body).to, [
     'alienx@alienxsmarthome.com',
   ]);
@@ -76,17 +75,12 @@ test('scheduled retries use real shared fixed-recipient transport and stable key
     /missing mail configuration/,
   );
 });
-test('shared mail transport follows only one same-origin redirect', async () => {
+test('shared mail transport uses one direct fixed-recipient Resend request', async () => {
   const calls = [];
   const { sendProductionMail } = load('src/lib/mail.ts', {
     fetch: async (url, options) => {
       calls.push({ url: String(url), ...options });
-      return calls.length === 1
-        ? new Response(null, {
-            status: 307,
-            headers: { location: '/emails/' },
-          })
-        : Response.json({ id: 'mock-id' });
+      return Response.json({ id: 'mock-id' });
     },
   });
   const response = await sendProductionMail('  fixture  ', 'stable-key', {
@@ -94,43 +88,19 @@ test('shared mail transport follows only one same-origin redirect', async () => 
     text: 'Fixture',
   });
   assert.equal(response.status, 200);
-  assert.deepEqual(
-    calls.map(({ url }) => url),
-    ['https://api.resend.com/emails', 'https://api.resend.com/emails/'],
-  );
-  assert.equal(calls[0].redirect, 'manual');
-  assert.equal(calls[1].redirect, 'manual');
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, 'https://api.resend.com/emails');
+  assert.equal(calls[0].method, 'POST');
+  assert.equal('redirect' in calls[0], false);
   assert.equal(calls[0].headers.Authorization, 'Bearer fixture');
   assert.equal(calls[0].headers['Idempotency-Key'], 'stable-key');
-  assert.equal(calls[0].body, calls[1].body);
-});
-
-test('shared mail transport rejects cross-origin and redirect-loop targets', async () => {
-  for (const [location, expectedCalls] of [
-    ['https://example.test/emails', 1],
-    ['/emails/again', 2],
-  ]) {
-    let calls = 0;
-    const { sendProductionMail } = load('src/lib/mail.ts', {
-      fetch: async () => {
-        calls++;
-        return new Response(null, {
-          status: 307,
-          headers: {
-            location: calls === 1 ? location : '/emails/again',
-          },
-        });
-      },
-    });
-    await assert.rejects(
-      sendProductionMail('fixture', 'stable-key', {
-        subject: 'Fixture',
-        text: 'Fixture',
-      }),
-      /redirect/,
-    );
-    assert.equal(calls, expectedCalls);
-  }
+  assert.deepEqual(JSON.parse(calls[0].body).to, [
+    'alienx@alienxsmarthome.com',
+  ]);
+  assert.equal(
+    JSON.parse(calls[0].body).from,
+    'AlienX SmartHome <contact@alienxsmarthome.com>',
+  );
 });
 
 test('scheduled mail fails closed on permanent, exhausted, and malformed provider results', async () => {
