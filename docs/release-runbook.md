@@ -128,10 +128,14 @@ build log. A successful release should show `CI approved main <sha>` immediately
 before Wrangler publishes. Do not weaken or bypass this gate to make a failed
 release green.
 
-- Verify failure notifications reach a monitored recipient. A scheduled job
-  without a recipient is not an alerting system.
+- Production/release workflow failures are surfaced by the trusted
+  `.github/workflows/operator-alert.yml` controller as GitHub issues. It validates
+  same-repository workflow origin, uses only `issues: write`, and never reads
+  mailbox contents or provider message history. The controlled canary validates
+  actual issue creation without breaking production.
 - Verify Turnstile production hostname configuration, Resend sender/domain
-  authentication, and actual delivery using the respective dashboards.
+  authentication, and actual delivery using the respective dashboards only when
+  the owner explicitly authorizes that private account inspection.
 - Check that rate-limit namespace `2107100911` does not collide with another
   Worker owned by this account. It is this site's documented namespace.
 
@@ -166,6 +170,11 @@ source revision. The candidate/deployment revision stays in `APPROVAL_SHA` or
 explicit and automatic setup-node package caching. Do not reintroduce a cache
 or event-supplied code execution into these workflow-run controllers.
 
+Operator Alert is also a privileged `workflow_run` controller. It does not check
+out or execute the completed workflow's source revision. It accepts only failed
+runs originating from this repository and may write GitHub issues only. Keep the
+canary isolated from production and keep alert evidence in GitHub.
+
 ## Email health
 
 The Worker schedules one fixed-recipient email at 05:00 America/Chicago through
@@ -181,12 +190,18 @@ errors stop. Use one direct request to the fixed Resend endpoint with the platfo
 default redirect handling, a 15-second timeout, and a nonempty provider ID; fail on
 missing config/exhaustion. No body/provider-error logs.
 
-The existing 05:30 Chicago ChatGPT health monitor checks connected Resend metadata:
-exact dated subject, sender name/address, sole recipient, today's timestamp after
-05:00 and delivered status; paginate as needed. Missing/pending/bounced/wrong-identity
-or inaccessible evidence fails acceptance. Never backfill mail to conceal failure.
-The 06:00 heartbeat watch is already configured; inspect before changing schedules.
-Configuration is not execution or actual notification receipt.
+Provider and mailbox history are private operator data. Do not enumerate connected
+Resend metadata, mailbox contents, or customer messages through ChatGPT or GitHub
+Actions. `scripts/verify-email-health.mjs` remains an optional evidence validator
+for an explicitly authorized operator invocation only; it is not an automated
+monitor and must not be used without case-specific authorization. Historical live
+heartbeat/inquiry evidence remains recorded in `docs/project-state.md`.
+
+Operational failure alerting is independent of provider delivery verification.
+The GitHub-native Operator Alert workflow watches Release Approval, Production
+Smoke, Production Integrity, and the controlled Alert Canary. A failed trusted run
+creates an operator issue using GitHub evidence only. The canary exists solely to
+prove this alert path without inducing a production or email failure.
 
 The separate full-form acceptance must fill legitimate required/optional fields,
 leave the honeypot empty, retain real Turnstile/rate limits, confirm success and
@@ -195,12 +210,13 @@ mailbox data; no token injection, challenge bypass, fictional customer or direct
 provider substitute. Prior tool approval rejections remain binding. The heartbeat
 does not exercise this path; a configured daily browser attempt is not success.
 
-For missing mail inspect deployed crons, invocation logs, revision, provider metadata
-and domain status through authorized access. Never extract secrets or weaken form
-validation. Provider delivery is receiving-server acceptance, not inbox placement.
-Independent notifications use ChatGPT; record actual receipt separately. Mocked
-tests cover DST, staleness, identity, deduplication and provider failures. Current
-live evidence/gaps belong only in project-state.md, not this procedural document.
+For missing mail inspect deployed crons, invocation logs and revision first.
+Provider metadata, domain status, or mailbox evidence may be inspected only with
+explicit owner authorization for that specific investigation. Never extract secrets
+or weaken form validation. Provider delivery is receiving-server acceptance, not
+inbox placement. Mocked tests cover DST, staleness, identity, deduplication and
+provider failures. Current live evidence/gaps belong only in project-state.md, not
+this procedural document.
 
 ## Physical-device acceptance
 
