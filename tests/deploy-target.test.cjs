@@ -1,18 +1,13 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const {
-  mkdtempSync,
-  mkdirSync,
-  writeFileSync,
-  rmSync,
-} = require('node:fs');
+const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = require('node:fs');
 const { tmpdir } = require('node:os');
 const { join } = require('node:path');
 const { pathToFileURL } = require('node:url');
 
 async function loadGuard() {
   return import(
-    `${pathToFileURL(join(__dirname, '../scripts/verify-deploy-target.mjs')).href}?test=${Date.now()}-${Math.random()}`
+    `${pathToFileURL(join(__dirname, '../scripts/verify-deploy-target.mjs')).href}?test=${Date.now()}-${Math.random()}`,
   );
 }
 
@@ -111,7 +106,10 @@ test('rejects the retired recovery drill artifacts in a production checkout', as
   const root = fixture();
   try {
     mkdirSync(join(root, 'ops'), { recursive: true });
-    writeFileSync(join(root, 'ops', 'recovery-drill.enabled'), 'enabled\n');
+    writeFileSync(
+      join(root, 'ops', 'recovery-drill.enabled'),
+      'enabled\n',
+    );
     const { verifyDeployTarget } = await loadGuard();
     assert.throws(
       () => verifyDeployTarget(root, {}),
