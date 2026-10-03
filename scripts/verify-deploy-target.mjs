@@ -3,6 +3,7 @@ import { dirname, isAbsolute, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const productionWorker = 'alienx-smarthome';
+export const generatedConfigPath = 'dist/server/wrangler.json';
 
 export const forbiddenProductionArtifacts = [
   'ops/recovery-drill.enabled',
@@ -78,6 +79,11 @@ export function verifyDeployTarget(root = process.cwd(), env = process.env) {
       `Redirected Wrangler configuration escapes the repository: ${effectiveConfigPath}`,
     );
   }
+  if (fromRoot !== generatedConfigPath) {
+    throw new Error(
+      `Unexpected Wrangler redirect target: ${fromRoot}; expected ${generatedConfigPath}`,
+    );
+  }
   if (!existsSync(effectiveConfigPath)) {
     throw new Error(
       `Redirected Wrangler configuration does not exist: ${effectiveConfigPath}`,
@@ -88,7 +94,9 @@ export function verifyDeployTarget(root = process.cwd(), env = process.env) {
     effectiveConfigPath,
     'redirected Wrangler configuration',
   );
-  assertWorkerName(effectiveConfig.name, 'redirected Wrangler configuration');
+  if (Object.hasOwn(effectiveConfig, 'name')) {
+    assertWorkerName(effectiveConfig.name, 'redirected Wrangler configuration');
+  }
 
   console.log(
     `Verified production deploy target: ${productionWorker} via ${fromRoot}`,

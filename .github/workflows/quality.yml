@@ -49,6 +49,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Verify generated deploy target
+        run: node scripts/verify-deploy-target.mjs
+
       - name: Type check
         run: npm run typecheck
 
