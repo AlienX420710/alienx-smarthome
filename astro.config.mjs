@@ -18,6 +18,7 @@ export default defineConfig({
     },
   },
   site: 'https://alienxsmarthome.com',
+  session: false,
   integrations: [
     sitemap({
       filter: (page) => {
