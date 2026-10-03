@@ -68,7 +68,10 @@ export function verifyDeployTarget(root = process.cwd(), env = process.env) {
     );
   }
 
-  const effectiveConfigPath = resolve(dirname(redirectPath), redirect.configPath);
+  const effectiveConfigPath = resolve(
+    dirname(redirectPath),
+    redirect.configPath,
+  );
   const fromRoot = relative(root, effectiveConfigPath);
   if (fromRoot.startsWith('..') || isAbsolute(fromRoot)) {
     throw new Error(
@@ -85,10 +88,7 @@ export function verifyDeployTarget(root = process.cwd(), env = process.env) {
     effectiveConfigPath,
     'redirected Wrangler configuration',
   );
-  assertWorkerName(
-    effectiveConfig.name,
-    'redirected Wrangler configuration',
-  );
+  assertWorkerName(effectiveConfig.name, 'redirected Wrangler configuration');
 
   console.log(
     `Verified production deploy target: ${productionWorker} via ${fromRoot}`,
