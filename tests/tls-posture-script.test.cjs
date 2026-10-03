@@ -15,7 +15,7 @@ test('TLS posture verifier is valid bash and covers both production hosts', () =
 
   const source = fs.readFileSync(scriptPath, 'utf8');
   for (const host of ['alienxsmarthome.com', 'www.alienxsmarthome.com']) {
-    assert.match(source, new RegExp(host.replaceAll('.', '\\.')));
+    assert.ok(source.includes(`"${host}"`), `missing production host ${host}`);
   }
 
   for (const flag of ['-tls1', '-tls1_1', '-tls1_2', '-tls1_3']) {
