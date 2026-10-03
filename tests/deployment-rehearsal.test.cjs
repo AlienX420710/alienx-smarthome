@@ -11,7 +11,7 @@ const { tmpdir } = require('node:os');
 const { join } = require('node:path');
 const { execFileSync, spawnSync } = require('node:child_process');
 
-test('actual npm deploy command stops before Wrangler on rejected, missing, stale or unavailable evidence', () => {
+test('actual npm deploy command stops before Wrangler on rejected, missing, stale, unavailable or wrong-target evidence', () => {
   const root = mkdtempSync(join(tmpdir(), 'alienx-deploy-rehearsal-'));
   try {
     const git = (args) =>
@@ -24,10 +24,21 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
       join(root, 'scripts/verify-ci.mjs'),
       readFileSync(join(__dirname, '../scripts/verify-ci.mjs')),
     );
+    writeFileSync(
+      join(root, 'scripts/verify-deploy-target.mjs'),
+      readFileSync(join(__dirname, '../scripts/verify-deploy-target.mjs')),
+    );
+    writeFileSync(
+      join(root, 'wrangler.json'),
+      JSON.stringify({ name: 'alienx-smarthome' }),
+    );
     const {
       scripts: { deploy },
     } = JSON.parse(readFileSync(join(__dirname, '../package.json')));
-    assert.equal(deploy, 'node scripts/verify-ci.mjs && wrangler deploy');
+    assert.equal(
+      deploy,
+      'node scripts/verify-ci.mjs && node scripts/verify-deploy-target.mjs && wrangler deploy',
+    );
     writeFileSync(
       join(root, 'package.json'),
       JSON.stringify({ type: 'module', scripts: { deploy } }),
@@ -38,7 +49,8 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
       { mode: 0o755 },
     );
     // Only Git remote evidence is replaced. The real verifier, checkout checks,
-    // npm command and shell short-circuit execute. No network/deployment occurs.
+    // deploy-target guard, npm command and shell short-circuit execute. No
+    // network/deployment occurs.
     writeFileSync(
       join(root, 'evidence.mjs'),
       `
@@ -74,6 +86,7 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
       'unavailable',
       'wrong-branch',
       'wrong-sha',
+      'wrong-worker-override',
       'approved',
     ]) {
       const result = spawnSync('npm', ['run', 'deploy'], {
@@ -88,12 +101,17 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
           WORKERS_CI_BRANCH: scenario === 'wrong-branch' ? 'feature' : 'main',
           WORKERS_CI_COMMIT_SHA:
             scenario === 'wrong-sha' ? 'b'.repeat(40) : sha,
+          WRANGLER_CI_OVERRIDE_NAME:
+            scenario === 'wrong-worker-override'
+              ? 'alienx-smarthome-recovery-drill'
+              : 'alienx-smarthome',
         },
       });
       const output = result.stdout + result.stderr;
       assert.equal(result.error, undefined, scenario);
       if (scenario === 'approved') {
         assert.equal(result.status, 0, output);
+        assert.match(output, /Verified production deploy target/);
         assert.match(output, /OFFLINE_WRANGLER_SENTINEL/);
       } else {
         assert.notEqual(result.status, 0, scenario);
