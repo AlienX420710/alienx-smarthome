@@ -4,7 +4,9 @@ const { pathToFileURL } = require('node:url');
 const path = require('node:path');
 
 async function loadAuditModule() {
-  return import(pathToFileURL(path.resolve('scripts/dependency-audit.mjs')).href);
+  return import(
+    pathToFileURL(path.resolve('scripts/dependency-audit.mjs')).href
+  );
 }
 
 function acceptedAudit() {
@@ -38,7 +40,8 @@ function acceptedAudit() {
             source: 999999,
             name: 'http-cache-semantics',
             dependency: 'http-cache-semantics',
-            title: 'max-stale handling can disclose cross-user cached responses',
+            title:
+              'max-stale handling can disclose cross-user cached responses',
             url: 'https://github.com/advisories/GHSA-ch52-4w7c-c8xp',
             severity: 'high',
             range: '*',
