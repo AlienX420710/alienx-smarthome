@@ -1,11 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const {
-  mkdtempSync,
-  mkdirSync,
-  writeFileSync,
-  rmSync,
-} = require('node:fs');
+const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = require('node:fs');
 const { tmpdir } = require('node:os');
 const { dirname, join } = require('node:path');
 const { pathToFileURL } = require('node:url');
@@ -25,11 +20,7 @@ function fixture() {
   return root;
 }
 
-function writeGeneratedRedirect(
-  root,
-  relativeConfigPath,
-  generatedConfig,
-) {
+function writeGeneratedRedirect(root, relativeConfigPath, generatedConfig) {
   const redirectDir = join(root, '.wrangler', 'deploy');
   const generatedPath = join(root, relativeConfigPath);
   mkdirSync(redirectDir, { recursive: true });
