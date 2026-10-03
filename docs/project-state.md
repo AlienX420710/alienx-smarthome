@@ -1,36 +1,39 @@
 # AlienX — current state
 
-Updated October 2, 2026. This file alone owns findings and dated release
+Updated October 3, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
 ## Last verified release
 
-October 2, 2026: main `fea0fdff4797a77afed6dd8e0d9521fa4b80c0ee`
-(PR #91) is the latest fully verified production application release. Exact-main
-[Quality 37075217968](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217968),
-[Responsive 37075217941](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217941),
-[Accessibility 37075217977](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217977),
-[Lighthouse 37075217955](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217955)
-and [Safari 37075217920](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217920)
-passed. [Push on main 37075217613](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217613)
+October 3, 2026: main `05289a30922ae39dcdd096f2357e98c327d7c5d7`
+(PR #94) is the latest fully verified production application/operator-alert release.
+Exact-main [Quality 37083061974](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083061974),
+[Responsive 37083061983](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083061983),
+[Accessibility 37083061977](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083061977),
+[Lighthouse 37083062046](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083062046)
+and [Safari 37083061989](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083061989)
+passed. [Push on main 37083061513](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083061513)
 passed CodeQL, and Quality passed the current-alert policy. Release Approval
-37075477543 and Workers Build `62a334e2-f73d-4bc8-a9a1-3831ff519bea`
-(version `112241cf-cd9b-41b1-b7af-f10c6b90bcec`) succeeded.
-[Push Smoke 37075217950](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075217950)
-verified this exact healthy revision at 23:01:20Z, followed by
-[Integrity 37075529551](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37075529551).
-The separate skipped integrity invocation from scheduled smoke is not release evidence.
+[37083281363](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083281363)
+succeeded and `alienx-ci-approved-main` points to this exact SHA.
+[Push Smoke 37083061968](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083061968)
+verified the exact healthy revision in production, followed by
+[Integrity 37083340476](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083340476).
+Skipped Operator Alert invocations after successful workflows are expected; the
+controller creates an issue only when a watched workflow actually fails.
 
-This release includes the working customer inquiry transport with natural heartbeat
-and recipient receipt evidence, the functional command-palette Escape control from
-PR #88, and PR #89's error-shell correction. Error routes now retain their
-server-declared `data-alienx-page="error"` state through preference application and
-use the same outer site background as the primary experience in explicit light,
-explicit dark, system light and system dark. The branded error terminal, noindex
-policy, reduced-motion behavior and recovery semantics remain unchanged.
-PR #91 extends the correct error identity to retired route URLs, removes their
-obsolete themes, and preserves Lighthouse diagnostics across attempts/invocations.
+PR #94 replaces private ChatGPT/provider-history monitoring with a trusted
+GitHub-native operator-alert controller. The controller validates same-repository
+workflow origin, has only `contents: read` and `issues: write`, and does not execute
+event-supplied source code. Controlled PR #95 changed only `.github/alert-canary`;
+`AlienX Alert Canary` run 37083084058 failed intentionally and trusted controller
+run 37083095061 automatically created operator-alert issue #96 with the exact run
+ID and SHA. The canary did not access production, mailbox contents, Resend/provider
+history, credentials or customer data. #96 and the unmerged canary PR were closed
+after evidence capture. Together with the previously recorded natural heartbeat,
+provider delivery, inbox receipt and authorized full inquiry evidence, this closes
+#58 / AX-017. The privacy boundary is now explicit in the release runbook.
 
 ## October 2 fresh review and scoped engineering closeout
 
@@ -47,15 +50,15 @@ connector independently verified ruleset 23059349 with
 The rule remains active on the default branch and still requires PRs, all five
 existing checks attributed to GitHub Actions (integration 15368), strict freshness,
 no deletion/force-push, an empty bypass list and `current_user_can_bypass: never`.
-This satisfies #63 / AX-011's live-setting acceptance. The owner's standing
-no-interactive-GitHub-login instruction is now maintained in AGENTS.md.
+This satisfies #63 / AX-011's live-setting acceptance; #63 is closed. The owner's
+standing no-interactive-GitHub-login instruction is maintained in AGENTS.md.
 Fresh local baseline checks passed: locked install, formatting, 94 unit tests,
 source and reachable-history audits (988 text blobs), zero dependency findings,
 zero type errors/warnings, build and Worker dry run. Direct live inspection from
 this environment was blocked by DNS resolution; CI evidence is separate.
 
 PR #91 completed the scoped engineering work for #64/#65, with all five PR
-gates and the exact-main production chain above. Updated local checks passed
+gates and its exact-main production chain. Updated local checks passed
 103 unit tests, formatting, source audit, zero type errors/warnings, build and
 Worker dry run. Local browser installation failed with a truncated archive;
 actual browser coverage passed in CI and is not presented as local execution:
@@ -75,8 +78,9 @@ actual browser coverage passed in CI and is not presented as local execution:
   errors still fail without retry; executable runner tests cover single-retry
   recovery, two-retry recovery and the bounded ceiling.
 
-This tranche does not certify all CSS as unused or close account, physical-device,
-owner-content, recovery or alert-receipt acceptance. Issues #58–#62 remain open.
+This engineering tranche does not certify all CSS as unused or close account,
+physical-device, owner-content or rollback/recovery acceptance. #58 and #63 are
+closed; Beta Closeout issues #59–#62 remain open. #62 remains intentionally last.
 
 ## Beta acceptance — incomplete
 
@@ -96,18 +100,18 @@ provider acceptance/delivery, inbox receipt and human/device acceptance differ.
 | AX-003 | Verified; PR #53 repair deployed                           | Three fixed Lighthouse samples, median performance, minimum other scores; no retry-until-green.                                                                                                                  |
 | AX-004 | Verified at e69c280                                        | Three obsolete manual CSP hashes removed after emitted-byte mapping.                                                                                                                                             |
 | AX-005 | Positive promotion verified; negative drill open           | Real Cloudflare rejection evidence still needed; offline mocks are not account execution.                                                                                                                        |
-| AX-006 | Owner/account evidence open                                | Mail receipt is now proven; failure-notification receipt and authorized compatible rollback/recovery evidence remain open.                                                                                       |
+| AX-006 | Recovery evidence open                                    | Mail receipt and the GitHub-native failure-alert path are proven; authorized compatible rollback/recovery evidence remains open under #59.                                                                      |
 | AX-007 | Verified at e69c280                                        | Required sanitized reachable-history scan; heuristic, not exhaustive certification.                                                                                                                              |
 | AX-008 | Physical-device evidence open                              | Actual screen reader, keyboard, touch, zoom and theme outcomes; resolve discovered defects.                                                                                                                      |
 | AX-009 | Scoped cleanup verified in PR #91                          | PR #77 consolidated routes; PR #91 removed 76 exclusive retired-route selectors and obsolete mappings. Active/dynamic theme and component behavior remains covered.                                              |
-| AX-010 | Owner editorial acceptance open; last                      | Factual consolidated homepage/About copy is deployed; no invented clients, results, incorporation or biography.                                                                                                  |
-| AX-011 | Enforcement reverified October 2                           | Ruleset 23059349 requires PR/five Actions checks, strict freshness, no bypass. Required review-thread resolution is enabled; owner save at 18:26:41 America/Chicago subsequently verified through the connector. |
+| AX-010 | Owner editorial acceptance open; last                      | Factual consolidated homepage/About copy is deployed; explicit owner editorial/public-contact acceptance remains intentionally last.                                                                             |
+| AX-011 | Verified and closed October 2                              | Ruleset 23059349 requires PR/five Actions checks, strict freshness, no bypass. Required review-thread resolution is enabled; owner save at 18:26:41 America/Chicago subsequently verified through the connector. |
 | AX-012 | Verified at e3b8e89                                        | Security/quality policies, all-severity audit, workflow/history gates; operational exceptions remain.                                                                                                            |
 | AX-013 | Verified at e3b8e89                                        | Exact-main fresh Actions/JS/TS analyses and zero open code-scanning alerts; private Dependabot/secret inventory is separate.                                                                                     |
 | AX-014 | Repository tranche verified in PR #47                      | Headers/static checks, sanitized analysis errors/warnings and offline deployment rehearsal; account scope remains open.                                                                                          |
-| AX-015 | Verified at f67c91c                                        | Mandatory edge limiter, strict honeypot/Turnstile success and safe logs; not live email proof.                                                                                                                   |
+| AX-015 | Verified at f67c91c                                        | Mandatory edge limiter, strict honeypot/Turnstile success and safe logs; live email evidence is recorded separately.                                                                                            |
 | AX-016 | Protocol rejection verified September 29; cipher work open | Both hosts reject TLS 1.0/1.1 and accept 1.2/1.3. Reassess/disposition CBC/RSA heuristics; static-homepage BREACH heuristic is not confirmed exploitation.                                                       |
-| AX-017 | Mail path proven; failure alert open                       | Natural heartbeat and authorized full-form provider delivery plus recipient receipt are proven; independent failure-alert receipt remains open.                                                                  |
+| AX-017 | Verified and closed October 3                              | Natural heartbeat and authorized inquiry delivery/receipt are proven; the GitHub-native controlled canary proved independent operator-alert creation without mailbox/provider-history access.                   |
 
 Branch cleanup is unverified. Re-enumerate remotes, confirm each temporary head is
 merged before deleting it, and retain active PRs and alienx-ci-approved-main /
@@ -121,11 +125,10 @@ following acceptance before calling beta closed; no generic rewrite is required.
 
 | Priority / finding             | Next action and completion evidence                                                                                                                                                                                                            | Responsible role                                                       |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| P1 — AX-017, AX-006            | Verify an independent safe failure condition produces the expected ChatGPT/operator alert; heartbeat and authorized full-form delivery/receipt are now proven.                                                                                 | Operator/owner with provider access; engineering investigates failures |
 | P1 — AX-005, AX-006            | Exercise fail-closed promotion and compatible recovery on an isolated Worker first; retain deployment versions, SHA/bindings/secret compatibility and notification evidence. A documented runbook or mocked rehearsal alone does not close it. | Cloudflare operator + engineering                                      |
 | P1 — AX-008                    | Execute the existing real-device/VoiceOver/keyboard/touch/zoom protocol and fix actual failures.                                                                                                                                               | Human tester + engineering                                             |
 | P1 — AX-016, AX-012            | Reassess TLS cipher findings and privately verify MFA/recovery, credential scope, WAF and private alerts. Record fixes or justified acceptance; scanner heuristics are not confirmed exploits.                                                 | Account owner/operator                                                 |
-| P1 — AX-010, after reliability | Owner accepts factual Work/About content and public contact/privacy expectations.                                                                                                                                                              | Jordan                                                                 |
+| P1 — AX-010, final             | Owner accepts factual Work/About content and public contact/privacy expectations only after the other Beta Closeout issues are resolved.                                                                                                     | Jordan                                                                 |
 
 AlienX adopted the coordination protocol through [PR #55](https://github.com/AlienX420710/alienx-smarthome/pull/55)
 on September 30. The linked Cleaning PR #28 remains independently owned;
@@ -148,39 +151,45 @@ owns its remaining work; this table records AlienX's adoption decisions.
 | Dependencies | Runtime dependency pins match. Wrangler/Prettier versions, parse5 usage and Undici override scope differ; both current audits are clean. No upgrade solely to make versions identical.                                                                                 |
 | Operations   | Both lack complete current owner/account/device evidence in this review. Shared procedures cannot substitute for each site's receipt/recovery records.                                                                                                                 |
 
-Review limits: direct read-only requests to both sites' release/status endpoints
-returned HTTP 403 from this execution environment, so no fresh live revision is
-asserted from those requests. CI/provider checks above are separately attributed.
-No provider/mailbox, account, physical-device or complete penetration test was
-performed. No new message, schedule, quote or inquiry was sent.
+Review limits: the October 3 alert-canary closeout used GitHub/repository/CI evidence
+only. No mailbox or provider-history access was used for that proof. No private
+account inspection, physical-device test or complete penetration test was performed
+in that closeout pass. Historical provider/mailbox evidence below remains attributed
+to the previously authorized October 2 checks; it is not permission for future access.
 
 ## External evidence boundaries
 
 September 29 SSL.org browser scans on both hosts showed trusted matching
 certificates, complete chains and old-protocol rejection. CBC/RSA results remain
 heuristics, not confirmed timing attacks. See the pinned scan record below.
-Cloudflare bot verification blocked account inspection; no cron activation,
-negative deployment or rollback was certified. The prepared manual inquiry was
-rejected by automatic approval review and was not sent. Cleanup does not override
-that rejection. September 29 provider inspection found no natural heartbeat. October 1 provider
-inspection confirmed the sending domain is verified and historical inquiry delivery
-through September 26. On October 2, the natural 05:00 America/Chicago heartbeat
-produced a provider event at 10:01:06.243Z marked delivered, and the site owner
-confirmed inbox receipt. An authorized production inquiry produced a provider event
-at 03:48:49.978Z marked delivered, and the site owner confirmed receipt of that same
-customer-facing message. The heartbeat was not replaced by a manual send. The
-remaining AX-017 evidence gap is an independently observed safe failure condition
-producing the expected ChatGPT/operator alert. The existing 05:30 health/full-form
-and 06:00 heartbeat-watch monitors were observed enabled; configured prompts are not
-successful execution. Do not duplicate them.
+Cloudflare bot verification blocked account inspection; no negative deployment or
+rollback was certified. September 29 provider inspection found no natural heartbeat.
+October 1 provider inspection confirmed the sending domain is verified and historical
+inquiry delivery through September 26. On October 2, the natural 05:00
+America/Chicago heartbeat produced a provider event at 10:01:06.243Z marked
+delivered, and the site owner confirmed inbox receipt. An authorized production
+inquiry produced a provider event at 03:48:49.978Z marked delivered, and the site
+owner confirmed receipt of that same customer-facing message. The heartbeat was not
+replaced by a manual send.
+
+On October 3, controlled PR #95 supplied the final AX-017 failure condition without
+email or provider access. `AlienX Alert Canary` run 37083084058 failed intentionally;
+trusted default-branch `AlienX Operator Alert` run 37083095061 succeeded and created
+issue #96 containing the failed workflow/run/SHA evidence. The canary changed only
+`.github/alert-canary`, was closed without merge, and did not modify production.
+Provider and mailbox data are private operator evidence: do not enumerate connected
+Resend metadata, mailbox contents or customer messages through ChatGPT/GitHub Actions.
+Any future private provider/account inspection requires explicit case-specific owner
+authorization.
 
 ## Next work and coordination
 
-Resolve live TLS/mail and operational/device evidence first. Modernize components
-only for concrete semantics, responsiveness, lifecycle or measured performance.
-Work, Experience, Lab and Technology are consolidated into the homepage; do not
-recreate standalone destinations without a concrete customer/navigation need.
-AlienX is a showcase and possible future business, not an established LLC.
+Resolve rollback/recovery, TLS/account and physical-device evidence first. Modernize
+components only for concrete semantics, responsiveness, lifecycle or measured
+performance. Work, Experience, Lab and Technology are consolidated into the homepage;
+do not recreate standalone destinations without a concrete customer/navigation need.
+AlienX is a showcase and possible future business, not an established LLC. #62's
+owner editorial/public-contact acceptance remains the final Beta Closeout step.
 
 Both owners' chat sessions can work on either repo under the local
 [coordination agreement](../AGENTS.md#cross-project-coordination). Each project
