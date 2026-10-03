@@ -67,7 +67,9 @@ async function requestJson(url, expectedStatus) {
     );
   }
   if (!body || typeof body !== 'object') {
-    throw new Error(`Recovery drill endpoint returned an invalid payload: ${url}`);
+    throw new Error(
+      `Recovery drill endpoint returned an invalid payload: ${url}`,
+    );
   }
   return body;
 }
@@ -127,7 +129,9 @@ async function main() {
     return;
   }
   if (!existsSync(join(root, 'dist'))) {
-    throw new Error('Recovery drill requires an existing production build in dist');
+    throw new Error(
+      'Recovery drill requires an existing production build in dist',
+    );
   }
   if (!/^[a-f0-9]{40}$/.test(sha)) {
     throw new Error('Recovery drill requires a full source SHA');
@@ -185,7 +189,8 @@ async function main() {
 
   const afterRejected = await pollLive(
     workerUrl,
-    (value) => value.versionId === baseline.versionId && value.state === 'baseline',
+    (value) =>
+      value.versionId === baseline.versionId && value.state === 'baseline',
     'Fail-closed negative promotion check',
   );
   if (afterRejected.versionId === rejected.versionId) {
@@ -302,7 +307,9 @@ async function main() {
 
   await mkdir(tmpdir(), { recursive: true });
   await writeFile(evidencePath, `${JSON.stringify(evidence, null, 2)}\n`);
-  console.log(`Recovery drill passed; private evidence staged at ${evidencePath}`);
+  console.log(
+    `Recovery drill passed; private evidence staged at ${evidencePath}`,
+  );
   console.log(`RECOVERY_DRILL_EVIDENCE ${JSON.stringify(evidence)}`);
 }
 
