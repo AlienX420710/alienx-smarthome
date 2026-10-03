@@ -20,6 +20,19 @@ function fixture() {
   return root;
 }
 
+function writeAstroRedirect(root, generatedConfig) {
+  mkdirSync(join(root, '.wrangler', 'deploy'), { recursive: true });
+  mkdirSync(join(root, 'dist', 'server'), { recursive: true });
+  writeFileSync(
+    join(root, '.wrangler', 'deploy', 'config.json'),
+    JSON.stringify({ configPath: '../../dist/server/wrangler.json' }),
+  );
+  writeFileSync(
+    join(root, 'dist', 'server', 'wrangler.json'),
+    JSON.stringify(generatedConfig),
+  );
+}
+
 test('accepts the production Worker target', async () => {
   const root = fixture();
   try {
@@ -51,19 +64,29 @@ test('rejects a Workers Build name override to another Worker', async () => {
   }
 });
 
-test('rejects a redirected Wrangler config for another Worker', async () => {
+test('accepts Astro generated Wrangler config without its own Worker name', async () => {
   const root = fixture();
   try {
-    mkdirSync(join(root, '.wrangler', 'deploy'), { recursive: true });
-    mkdirSync(join(root, 'dist'), { recursive: true });
-    writeFileSync(
-      join(root, '.wrangler', 'deploy', 'config.json'),
-      JSON.stringify({ configPath: '../../dist/wrangler.json' }),
+    writeAstroRedirect(root, { main: 'entry.mjs' });
+    const { verifyDeployTarget } = await loadGuard();
+    const result = verifyDeployTarget(root, {
+      WRANGLER_CI_OVERRIDE_NAME: 'alienx-smarthome',
+    });
+    assert.equal(result.worker, 'alienx-smarthome');
+    assert.equal(result.redirected, true);
+    assert.equal(
+      result.configPath,
+      join(root, 'dist', 'server', 'wrangler.json'),
     );
-    writeFileSync(
-      join(root, 'dist', 'wrangler.json'),
-      JSON.stringify({ name: 'alienx-smarthome-recovery-drill' }),
-    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('rejects a generated Wrangler config that declares another Worker', async () => {
+  const root = fixture();
+  try {
+    writeAstroRedirect(root, { name: 'alienx-smarthome-recovery-drill' });
     const { verifyDeployTarget } = await loadGuard();
     assert.throws(
       () =>
@@ -77,7 +100,7 @@ test('rejects a redirected Wrangler config for another Worker', async () => {
   }
 });
 
-test('accepts a redirected Wrangler config only for production', async () => {
+test('rejects a Wrangler redirect outside the pinned Astro generated path', async () => {
   const root = fixture();
   try {
     mkdirSync(join(root, '.wrangler', 'deploy'), { recursive: true });
@@ -86,17 +109,12 @@ test('accepts a redirected Wrangler config only for production', async () => {
       join(root, '.wrangler', 'deploy', 'config.json'),
       JSON.stringify({ configPath: '../../dist/wrangler.json' }),
     );
-    writeFileSync(
-      join(root, 'dist', 'wrangler.json'),
-      JSON.stringify({ name: 'alienx-smarthome' }),
-    );
+    writeFileSync(join(root, 'dist', 'wrangler.json'), JSON.stringify({}));
     const { verifyDeployTarget } = await loadGuard();
-    const result = verifyDeployTarget(root, {
-      WRANGLER_CI_OVERRIDE_NAME: 'alienx-smarthome',
-    });
-    assert.equal(result.worker, 'alienx-smarthome');
-    assert.equal(result.redirected, true);
-    assert.equal(result.configPath, join(root, 'dist', 'wrangler.json'));
+    assert.throws(
+      () => verifyDeployTarget(root, {}),
+      /Unexpected Wrangler redirect target/,
+    );
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
