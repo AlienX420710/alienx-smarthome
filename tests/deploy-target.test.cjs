@@ -7,7 +7,7 @@ const { pathToFileURL } = require('node:url');
 
 async function loadGuard() {
   return import(
-    `${pathToFileURL(join(__dirname, '../scripts/verify-deploy-target.mjs')).href}?test=${Date.now()}-${Math.random()}`,
+    `${pathToFileURL(join(__dirname, '../scripts/verify-deploy-target.mjs')).href}?test=${Date.now()}-${Math.random()}`
   );
 }
 
