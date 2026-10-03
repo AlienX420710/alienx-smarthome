@@ -6,24 +6,22 @@ and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
 ## Last verified release
 
-October 3, 2026: main `05289a30922ae39dcdd096f2357e98c327d7c5d7`
-(PR #94) is the latest fully verified production application/operator-alert release.
-Exact-main [Quality 37083061974](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083061974),
-[Responsive 37083061983](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083061983),
-[Accessibility 37083061977](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083061977),
-[Lighthouse 37083062046](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083062046)
-and [Safari 37083061989](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083061989)
-passed. [Push on main 37083061513](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083061513)
-passed CodeQL, and Quality passed the current-alert policy. Release Approval
-[37083281363](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083281363)
-succeeded and `alienx-ci-approved-main` points to this exact SHA.
-[Push Smoke 37083061968](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083061968)
-verified the exact healthy revision in production, followed by
-[Integrity 37083340476](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37083340476).
-Skipped Operator Alert invocations after successful workflows are expected; the
-controller creates an issue only when a watched workflow actually fails.
+October 3, 2026: main `81e219fc0e9e13dad669e77d5d2508c32eb75908`
+(PR #119) is the latest fully verified production release. All five required main
+gates and current code-scanning policy passed. Release Approval run
+[37146953634](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37146953634)
+succeeded for this exact SHA. Cloudflare Workers Build
+`487c0a70-295b-4581-adb3-83f670b7c681` succeeded and published Version ID
+`8126be09-38da-45f2-b06a-32a210cea9bd`.
+[Push Smoke 37146883118](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37146883118)
+verified that exact pushed revision live, checked both production hosts and the public
+status endpoint, and completed successfully. It was followed by
+[Integrity 37147118752](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37147118752),
+which also completed successfully for the same main revision. Skipped Operator Alert
+invocations after successful workflows are expected; the controller creates an issue
+only when a watched workflow actually fails.
 
-PR #94 replaces private ChatGPT/provider-history monitoring with a trusted
+PR #94 replaced private ChatGPT/provider-history monitoring with a trusted
 GitHub-native operator-alert controller. The controller validates same-repository
 workflow origin, has only `contents: read` and `issues: write`, and does not execute
 event-supplied source code. Controlled PR #95 changed only `.github/alert-canary`;
@@ -33,9 +31,9 @@ ID and SHA. The canary did not access production, mailbox contents, Resend/provi
 history, credentials or customer data. #96 and the unmerged canary PR were closed
 after evidence capture. Together with the previously recorded natural heartbeat,
 provider delivery, inbox receipt and authorized full inquiry evidence, this closes
-#58 / AX-017. The privacy boundary is now explicit in the release runbook.
+#58 / AX-017. The privacy boundary is explicit in the release runbook.
 
-## October 3 production recovery incident
+## October 3 production recovery incident — resolved
 
 PR #99 / main `9bc53a6c7aa421faf4e49ca11a78f39357940e07`
 added an account-level recovery drill that was intended to remain isolated from
@@ -43,24 +41,42 @@ production. That isolation failed. Scheduled Production Smoke run `37088364101`
 requested `https://alienxsmarthome.com/` at 2026-10-03 02:02:26Z and received
 HTTP 200 `application/json` containing the recovery-drill baseline payload instead
 of the AlienX HTML application. The trusted Operator Alert controller opened #100.
-This is failed safety evidence for #59, not successful rollback/recovery acceptance.
+This remains failed safety evidence for #59, not successful negative-promotion
+acceptance.
 
 PR #105 removed the recovery drill from the production deploy command, removed its
 enable marker, Worker, executor, regression test and Wrangler config, and restored
 the pre-#99 fail-closed deployment rehearsal. It merged as main
 `35471a63ffeed3883a4c94b893091c3b1b4fa58b`. All five exact-main gates passed and
 Release Approval run `37089458826` published `alienx-ci-approved-main` for that exact
-SHA. Production Smoke run `37089212686` nevertheless exhausted its 15-minute
-exact-revision poll without observing the remediation revision; every response was
-HTTP 200 but lacked the expected status/revision contract. Operator Alert #106 was
-opened. Incident #102 remains open and production recovery is not verified. PR #105
-is repository remediation evidence only; it is not a verified production release.
+SHA, but Production Smoke run `37089212686` exhausted its 15-minute exact-revision
+poll without observing the remediation revision. The repository repair was correct,
+but the Cloudflare deployment had not completed.
 
-The acceptance audit also reopened #61 because its own prior closeout explicitly
-left private account-side MFA/recovery, credential/API-token scope, applicable
-WAF/security controls and private security/failure alert receipt outstanding. #58
-and #63 remain closed with their existing evidence. #59, #60, #61 and #62 are open;
-#62 remains intentionally last.
+The site was restored by an authorized Cloudflare rollback to known-good Version ID
+`6533994e-f989-4677-885f-e4b63252d2b0` from PR #94. Subsequent failed Workers Builds
+were traced to a separate deployment blocker rather than the removed recovery drill:
+Astro's Cloudflare adapter automatically enabled an unused `SESSION` KV binding, and
+Wrangler attempted to create `alienx-smarthome-session`. Cloudflare rejected that
+provisioning request because a namespace with that account/title already existed
+(API code 10014).
+
+PR #119 set `session: false` in `astro.config.mjs` and added regression coverage so
+the unused session binding cannot silently return. Its PR-head Cloudflare build
+`bdb59ef7-cc7b-453c-82f5-7fa362817f4a` succeeded as Version ID
+`2bf401ae-8f94-4377-b456-e8c0d3a94daa`. After merge, production build
+`487c0a70-295b-4581-adb3-83f670b7c681` succeeded as Version ID
+`8126be09-38da-45f2-b06a-32a210cea9bd`; push Smoke verified exact live revision
+`81e219fc0e9e13dad669e77d5d2508c32eb75908`, and Production Integrity passed.
+Incident #102 and the stale incident/recovery Operator Alert issues were closed after
+that proof chain completed.
+
+The acceptance audit keeps #58 and #63 closed with their existing evidence. #59 was
+explicitly reopened because PR #99 violated its safety constraint and cannot satisfy
+the required isolated negative-promotion exercise. #60, #61 and #62 also remain open;
+#61 retains private account-side MFA/recovery, credential/API-token scope, applicable
+WAF/security controls and private security/failure alert receipt. #62 remains
+intentionally last.
 
 ## October 2 fresh review and scoped engineering closeout
 
@@ -127,8 +143,8 @@ provider acceptance/delivery, inbox receipt and human/device acceptance differ.
 | AX-002 | Verified at d8bf0d3 / 4a51a7e                         | Candidate and exact-revision post-Smoke Integrity remain separate.                                                                                                                                               |
 | AX-003 | Verified; PR #53 repair deployed                      | Three fixed Lighthouse samples, median performance, minimum other scores; no retry-until-green.                                                                                                                  |
 | AX-004 | Verified at e69c280                                   | Three obsolete manual CSP hashes removed after emitted-byte mapping.                                                                                                                                             |
-| AX-005 | Recovery drill failed isolation; acceptance open      | PR #99 replaced the production response with drill JSON. Incident #102 is open; a genuinely isolated negative promotion test and compatible recovery evidence are still required.                                |
-| AX-006 | Recovery evidence open                                | Mail receipt and GitHub-native failure alerts are proven. PR #105 removed the unsafe drill, but its first exact-revision Production Smoke failed because the remediation revision never became live.             |
+| AX-005 | Recovery drill failed isolation; acceptance open      | PR #99 replaced the production response with drill JSON. Incident #102 is resolved, but a genuinely isolated negative-promotion test with retained rejection evidence is still required.                       |
+| AX-006 | Compatible recovery proven; #59 still open            | Authorized rollback restored the known-good Worker, and PR #119 then deployed exact main `81e219fc` with successful Cloudflare build, exact-revision Smoke and Integrity. #59 remains open for AX-005 isolation proof. |
 | AX-007 | Verified at e69c280                                   | Required sanitized reachable-history scan; heuristic, not exhaustive certification.                                                                                                                              |
 | AX-008 | Physical-device evidence open                         | Actual screen reader, keyboard, touch, zoom and theme outcomes; resolve discovered defects.                                                                                                                      |
 | AX-009 | Scoped cleanup verified in PR #91                     | PR #77 consolidated routes; PR #91 removed 76 exclusive retired-route selectors and obsolete mappings. Active/dynamic theme and component behavior remains covered.                                              |
@@ -151,12 +167,12 @@ and exact-main approval/build/Smoke/Integrity chain.
 This is a source/CI comparison, not an account-security certification. Finish the
 following acceptance before calling beta closed; no generic rewrite is required.
 
-| Priority / finding  | Next action and completion evidence                                                                                                                                                                                              | Responsible role                  |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| P1 — AX-005, AX-006 | Restore a healthy production application first. Then redesign the negative-promotion drill so test-worker identity and routing are independently verified before any destructive action; retain exact version/recovery evidence. | Cloudflare operator + engineering |
-| P1 — AX-008         | Execute the existing real-device/VoiceOver/keyboard/touch/zoom protocol and fix actual failures.                                                                                                                                 | Human tester + engineering        |
-| P1 — AX-016, AX-012 | Reassess TLS cipher findings and privately verify MFA/recovery, credential scope, WAF and private alerts. Record fixes or justified acceptance; scanner heuristics are not confirmed exploits.                                   | Account owner/operator            |
-| P1 — AX-010, final  | Owner accepts factual Work/About content and public contact/privacy expectations only after the other Beta Closeout issues are resolved.                                                                                         | Jordan                            |
+| Priority / finding  | Next action and completion evidence                                                                                                                                                                                            | Responsible role                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
+| P1 — AX-005, AX-006 | Production is healthy and compatible recovery is proven. Redesign the negative-promotion drill so an isolated test Worker's identity and routing are independently verified before any destructive action; retain exact rejected/recovered version evidence. | Cloudflare operator + engineering |
+| P1 — AX-008         | Execute the existing real-device/VoiceOver/keyboard/touch/zoom protocol and fix actual failures.                                                                                                                               | Human tester + engineering        |
+| P1 — AX-016, AX-012 | Reassess TLS cipher findings and privately verify MFA/recovery, credential scope, WAF and private alerts. Record fixes or justified acceptance; scanner heuristics are not confirmed exploits.                                 | Account owner/operator            |
+| P1 — AX-010, final  | Owner accepts factual Work/About content and public contact/privacy expectations only after the other Beta Closeout issues are resolved.                                                                                       | Jordan                            |
 
 AlienX adopted the coordination protocol through [PR #55](https://github.com/AlienX420710/alienx-smarthome/pull/55)
 on September 30. The linked Cleaning PR #28 remains independently owned;
@@ -171,7 +187,7 @@ owns its remaining work; this table records AlienX's adoption decisions.
 
 | Concern      | Comparison and AlienX disposition                                                                                                                                                                                                                                      |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Release      | AlienX's last verified production release remains PR #94 while incident #102 is open; the current source/remediation SHA is not production-verified. Cleaning main's performance/promotion chain is independently blocked.                                             |
+| Release      | AlienX's latest verified production release is PR #119 / main `81e219fc`, with successful Cloudflare publish, exact-revision Smoke and Integrity. Incident #102 is closed. Cleaning's release state remains independently owned.                                        |
 | Forms        | Both enforce Turnstile, edge limits, bounded payloads, validation and idempotency. AlienX's JSON inquiry and Cleaning's multipart quote/customer confirmation serve different needs; retain both contracts.                                                            |
 | Lighthouse   | AlienX captures CLI stderr; Cleaning's missing-report path was reproduced as ENOENT before retry. Share PR #53 as evidence, leave the repair to independent Cleaning validation. Fixed three-sample versus single-sample policies remain local.                        |
 | Mail         | Both schedule 05:00 Chicago using two UTC candidates and bounded retry. Both use a direct Resend request with the platform's default redirect behavior; sender, recipient, payload and confirmation contracts remain project-local. No live test permission transfers. |
@@ -190,15 +206,16 @@ to the previously authorized October 2 checks; it is not permission for future a
 September 29 SSL.org browser scans on both hosts showed trusted matching
 certificates, complete chains and old-protocol rejection. CBC/RSA results remain
 heuristics, not confirmed timing attacks. See the pinned scan record below.
-Cloudflare bot verification blocked account inspection; no successful isolated
-negative-promotion/rollback acceptance has been certified. September 29 provider
-inspection found no natural heartbeat. October 1 provider inspection confirmed the
-sending domain is verified and historical inquiry delivery through September 26. On
-October 2, the natural 05:00 America/Chicago heartbeat produced a provider event at
-10:01:06.243Z marked delivered, and the site owner confirmed inbox receipt. An
-authorized production inquiry produced a provider event at 03:48:49.978Z marked
-delivered, and the site owner confirmed receipt of that same customer-facing message.
-The heartbeat was not replaced by a manual send.
+Cloudflare account inspection remains separate from public/repository evidence. A
+compatible production rollback and subsequent exact-main recovery are now proven by
+the October 3 #119 chain, but no successful isolated negative-promotion exercise has
+been certified for #59. September 29 provider inspection found no natural heartbeat.
+October 1 provider inspection confirmed the sending domain is verified and historical
+inquiry delivery through September 26. On October 2, the natural 05:00 America/Chicago
+heartbeat produced a provider event at 10:01:06.243Z marked delivered, and the site
+owner confirmed inbox receipt. An authorized production inquiry produced a provider
+event at 03:48:49.978Z marked delivered, and the site owner confirmed receipt of that
+same customer-facing message. The heartbeat was not replaced by a manual send.
 
 On October 3, controlled PR #95 supplied the final AX-017 failure condition without
 email or provider access. `AlienX Alert Canary` run 37083084058 failed intentionally;
@@ -212,10 +229,11 @@ authorization.
 
 ## Next work and coordination
 
-Resolve the live production incident first, then rollback/recovery, TLS/account and
-physical-device evidence. Modernize components only for concrete semantics,
-responsiveness, lifecycle or measured performance. Work, Experience, Lab and
-Technology are consolidated into the homepage; do not recreate standalone
+Production is healthy on verified main `81e219fc0e9e13dad669e77d5d2508c32eb75908`.
+Next complete #59's genuinely isolated negative-promotion acceptance, then the
+TLS/account and physical-device evidence. Modernize components only for concrete
+semantics, responsiveness, lifecycle or measured performance. Work, Experience, Lab
+and Technology are consolidated into the homepage; do not recreate standalone
 destinations without a concrete customer/navigation need. AlienX is a showcase and
 possible future business, not an established LLC. #62's owner editorial/public-contact
 acceptance remains the final Beta Closeout step.
