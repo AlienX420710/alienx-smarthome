@@ -95,10 +95,7 @@ export function verifyDeployTarget(root = process.cwd(), env = process.env) {
     'redirected Wrangler configuration',
   );
   if (Object.hasOwn(effectiveConfig, 'name')) {
-    assertWorkerName(
-      effectiveConfig.name,
-      'redirected Wrangler configuration',
-    );
+    assertWorkerName(effectiveConfig.name, 'redirected Wrangler configuration');
   }
 
   console.log(
