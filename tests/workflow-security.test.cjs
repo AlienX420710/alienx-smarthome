@@ -24,6 +24,7 @@ function auditMutation(mutate) {
     fs.rmSync(root, { recursive: true, force: true });
   }
 }
+
 function change(root, file, from, to) {
   const target = path.join(root, '.github/workflows', file);
   const source = fs.readFileSync(target, 'utf8');
@@ -33,10 +34,12 @@ function change(root, file, from, to) {
   );
   fs.writeFileSync(target, source.replace(from, to));
 }
+
 test('workflow security audit accepts the committed policy', () => {
   const result = auditMutation(() => {});
   assert.equal(result.status, 0, result.stderr);
 });
+
 for (const [name, file, from, to, error] of [
   [
     'email credential in Actions',
@@ -88,6 +91,13 @@ for (const [name, file, from, to, error] of [
     /origin validation is required/,
   ],
   [
+    'foreign operator-alert origin',
+    'operator-alert.yml',
+    'github.event.workflow_run.head_repository.full_name == github.repository',
+    'true',
+    /origin validation is required/,
+  ],
+  [
     'SafariDriver without WebKit',
     'safari.yml',
     'npm run test:webkit',
@@ -118,6 +128,13 @@ for (const [name, file, from, to, error] of [
     /unexpected write permission/,
   ],
   [
+    'operator alert contents write',
+    'operator-alert.yml',
+    'issues: write',
+    'contents: write',
+    /unexpected write permission for contents/,
+  ],
+  [
     'compact privileged PR trigger',
     'quality.yml',
     'on:',
@@ -142,6 +159,7 @@ for (const [name, file, from, to, error] of [
     assert.match(result.stderr, error);
   });
 }
+
 test('audit rejects tracked Worker secrets', () => {
   const result = auditMutation((root) => {
     fs.writeFileSync(path.join(root, '.dev.vars'), 'EXAMPLE=value');
