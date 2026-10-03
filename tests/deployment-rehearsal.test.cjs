@@ -11,7 +11,7 @@ const { tmpdir } = require('node:os');
 const { join } = require('node:path');
 const { execFileSync, spawnSync } = require('node:child_process');
 
-test('actual npm deploy command stops before recovery drill and Wrangler on rejected, missing, stale or unavailable evidence', () => {
+test('actual npm deploy command stops before Wrangler on rejected, missing, stale or unavailable evidence', () => {
   const root = mkdtempSync(join(tmpdir(), 'alienx-deploy-rehearsal-'));
   try {
     const git = (args) =>
@@ -24,17 +24,10 @@ test('actual npm deploy command stops before recovery drill and Wrangler on reje
       join(root, 'scripts/verify-ci.mjs'),
       readFileSync(join(__dirname, '../scripts/verify-ci.mjs')),
     );
-    writeFileSync(
-      join(root, 'scripts/recovery-drill.mjs'),
-      "console.log('OFFLINE_RECOVERY_DRILL_SENTINEL');\n",
-    );
     const {
       scripts: { deploy },
     } = JSON.parse(readFileSync(join(__dirname, '../package.json')));
-    assert.equal(
-      deploy,
-      'node scripts/verify-ci.mjs && node scripts/recovery-drill.mjs && wrangler deploy',
-    );
+    assert.equal(deploy, 'node scripts/verify-ci.mjs && wrangler deploy');
     writeFileSync(
       join(root, 'package.json'),
       JSON.stringify({ type: 'module', scripts: { deploy } }),
@@ -101,15 +94,9 @@ test('actual npm deploy command stops before recovery drill and Wrangler on reje
       assert.equal(result.error, undefined, scenario);
       if (scenario === 'approved') {
         assert.equal(result.status, 0, output);
-        assert.match(output, /OFFLINE_RECOVERY_DRILL_SENTINEL/);
         assert.match(output, /OFFLINE_WRANGLER_SENTINEL/);
       } else {
         assert.notEqual(result.status, 0, scenario);
-        assert.doesNotMatch(
-          output,
-          /OFFLINE_RECOVERY_DRILL_SENTINEL/,
-          scenario,
-        );
         assert.doesNotMatch(output, /OFFLINE_WRANGLER_SENTINEL/, scenario);
       }
     }
