@@ -139,10 +139,7 @@ for (const file of workflowFiles) {
 }
 
 for (const file of trackedFiles) {
-  if (
-    /(^|\/)\.env(?:\.|$)/i.test(file) &&
-    !/(^|\/)\.env\.example$/i.test(file)
-  )
+  if (/(^|\/)\.env(?:\.|$)/i.test(file) && !/(^|\/)\.env\.example$/i.test(file))
     fail(`${file}: tracked environment file is prohibited`);
   if (
     /(^|\/)\.dev\.vars(?:\.|$)/i.test(file) &&
