@@ -6,7 +6,10 @@ const path = require('node:path');
 
 test('recovery drill configuration is isolated from production', () => {
   const config = JSON.parse(
-    readFileSync(path.join(__dirname, '../wrangler.recovery-drill.json'), 'utf8'),
+    readFileSync(
+      path.join(__dirname, '../wrangler.recovery-drill.json'),
+      'utf8',
+    ),
   );
 
   assert.equal(config.name, 'alienx-smarthome-recovery-drill');
@@ -43,7 +46,10 @@ test('recovery drill evidence stays outside deployable production assets', () =>
   );
   assert.ok(source.includes("join(tmpdir(), 'alienx-recovery-drill.json')"));
   assert.ok(source.includes('RECOVERY_DRILL_EVIDENCE'));
-  assert.equal(source.includes("join(root, 'dist', 'recovery-drill.json')"), false);
+  assert.equal(
+    source.includes("join(root, 'dist', 'recovery-drill.json')"),
+    false,
+  );
 });
 
 test('recovery drill worker exposes version evidence and makes rejected candidate unhealthy', async () => {
