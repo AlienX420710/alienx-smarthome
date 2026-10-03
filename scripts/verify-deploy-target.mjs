@@ -48,8 +48,6 @@ export function verifyDeployTarget(root = process.cwd(), env = process.env) {
   if (overrideName !== undefined) {
     assertWorkerName(overrideName, 'WRANGLER_CI_OVERRIDE_NAME');
   }
-  const workersBuildOverrideIsAuthoritative =
-    env.WORKERS_CI === '1' && overrideName === productionWorker;
 
   const redirectPath = resolve(root, '.wrangler/deploy/config.json');
   if (!existsSync(redirectPath)) {
@@ -90,10 +88,7 @@ export function verifyDeployTarget(root = process.cwd(), env = process.env) {
     effectiveConfigPath,
     'redirected Wrangler configuration',
   );
-  if (
-    Object.hasOwn(effectiveConfig, 'name') &&
-    !workersBuildOverrideIsAuthoritative
-  ) {
+  if (Object.hasOwn(effectiveConfig, 'name')) {
     assertWorkerName(effectiveConfig.name, 'redirected Wrangler configuration');
   }
 
