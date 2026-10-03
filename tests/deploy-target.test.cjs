@@ -106,10 +106,7 @@ test('rejects the retired recovery drill artifacts in a production checkout', as
   const root = fixture();
   try {
     mkdirSync(join(root, 'ops'), { recursive: true });
-    writeFileSync(
-      join(root, 'ops', 'recovery-drill.enabled'),
-      'enabled\n',
-    );
+    writeFileSync(join(root, 'ops', 'recovery-drill.enabled'), 'enabled\n');
     const { verifyDeployTarget } = await loadGuard();
     assert.throws(
       () => verifyDeployTarget(root, {}),
