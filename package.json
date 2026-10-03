@@ -29,7 +29,7 @@
     "cf-typegen": "wrangler types && node scripts/scope-worker-types.mjs",
     "check": "npm test && npm run security:audit && npm run typecheck && npm run build && wrangler deploy --dry-run",
     "audit": "node scripts/dependency-audit.mjs",
-    "deploy": "node scripts/verify-ci.mjs && wrangler deploy",
+    "deploy": "node scripts/verify-ci.mjs && node scripts/verify-deploy-target.mjs && wrangler deploy",
     "dev": "node scripts/optimize-images.mjs && astro dev",
     "preview": "npm run build && wrangler dev",
     "security:audit": "node scripts/security-audit.mjs",
