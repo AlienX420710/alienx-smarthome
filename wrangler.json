@@ -13,7 +13,6 @@
     "directory": "./dist",
     "binding": "ASSETS"
   },
-  "previews": {},
   "routes": [
     {
       "pattern": "alienxsmarthome.com",
