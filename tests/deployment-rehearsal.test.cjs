@@ -105,7 +105,11 @@ test('actual npm deploy command stops before recovery drill and Wrangler on reje
         assert.match(output, /OFFLINE_WRANGLER_SENTINEL/);
       } else {
         assert.notEqual(result.status, 0, scenario);
-        assert.doesNotMatch(output, /OFFLINE_RECOVERY_DRILL_SENTINEL/, scenario);
+        assert.doesNotMatch(
+          output,
+          /OFFLINE_RECOVERY_DRILL_SENTINEL/,
+          scenario,
+        );
         assert.doesNotMatch(output, /OFFLINE_WRANGLER_SENTINEL/, scenario);
       }
     }
