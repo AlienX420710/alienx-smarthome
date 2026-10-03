@@ -9,6 +9,11 @@ function auditMutation(mutate) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'alienx-workflow-audit-'));
   try {
     fs.cpSync('.github', path.join(root, '.github'), { recursive: true });
+    fs.mkdirSync(path.join(root, 'scripts'), { recursive: true });
+    fs.copyFileSync(
+      'scripts/dependency-audit.mjs',
+      path.join(root, 'scripts/dependency-audit.mjs'),
+    );
     for (const file of ['package.json', 'package-lock.json'])
       fs.copyFileSync(file, path.join(root, file));
     fs.writeFileSync(path.join(root, 'README.md'), 'Audit fixture');
@@ -25,8 +30,8 @@ function auditMutation(mutate) {
   }
 }
 
-function change(root, file, from, to) {
-  const target = path.join(root, '.github/workflows', file);
+function changeTracked(root, relativePath, from, to) {
+  const target = path.join(root, relativePath);
   const source = fs.readFileSync(target, 'utf8');
   assert.ok(
     source.includes(from),
@@ -35,9 +40,39 @@ function change(root, file, from, to) {
   fs.writeFileSync(target, source.replace(from, to));
 }
 
+function change(root, file, from, to) {
+  changeTracked(root, path.join('.github/workflows', file), from, to);
+}
+
 test('workflow security audit accepts the committed policy', () => {
   const result = auditMutation(() => {});
   assert.equal(result.status, 0, result.stderr);
+});
+
+test('workflow security audit rejects removal of raw all-severity dependency audit', () => {
+  const result = auditMutation((root) =>
+    changeTracked(
+      root,
+      'scripts/dependency-audit.mjs',
+      "['audit', '--audit-level=low', '--json']",
+      "['audit', '--json']",
+    ),
+  );
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /guarded VEX is required/);
+});
+
+test('workflow security audit rejects a changed VEX advisory identity', () => {
+  const result = auditMutation((root) =>
+    changeTracked(
+      root,
+      'scripts/dependency-audit.mjs',
+      "advisory: 'GHSA-ch52-4w7c-c8xp'",
+      "advisory: 'GHSA-different'",
+    ),
+  );
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /guarded VEX is required/);
 });
 
 for (const [name, file, from, to, error] of [
