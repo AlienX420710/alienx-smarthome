@@ -83,7 +83,9 @@ export function assertAcceptedAuditShape(audit) {
     advisory.severity !== 'high' ||
     advisory.name !== accepted.package
   ) {
-    fail('the only allowed advisory no longer matches the pinned VEX statement');
+    fail(
+      'the only allowed advisory no longer matches the pinned VEX statement',
+    );
   }
 
   const astroVia = vulnerabilities.astro?.via;
@@ -105,16 +107,22 @@ export function assertAcceptedAuditShape(audit) {
     counts.info !== 0 ||
     counts.total !== 3
   ) {
-    fail('vulnerability counts changed from the single accepted advisory chain');
+    fail(
+      'vulnerability counts changed from the single accepted advisory chain',
+    );
   }
 
   return { acceptedException: true };
 }
 
 export function assertVexReachability() {
-  const packageManifest = readJson('node_modules/http-cache-semantics/package.json');
+  const packageManifest = readJson(
+    'node_modules/http-cache-semantics/package.json',
+  );
   const astroManifest = readJson('node_modules/astro/package.json');
-  const cloudflareManifest = readJson('node_modules/@astrojs/cloudflare/package.json');
+  const cloudflareManifest = readJson(
+    'node_modules/@astrojs/cloudflare/package.json',
+  );
 
   if (packageManifest.version !== accepted.version) {
     fail(`http-cache-semantics version changed to ${packageManifest.version}`);
@@ -132,11 +140,16 @@ export function assertVexReachability() {
   );
 
   if (importingFiles.length !== 1) {
-    fail(`Astro http-cache-semantics usage changed (${importingFiles.length} importing files)`);
+    fail(
+      `Astro http-cache-semantics usage changed (${importingFiles.length} importing files)`,
+    );
   }
 
   const astroUsage = fs.readFileSync(importingFiles[0], 'utf8');
-  if (!astroUsage.includes('.storable()') || !astroUsage.includes('.timeToLive()')) {
+  if (
+    !astroUsage.includes('.storable()') ||
+    !astroUsage.includes('.timeToLive()')
+  ) {
     fail('known Astro remote-image TTL usage changed');
   }
   if (
@@ -157,7 +170,9 @@ export function assertVexReachability() {
       source.includes('http-cache-semantics') ||
       source.includes('satisfiesWithoutRevalidation')
     ) {
-      fail(`vulnerable cache implementation reached deployed server output: ${path.relative(root, file)}`);
+      fail(
+        `vulnerable cache implementation reached deployed server output: ${path.relative(root, file)}`,
+      );
     }
   }
 }
@@ -187,7 +202,8 @@ function main() {
 
   const classification = evaluateAudit(audit);
   if (!classification.acceptedException) {
-    if (result.status !== 0) fail('npm audit exited nonzero without a classified finding');
+    if (result.status !== 0)
+      fail('npm audit exited nonzero without a classified finding');
     console.log('Dependency audit passed: zero known vulnerabilities.');
     return;
   }
@@ -199,11 +215,16 @@ function main() {
   );
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
   try {
     main();
   } catch (error) {
-    console.error(error instanceof Error ? error.message : 'Dependency audit failed closed');
+    console.error(
+      error instanceof Error ? error.message : 'Dependency audit failed closed',
+    );
     process.exitCode = 1;
   }
 }
