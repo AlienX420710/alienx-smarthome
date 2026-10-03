@@ -1,0 +1,19 @@
+name: AlienX Alert Canary
+
+on:
+  pull_request:
+    paths:
+      - .github/alert-canary
+
+permissions:
+  contents: read
+
+jobs:
+  controlled-failure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Emit controlled failure
+        run: |
+          echo "Intentional operator-alert canary failure for acceptance testing."
+          echo "No production, mailbox, or provider access is performed."
+          exit 1

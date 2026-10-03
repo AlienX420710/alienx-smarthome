@@ -1,5 +1,7 @@
-// Optional injectable evidence validator; production monitoring uses the connected
-// Resend account in ChatGPT. No environment variable or CI credential is required.
+// Optional provider-evidence validator for explicitly authorized operator use only.
+// It is not an automated monitor, is not invoked by ChatGPT, and is not used by
+// GitHub Actions. Production operator alerts are generated from GitHub workflow
+// evidence without enumerating mailbox or provider message history.
 
 export function expectedHealthDate(now = new Date()) {
   const parts = Object.fromEntries(
