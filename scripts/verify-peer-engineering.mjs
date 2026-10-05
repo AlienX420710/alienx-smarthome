@@ -10,6 +10,26 @@ if (!peer)
 const read = (directory, file) =>
   readFileSync(resolve(directory, file), 'utf8');
 const files = [
+  'scripts/site-config.mjs',
+  'scripts/verify-ci.mjs',
+  'scripts/publish-ci-approval.mjs',
+  'scripts/verify-code-scanning.mjs',
+  'scripts/security-audit.mjs',
+  'scripts/workflow-policy.mjs',
+  'tests/release-gate.test.mjs',
+  'tests/release-refs.test.cjs',
+  'tests/deployment-rehearsal.test.cjs',
+  '.github/dependabot.yml',
+  'scripts/test-browser.mjs',
+  'scripts/lighthouse.mjs',
+  'scripts/lighthouse-runner.mjs',
+  'scripts/lighthouse-assessment.mjs',
+  'scripts/verify-contact-form-health.mjs',
+  'scripts/verify-email-health.mjs',
+  'lighthouse.config.cjs',
+  'tests/accessibility.spec.cjs',
+  'tests/responsive.spec.cjs',
+  'tests/safari.cjs',
   'AGENTS.md',
   '.github/copilot-instructions.md',
   '.prettierrc.json',
@@ -73,11 +93,20 @@ assert.deepEqual(
 );
 const normalizeWorkflow = (text) =>
   text.replace(/^name: .*\n/, 'name: SITE Quality\n');
-assert.equal(
-  normalizeWorkflow(read(root, '.github/workflows/quality.yml')),
-  normalizeWorkflow(read(peer, '.github/workflows/quality.yml')),
-  'Shared engineering drift: Quality workflow',
-);
+for (const workflow of [
+  'quality.yml',
+  'responsive.yml',
+  'accessibility.yml',
+  'safari.yml',
+  'lighthouse.yml',
+  'contact-form-health.yml',
+]) {
+  assert.equal(
+    normalizeWorkflow(read(root, '.github/workflows/' + workflow)),
+    normalizeWorkflow(read(peer, '.github/workflows/' + workflow)),
+    'Shared workflow drift: ' + workflow,
+  );
+}
 console.log(
-  'Shared preflight baseline matches. This does not certify full application/release parity.',
+  'Migrated release, monitoring, browser and preflight components match. Remaining application/CSP/integrity differences and deployment evidence are tracked separately; full parity is not certified.',
 );

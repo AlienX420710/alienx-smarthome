@@ -27,7 +27,8 @@ The live inventory job is main-only; the five PR gates remain mandatory.
 Missing, pending, skipped, cancelled, timed-out or failed required evidence is
 not approval. Investigate the actual cause of failures. Do not skip tests, lower
 thresholds, remove required checks or rerun repeatedly to manufacture a pass.
-Keep fixed Lighthouse sample aggregation and retained diagnostic artifacts.
+Keep three fixed Lighthouse samples, each meeting the existing score thresholds,
+and retained diagnostic artifacts; do not average away a failing sample.
 
 Keyboard tests use actual Tab, Shift+Tab, Enter, Space and Escape. Controls must
 be reachable, visibly focused and operable. Preserve semantic controls, real

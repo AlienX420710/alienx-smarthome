@@ -57,10 +57,10 @@ is committed in `lighthouse.config.cjs`; `scripts/lighthouse.mjs` runs the locke
 Lighthouse CLI, with `--accessibility` for the accessibility-only job. Keep both
 Lighthouse workflows green when changing tooling. Do not use `npm audit fix --force`.
 
-The quality audit collects three fixed samples per route and compares median
-performance against the unchanged 0.85 threshold. Accessibility, best practices,
+The quality audit collects three fixed samples per route; every performance
+score must meet the unchanged 0.85 threshold. Accessibility, best practices,
 and SEO must meet 0.95 in every sample. Measurement errors or missing scores
-fail closed. The accessibility-only job runs one sample per route. All raw
+fail closed. The accessibility-only job also runs three fixed samples per route. All raw
 reports and `summary.json` are retained under a unique `quality-*` or
 `accessibility-*` invocation directory in the Lighthouse diagnostics artifact.
 Each report names its route, sample and attempt. Only recognized trace-capture
@@ -260,3 +260,30 @@ case pass/fail/not-tested and attach sanitized evidence; not-tested is not pass.
 
 Closing AX-008 requires actual results and resolution of discovered defects,
 not merely committing this protocol.
+
+## Shared engineering configuration and verification
+
+`engineering.config.json` supplies explicit repository/release-ref identity,
+public routes, form selectors/encoding, theme capability and fixed mail identity.
+The migrated scripts and browser workflows are shared; site interaction suites
+remain selected explicitly and must not be dropped. Run `npm run verify:peer --
+/path/to/peer-checkout` after final formatting. It compares migrated components
+and normalized lockfiles, not unimplemented application parity or deployments.
+Use `SITE_DISABLE_INSPECTOR=1` only for restricted local preflight environments;
+production defaults are unchanged. Native Safari still requires macOS CI.
+
+The common Lighthouse runner uses the locked Playwright Chromium, three samples
+for quality and accessibility, and requires every applicable score to meet the
+unchanged threshold. At most two retries apply solely to trace-capture failures;
+missing/malformed reports, process failures and score failures never retry.
+All samples, attempts, assets and process diagnostics remain under `.lighthouseci`.
+Historical single-sample/median results remain evidence for their recorded revisions only.
+
+The shared form-health monitor checks visible UI, empty-form validation, security
+bootstrap and unverified API rejection; it cannot prove successful delivery.
+Operator Alert watches failed trusted production, release and form-health runs.
+Its canary changes only `.github/alert-canary` and never touches production or
+mail. Actual alert creation/owner receipt requires separate evidence.
+The optional provider-evidence validator remains operator-authorized and is not
+called by Actions. Mailbox receipt, MFA, credential scope and recovery evidence
+remain distinct from source checks; no real quote test is authorized here.

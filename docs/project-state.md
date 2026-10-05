@@ -4,6 +4,43 @@ Updated October 3, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
+## October 5 shared implementation migration — candidate, not released
+
+Owner requested completion of Cleaning #39 / AlienX #122, not cancellation.
+The mistaken administrative closure of #39 was reversed; no parity acceptance
+is inferred from issue state. Candidate work migrates the release verifier and
+publisher, security audit/code-scanning checks, dependency pins and normalized
+lock, Dependabot policy, responsive/accessibility/native Safari runners, browser
+workflows, Lighthouse, form-health and optional provider-evidence validator.
+`engineering.config.json` owns repository/ref identity, public site routes,
+form encoding/selectors, theme controls, and fixed mail identity. It contains no
+credentials. Existing application-specific interaction suites remain mandatory.
+
+The common release verifier retains malformed/incomplete evidence rejection and
+uses exact approved/rejected Git refs; target guard runs again before Wrangler.
+The shared Lighthouse gate retains all budgets, uses three fixed samples and
+requires **every** score to pass (stronger than the former median). The locked
+Playwright Chromium is selected in both measurement workflows. Two trace-only
+retries retain all attempts/stdout/stderr/assets; low scores never retry.
+GitHub-native operator alerts use trusted origin checks and no provider history.
+The form-health probe submits no verified inquiry and uses an empty security token.
+
+Local Node 22 preflight passed for the prepared migration: formatting, source/history
+scans, unit tests, build, target guard, type checks, Worker dry run and zero dependency
+vulnerabilities. The migrated-component comparison also passed. Verification is
+pending for the final paired PR heads and exact deployed mains. Automatic approval
+review blocked publishing the AlienX branch as an insufficiently authorized external
+write. Explicit publication approval is required before retrying; no workaround,
+merge, deployment or issue closeout is authorized by these local test results.
+Local browser installation failed while downloading the pinned Chromium archive;
+this is not browser acceptance. Local preflight initially hit the restricted
+network-interface inspector probe; the explicit local-only disable switch is
+available without changing production defaults. No new release is claimed here.
+Remaining #39 work includes shared framework/build revision/CSP and integrity
+implementation, final migration comparison, and both production evidence chains.
+Existing account, recovery, real-device, content and incident findings below stay
+open unless independently evidenced. #32–#36 are not closed by this migration.
+
 ## October 5 engineering alignment — verification pending
 
 The owner requires identical engineering except for site content/configuration.

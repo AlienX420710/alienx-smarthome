@@ -2,15 +2,9 @@ const { test, expect } = require('@playwright/test');
 const axe = require('axe-core');
 
 const baseURL = 'http://127.0.0.1:4321';
-const routes = [
-  '/',
-  '/status/',
-  '/about/',
-  '/contact/',
-  '/__alienx_missing_error_test__/',
-  '/contact/success/',
-];
-const themes = ['light', 'dark', 'system'];
+const site = require('../engineering.config.json');
+const routes = [...site.routes, site.browser.missingRoute];
+const themes = site.browser.themeKey ? ['light', 'dark', 'system'] : ['system'];
 const schemes = ['light', 'dark'];
 test.use({ screenshot: 'only-on-failure', trace: 'retain-on-failure' });
 
@@ -19,12 +13,12 @@ for (const scheme of schemes) {
     for (const route of routes) {
       test(`${theme} theme on ${scheme} OS: ${route}`, async ({ page }) => {
         await page.addInitScript(
-          ({ selectedTheme }) => {
+          ({ selectedTheme, key }) => {
             try {
-              localStorage.setItem('alienx-theme', selectedTheme);
+              if (key) localStorage.setItem(key, selectedTheme);
             } catch {}
           },
-          { selectedTheme: theme },
+          { selectedTheme: theme, key: site.browser.themeKey },
         );
 
         await page.addInitScript({ content: axe.source });
@@ -36,17 +30,17 @@ for (const scheme of schemes) {
           waitUntil: 'domcontentloaded',
         });
 
-        if (theme === 'system')
+        if (site.browser.themeAttribute && theme === 'system')
           await expect(page.locator('html')).not.toHaveAttribute(
-            'data-alienx-theme',
+            site.browser.themeAttribute,
           );
-        else
+        else if (site.browser.themeAttribute)
           await expect(page.locator('html')).toHaveAttribute(
-            'data-alienx-theme',
+            site.browser.themeAttribute,
             theme,
           );
 
-        if (route === '/status/') {
+        if (route === site.browser.statusRoute) {
           await expect(page.locator('#checks')).toHaveAttribute(
             'aria-busy',
             'false',

@@ -9,6 +9,7 @@ const {
 } = require('node:fs');
 const { tmpdir } = require('node:os');
 const { join } = require('node:path');
+const site = require('../engineering.config.json');
 const { execFileSync, spawnSync } = require('node:child_process');
 
 test('actual npm deploy command stops before Wrangler on rejected, missing, stale, unavailable or wrong-target evidence', () => {
@@ -20,6 +21,11 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
     git(['config', 'user.name', 'Offline rehearsal']);
     git(['config', 'user.email', 'rehearsal@example.invalid']);
     mkdirSync(join(root, 'scripts'));
+    for (const file of ['engineering.config.json', 'scripts/site-config.mjs'])
+      writeFileSync(
+        join(root, file),
+        readFileSync(join(__dirname, '..', file)),
+      );
     writeFileSync(
       join(root, 'scripts/verify-ci.mjs'),
       readFileSync(join(__dirname, '../scripts/verify-ci.mjs')),
@@ -30,7 +36,7 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
     );
     writeFileSync(
       join(root, 'wrangler.json'),
-      JSON.stringify({ name: 'alienx-smarthome' }),
+      JSON.stringify({ name: site.repository.split('/')[1] }),
     );
     const {
       scripts: { deploy },
@@ -42,7 +48,7 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
     writeFileSync(
       join(root, 'package.json'),
       JSON.stringify({
-        name: 'alienx-smarthome',
+        name: site.repository.split('/')[1],
         type: 'module',
         scripts: { deploy },
       }),
@@ -69,12 +75,12 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
       globalThis.setTimeout = callback => { clock += 13 * 60 * 1000; callback(); };
       childProcess.execFileSync = (file, args, options) => {
         if (file !== 'git' || args[0] !== 'ls-remote') return original(file, args, options);
-        if (args[2] !== 'https://github.com/AlienX420710/alienx-smarthome.git') throw Error('Unexpected remote');
+        if (args[2] !== 'https://github.com/${site.repository}.git') throw Error('Unexpected remote');
         if (scenario === 'unavailable') throw Error('Offline transport failure');
         if (args.includes('refs/heads/main')) return (scenario === 'stale' ? 'b'.repeat(40) : sha) + '\\trefs/heads/main\\n';
-        if (scenario === 'rejected') return sha + '\\trefs/tags/alienx-ci-rejected-main\\n' + sha + '\\trefs/tags/alienx-ci-approved-main\\n';
+        if (scenario === 'rejected') return sha + '\\trefs/tags/${site.releaseRefPrefix}-ci-rejected-main\\n' + sha + '\\trefs/tags/${site.releaseRefPrefix}-ci-approved-main\\n';
         if (scenario === 'missing') return '';
-        return sha + '\\trefs/tags/alienx-ci-approved-main\\n';
+        return sha + '\\trefs/tags/${site.releaseRefPrefix}-ci-approved-main\\n';
       };
       syncBuiltinESMExports();
       }
@@ -107,8 +113,8 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
             scenario === 'wrong-sha' ? 'b'.repeat(40) : sha,
           WRANGLER_CI_OVERRIDE_NAME:
             scenario === 'wrong-worker-override'
-              ? 'alienx-smarthome-recovery-drill'
-              : 'alienx-smarthome',
+              ? 'wrong-production-target'
+              : site.repository.split('/')[1],
         },
       });
       const output = result.stdout + result.stderr;

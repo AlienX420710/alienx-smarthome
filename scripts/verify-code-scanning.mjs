@@ -1,6 +1,7 @@
 import { pathToFileURL } from 'node:url';
 
-const repository = 'AlienX420710/alienx-smarthome';
+import { site } from './site-config.mjs';
+const repository = site.repository;
 const ref = 'refs/heads/main';
 const languages = ['actions', 'javascript-typescript'];
 
@@ -75,7 +76,7 @@ export async function verifyCodeScanning({
           Accept: 'application/vnd.github+json',
           Authorization: `Bearer ${token}`,
           'X-GitHub-Api-Version': '2022-11-28',
-          'User-Agent': 'AlienX-security-policy',
+          'User-Agent': 'Shared-security-policy',
         },
         redirect: 'error',
         signal: AbortSignal.timeout(15000),
@@ -143,8 +144,11 @@ if (
 ) {
   if (process.env.GITHUB_REPOSITORY !== repository)
     throw Error('Unexpected repository');
-  await verifyCodeScanning({
+  verifyCodeScanning({
     sha: process.env.GITHUB_SHA,
     token: process.env.GITHUB_TOKEN,
+  }).catch((error) => {
+    console.error(error.message);
+    process.exitCode = 1;
   });
 }
