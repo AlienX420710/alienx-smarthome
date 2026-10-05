@@ -75,6 +75,27 @@ test('scheduled retries use real shared fixed-recipient transport and stable key
     /missing mail configuration/,
   );
 });
+test('heartbeat copy is actionable only on failure and does not pretend to test the form', async () => {
+  const sends = [];
+  const { sendDailyHealth } = load('src/lib/email-health.ts', {
+    sendProductionMail: async (_token, _key, message) => {
+      sends.push(message);
+      return Response.json({ id: 'mock-id' });
+    },
+  });
+  const stamp = Date.parse('2026-07-15T10:00:00Z');
+  await sendDailyHealth(stamp, { RESEND_API_KEY: 'fixture' }, stamp);
+  assert.equal(sends.length, 1);
+  assert.equal(
+    sends[0].subject,
+    'AlienX SmartHome — email transport healthy — 2026-07-15',
+  );
+  assert.match(sends[0].text, /No action is required/);
+  assert.match(sends[0].text, /Contact-form health is monitored separately/);
+  assert.doesNotMatch(sends[0].text, /If missing/);
+  assert.doesNotMatch(sends[0].text, /No customer inquiry was created/);
+});
+
 test('shared mail transport uses one direct fixed-recipient Resend request', async () => {
   const calls = [];
   const { sendProductionMail } = load('src/lib/mail.ts', {
@@ -135,7 +156,7 @@ test('delivery monitor requires matching provider delivery, not mere acceptance'
   const now = new Date('2026-07-15T10:25:00Z');
   const row = {
     id: 'fixture',
-    subject: 'AlienX SmartHome — daily email health check — 2026-07-15',
+    subject: 'AlienX SmartHome — email transport healthy — 2026-07-15',
     from: 'AlienX SmartHome <contact@alienxsmarthome.com>',
     to: ['alienx@alienxsmarthome.com'],
     created_at: '2026-07-15T10:00:00Z',
