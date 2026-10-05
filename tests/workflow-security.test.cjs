@@ -10,10 +10,6 @@ function auditMutation(mutate) {
   try {
     fs.cpSync('.github', path.join(root, '.github'), { recursive: true });
     fs.mkdirSync(path.join(root, 'scripts'), { recursive: true });
-    fs.copyFileSync(
-      'scripts/dependency-audit.mjs',
-      path.join(root, 'scripts/dependency-audit.mjs'),
-    );
     for (const file of ['package.json', 'package-lock.json'])
       fs.copyFileSync(file, path.join(root, file));
     fs.writeFileSync(path.join(root, 'README.md'), 'Audit fixture');
@@ -49,30 +45,17 @@ test('workflow security audit accepts the committed policy', () => {
   assert.equal(result.status, 0, result.stderr);
 });
 
-test('workflow security audit rejects removal of raw all-severity dependency audit', () => {
+test('workflow security audit rejects weakening the dependency audit', () => {
   const result = auditMutation((root) =>
     changeTracked(
       root,
-      'scripts/dependency-audit.mjs',
-      "['audit', '--audit-level=low', '--json']",
-      "['audit', '--json']",
+      'package.json',
+      'npm audit --audit-level=low',
+      'npm audit --audit-level=critical',
     ),
   );
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /guarded VEX is required/);
-});
-
-test('workflow security audit rejects a changed VEX advisory identity', () => {
-  const result = auditMutation((root) =>
-    changeTracked(
-      root,
-      'scripts/dependency-audit.mjs',
-      "advisory: 'GHSA-ch52-4w7c-c8xp'",
-      "advisory: 'GHSA-different'",
-    ),
-  );
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /guarded VEX is required/);
+  assert.match(result.stderr, /all-severity npm audit is required/);
 });
 
 for (const [name, file, from, to, error] of [

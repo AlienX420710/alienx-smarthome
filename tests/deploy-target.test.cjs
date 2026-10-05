@@ -1,3 +1,4 @@
+const productionWorker = require('../package.json').name;
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { mkdtempSync, mkdirSync, writeFileSync, rmSync } = require('node:fs');
@@ -15,7 +16,7 @@ function fixture() {
   const root = mkdtempSync(join(tmpdir(), 'alienx-deploy-target-'));
   writeFileSync(
     join(root, 'wrangler.json'),
-    JSON.stringify({ name: 'alienx-smarthome' }),
+    JSON.stringify({ name: productionWorker }),
   );
   return root;
 }
@@ -41,9 +42,9 @@ test('accepts the production Worker target', async () => {
     const { verifyDeployTarget } = await loadGuard();
     assert.deepEqual(
       verifyDeployTarget(root, {
-        WRANGLER_CI_OVERRIDE_NAME: 'alienx-smarthome',
+        WRANGLER_CI_OVERRIDE_NAME: productionWorker,
       }),
-      { worker: 'alienx-smarthome', redirected: false },
+      { worker: productionWorker, redirected: false },
     );
   } finally {
     rmSync(root, { recursive: true, force: true });
@@ -57,7 +58,7 @@ test('rejects a Workers Build name override to another Worker', async () => {
     assert.throws(
       () =>
         verifyDeployTarget(root, {
-          WRANGLER_CI_OVERRIDE_NAME: 'alienx-smarthome-recovery-drill',
+          WRANGLER_CI_OVERRIDE_NAME: `${productionWorker}-recovery-drill`,
         }),
       /WRANGLER_CI_OVERRIDE_NAME targets/,
     );
@@ -76,9 +77,9 @@ test('accepts Astro generated Wrangler config without its own Worker name', asyn
     );
     const { verifyDeployTarget } = await loadGuard();
     const result = verifyDeployTarget(root, {
-      WRANGLER_CI_OVERRIDE_NAME: 'alienx-smarthome',
+      WRANGLER_CI_OVERRIDE_NAME: productionWorker,
     });
-    assert.equal(result.worker, 'alienx-smarthome');
+    assert.equal(result.worker, productionWorker);
     assert.equal(result.redirected, true);
     assert.equal(result.configPath, generatedPath);
   } finally {
@@ -96,9 +97,9 @@ test('accepts another framework-generated in-repository config path', async () =
     );
     const { verifyDeployTarget } = await loadGuard();
     const result = verifyDeployTarget(root, {
-      WRANGLER_CI_OVERRIDE_NAME: 'alienx-smarthome',
+      WRANGLER_CI_OVERRIDE_NAME: productionWorker,
     });
-    assert.equal(result.worker, 'alienx-smarthome');
+    assert.equal(result.worker, productionWorker);
     assert.equal(result.redirected, true);
     assert.equal(result.configPath, generatedPath);
   } finally {
@@ -110,13 +111,13 @@ test('rejects a generated Wrangler config that declares another Worker', async (
   const root = fixture();
   try {
     writeGeneratedRedirect(root, 'dist/server/wrangler.json', {
-      name: 'alienx-smarthome-recovery-drill',
+      name: `${productionWorker}-recovery-drill`,
     });
     const { verifyDeployTarget } = await loadGuard();
     assert.throws(
       () =>
         verifyDeployTarget(root, {
-          WRANGLER_CI_OVERRIDE_NAME: 'alienx-smarthome',
+          WRANGLER_CI_OVERRIDE_NAME: productionWorker,
         }),
       /redirected Wrangler configuration targets/,
     );

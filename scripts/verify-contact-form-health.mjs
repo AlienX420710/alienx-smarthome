@@ -9,7 +9,8 @@ try {
     waitUntil: 'domcontentloaded',
     timeout: 30_000,
   });
-  if (!response?.ok()) throw new Error(`Contact page HTTP ${response?.status()}`);
+  if (!response?.ok())
+    throw new Error(`Contact page HTTP ${response?.status()}`);
 
   const form = page.locator('#inquiry-form');
   const submit = page.locator('#submit-button');
@@ -50,12 +51,18 @@ try {
     },
   });
   if (api.status() !== 403)
-    throw new Error(`Unverified inquiry returned HTTP ${api.status()}, expected 403`);
+    throw new Error(
+      `Unverified inquiry returned HTTP ${api.status()}, expected 403`,
+    );
   const body = await api.json().catch(() => null);
   if (!body || typeof body.error !== 'string')
-    throw new Error('Unverified inquiry rejection returned an invalid response');
+    throw new Error(
+      'Unverified inquiry rejection returned an invalid response',
+    );
 
-  console.log('PASS: production Contact UI, validation, Turnstile wiring, and fail-closed API boundary');
+  console.log(
+    'PASS: production Contact UI, validation, Turnstile wiring, and fail-closed API boundary',
+  );
 } finally {
   await browser.close();
 }

@@ -41,7 +41,11 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
     );
     writeFileSync(
       join(root, 'package.json'),
-      JSON.stringify({ type: 'module', scripts: { deploy } }),
+      JSON.stringify({
+        name: 'alienx-smarthome',
+        type: 'module',
+        scripts: { deploy },
+      }),
     );
     writeFileSync(
       join(root, 'wrangler'),

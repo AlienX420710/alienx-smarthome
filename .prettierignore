@@ -3,5 +3,9 @@ dist
 .astro
 .wrangler
 worker-configuration.d.ts
+src/release.json
 package-lock.json
 test-results
+playwright-report
+.lighthouseci
+safari-diagnostics

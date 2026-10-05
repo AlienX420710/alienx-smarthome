@@ -3,6 +3,7 @@ name: AlienX Quality
 on:
   push:
     branches: [main]
+  workflow_dispatch:
   pull_request:
     branches: [main]
 
@@ -34,29 +35,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Repository security audit
-        run: npm run security:audit
-
-      - name: Historical secret audit
-        run: node scripts/security-history-audit.mjs
-
-      - name: Source formatting
-        run: npm run format:check
-
-      - name: Committed regression suite
-        run: npm test
-
-      - name: Build
-        run: npm run build
-
-      - name: Verify generated deploy target
-        run: node scripts/verify-deploy-target.mjs
-
-      - name: Type check
-        run: npm run typecheck
-
-      - name: Cloudflare deploy dry run
-        run: npx wrangler deploy --dry-run
+      - name: Shared local and CI checks
+        run: npm run check
 
       - name: Dependency audit
         run: npm run audit
