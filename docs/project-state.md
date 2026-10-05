@@ -4,6 +4,18 @@ Updated October 3, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
+## October 5 engineering alignment — verification pending
+
+The owner requires identical engineering except for site content/configuration.
+The paired changes align assistant instructions, dependency pins/overrides,
+formatting coverage, Quality checks, preflight and generated-target validation.
+The dependency lock updates patch http-cache-semantics rather than granting an
+audit exception. Existing historical release evidence below remains authoritative
+until the paired PR heads and resulting deployments pass their required gates.
+Application-specific browser suites and the existing release/monitoring machinery
+still differ; full non-content parity is not yet established. Those differences
+must be migrated and verified, not relabeled as content or silently accepted.
+
 ## Last verified release
 
 October 3, 2026: main `81e219fc0e9e13dad669e77d5d2508c32eb75908`

@@ -2,7 +2,9 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, isAbsolute, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-export const productionWorker = 'alienx-smarthome';
+export const productionWorker = JSON.parse(
+  readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
+).name;
 
 export const forbiddenProductionArtifacts = [
   'ops/recovery-drill.enabled',

@@ -98,8 +98,9 @@ rather than unnecessary raster downloads. Detailed idea sources remain in histor
 
 ## Local work
 
-Run npm ci, format:check, check, audit and affected browser suites. check includes
-unit tests, types, build and Worker dry run, not formatting/audit/browser coverage.
+Run npm ci, npm run format, npm run preflight and affected browser suites.
+Preflight includes formatting, security scans, tests, build, generated deployment
+target validation, types, Worker dry run and dependency audit.
 npm run cf-typegen regenerates scoped Worker types. ALIENX_DISABLE_INSPECTOR=1
 is the existing local restricted-interface workaround, not a production relaxation.
 Unavailable browser execution is blocked, not passed. Release steps live only in

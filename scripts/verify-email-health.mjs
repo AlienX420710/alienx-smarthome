@@ -29,7 +29,7 @@ export async function verifyEmailHealth({
   if (!date) return { status: 'not-due' };
   if (typeof token !== 'string' || !token.trim())
     throw new Error('Email monitor credential is missing');
-  const subject = `AlienX SmartHome — daily email health check — ${date}`;
+  const subject = `AlienX SmartHome — email transport healthy — ${date}`;
   let after;
   const seen = new Set();
   for (let page = 0; page < 20; page++) {

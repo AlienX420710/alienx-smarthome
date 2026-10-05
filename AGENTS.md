@@ -1,6 +1,6 @@
 # Repository instructions
 
-Read [current state](docs/project-state.md), [Architecture](docs/ai-context.md),
+Read [current state](docs/project-state.md), the application contract linked from README.md,
 [operations](docs/release-runbook.md), QUALITY.md and SECURITY.md. Owner instructions
 govern intent; source and exact-revision evidence govern facts. Higher-priority
 operating rules still apply. Historical assistant prose is not current authority.
@@ -9,17 +9,37 @@ The owner authorizes scoped fixes/PRs and safe merges without repeated approval.
 Reuse a relevant active PR; preserve unrelated changes. main is the only durable
 production branch. Never force-reset, bypass protections or weaken gates. Require
 five checks on the current up-to-date head; merge with expected SHA. Verify resulting
-main through Release Approval, Workers Build, Smoke and Integrity. Delete temporary
+main through the configured release gate, Workers Build, Smoke and Integrity. Delete temporary
 branches only after verified merge; never delete active work or approval/rejection
 tags. Report access limits honestly, never evade tool approval rejections.
 
-Application/tooling changes: npm ci, format:check, check, audit, repository/history
-scans and affected browser suites. Docs-only changes: format, links/anchors,
-finding/contract preservation and diff scope; mandatory CI still applies. Tests
+Application/tooling changes: Node 22, `npm ci`, `npm run format`, then
+`npm run preflight` after the final edit. The pinned formatter writes the output;
+never approximate its whitespace manually. Docs-only changes still require
+`npm run format:check`, links/anchors, finding preservation and diff review;
+mandatory CI still applies. Run affected browser suites separately. Tests
 not run are not passed. Separate local, CI, deployment, provider acceptance/delivery,
 inbox receipt and human/device evidence. Preserve Turnstile, validation, rate limits,
 idempotency, CSP and authentic content. No secrets/private provider/customer data
-in public docs/logs. Real inquiries/account operations need applicable authorization; prior tool rejections remain binding.
+in public docs/logs. Real inquiries/account operations need applicable authorization; prior tool rejections remain binding. Do not send real quote test emails; the fixed-recipient scheduled heartbeat is a separate authorized exception.
+
+## Shared engineering baseline
+
+The two repositories must use the same engineering implementation except for
+site content and explicit site identity/configuration. Unexplained tooling,
+validation or instruction differences are defects, not independent preferences.
+Ship engineering changes through linked PRs in both repositories and verify each.
+Use the same pinned tooling, formatter, preflight contract and assistant entry
+points. Preserve business content, routes, form fields, recipients and credentials
+as site-specific inputs; do not overwrite those while aligning infrastructure.
+Record remaining migration gaps honestly until they are removed.
+
+Run validation after the last edit, including documentation and lockfile edits.
+A prior green run does not validate new bytes. Never change format:check to print
+diffs or deliberately fail CI; run the pinned formatter locally. If a tool cannot
+run, report the exact blocker; do not claim success or guess the expected output.
+Read the actual failing provider log before changing deployment guards. Keep
+local checks, CI, and provider deployment evidence separate.
 
 ## GitHub access — no interactive login
 
@@ -84,11 +104,11 @@ volatile status/test counts in README/primers. Keep reporting policies and licen
 
 Documentation review is part of completion, not optional cleanup. After implementation
 and again after production verification, re-read the task diff plus AGENTS.md,
-docs/project-state.md, docs/ai-context.md and docs/release-runbook.md. A repository
+docs/project-state.md, the application contract and docs/release-runbook.md. A repository
 task is not complete until durable documentation matches the resulting reality or an
 explicit blocker/follow-up is recorded.
 
-- Update docs/ai-context.md when routes, components, ownership, request contracts,
+- Update the application contract when routes, components, ownership, request contracts,
   runtime behavior or other durable architecture changes.
 - Update docs/release-runbook.md when release, rollback, monitoring, incident,
   provider or operator procedures change.

@@ -2,7 +2,18 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 
 // Scan every reachable text blob while suppressing any matched credential value.
-const execFileAsync = promisify(execFile);
+const rawExec = promisify(execFile);
+// Child-process errors carry stdout/stderr: never let a failed blob read print
+// credential-bearing content through an uncaught exception.
+const execFileAsync = async (...args) => {
+  try {
+    return await rawExec(...args);
+  } catch {
+    throw new Error(
+      'Git history read failed; audit incomplete. Output suppressed.',
+    );
+  }
+};
 const root = process.cwd();
 const maxBytes = 2 * 1024 * 1024;
 
@@ -26,6 +37,14 @@ const { stdout } = await execFileAsync(
   { cwd: root, encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 },
 );
 
+const { stdout: shallow } = await execFileAsync('git', [
+  'rev-parse',
+  '--is-shallow-repository',
+]);
+if (shallow.trim() !== 'false')
+  throw new Error(
+    'Full-history audit requires a non-shallow checkout (fetch-depth: 0).',
+  );
 const objects = new Map();
 for (const line of stdout.split('\n')) {
   if (!line) continue;
@@ -46,7 +65,9 @@ for (const [object, path] of objects) {
       encoding: 'utf8',
     }));
   } catch {
-    continue;
+    throw new Error(
+      'Unable to read a reachable Git object; history audit incomplete.',
+    );
   }
   if (type.trim() !== 'blob') continue;
 
@@ -58,16 +79,17 @@ for (const [object, path] of objects) {
   const size = Number(sizeText.trim());
   if (!Number.isFinite(size) || size > maxBytes) continue;
 
-  const { stdout: text } = await execFileAsync(
+  const { stdout: bytes } = await execFileAsync(
     'git',
     ['cat-file', '-p', object],
     {
       cwd: root,
-      encoding: 'utf8',
+      encoding: 'buffer',
       maxBuffer: maxBytes + 1024,
     },
   );
-  if (text.includes('\u0000')) continue;
+  if (bytes.includes(0)) continue;
+  const text = bytes.toString('utf8');
   scanned += 1;
 
   for (const [label, pattern] of detectors) {

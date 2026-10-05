@@ -223,23 +223,11 @@ const qualityWorkflow = await readFile(
   join(workflowDirectory, 'quality.yml'),
   'utf8',
 );
-const dependencyAudit = await readFile(
-  join(root, 'scripts', 'dependency-audit.mjs'),
-  'utf8',
-);
 if (
   !/npm run audit/.test(qualityWorkflow) ||
-  packageJson.scripts?.audit !== 'node scripts/dependency-audit.mjs' ||
-  !dependencyAudit.includes("['audit', '--audit-level=low', '--json']") ||
-  !dependencyAudit.includes("advisory: 'GHSA-ch52-4w7c-c8xp'") ||
-  !dependencyAudit.includes("package: 'http-cache-semantics'") ||
-  !dependencyAudit.includes('assertVexReachability') ||
-  !dependencyAudit.includes('.satisfiesWithoutRevalidation(') ||
-  !dependencyAudit.includes("path.join(root, 'dist/server')")
+  packageJson.scripts?.audit !== 'npm audit --audit-level=low'
 )
-  fail(
-    '.github/workflows/quality.yml: fail-closed all-severity dependency audit with guarded VEX is required',
-  );
+  fail('.github/workflows/quality.yml: all-severity npm audit is required');
 if (!qualityWorkflow.includes('node scripts/verify-code-scanning.mjs'))
   fail('.github/workflows/quality.yml: live code-scanning policy is required');
 

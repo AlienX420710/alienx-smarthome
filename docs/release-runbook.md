@@ -4,6 +4,16 @@ Use scoped PRs for authorized changes. The owner has granted standing permission
 to open/update them and merge after all five mandatory exact-head gates pass.
 Keep main as the production branch and verify the resulting deployed main SHA.
 
+## Shared preflight
+
+Use Node 22 and `npm ci`. After the final edit, run `npm run format` and
+`npm run preflight`. Preflight runs formatting, repository and history security
+scans, regression tests, production build, generated deployment-target validation,
+type checks, Worker dry run and all-severity dependency audit. Quality CI invokes
+those same `check` and `audit` commands. Browser and post-deployment gates remain
+separate and mandatory. Formatting includes instructions and package.json.
+Do not commit temporary diagnostic replacements for format:check.
+
 ## Safe auto-merge
 
 In repository **Settings → General → Pull Requests**, enable **Allow auto-merge**.
@@ -39,7 +49,7 @@ Reference: [GitHub native auto-merge](https://docs.github.com/en/repositories/co
 
 ## Before release
 
-Run `npm ci`, `npm test`, `npm run check`, and `npm run audit` on Node 22.
+Run `npm ci`, `npm run format`, and `npm run preflight` on Node 22.
 For browser checks, start the built Cloudflare preview on port 4321, install the
 Playwright Chromium browser, and run `npm run test:browser` and `npm run test:a11y`.
 `node tests/safari.cjs` requires macOS Safari WebDriver. Lighthouse configuration
