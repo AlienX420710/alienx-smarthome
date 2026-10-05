@@ -7,6 +7,7 @@ on:
       - AlienX Production Integrity
       - AlienX Release Approval
       - AlienX Alert Canary
+      - AlienX Contact Form Health
     types:
       - completed
 
