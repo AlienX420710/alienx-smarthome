@@ -207,3 +207,6 @@ playwright-report/
 
 # On-demand historical research, not maintained context
 docs/*-commit-inventory.md
+
+# Generated exact build identity
+src/release.json

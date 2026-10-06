@@ -4,22 +4,79 @@ Updated October 3, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
-## October 5 engineering alignment — verification pending
+## October 5 shared implementation migration — candidate, not released
+
+Owner requested completion of Cleaning #39 / AlienX #122, not cancellation.
+The mistaken administrative closure of #39 was reversed; no parity acceptance
+is inferred from issue state. Candidate work migrates the release verifier and
+publisher, security audit/code-scanning checks, dependency pins and normalized
+lock, Dependabot policy, responsive/accessibility/native Safari runners, browser
+workflows, Lighthouse, form-health and optional provider-evidence validator.
+`engineering.config.json` owns repository/ref identity, public site routes,
+form encoding/selectors, theme controls, and fixed mail identity. It contains no
+credentials. Existing application-specific interaction suites remain mandatory.
+
+The common release verifier retains malformed/incomplete evidence rejection and
+uses exact approved/rejected Git refs; target guard runs again before Wrangler.
+The shared Lighthouse gate retains all budgets, uses three fixed samples and
+requires **every** score to pass (stronger than the former median). The locked
+Playwright Chromium is selected in both measurement workflows. Two trace-only
+retries retain all attempts/stdout/stderr/assets; low scores never retry.
+GitHub-native operator alerts use trusted origin checks and no provider history.
+The form-health probe submits no verified inquiry and uses an empty security token.
+
+The follow-up candidate also shares framework configuration, generated release
+metadata, security-header implementation, SEO/integrity checks, exact-revision
+production Smoke/Integrity, TLS probes, image decoding/generation and the scheduled
+mail retry engine. Explicit rendering/CSP inputs retain the server-rendered
+Cleaning header policy and AlienX's generated hash policy. This preserves each
+site's emitted content requirements while using the same implementation.
+The peer verifier compares these source files, normalized workflow display names,
+commands and normalized dependency locks; it does not certify private acceptance.
+
+Paired PRs: [Cleaning #41](https://github.com/Cassileigh/cleaning-by-cassi/pull/41)
+and [AlienX #123](https://github.com/AlienX420710/alienx-smarthome/pull/123).
+Latest published heads passed Quality, Responsive, Lighthouse and Safari, but
+failed Accessibility. The screenshot-based contrast checker revealed genuine
+low-contrast Cleaning hero text and AlienX's light status accent; candidate fixes
+darken the photo overlay and make the intended light-theme accent win scoped CSS
+specificity. A fixture's `endswith` typo is corrected. The screenshot checker and
+its regression fixtures are retained from the concurrent PR continuation.
+Fresh final-head verification is still required. October 6 audit newly reported
+GHSA-r4xh-jqrq-34v2 and GHSA-68fv-2mgg-jv7q in the prior lock; the candidate
+updates smol-toml to 1.9.0 and source-map-js to 1.2.2 without audit exceptions.
+
+The owner explicitly authorized publication to both named repositories after an
+earlier automatic approval rejection. The connector published both draft PRs;
+terminal Git credential access remains unavailable. Local browser installation
+failed downloading the pinned archive, so browser evidence must come from CI.
+No merge or production acceptance is claimed by this candidate record.
+
+Failed heartbeat-response cleanup is now best-effort and cannot change permanent
+versus transient retry decisions. Regression tests cover canceled, missing and
+rejecting bodies with the same bounded attempts and stable key. Cleaning field
+validation now returns safe field errors; inline descriptions, invalid state and
+focus guide correction while preserving input, retry identity and Turnstile.
+Cleaning #35/#36 require deployment evidence before closure. #32/#33 retain private
+account/mailbox and physical-device evidence requirements; #34 retains CSP and
+reporting acceptance. Existing unresolved findings below remain authoritative.
+
+## October 5 engineering alignment — released, full parity still open
 
 The owner requires identical engineering except for site content/configuration.
-The paired changes align assistant instructions, dependency pins/overrides,
-formatting coverage, Quality checks, preflight and generated-target validation.
-The dependency lock updates patch http-cache-semantics rather than granting an
-audit exception. Existing historical release evidence below remains authoritative
-until the paired PR heads and resulting deployments pass their required gates.
-Application-specific browser suites and the existing release/monitoring machinery
-still differ; full non-content parity is not yet established. Those differences
-must be migrated and verified, not relabeled as content or silently accepted.
+The first paired preflight repair is merged. Current main
+`3dbf0542be8082a4973996ab35b2fe4786ad3505` passed all five gates and
+code-scanning policy, [Release Approval](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37362119608),
+Workers Build, [Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37361587769),
+and [Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37362184149).
+The latter verified that exact revision on both production hosts and TLS protocol
+acceptance. This supersedes the October 3 release below. Full non-content parity
+is still open in #122; candidate #123 has not passed all checks or deployed.
 
-## Last verified release
+## Previous verified release
 
 October 3, 2026: main `81e219fc0e9e13dad669e77d5d2508c32eb75908`
-(PR #119) is the latest fully verified production release. All five required main
+(PR #119) was the fully verified production release on that date. All five required main
 gates and current code-scanning policy passed. Release Approval run
 [37146953634](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37146953634)
 succeeded for this exact SHA. Cloudflare Workers Build

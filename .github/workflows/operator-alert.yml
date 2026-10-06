@@ -44,7 +44,7 @@ jobs:
           const file = process.argv[2];
           const runName = process.env.RUN_NAME;
           const body = [
-            'Automated operator alert from the trusted AlienX workflow controller.',
+            'Automated operator alert from the trusted repository workflow controller.',
             '',
             `- Workflow: \`${runName}\``,
             `- Run: ${process.env.RUN_URL}`,

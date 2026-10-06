@@ -1,3 +1,4 @@
+import { site } from './site-config.mjs';
 // Optional provider-evidence validator for explicitly authorized operator use only.
 // It is not an automated monitor, is not invoked by ChatGPT, and is not used by
 // GitHub Actions. Production operator alerts are generated from GitHub workflow
@@ -29,7 +30,7 @@ export async function verifyEmailHealth({
   if (!date) return { status: 'not-due' };
   if (typeof token !== 'string' || !token.trim())
     throw new Error('Email monitor credential is missing');
-  const subject = `AlienX SmartHome — email transport healthy — ${date}`;
+  const subject = `${site.mail.healthSubject}${date}`;
   let after;
   const seen = new Set();
   for (let page = 0; page < 20; page++) {
@@ -61,13 +62,10 @@ export async function verifyEmailHealth({
         !Number.isFinite(created.getTime()) ||
         created > now ||
         expectedHealthDate(created) !== date ||
-        ![
-          'contact@alienxsmarthome.com',
-          'AlienX SmartHome <contact@alienxsmarthome.com>',
-        ].includes(mail.from) ||
+        ![site.mail.address, site.mail.sender].includes(mail.from) ||
         !Array.isArray(mail.to) ||
         mail.to.length !== 1 ||
-        mail.to[0] !== 'alienx@alienxsmarthome.com' ||
+        mail.to[0] !== site.mail.recipient ||
         typeof mail.id !== 'string' ||
         !mail.id.trim()
       )

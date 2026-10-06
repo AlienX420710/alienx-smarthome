@@ -1,3 +1,4 @@
+import { site } from './site-config.mjs';
 import { assessRuns, approvalRefs, classifyApproval } from './verify-ci.mjs';
 
 const sha = process.env.APPROVAL_SHA ?? '';
@@ -7,7 +8,7 @@ const repository = process.env.GITHUB_REPOSITORY ?? '';
 if (!/^[a-f0-9]{40}$/.test(sha))
   throw Error('APPROVAL_SHA must be a full Git SHA');
 if (!token) throw Error('GITHUB_TOKEN is required');
-if (repository !== 'AlienX420710/alienx-smarthome') {
+if (repository !== site.repository) {
   throw Error(`Unexpected repository: ${repository || '(missing)'}`);
 }
 
@@ -15,7 +16,7 @@ const api = `https://api.github.com/repos/${repository}`;
 const headers = {
   Accept: 'application/vnd.github+json',
   Authorization: `Bearer ${token}`,
-  'User-Agent': 'AlienX-release-approval',
+  'User-Agent': 'Shared-release-approval',
   'X-GitHub-Api-Version': '2022-11-28',
 };
 
@@ -26,6 +27,7 @@ const request = async (path, options = {}) => {
       ...headers,
       ...(options.body ? { 'Content-Type': 'application/json' } : {}),
     },
+    redirect: 'error',
     signal: AbortSignal.timeout(15000),
   });
 
@@ -83,6 +85,10 @@ const setRef = async (fullRef, targetSha) => {
     body: JSON.stringify({ ref: fullRef, sha: targetSha }),
   });
 };
+
+// Re-check after reading evidence; an obsolete result must not publish approval.
+if ((await request('/git/ref/heads/main')).object.sha !== sha)
+  throw Error('Main changed before release publication');
 
 if (decision === 'rejected') {
   await deleteRef(approvalRefs.approved);

@@ -1,33 +1,7 @@
 import { sendProductionMail } from './mail';
 
-export function healthDate(
-  scheduledTime: number,
-  now = Date.now(),
-): string | null {
-  if (
-    !Number.isFinite(scheduledTime) ||
-    !Number.isFinite(now) ||
-    scheduledTime > now + 60_000 ||
-    now - scheduledTime > 15 * 60_000
-  )
-    return null;
-  const parts = Object.fromEntries(
-    new Intl.DateTimeFormat('en-US', {
-      timeZone: 'America/Chicago',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      hourCycle: 'h23',
-    })
-      .formatToParts(new Date(scheduledTime))
-      .map(({ type, value }) => [type, value]),
-  );
-  return parts.hour === '05' && parts.minute === '00'
-    ? `${parts.year}-${parts.month}-${parts.day}`
-    : null;
-}
+import { healthDate, deliverHealth } from '../email-health-engine';
+export { healthDate } from '../email-health-engine';
 
 export async function sendDailyHealth(
   scheduledTime: number,
@@ -43,33 +17,11 @@ export async function sendDailyHealth(
     subject: `AlienX SmartHome — email transport healthy — ${date}`,
     text: `Automated production mail-transport heartbeat for ${date}.\n\nNo action is required. This message verifies that the production Worker can send through the configured AlienX mail transport to the business mailbox. Contact-form health is monitored separately.`,
   };
-  for (let attempt = 0; attempt < 3; attempt++) {
-    if (attempt)
-      await new Promise((resolve) =>
-        setTimeout(resolve, 1000 * 2 ** (attempt - 1)),
-      );
-    try {
-      const response = await sendProductionMail(
-        env.RESEND_API_KEY,
-        `alienx-daily-email-health/${date}`,
-        message,
-      );
-      if (!response.ok) {
-        await response.body?.cancel();
-        if (response.status !== 429 && response.status < 500) break;
-        continue;
-      }
-      const result = (await response.json()) as { id?: unknown } | null;
-      if (typeof result?.id === 'string' && result.id.trim()) {
-        console.info('Daily email health accepted.', {
-          date,
-          emailId: result.id,
-        });
-        return;
-      }
-    } catch {
-      // Never log provider-controlled bodies/errors or secrets. Same key on retry.
-    }
-  }
-  throw new Error('Daily email health not confirmed by provider');
+  await deliverHealth(date, () =>
+    sendProductionMail(
+      env.RESEND_API_KEY!,
+      `alienx-daily-email-health/${date}`,
+      message,
+    ),
+  );
 }

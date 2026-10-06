@@ -1,3 +1,4 @@
+import { secure } from './security';
 import { defineMiddleware } from 'astro:middleware';
 
 const SITEVERIFY_URL =
@@ -7,30 +8,6 @@ const RATE_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT = 8;
 const MAX_TRACKED_IPS = 5000;
 const attempts = new Map<string, number[]>();
-
-const securityHeaders = {
-  'Content-Security-Policy': "frame-ancestors 'none'",
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY',
-  'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'Permissions-Policy':
-    'camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=(), display-capture=()',
-  'Cross-Origin-Opener-Policy': 'same-origin',
-  'Cross-Origin-Resource-Policy': 'same-origin',
-  'X-Permitted-Cross-Domain-Policies': 'none',
-  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
-};
-
-const secure = (response: Response) => {
-  const headers = new Headers(response.headers);
-  for (const [name, value] of Object.entries(securityHeaders))
-    headers.set(name, value);
-  return new Response(response.body, {
-    status: response.status,
-    statusText: response.statusText,
-    headers,
-  });
-};
 
 const json = (
   body: Record<string, unknown>,

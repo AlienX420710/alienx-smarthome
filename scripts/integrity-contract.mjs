@@ -1,27 +1,17 @@
 import { parse } from 'parse5';
+import { site } from './site-config.mjs';
+import assert from 'node:assert/strict';
 
-export function assertSecurityHeaders(headers) {
-  const required = {
-    'strict-transport-security': /max-age=31536000.*includeSubDomains/i,
-    'x-content-type-options': /^nosniff$/i,
-    'x-frame-options': /^DENY$/i,
-    'referrer-policy': /^strict-origin-when-cross-origin$/i,
-    'cross-origin-opener-policy': /^same-origin$/i,
-    'cross-origin-resource-policy': /^same-origin$/i,
-    'x-permitted-cross-domain-policies': /^none$/i,
-  };
-  for (const [name, pattern] of Object.entries(required)) {
-    if (!pattern.test(headers.get(name) ?? ''))
-      throw Error(`Missing/incorrect ${name}`);
-  }
+export function assertPermissionsPolicy(value) {
   const permissions = new Map();
-  for (const entry of (headers.get('permissions-policy') ?? '').split(',')) {
-    if (entry.split('=').length !== 2)
-      throw Error('Malformed Permissions-Policy directive');
-    const [name, value] = entry.trim().split('=');
-    if (permissions.has(name))
-      throw Error('Duplicate Permissions-Policy directive');
-    permissions.set(name, value?.trim());
+  for (const entry of (value ?? '').split(',')) {
+    const match = /^\s*([a-z-]+)\s*=\s*(\([^)]*\))\s*$/.exec(entry);
+    assert.ok(match, 'Malformed Permissions-Policy directive');
+    assert.ok(
+      !permissions.has(match[1]),
+      'Duplicate Permissions-Policy directive',
+    );
+    permissions.set(match[1], match[2]);
   }
   for (const name of [
     'camera',
@@ -31,10 +21,80 @@ export function assertSecurityHeaders(headers) {
     'usb',
     'browsing-topics',
     'display-capture',
-  ]) {
-    if (permissions.get(name) !== '()')
-      throw Error(`Missing/incorrect Permissions-Policy ${name}`);
+  ])
+    assert.equal(permissions.get(name), '()', `Permissions-Policy ${name}`);
+}
+
+export function assertSecurityHeaders(headers, { status = false } = {}) {
+  for (const [name, pattern] of Object.entries({
+    'x-permitted-cross-domain-policies': /^none$/i,
+    'cross-origin-opener-policy': /^same-origin$/i,
+    'x-content-type-options': /^nosniff$/i,
+    'x-frame-options': /^DENY$/i,
+    'strict-transport-security': /max-age=31536000.*includeSubDomains/i,
+    'cross-origin-resource-policy': /^same-origin$/i,
+    'referrer-policy': status
+      ? /^no-referrer$/
+      : /^strict-origin-when-cross-origin$/,
+  }))
+    assert.match(headers.get(name) ?? '', pattern, name);
+  assertPermissionsPolicy(headers.get('permissions-policy'));
+  assert.ok(
+    (headers.get('content-security-policy') ?? '')
+      .split(',')
+      .some(
+        (policy) =>
+          directives(policy).get('frame-ancestors')?.join(' ') === "'none'",
+      ),
+    'Missing frame-ancestors header protection',
+  );
+}
+
+export function assertHeaders(
+  headers,
+  { status = false, candidate = false } = {},
+) {
+  assertSecurityHeaders(headers, { status });
+  const directives = new Map();
+  for (const entry of (headers.get('content-security-policy') ?? '').split(
+    ';',
+  )) {
+    const [name, ...values] = entry.trim().split(/\s+/);
+    if (!name) continue;
+    assert.ok(!directives.has(name), 'Duplicate CSP directive');
+    directives.set(name, values);
   }
+  const expect = (name, values) =>
+    assert.deepEqual(directives.get(name), values, name);
+  expect('frame-ancestors', ["'none'"]);
+  if (status) {
+    expect('default-src', ["'none'"]);
+    assert.match(headers.get('cache-control') ?? '', /no-store/);
+    return;
+  }
+  expect('default-src', ["'self'"]);
+  expect('base-uri', ["'self'"]);
+  expect('object-src', ["'none'"]);
+  expect('form-action', ["'self'"]);
+  expect('style-src', ["'self'"]);
+  expect('font-src', ["'self'"]);
+  expect('img-src', ["'self'", 'data:']);
+  expect('script-src', ["'self'", 'https://challenges.cloudflare.com']);
+  expect('frame-src', ['https://challenges.cloudflare.com']);
+  expect('connect-src', ["'self'", 'https://challenges.cloudflare.com']);
+  if (candidate)
+    assert.ok(
+      !directives.has('upgrade-insecure-requests'),
+      'HTTP loopback must not upgrade assets',
+    );
+  else expect('upgrade-insecure-requests', []);
+  for (const name of [
+    'script-src-elem',
+    'script-src-attr',
+    'style-src-elem',
+    'style-src-attr',
+  ])
+    assert.ok(!directives.has(name), 'Unexpected script policy override');
 }
 
 export function headElements(html) {
@@ -91,7 +151,7 @@ export function assertCsp(header, html) {
     'base-uri': ["'self'"],
     'object-src': ["'none'"],
     'form-action': ["'self'"],
-    'img-src': ["'self'", 'data:', 'blob:'],
+    'img-src': site.csp.imageSources,
     'font-src': ["'self'"],
     'connect-src': ["'self'", 'https://challenges.cloudflare.com'],
     'frame-src': ['https://challenges.cloudflare.com'],
@@ -114,7 +174,7 @@ export function assertCsp(header, html) {
     if (
       !scriptSources.has("'self'") ||
       !scriptSources.has('https://challenges.cloudflare.com') ||
-      !scripts.some((value) => hash.test(value))
+      (site.csp.generatedHashes && !scripts.some((value) => hash.test(value)))
     )
       return false;
     if (
@@ -148,7 +208,7 @@ export function assertCsp(header, html) {
 }
 
 export function assertSeo(html, route) {
-  const origin = 'https://alienxsmarthome.com';
+  const origin = site.origin;
   const elements = headElements(html);
   const meta = (name, attr = 'name') =>
     elements.find(({ tag, attrs }) => tag === 'meta' && attrs[attr] === name)
@@ -164,9 +224,10 @@ export function assertSeo(html, route) {
     meta('og:url', 'property') !== origin + route
   )
     throw new Error(`${route}: incorrect canonical/og:url`);
-  const robots =
-    route === '/contact/success/' ? 'noindex, follow' : 'index, follow';
-  if (meta('robots') !== robots)
+  const robots = site.noindexRoutes.includes(route)
+    ? 'noindex, follow'
+    : 'index, follow';
+  if ((meta('robots') || 'index, follow') !== robots)
     throw new Error(`${route}: incorrect robots policy`);
   if (!meta('og:image', 'property')?.startsWith(origin + '/'))
     throw new Error(`${route}: incorrect social image URL`);

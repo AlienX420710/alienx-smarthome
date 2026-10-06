@@ -10,6 +10,44 @@ if (!peer)
 const read = (directory, file) =>
   readFileSync(resolve(directory, file), 'utf8');
 const files = [
+  'astro.config.mjs',
+  'src/security.ts',
+  'src/email-health-engine.ts',
+  'src/pages/api/release.ts',
+  'public/_headers',
+  'scripts/write-release.mjs',
+  'scripts/verify-release.mjs',
+  'scripts/verify-smoke.mjs',
+  'scripts/verify-integrity.mjs',
+  'scripts/integrity-contract.mjs',
+  'scripts/verify-tls-posture.sh',
+  'scripts/optimize-images.mjs',
+  'tests/email-health-cleanup.test.mjs',
+  'tests/tls-posture-script.test.cjs',
+  'scripts/site-config.mjs',
+  'scripts/verify-ci.mjs',
+  'scripts/publish-ci-approval.mjs',
+  'scripts/verify-code-scanning.mjs',
+  'scripts/security-audit.mjs',
+  'scripts/workflow-policy.mjs',
+  'tests/release-gate.test.mjs',
+  'tests/release-refs.test.cjs',
+  'tests/deployment-rehearsal.test.cjs',
+  '.github/dependabot.yml',
+  'scripts/test-browser.mjs',
+  'scripts/lighthouse.mjs',
+  'scripts/lighthouse-runner.mjs',
+  'scripts/lighthouse-assessment.mjs',
+  'scripts/verify-contact-form-health.mjs',
+  'scripts/verify-email-health.mjs',
+  'lighthouse.config.cjs',
+  'tests/accessibility.spec.cjs',
+  'tests/heading-contrast.cjs',
+  'tests/heading-contrast.test.cjs',
+  'tests/heading-contrast.spec.cjs',
+  'tests/engineering-config.test.mjs',
+  'tests/responsive.spec.cjs',
+  'tests/safari.cjs',
   'AGENTS.md',
   '.github/copilot-instructions.md',
   '.prettierrc.json',
@@ -43,6 +81,10 @@ for (const field of [
   );
 }
 for (const command of [
+  'build',
+  'dev',
+  'preview',
+  'typecheck',
   'format',
   'format:check',
   'check',
@@ -71,13 +113,56 @@ assert.deepEqual(
   normalizeLock(peer),
   'Shared engineering drift: dependency lock',
 );
-const normalizeWorkflow = (text) =>
-  text.replace(/^name: .*\n/, 'name: SITE Quality\n');
-assert.equal(
-  normalizeWorkflow(read(root, '.github/workflows/quality.yml')),
-  normalizeWorkflow(read(peer, '.github/workflows/quality.yml')),
-  'Shared engineering drift: Quality workflow',
-);
+// Normalize only declared workflow display names/references, never script bodies.
+const workflowNames = (directory) =>
+  Object.fromEntries(
+    [
+      'quality.yml',
+      'responsive.yml',
+      'accessibility.yml',
+      'safari.yml',
+      'lighthouse.yml',
+      'contact-form-health.yml',
+      'production-smoke.yml',
+      'production-integrity.yml',
+      'operator-alert.yml',
+      'operator-alert-canary.yml',
+      'release-approval.yml',
+    ].map((file) => [
+      read(directory, '.github/workflows/' + file).match(/^name: (.*)$/m)[1],
+      file,
+    ]),
+  );
+const normalizeWorkflow = (text, directory) => {
+  const names = workflowNames(directory);
+  return text
+    .split('\n')
+    .map((line) => {
+      if (line.startsWith('name: ')) return 'name: SITE Workflow';
+      const match = line.match(/^(\s+- )(.*)$/);
+      return match && names[match[2]] ? match[1] + names[match[2]] : line;
+    })
+    .join('\n');
+};
+for (const workflow of [
+  'quality.yml',
+  'responsive.yml',
+  'accessibility.yml',
+  'safari.yml',
+  'lighthouse.yml',
+  'contact-form-health.yml',
+  'production-smoke.yml',
+  'production-integrity.yml',
+  'operator-alert.yml',
+  'operator-alert-canary.yml',
+  'release-approval.yml',
+]) {
+  assert.equal(
+    normalizeWorkflow(read(root, '.github/workflows/' + workflow), root),
+    normalizeWorkflow(read(peer, '.github/workflows/' + workflow), peer),
+    'Shared workflow drift: ' + workflow,
+  );
+}
 console.log(
-  'Shared preflight baseline matches. This does not certify full application/release parity.',
+  'Shared framework, revision, security, integrity, release, monitoring, image, browser and preflight implementations match; site configuration and application-specific content are separate. This source comparison does not certify deployment or private acceptance.',
 );

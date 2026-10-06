@@ -5,6 +5,10 @@ const vm = require('node:vm');
 const ts = require('typescript');
 // Load the actual handlers with provider bindings replaced; no network or email.
 function load(file, extra = {}) {
+  if (file === 'src/security.ts')
+    extra = { ...extra, site: require('../engineering.config.json') };
+  if (file === 'src/middleware.ts')
+    extra = { ...extra, secure: load('src/security.ts', extra).secure };
   if (file === 'src/pages/api/inquiry.ts') {
     extra = {
       ...extra,

@@ -2,6 +2,7 @@ import { execFile } from 'node:child_process';
 import { readFile, stat } from 'node:fs/promises';
 import { basename, join } from 'node:path';
 import { promisify } from 'node:util';
+import { workflowFailures } from './workflow-policy.mjs';
 
 const execFileAsync = promisify(execFile);
 const root = process.cwd();
@@ -10,15 +11,6 @@ const workflowDirectory = join(root, '.github', 'workflows');
 const allowedWritePermissions = new Map([
   ['release-approval.yml', new Set(['contents'])],
   ['operator-alert.yml', new Set(['issues'])],
-]);
-const workflowRunControllers = new Set([
-  'production-integrity.yml',
-  'release-approval.yml',
-  'operator-alert.yml',
-]);
-const sourceExecutingWorkflowRunControllers = new Set([
-  'production-integrity.yml',
-  'release-approval.yml',
 ]);
 
 const fail = (message) => failures.push(message);
@@ -39,6 +31,7 @@ if (workflowFiles.length === 0) fail('No GitHub Actions workflows found.');
 for (const file of workflowFiles) {
   const text = await readFile(join(root, file), 'utf8');
   const name = basename(file);
+  for (const issue of workflowFailures(name, text)) fail(`${file}: ${issue}`);
 
   if (!/^permissions:\s*$/m.test(text))
     fail(`${file}: missing explicit top-level permissions block`);
@@ -67,46 +60,6 @@ for (const file of workflowFiles) {
       fail(`${file}: action must be pinned to a full commit SHA: ${action}`);
   }
 
-  // Every checkout is read-only; privileged publishers use step-scoped API tokens.
-  for (const block of text.split(/(?=^      - )/m)) {
-    if (
-      /uses: actions\/checkout@/.test(block) &&
-      !/^          persist-credentials: false\s*$/m.test(block)
-    )
-      fail(`${file}: checkout must disable persisted credentials`);
-  }
-
-  if (
-    workflowRunControllers.has(name) &&
-    !text.includes(
-      'github.event.workflow_run.head_repository.full_name == github.repository',
-    )
-  )
-    fail(`${file}: workflow-run repository origin validation is required`);
-
-  if (sourceExecutingWorkflowRunControllers.has(name)) {
-    if (!text.includes('ref: ${{ github.workflow_sha }}'))
-      fail(`${file}: trusted workflow controller checkout is required`);
-    if (/ref:.*github\.event\.workflow_run\./.test(text))
-      fail(`${file}: workflow-run source must not be executed`);
-  }
-
-  if (
-    name === 'production-integrity.yml' &&
-    (!text.includes('package-manager-cache: false') ||
-      /^\s*cache:\s*\S/m.test(text) ||
-      /uses:\s*actions\/cache/.test(text))
-  )
-    fail(`${file}: privileged verification must not use package caches`);
-
-  if (name === 'safari.yml' && !text.includes('npm run test:webkit'))
-    fail(
-      `${file}: real WebKit interactions are required alongside SafariDriver`,
-    );
-
-  if (/secrets\.RESEND_/.test(text))
-    fail(`${file}: email credentials belong in the Worker, not Actions`);
-
   const lines = text.split('\n');
   for (let index = 0; index < lines.length; index += 1) {
     const policyLine = lines[index].split('#')[0].trimEnd();
@@ -115,26 +68,29 @@ for (const file of workflowFiles) {
       !/^\s*permissions:\s*$/.test(policyLine)
     )
       fail(`${file}: permissions must use an explicit block mapping`);
-
     const permissions = policyLine.match(/^(\s*)permissions:\s*$/);
     if (!permissions) continue;
     const parentIndent = permissions[1].length;
-
     for (let child = index + 1; child < lines.length; child += 1) {
       const line = lines[child].split('#')[0].trimEnd();
       if (!line.trim()) continue;
       const indent = indentOf(line);
       if (indent <= parentIndent) break;
       if (indent !== parentIndent + 2) continue;
-
       const scope = line.trim().match(/^([\w-]+):\s*(read|write|none)\s*$/);
       if (!scope) fail(`${file}: unsupported permission declaration`);
       if (!scope || scope[2] !== 'write') continue;
-
       const allowed = allowedWritePermissions.get(name);
       if (!allowed?.has(scope[1]))
         fail(`${file}: unexpected write permission for ${scope[1]}`);
     }
+  }
+
+  // Each checkout must opt out individually; a setting on another step is not evidence.
+  for (const step of text.split(/^\s*-\s+(?=name:|uses:|run:)/m)) {
+    if (!/\buses:\s*['"]?actions\/checkout@/.test(step)) continue;
+    if (!/^\s*persist-credentials:\s*false\s*(?:#.*)?$/m.test(step))
+      fail(`${file}: checkout must disable persisted credentials`);
   }
 }
 
@@ -228,8 +184,6 @@ if (
   packageJson.scripts?.audit !== 'npm audit --audit-level=low'
 )
   fail('.github/workflows/quality.yml: all-severity npm audit is required');
-if (!qualityWorkflow.includes('node scripts/verify-code-scanning.mjs'))
-  fail('.github/workflows/quality.yml: live code-scanning policy is required');
 
 if (failures.length) {
   console.error('Repository security audit failed:');

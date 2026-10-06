@@ -10,138 +10,31 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: production-smoke-${{ github.sha }}
+  cancel-in-progress: true
+
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
-      - name: Checkout
+      - name: Checkout exact verification revision
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ github.sha }}
           persist-credentials: false
-
-      - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
-
-      - name: Verify pushed revision is live
-        if: github.event_name == 'push'
+          package-manager-cache: false
+      - name: Install locked verification tooling
+        run: npm ci
+      - name: Wait for exact production revision
         env:
           EXPECTED_REVISION: ${{ github.sha }}
         run: node scripts/verify-release.mjs
-
-      - name: Check production hosts
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          check_html() {
-            local url="$1"
-            local body_file
-            local headers_file
-            body_file="$(mktemp)"
-            headers_file="$(mktemp)"
-
-            echo "Checking $url"
-
-            if ! curl --fail --silent --show-error --location \
-              --connect-timeout 10 --max-time 30 \
-              --retry 3 --retry-delay 2 --retry-connrefused \
-              --dump-header "$headers_file" \
-              --output "$body_file" \
-              "$url"; then
-              echo "Request failed for $url"
-              echo "Response headers:"
-              cat "$headers_file" 2>/dev/null || true
-              echo "Response body (first 2000 bytes):"
-              head -c 2000 "$body_file" 2>/dev/null || true
-              rm -f "$body_file" "$headers_file"
-              exit 1
-            fi
-
-            grep -qi '^content-type:.*text/html' "$headers_file" || {
-              echo "Expected HTML content type from $url"
-              cat "$headers_file"
-              echo "Response body (first 2000 bytes):"
-              head -c 2000 "$body_file"
-              rm -f "$body_file" "$headers_file"
-              exit 1
-            }
-
-            grep -q 'AlienX SmartHome' "$body_file" || {
-              echo "Expected AlienX marker missing from $url"
-              echo "Response body (first 2000 bytes):"
-              head -c 2000 "$body_file"
-              rm -f "$body_file" "$headers_file"
-              exit 1
-            }
-
-            if grep -q '\[object Object\]' "$body_file"; then
-              echo "Production returned [object Object] from $url"
-              echo "Response body (first 2000 bytes):"
-              head -c 2000 "$body_file"
-              rm -f "$body_file" "$headers_file"
-              exit 1
-            fi
-
-            echo "PASS: $url"
-            rm -f "$body_file" "$headers_file"
-          }
-
-          check_html "https://alienxsmarthome.com/"
-          check_html "https://www.alienxsmarthome.com/"
-
-      - name: Check public status endpoint
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          status_file="$(mktemp)"
-          trap 'rm -f "$status_file"' EXIT
-
-          curl --fail --silent --show-error --location \
-            --connect-timeout 10 --max-time 30 \
-            --retry 3 --retry-delay 2 --retry-connrefused \
-            --output "$status_file" \
-            https://www.alienxsmarthome.com/api/status
-
-          node - "$status_file" <<'NODE'
-          const fs = require('node:fs');
-
-          const file = process.argv[2];
-          const raw = fs.readFileSync(file, 'utf8');
-          let value;
-
-          try {
-            value = JSON.parse(raw);
-          } catch (error) {
-            console.error('Status endpoint returned invalid JSON.');
-            console.error(raw.slice(0, 2000));
-            throw error;
-          }
-
-          const requiredChecks = ['worker', 'inquiry', 'turnstile', 'resend'];
-
-          if (
-            value.ok !== true ||
-            value.status !== 'operational' ||
-            !value.checks ||
-            typeof value.checks !== 'object' ||
-            value.runtime !== 'Cloudflare Workers' ||
-            typeof value.generatedAt !== 'string' ||
-            typeof value.summary !== 'string' ||
-            requiredChecks.some((key) => {
-              const check = value.checks[key];
-              return !check || !['operational', 'configured'].includes(check.status) || typeof check.detail !== 'string';
-            })
-          ) {
-            console.error('Unexpected status payload:');
-            console.error(JSON.stringify(value, null, 2).slice(0, 4000));
-            throw new Error('Unexpected status payload');
-          }
-
-          console.log(`Status endpoint: ${value.status}`);
-          console.log(`Summary: ${value.summary}`);
-          console.log(`Runtime: ${value.runtime}`);
-          NODE
+      - name: Verify production smoke without sending mail
+        env:
+          EXPECTED_REVISION: ${{ github.sha }}
+        run: node scripts/verify-smoke.mjs

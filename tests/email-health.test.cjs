@@ -6,7 +6,7 @@ const ts = require('typescript');
 
 function load(file, extra = {}) {
   const code = ts.transpileModule(
-    fs.readFileSync(file, 'utf8').replace(/^import .*;\n/gm, ''),
+    fs.readFileSync(file, 'utf8').replace(/^(?:import|export \{).*;\n/gm, ''),
     {
       compilerOptions: {
         module: ts.ModuleKind.CommonJS,
@@ -20,9 +20,14 @@ function load(file, extra = {}) {
     AbortSignal,
     console: { info() {} },
     setTimeout: (fn) => fn(),
+    ...(file.endsWith('/email-health.ts')
+      ? { ...load('src/email-health-engine.ts') }
+      : {}),
     ...extra,
   };
   vm.runInNewContext(code, context);
+  if (file.endsWith('/email-health.ts'))
+    context.exports.healthDate = context.healthDate;
   return context.exports;
 }
 test('daily mail is DST-safe at 05:00 Chicago including both transition days', () => {

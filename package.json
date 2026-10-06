@@ -4,7 +4,7 @@
   "dependencies": {
     "@astrojs/cloudflare": "14.3.3",
     "@astrojs/sitemap": "3.7.4",
-    "astro": "7.3.4",
+    "astro": "7.3.5",
     "typescript": "6.0.3"
   },
   "devDependencies": {
@@ -13,11 +13,11 @@
     "axe-core": "4.13.0",
     "lighthouse": "13.5.0",
     "parse5": "8.0.1",
-    "prettier": "3.9.8",
-    "prettier-plugin-astro": "1.0.1",
-    "selenium-webdriver": "4.49.0",
-    "sharp": "0.35.4",
-    "wrangler": "4.137.0"
+    "prettier": "3.9.9",
+    "prettier-plugin-astro": "1.1.0",
+    "selenium-webdriver": "4.50.0",
+    "sharp": "0.35.5",
+    "wrangler": "4.147.0"
   },
   "engines": {
     "node": ">=22"
@@ -25,19 +25,19 @@
   "private": true,
   "scripts": {
     "astro": "astro",
-    "build": "node scripts/optimize-images.mjs && astro build",
+    "build": "node scripts/write-release.mjs && node scripts/optimize-images.mjs && astro build",
     "cf-typegen": "wrangler types && node scripts/scope-worker-types.mjs",
     "check": "npm run format:check && npm run security:audit && npm run security:history && npm test && npm run build && npm run verify:target && npm run typecheck && wrangler deploy --dry-run",
     "audit": "npm audit --audit-level=low",
     "deploy": "node scripts/verify-ci.mjs && node scripts/verify-deploy-target.mjs && wrangler deploy",
-    "dev": "node scripts/optimize-images.mjs && astro dev",
-    "preview": "npm run build && wrangler dev",
+    "dev": "node scripts/write-release.mjs && node scripts/optimize-images.mjs && astro dev",
+    "preview": "npm run build && wrangler dev --host 127.0.0.1 --upstream-protocol http",
     "security:audit": "node scripts/security-audit.mjs",
     "test": "node --test tests/*.test.*",
-    "typecheck": "astro check && tsc --noEmit",
-    "test:browser": "playwright test tests/responsive.spec.cjs tests/interactions.spec.cjs tests/keyboard.spec.cjs tests/error-pages.spec.cjs --reporter=line",
-    "test:webkit": "playwright test tests/interactions.spec.cjs tests/keyboard.spec.cjs tests/error-pages.spec.cjs --browser=webkit --reporter=line",
-    "test:a11y": "playwright test tests/accessibility.spec.cjs --reporter=line",
+    "typecheck": "node scripts/write-release.mjs && astro check && tsc --noEmit",
+    "test:browser": "node scripts/test-browser.mjs responsive",
+    "test:webkit": "node scripts/test-browser.mjs webkit",
+    "test:a11y": "node scripts/test-browser.mjs accessibility",
     "test:lighthouse": "node scripts/lighthouse.mjs",
     "format": "prettier --write src public scripts tests .github \"*.md\" \"docs/*.md\" \"*.config.*\" package.json .prettierrc.json",
     "format:check": "prettier --check src public scripts tests .github \"*.md\" \"docs/*.md\" \"*.config.*\" package.json .prettierrc.json",
@@ -47,7 +47,7 @@
     "verify:peer": "node scripts/verify-peer-engineering.mjs"
   },
   "overrides": {
-    "sharp": "0.35.4",
+    "sharp": "0.35.5",
     "undici": "7.29.1"
   },
   "type": "module"

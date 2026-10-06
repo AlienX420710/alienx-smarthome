@@ -14,7 +14,7 @@ function fixture(t) {
   });
   for (const name of [
     'lighthouse',
-    'lighthouse-command',
+    'lighthouse-runner',
     'lighthouse-assessment',
   ]) {
     fs.copyFileSync(
@@ -23,7 +23,8 @@ function fixture(t) {
     );
   }
   const config = structuredClone(require('../lighthouse.config.cjs'));
-  config.ci.collect.url = ['http://example.test/'];
+  config.origin = 'http://example.test';
+  config.routes = ['/'];
   fs.writeFileSync(
     join(directory, 'lighthouse.config.cjs'),
     `module.exports = ${JSON.stringify(config)};`,
@@ -132,14 +133,14 @@ test('unrelated errors and low scores fail without retries or reduced sample cou
   }
 });
 
-test('accessibility keeps one sample and invocation-specific summary evidence', (t) => {
+test('accessibility keeps three samples and invocation-specific summary evidence', (t) => {
   const f = fixture(t);
   assert.equal(f.run('success', '--accessibility').status, 0);
-  assert.equal(f.calls().length, 1);
+  assert.equal(f.calls().length, 3);
   assert.match(f.calls()[0], /accessibility-.*sample-1-attempt-1/);
   const folder = fs.readdirSync(join(f.directory, '.lighthouseci'))[0];
   const summary = JSON.parse(f.read(`.lighthouseci/${folder}/summary.json`));
-  assert.equal(summary[0].runs, 1);
+  assert.equal(summary.length, 3);
   assert.deepEqual(
     summary[0].results.map((result) => result.category),
     ['accessibility'],

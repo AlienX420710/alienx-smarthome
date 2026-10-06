@@ -38,7 +38,7 @@ jobs:
         run: npm run build
 
       - name: Start Cloudflare preview
-        run: npx wrangler dev --port 4321 > /tmp/alienx-preview.log 2>&1 &
+        run: npx wrangler dev --port 4321 --host 127.0.0.1 --upstream-protocol http > /tmp/site-preview.log 2>&1 &
 
       - name: Wait for preview
         run: |
@@ -48,7 +48,7 @@ jobs:
             fi
             sleep 2
           done
-          cat /tmp/alienx-preview.log
+          cat /tmp/site-preview.log
           exit 1
 
       - name: Verify candidate security and SEO contract
@@ -68,6 +68,6 @@ jobs:
         with:
           name: responsive-preview-log
           path: |
-            /tmp/alienx-preview.log
+            /tmp/site-preview.log
             test-results
           if-no-files-found: ignore

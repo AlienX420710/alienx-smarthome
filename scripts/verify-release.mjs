@@ -1,38 +1,25 @@
-// Read-only release verification. A healthy older deployment is not a successful release.
+import { site } from './site-config.mjs';
 const expected = process.env.EXPECTED_REVISION;
 if (!/^[a-f0-9]{40}$/.test(expected ?? ''))
-  throw new Error('EXPECTED_REVISION must be a full Git SHA');
+  throw Error('EXPECTED_REVISION must be a full Git SHA');
 const deadline = Date.now() + 15 * 60 * 1000;
-let last = 'No response';
 while (Date.now() < deadline) {
   try {
-    const status = new URL('https://alienxsmarthome.com/api/status');
-    status.searchParams.set('_alienx_revision', `${expected}-${Date.now()}`);
-    const response = await fetch(status, {
-      cache: 'no-store',
-      headers: {
-        'Cache-Control': 'no-cache, no-store, max-age=0',
-        Pragma: 'no-cache',
+    const response = await fetch(
+      new URL(`/api/release?_revision=${expected}-${Date.now()}`, site.origin),
+      {
+        redirect: 'error',
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache, no-store', Pragma: 'no-cache' },
+        signal: AbortSignal.timeout(15000),
       },
-      signal: AbortSignal.timeout(15000),
-    });
-    const data = await response.json();
-    if (
-      response.ok &&
-      data.ok === true &&
-      data.status === 'operational' &&
-      data.buildRevision === expected
-    ) {
-      console.log(
-        `Verified healthy production revision ${expected}; rate limiting: ${data.rateLimiting}`,
-      );
+    );
+    if (response.ok && (await response.json()).revision === expected) {
+      console.log(`Verified production revision ${expected}`);
       process.exit(0);
     }
-    last = `HTTP ${response.status}; revision ${data.buildRevision ?? 'missing'}; status ${data.status ?? 'missing'}`;
-  } catch (error) {
-    last = error.message;
-  }
-  console.log(`Waiting for production: ${last}`);
+  } catch {}
+  console.log(`Waiting for exact production revision ${expected}`);
   await new Promise((resolve) => setTimeout(resolve, 10000));
 }
-throw new Error(`Production did not become healthy at ${expected}: ${last}`);
+throw Error('Production did not reach the expected revision');

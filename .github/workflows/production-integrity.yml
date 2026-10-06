@@ -6,7 +6,7 @@ on:
       - AlienX Production Smoke
     types: [completed]
   schedule:
-    - cron: '17 */6 * * *'
+    - cron: '43 */6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -47,7 +47,7 @@ jobs:
 
       - name: Verify deployed security and SEO
         env:
-          EXPECTED_REVISION: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || '' }}
+          EXPECTED_REVISION: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: node scripts/verify-integrity.mjs
 
       - name: Verify live TLS protocol posture

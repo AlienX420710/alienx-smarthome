@@ -1,13 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
 const baseURL = 'http://127.0.0.1:4321';
-const routes = [
-  '/',
-  '/status/',
-  '/about/',
-  '/contact/',
-  '/__alienx_missing_error_test__/',
-];
+const site = require('../engineering.config.json');
+const routes = [...site.routes, site.browser.missingRoute];
 const viewports = [
   [320, 568],
   [360, 800],
@@ -57,7 +52,7 @@ for (const [width, height] of viewports)
                 remove() {},
                 reset() {},
               };
-              window.alienxTurnstileLoad?.();
+              window.${site.browser.turnstileCallback}?.();
             `,
           }),
       );
@@ -66,7 +61,7 @@ for (const [width, height] of viewports)
         if (m.type() === 'error') {
           const text = m.text();
           const expected404Navigation =
-            route === '/__alienx_missing_error_test__/' &&
+            route === site.browser.missingRoute &&
             text.includes('Failed to load resource') &&
             text.includes('404');
           if (
@@ -79,15 +74,17 @@ for (const [width, height] of viewports)
       });
 
       await page.setViewportSize({ width, height });
-      await page.addInitScript(() => {
+      await page.addInitScript((key) => {
         try {
-          localStorage.setItem('alienx-theme', 'light');
+          if (key) localStorage.setItem(key, 'light');
         } catch {}
-      });
+      }, site.browser.themeKey);
+      await page.emulateMedia({ colorScheme: 'light' });
       await page.goto(`${baseURL}${route}`, { waitUntil: 'domcontentloaded' });
-      await page.evaluate(() => {
-        document.documentElement.dataset.alienxTheme = 'light';
-      });
+      await page.evaluate((attribute) => {
+        if (attribute)
+          document.documentElement.setAttribute(attribute, 'light');
+      }, site.browser.themeAttribute);
       await page.waitForTimeout(500);
 
       const result = await page.evaluate(() => {

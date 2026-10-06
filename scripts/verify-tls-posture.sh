@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-HOSTS=(
-  "alienxsmarthome.com"
-  "www.alienxsmarthome.com"
-)
+mapfile -t HOSTS < <(node --input-type=module -e 'import {site} from "./scripts/site-config.mjs"; const host=new URL(site.origin).hostname; console.log(host+"\nwww."+host)')
+logs="$(mktemp -d)"
+trap 'rm -rf "$logs"' EXIT
 
 probe_tls() {
   local host="$1"
@@ -58,30 +57,30 @@ probe_cipher_family() {
 for host in "${HOSTS[@]}"; do
   echo "Checking TLS posture for ${host}"
 
-  if probe_tls "$host" -tls1 >/tmp/alienx-tls1.log; then
+  if probe_tls "$host" -tls1 >${logs}/tls1.log; then
     echo "FAIL: ${host} accepted TLS 1.0"
-    cat /tmp/alienx-tls1.log
+    cat ${logs}/tls1.log
     exit 1
   fi
   echo "PASS: ${host} rejects TLS 1.0"
 
-  if probe_tls "$host" -tls1_1 >/tmp/alienx-tls11.log; then
+  if probe_tls "$host" -tls1_1 >${logs}/tls11.log; then
     echo "FAIL: ${host} accepted TLS 1.1"
-    cat /tmp/alienx-tls11.log
+    cat ${logs}/tls11.log
     exit 1
   fi
   echo "PASS: ${host} rejects TLS 1.1"
 
-  if ! probe_tls "$host" -tls1_2 >/tmp/alienx-tls12.log; then
+  if ! probe_tls "$host" -tls1_2 >${logs}/tls12.log; then
     echo "FAIL: ${host} did not accept TLS 1.2"
-    cat /tmp/alienx-tls12.log 2>/dev/null || true
+    cat ${logs}/tls12.log 2>/dev/null || true
     exit 1
   fi
   echo "PASS: ${host} accepts TLS 1.2"
 
-  if ! probe_tls "$host" -tls1_3 >/tmp/alienx-tls13.log; then
+  if ! probe_tls "$host" -tls1_3 >${logs}/tls13.log; then
     echo "FAIL: ${host} did not accept TLS 1.3"
-    cat /tmp/alienx-tls13.log 2>/dev/null || true
+    cat ${logs}/tls13.log 2>/dev/null || true
     exit 1
   fi
   echo "PASS: ${host} accepts TLS 1.3"
@@ -95,6 +94,6 @@ for host in "${HOSTS[@]}"; do
 
 done
 
-rm -f /tmp/alienx-tls1.log /tmp/alienx-tls11.log /tmp/alienx-tls12.log /tmp/alienx-tls13.log
+
 
 echo 'TLS protocol acceptance passed for both production hosts.'
