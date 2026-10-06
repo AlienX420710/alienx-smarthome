@@ -65,32 +65,50 @@ async function headingContrast(page) {
       return runs;
     });
     if (!runs.length) continue;
-    // CSSOM property edits work under the production CSP; an injected inline
-    // stylesheet is correctly blocked there. Preserve and restore exact styles.
-    const originalStyles = await heading.evaluate((element) =>
-      [element, ...element.querySelectorAll('*')].map((node) => {
-        const original = node.getAttribute('style');
-        node.style.setProperty(
-          '-webkit-text-fill-color',
-          'transparent',
-          'important',
-        );
-        node.style.setProperty('text-shadow', 'none', 'important');
-        if (getComputedStyle(node).webkitTextFillColor !== 'rgba(0, 0, 0, 0)')
-          throw new Error('Heading text masking did not apply');
-        return original;
-      }),
-    );
+    // Modify an already-authorized stylesheet through CSSOM. Creating an inline
+    // stylesheet is blocked by production CSP; do not disable that policy.
+    const mask = await heading.evaluate((element) => {
+      const sheet = [...document.styleSheets].find((candidate) => {
+        try {
+          return Boolean(candidate.cssRules);
+        } catch {
+          return false;
+        }
+      });
+      if (!sheet)
+        throw new Error('No accessible stylesheet for contrast capture');
+      const previous = element.getAttribute('data-contrast-mask');
+      element.setAttribute('data-contrast-mask', 'active');
+      const index = sheet.cssRules.length;
+      sheet.insertRule(
+        '[data-contrast-mask="active"], [data-contrast-mask="active"] * { -webkit-text-fill-color: transparent !important; text-shadow: none !important; transition: none !important; }',
+        index,
+      );
+      return {
+        sheet: [...document.styleSheets].indexOf(sheet),
+        index,
+        previous,
+      };
+    });
     let png;
     try {
+      await heading.evaluate((element) => {
+        for (const node of [element, ...element.querySelectorAll('*')]) {
+          const fill = getComputedStyle(node).webkitTextFillColor;
+          if (fill !== 'rgba(0, 0, 0, 0)')
+            throw new Error(
+              `Heading text masking did not apply: ${node.tagName} ${fill}`,
+            );
+        }
+      });
       png = await heading.screenshot({ scale: 'css', animations: 'disabled' });
     } finally {
-      await heading.evaluate((element, styles) => {
-        [element, ...element.querySelectorAll('*')].forEach((node, index) => {
-          if (styles[index] === null) node.removeAttribute('style');
-          else node.setAttribute('style', styles[index]);
-        });
-      }, originalStyles);
+      await heading.evaluate((element, mask) => {
+        document.styleSheets[mask.sheet].deleteRule(mask.index);
+        if (mask.previous === null)
+          element.removeAttribute('data-contrast-mask');
+        else element.setAttribute('data-contrast-mask', mask.previous);
+      }, mask);
     }
     const { data, info } = await sharp(png)
       .removeAlpha()

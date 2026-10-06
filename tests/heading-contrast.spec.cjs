@@ -4,19 +4,27 @@ const { headingContrast } = require('./heading-contrast.cjs');
 test('measures child text against painted gradients rather than ancestor colors', async ({
   page,
 }) => {
-  await page.setContent(`<style>
-    body { background: white; }
-    section { background: linear-gradient(135deg,#6f14d9,#1548f5,#f24bb5); }
-    h1 { color: #211631; font-size: 40px; }
-    h1 span, h2 { color: white; }
-    h2 { font-size: 32px; }
-  </style><section><h1><span>Visible child color</span></h1><h2>Gradient backdrop</h2></section>`);
-  await page.evaluate(() => {
-    const policy = document.createElement('meta');
-    policy.httpEquiv = 'Content-Security-Policy';
-    policy.content = "style-src 'self'";
-    document.head.append(policy);
+  await page.route('https://contrast.test/**', (route) => {
+    if (route.request().url().endswith('/fixture.css'))
+      return route.fulfill({
+        contentType: 'text/css',
+        body: `
+        body { background: white; }
+        section { background: linear-gradient(135deg,#6f14d9,#1548f5,#f24bb5); }
+        h1 { color: #211631; font-size: 40px; }
+        h1 span, h2 { color: white; }
+        h2 { font-size: 32px; }
+      `,
+      });
+    return route.fulfill({
+      contentType: 'text/html',
+      headers: {
+        'Content-Security-Policy': "default-src 'self'; style-src 'self'",
+      },
+      body: '<link rel="stylesheet" href="/fixture.css"><section><h1><span>Visible child color</span></h1><h2>Gradient backdrop</h2></section>',
+    });
   });
+  await page.goto('https://contrast.test/');
   const results = await headingContrast(page);
   expect(results).toHaveLength(2);
   expect(results.filter((run) => run.ratio < run.required)).toEqual([]);

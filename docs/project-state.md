@@ -38,6 +38,10 @@ against screenshot backdrops and validates the explicit navigation breakpoint,
 without lowering thresholds or removing axe checks. Browser regression fixtures
 cover both readable and unreadable child text/gradients. Acceptance still requires
 fresh exact-head CI and production evidence; publication alone is not acceptance.
+The rendered-text check also found a real light-theme status-hero defect:
+"visible." used neon green at approximately 1.34:1 contrast. The candidate uses
+the existing dark brand green for that accent in explicit/system light mode;
+dark mode retains the original accent. Browser acceptance remains pending.
 Local browser installation failed while downloading the pinned Chromium archive;
 this is not browser acceptance. Local preflight initially hit the restricted
 network-interface inspector probe; the explicit local-only disable switch is
