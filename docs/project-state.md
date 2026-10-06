@@ -1,77 +1,64 @@
 # AlienX — current state
 
-Updated October 3, 2026. This file alone owns findings and dated release
+Updated October 6, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
-## October 5 shared implementation migration — candidate, not released
+## October 6 shared infrastructure release — verified
 
-Owner requested completion of Cleaning #39 / AlienX #122, not cancellation.
-The mistaken administrative closure of #39 was reversed; no parity acceptance
-is inferred from issue state. Candidate work migrates the release verifier and
-publisher, security audit/code-scanning checks, dependency pins and normalized
-lock, Dependabot policy, responsive/accessibility/native Safari runners, browser
-workflows, Lighthouse, form-health and optional provider-evidence validator.
-`engineering.config.json` owns repository/ref identity, public site routes,
-form encoding/selectors, theme controls, and fixed mail identity. It contains no
-credentials. Existing application-specific interaction suites remain mandatory.
+PR #123 merged as `c192e08bb22b662f6a79c866369016a570492ff2`.
+All five exact PR-head and main checks passed, including native Safari, WebKit,
+rendered-text contrast and all three Lighthouse samples. Main's fresh CodeQL
+analysis and zero-open-alert policy passed. [Release Approval](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37473354502)
+published the approved-main ref for this SHA. [Workers Build](https://github.com/AlienX420710/alienx-smarthome/runs/112302626579)
+succeeded; [Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37472612533)
+and [Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37473492323)
+verified the exact revision on both production hosts. Integrity also passed the
+live TLS protocol checks. This supersedes the earlier release evidence below.
 
-The common release verifier retains malformed/incomplete evidence rejection and
-uses exact approved/rejected Git refs; target guard runs again before Wrangler.
-The shared Lighthouse gate retains all budgets, uses three fixed samples and
-requires **every** score to pass (stronger than the former median). The locked
-Playwright Chromium is selected in both measurement workflows. Two trace-only
-retries retain all attempts/stdout/stderr/assets; low scores never retry.
-GitHub-native operator alerts use trusted origin checks and no provider history.
-The form-health probe submits no verified inquiry and uses an empty security token.
+The release shares framework configuration, revision metadata, security headers,
+release approval, security/code-scanning checks, integrity/SEO, production
+Smoke/TLS, image processing, monitoring, browser tooling and normalized dependency
+locks with Cleaning #41. Explicit site inputs retain business identity, routes,
+form schemas, recipients and rendering requirements. The peer comparison passes
+for the migrated components; it does not prove that every application file is
+identical. #122 / Cleaning #39 remain open for remaining application-level
+implementation differences (including form middleware/status handlers and manual
+browser diagnostics), plus each site's independent release acceptance.
 
-The follow-up candidate also shares framework configuration, generated release
-metadata, security-header implementation, SEO/integrity checks, exact-revision
-production Smoke/Integrity, TLS probes, image decoding/generation and the scheduled
-mail retry engine. Explicit rendering/CSP inputs retain the server-rendered
-Cleaning header policy and AlienX's generated hash policy. This preserves each
-site's emitted content requirements while using the same implementation.
-The peer verifier compares these source files, normalized workflow display names,
-commands and normalized dependency locks; it does not certify private acceptance.
+The initial migration exposed incorrect Safari layout and heading-contrast test
+assumptions. The shared tests now enforce the configured responsive layout and
+measure rendered text against painted backgrounds under the actual CSP. They
+also found a real low-contrast light-theme status accent, fixed using the existing
+dark brand green with sufficient selector specificity. Browser fixtures cover
+readable/unreadable text and gradients. No quality threshold or CSP was weakened.
+Dependency audit findings were patched with smol-toml 1.9.0 and source-map-js 1.2.2;
+no audit exceptions were added. Local browser installation remained unavailable;
+passing browser evidence comes from exact-revision CI, not a local claim.
 
-Paired PRs: [Cleaning #41](https://github.com/Cassileigh/cleaning-by-cassi/pull/41)
-and [AlienX #123](https://github.com/AlienX420710/alienx-smarthome/pull/123).
-Latest published heads passed Quality, Responsive, Lighthouse and Safari, but
-failed Accessibility. The screenshot-based contrast checker revealed genuine
-low-contrast Cleaning hero text and AlienX's light status accent; candidate fixes
-darken the photo overlay and make the intended light-theme accent win scoped CSS
-specificity. A fixture's `endswith` typo is corrected. The screenshot checker and
-its regression fixtures are retained from the concurrent PR continuation.
-Fresh final-head verification is still required. October 6 audit newly reported
-GHSA-r4xh-jqrq-34v2 and GHSA-68fv-2mgg-jv7q in the prior lock; the candidate
-updates smol-toml to 1.9.0 and source-map-js to 1.2.2 without audit exceptions.
+Shared scheduled-mail cleanup cancels failed response bodies best-effort without
+changing retry disposition, recipients, timing or stable keys. Mocked error-path
+coverage sends no mail. Cleaning's field-error work and release acceptance remain
+owned by its #35/#36; peer deployment is not transferable evidence.
 
-The owner explicitly authorized publication to both named repositories after an
-earlier automatic approval rejection. The connector published both draft PRs;
-terminal Git credential access remains unavailable. Local browser installation
-failed downloading the pinned archive, so browser evidence must come from CI.
-No merge or production acceptance is claimed by this candidate record.
-
-Failed heartbeat-response cleanup is now best-effort and cannot change permanent
-versus transient retry decisions. Regression tests cover canceled, missing and
-rejecting bodies with the same bounded attempts and stable key. Cleaning field
-validation now returns safe field errors; inline descriptions, invalid state and
-focus guide correction while preserving input, retry identity and Turnstile.
-Cleaning #35/#36 require deployment evidence before closure. #32/#33 retain private
-account/mailbox and physical-device evidence requirements; #34 retains CSP and
-reporting acceptance. Existing unresolved findings below remain authoritative.
+#59 isolated recovery, #60 physical-device acceptance,
+#61 account/TLS-cipher disposition, and AX-010 / #62 owner editorial
+acceptance remain open. Production TLS protocol success is not private account
+or exhaustive cipher evidence. No real inquiry, replacement heartbeat, mailbox
+inspection or production recovery drill was performed during this continuation.
+This evidence-only documentation closeout needs no recursive state update.
 
 ## October 5 engineering alignment — released, full parity still open
 
 The owner requires identical engineering except for site content/configuration.
-The first paired preflight repair is merged. Current main
+The first paired preflight repair is merged. Earlier main
 `3dbf0542be8082a4973996ab35b2fe4786ad3505` passed all five gates and
 code-scanning policy, [Release Approval](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37362119608),
 Workers Build, [Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37361587769),
 and [Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37362184149).
 The latter verified that exact revision on both production hosts and TLS protocol
 acceptance. This supersedes the October 3 release below. Full non-content parity
-is still open in #122; candidate #123 has not passed all checks or deployed.
+is still open in #122; the later verified #123 release is recorded above.
 
 ## Previous verified release
 
