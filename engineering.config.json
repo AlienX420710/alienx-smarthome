@@ -17,7 +17,10 @@
         "tests/keyboard.spec.cjs",
         "tests/error-pages.spec.cjs"
       ],
-      "accessibility": ["tests/accessibility.spec.cjs"],
+      "accessibility": [
+        "tests/accessibility.spec.cjs",
+        "tests/heading-contrast.spec.cjs"
+      ],
       "webkit": [
         "tests/interactions.spec.cjs",
         "tests/keyboard.spec.cjs",
@@ -25,7 +28,8 @@
       ]
     },
     "logoSelector": ".site-logo",
-    "externalSelector": ".source-link"
+    "externalSelector": ".source-link",
+    "navigationRowBreakpoint": 1050
   },
   "origin": "https://alienxsmarthome.com",
   "mail": {

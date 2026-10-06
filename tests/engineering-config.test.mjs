@@ -40,3 +40,13 @@ test('release approval and rejection refs stay separate and scoped to site ident
     `refs/tags/${site.releaseRefPrefix}-ci-rejected-main`,
   );
 });
+
+test('native Safari layout contract has an explicit valid breakpoint', () => {
+  assert.ok(Number.isInteger(site.browser.navigationRowBreakpoint));
+  assert.ok(site.browser.navigationRowBreakpoint >= 0);
+  assert.ok(
+    site.browser.suites.accessibility.includes(
+      'tests/heading-contrast.spec.cjs',
+    ),
+  );
+});

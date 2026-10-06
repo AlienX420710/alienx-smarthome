@@ -116,7 +116,10 @@ const { mkdirSync, writeFileSync } = require('node:fs');
               facebook.width > 0 &&
               facebook.left >= 0 &&
               facebook.right <= innerWidth,
-            sameRow: logo.top < nav.bottom && nav.top < logo.bottom,
+            navigationLayout:
+              innerWidth <= config.navigationRowBreakpoint
+                ? nav.top >= Math.max(logo.bottom, facebook.bottom) - 1
+                : logo.top < nav.bottom && nav.top < logo.bottom,
             activeVisible:
               !active ||
               (active.left >= nav.left - 1 && active.right <= nav.right + 1),
@@ -132,7 +135,7 @@ const { mkdirSync, writeFileSync } = require('node:fs');
         for (const key of [
           'logoVisible',
           'facebookVisible',
-          'sameRow',
+          'navigationLayout',
           'activeVisible',
         ])
           assert.ok(state[key], `${route}: ${key}`);

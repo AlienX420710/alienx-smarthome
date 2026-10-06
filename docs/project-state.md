@@ -1,6 +1,6 @@
 # AlienX — current state
 
-Updated October 3, 2026. This file alone owns findings and dated release
+Updated October 5, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
@@ -28,10 +28,16 @@ The form-health probe submits no verified inquiry and uses an empty security tok
 Local Node 22 preflight passed for the prepared migration: formatting, source/history
 scans, unit tests, build, target guard, type checks, Worker dry run and zero dependency
 vulnerabilities. The migrated-component comparison also passed. Verification is
-pending for the final paired PR heads and exact deployed mains. Automatic approval
-review blocked publishing the AlienX branch as an insufficiently authorized external
-write. Explicit publication approval is required before retrying; no workaround,
-merge, deployment or issue closeout is authorized by these local test results.
+pending for the final paired PR heads and exact deployed mains. The earlier automatic
+approval rejection of branch publication was resolved by explicit owner publication
+authorization. AlienX #123 and Cleaning #41 are the active paired PRs. Their initial
+heads exposed test assumptions: Safari imposed a single-row header on AlienX's
+intentional two-row tablet layout; heading contrast used container colors and
+ignored painted gradients. The candidate correction measures actual child text
+against screenshot backdrops and validates the explicit navigation breakpoint,
+without lowering thresholds or removing axe checks. Browser regression fixtures
+cover both readable and unreadable child text/gradients. Acceptance still requires
+fresh exact-head CI and production evidence; publication alone is not acceptance.
 Local browser installation failed while downloading the pinned Chromium archive;
 this is not browser acceptance. Local preflight initially hit the restricted
 network-interface inspector probe; the explicit local-only disable switch is
@@ -41,22 +47,22 @@ implementation, final migration comparison, and both production evidence chains.
 Existing account, recovery, real-device, content and incident findings below stay
 open unless independently evidenced. #32–#36 are not closed by this migration.
 
-## October 5 engineering alignment — verification pending
+## October 5 engineering alignment — released, full parity still open
 
 The owner requires identical engineering except for site content/configuration.
-The paired changes align assistant instructions, dependency pins/overrides,
-formatting coverage, Quality checks, preflight and generated-target validation.
-The dependency lock updates patch http-cache-semantics rather than granting an
-audit exception. Existing historical release evidence below remains authoritative
-until the paired PR heads and resulting deployments pass their required gates.
-Application-specific browser suites and the existing release/monitoring machinery
-still differ; full non-content parity is not yet established. Those differences
-must be migrated and verified, not relabeled as content or silently accepted.
+The first paired preflight repair is merged. Current main
+`3dbf0542be8082a4973996ab35b2fe4786ad3505` passed all five gates and
+code-scanning policy, [Release Approval](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37362119608),
+Workers Build, [Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37361587769),
+and [Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37362184149).
+The latter verified that exact revision on both production hosts and TLS protocol
+acceptance. This supersedes the October 3 release below. Full non-content parity
+is still open in #122; candidate #123 has not passed all checks or deployed.
 
-## Last verified release
+## Previous verified release
 
 October 3, 2026: main `81e219fc0e9e13dad669e77d5d2508c32eb75908`
-(PR #119) is the latest fully verified production release. All five required main
+(PR #119) was the fully verified production release on that date. All five required main
 gates and current code-scanning policy passed. Release Approval run
 [37146953634](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37146953634)
 succeeded for this exact SHA. Cloudflare Workers Build
