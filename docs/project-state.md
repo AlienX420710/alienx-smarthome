@@ -4,14 +4,22 @@ Updated October 6, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
-## October 6 diagnostic parity follow-up — candidate
+## October 6 diagnostic parity follow-up — verified
 
 The manual WebKit runner and workflow now share one implementation, retaining
 traces, screenshots, preview logs and baseline failure semantics in both repos.
 Regression coverage blocks external requests/local writes and verifies altered
 modes cannot count as release acceptance. The peer verifier now covers this
-previously omitted tool and workflow. This is candidate source work, not deployed
-acceptance; full application parity and owner-dependent checklist items stay open.
+previously omitted tool and workflow. PR #125 passed all five exact-head gates and
+real macOS WebKit diagnostics, then merged as
+`a2f3d1cf2a0883112748f8adb123502c71583c41`. All five main gates, fresh CodeQL and
+zero-open-alert policy passed. Release approval published this exact SHA and
+Workers Build 112467491484 succeeded. [Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37520714103)
+and [Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37521448579)
+verified this revision on both hosts, including TLS protocol acceptance. Full
+application parity and owner-dependent checklist items stay open. No real mail or
+account/recovery operation was performed. This evidence-only follow-up needs no
+recursive state update.
 
 ## October 6 shared infrastructure release — verified
 
