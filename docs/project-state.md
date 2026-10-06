@@ -4,6 +4,15 @@ Updated October 6, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
+## October 6 diagnostic parity follow-up — candidate
+
+The manual WebKit runner and workflow now share one implementation, retaining
+traces, screenshots, preview logs and baseline failure semantics in both repos.
+Regression coverage blocks external requests/local writes and verifies altered
+modes cannot count as release acceptance. The peer verifier now covers this
+previously omitted tool and workflow. This is candidate source work, not deployed
+acceptance; full application parity and owner-dependent checklist items stay open.
+
 ## October 6 shared infrastructure release — verified
 
 PR #123 merged as `c192e08bb22b662f6a79c866369016a570492ff2`.

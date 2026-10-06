@@ -1,7 +1,13 @@
-name: AlienX Browser Diagnostics
+name: Browser Diagnostics
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - scripts/webkit-diagnostics.cjs
+      - tests/webkit-diagnostics.test.cjs
+      - .github/workflows/browser-diagnostics.yml
+      - engineering.config.json
 
 permissions:
   contents: read
@@ -28,14 +34,14 @@ jobs:
       - name: Install WebKit
         run: npx playwright install webkit
       - name: Start local preview
-        run: npx wrangler dev --port 4321 --host 127.0.0.1 --upstream-protocol http > /tmp/alienx-diagnostics.log 2>&1 &
+        run: npx wrangler dev --port 4321 --host 127.0.0.1 --upstream-protocol http > /tmp/browser-diagnostics.log 2>&1 &
       - name: Wait for preview
         run: |
           for attempt in {1..30}; do
             if curl --fail --silent --max-time 5 http://127.0.0.1:4321/ > /dev/null; then exit 0; fi
             sleep 2
           done
-          cat /tmp/alienx-diagnostics.log
+          cat /tmp/browser-diagnostics.log
           exit 1
       - name: Run isolated diagnostics
         run: node scripts/webkit-diagnostics.cjs
@@ -45,6 +51,6 @@ jobs:
         with:
           name: webkit-diagnostics
           path: |
-            /tmp/alienx-diagnostics.log
+            /tmp/browser-diagnostics.log
             test-results/webkit-diagnostics
           if-no-files-found: warn

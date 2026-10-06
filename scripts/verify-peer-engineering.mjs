@@ -10,6 +10,9 @@ if (!peer)
 const read = (directory, file) =>
   readFileSync(resolve(directory, file), 'utf8');
 const files = [
+  'scripts/webkit-diagnostics.cjs',
+  'tests/webkit-diagnostics.test.cjs',
+  '.github/workflows/browser-diagnostics.yml',
   'astro.config.mjs',
   'src/security.ts',
   'src/email-health-engine.ts',

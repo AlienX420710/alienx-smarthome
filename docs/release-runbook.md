@@ -263,6 +263,14 @@ not merely committing this protocol.
 
 ## Shared engineering configuration and verification
 
+The shared Browser Diagnostics workflow runs manually and on diagnostic/configuration
+pull-request changes, only against the local preview.
+It retains screenshots, traces, preview logs and a JSON summary. Homepage and the
+configured public status page are checked. Baseline failures fail the diagnostic
+run; deliberately altered CSS/JS/header modes are observations, never release
+acceptance. External requests, local writes and service workers are blocked;
+header experiments do not follow redirects. No provider or form delivery is tested.
+
 `engineering.config.json` supplies explicit repository/release-ref identity,
 public routes, form selectors/encoding, theme capability and fixed mail identity.
 The migrated scripts and browser workflows are shared; site interaction suites
