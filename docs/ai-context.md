@@ -9,7 +9,7 @@ Workers remain the stack. This is a technology showcase, not a home-control syst
 - src/pages/components own routes/UI; middleware owns headers and inquiry abuse
   prevention; api/inquiry.ts independently revalidates fields. Defense in depth
   is intentional, not duplicate code to remove.
-- src/lib/mail.ts owns shared mail transport; src/worker.ts preserves HTTP and
+- src/mail.ts owns shared mail transport; src/worker.ts preserves HTTP and
   adds scheduling. ASSETS, IMAGES, SESSION and mandatory INQUIRY_RATE_LIMITER
   bindings remain separate; namespace 2107100911 is reserved for this site.
 - public/site-preferences.js applies theme/motion before paint and page swaps;
@@ -127,3 +127,26 @@ implementation in both repositories. `/api/release` exposes only the generated
 explicit inputs to verification. Shared heartbeat retries cancel failed response
 bodies best-effort; cancellation errors never convert permanent errors into retries.
 The 05:00 Chicago schedule, fixed recipients and stable daily keys are unchanged.
+
+## Shared application primitives
+
+`src/worker.ts`, `src/mail.ts` and `src/email-health.ts` are identical across both
+repositories. Mail identity, timeout, daily message/key and permission to send a
+customer confirmation are explicit non-secret configuration. Scheduled/business
+mail always uses the fixed recipient; only Cleaning's existing confirmation path
+can use its validated customer address. The scheduled time and retry contract are
+unchanged.
+
+`src/status.ts` and `/api/status` share configuration-only readiness evaluation,
+strict nonblank credentials/hostnames, callable limiter checks, bodyless HEAD and
+405 responses with Allow. All status responses are no-store with a restrictive
+CSP and no-referrer policy, preserved through middleware. Cleaning retains its
+generic private schema; AlienX retains its existing configured-check metadata.
+No status request calls a provider or consumes a limiter counter.
+
+`src/form-engine.ts` owns bounded stream reads with reader cleanup, the bounded
+isolate limiter, Turnstile verification, HTML escaping, email syntax and content
+digests. Site routes still own their field schemas, limits, response copy and
+retry payloads. Mandatory edge bindings and independent handler validation remain.
+The peer verifier compares these engines and their shared regression tests. UI
+behavior and remaining route/schema extraction are still open parity work.

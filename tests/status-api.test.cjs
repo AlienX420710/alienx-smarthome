@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const ts = require('typescript');
 const source = fs
-  .readFileSync('src/pages/api/status.ts', 'utf8')
+  .readFileSync('src/status.ts', 'utf8')
   .replace(/^import .*;\n/gm, '');
 const code = ts.transpileModule(source, {
   compilerOptions: {
@@ -24,11 +24,21 @@ for (const configured of [false, true]) {
             TURNSTILE_SECRET: 'test',
             TURNSTILE_HOSTNAMES: 'example.test',
             RESEND_API_KEY: 'test',
-            INQUIRY_RATE_LIMITER: {},
+            INQUIRY_RATE_LIMITER: { limit: async () => ({ success: true }) },
           }
         : {},
     };
-    vm.runInNewContext(code, context);
+    vm.runInNewContext(code, {
+      ...context,
+      site: require('../engineering.config.json'),
+    });
+    context.exports.GET = ({ request }) =>
+      context.exports.statusResponse(
+        context.env,
+        'GET',
+        context.release.revision,
+        request,
+      );
     const response = await context.exports.GET({
       request: new Request('https://example.test/api/status'),
     });
@@ -44,7 +54,7 @@ for (const configured of [false, true]) {
       data.rateLimiting,
       configured ? 'edge-location' : 'unavailable',
     );
-    assert.equal(response.headers.get('cache-control'), 'no-store');
+    assert.equal(response.headers.get('cache-control'), 'no-store, max-age=0');
     assert.equal(JSON.stringify(data).includes('TURNSTILE_SECRET'), false);
   });
 }
@@ -60,7 +70,17 @@ test('missing mandatory edge limiter degrades otherwise configured inquiry', asy
       RESEND_API_KEY: 'test',
     },
   };
-  vm.runInNewContext(code, context);
+  vm.runInNewContext(code, {
+    ...context,
+    site: require('../engineering.config.json'),
+  });
+  context.exports.GET = ({ request }) =>
+    context.exports.statusResponse(
+      context.env,
+      'GET',
+      context.release.revision,
+      request,
+    );
   const response = await context.exports.GET({
     request: new Request('https://example.test/api/status'),
   });

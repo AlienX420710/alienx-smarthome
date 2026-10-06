@@ -5,6 +5,9 @@ const vm = require('node:vm');
 const ts = require('typescript');
 // Load the actual handlers with provider bindings replaced; no network or email.
 function load(file, extra = {}) {
+  if (file === 'src/middleware.ts' || file === 'src/pages/api/inquiry.ts')
+    extra = { ...extra, ...load('src/form-engine.ts', extra) };
+
   if (file === 'src/security.ts')
     extra = { ...extra, site: require('../engineering.config.json') };
   if (file === 'src/middleware.ts')
@@ -12,12 +15,12 @@ function load(file, extra = {}) {
   if (file === 'src/pages/api/inquiry.ts') {
     extra = {
       ...extra,
-      sendProductionMail: load('src/lib/mail.ts', extra).sendProductionMail,
+      sendProductionMail: load('src/mail.ts', extra).sendProductionMail,
     };
   }
   const source = fs
     .readFileSync(file, 'utf8')
-    .replace(/^import .*;\n/gm, '')
+    .replace(/^import [\s\S]*?;\n/gm, '')
     .replace("await import('cloudflare:workers')", '({env:mockBindings})');
   const code = ts.transpileModule(source, {
     compilerOptions: {
@@ -27,6 +30,7 @@ function load(file, extra = {}) {
   }).outputText;
   const context = {
     exports: {},
+    site: require('../engineering.config.json'),
     Response,
     Request,
     Headers,

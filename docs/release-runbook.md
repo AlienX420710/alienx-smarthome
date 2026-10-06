@@ -188,7 +188,7 @@ canary isolated from production and keep alert evidence in GitHub.
 ## Email health
 
 The Worker schedules one fixed-recipient email at 05:00 America/Chicago through
-src/worker.ts and shared src/lib/mail.ts with the production RESEND_API_KEY.
+src/worker.ts and shared src/mail.ts with the production RESEND_API_KEY.
 Preserve the HTTP handler, 10:00/11:00 UTC candidates, local-time guard and rejection
 of events over 15 minutes late or one minute early. Scheduling is best effort.
 Sender: AlienX SmartHome <contact@alienxsmarthome.com>; sole destination:

@@ -1,6 +1,7 @@
+import { escapeHtml, contentDigest, isValidEmail } from '../../form-engine';
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
-import { sendProductionMail } from '../../lib/mail';
+import { sendProductionMail } from '../../mail';
 export const prerender = false;
 const MAX_NAME_LENGTH = 100,
   MIN_NAME_LENGTH = 2,
@@ -79,14 +80,6 @@ const text = (value: unknown) =>
     value.replace(/[\u0000-\u001F\u007F]/g, '').trim(),
   cleanMessage = (value: string) =>
     value.replace(/[\u0000\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').trim();
-const escapeHtml = (value: string) =>
-  value.replace(
-    /[&<>"']/g,
-    (c) =>
-      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[
-        c
-      ] ?? c,
-  );
 const label = (value: string) =>
   value.replaceAll('-', ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 export const POST: APIRoute = async ({ locals }) => {
@@ -139,11 +132,7 @@ export const POST: APIRoute = async ({ locals }) => {
       400,
       requestId,
     );
-  if (
-    !email ||
-    email.length > MAX_EMAIL_LENGTH ||
-    !/^([^\s@]+)@([^\s@]+)\.([^\s@]+)$/.test(email)
-  )
+  if (!email || email.length > MAX_EMAIL_LENGTH || !isValidEmail(email))
     return json(
       { error: 'Please provide a valid email address.', requestId },
       400,
@@ -299,15 +288,8 @@ export const POST: APIRoute = async ({ locals }) => {
     .join('');
   const safeMessage = escapeHtml(message).replaceAll('\n', '<br />'),
     safeWebsite = websiteUrl ? escapeHtml(websiteUrl) : '';
-  const digest = await crypto.subtle.digest(
-    'SHA-256',
-    new TextEncoder().encode(JSON.stringify([requestId, details, message])),
-  );
   const idempotencyKey =
-    'alienx-' +
-    Array.from(new Uint8Array(digest), (value) =>
-      value.toString(16).padStart(2, '0'),
-    ).join('');
+    'alienx-' + (await contentDigest([requestId, details, message]));
   let response: Response;
   try {
     response = await sendProductionMail(resendApiKey, idempotencyKey, {

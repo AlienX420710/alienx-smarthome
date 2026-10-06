@@ -1,13 +1,13 @@
+import {
+  createAttemptLimiter,
+  RATE_WINDOW_MS,
+  readBoundedBody,
+  verifyChallenge,
+} from './form-engine';
 import { secure } from './security';
 import { defineMiddleware } from 'astro:middleware';
 
-const SITEVERIFY_URL =
-  'https://challenges.cloudflare.com/turnstile/v0/siteverify';
-const EXPECTED_ACTION = 'contact';
-const RATE_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT = 8;
-const MAX_TRACKED_IPS = 5000;
-const attempts = new Map<string, number[]>();
+const attempt = createAttemptLimiter();
 
 const json = (
   body: Record<string, unknown>,
@@ -27,16 +27,6 @@ const json = (
       },
     }),
   );
-
-const pruneAttempts = (now: number) => {
-  for (const [ip, timestamps] of attempts) {
-    const recent = timestamps.filter(
-      (timestamp) => now - timestamp < RATE_WINDOW_MS,
-    );
-    if (recent.length === 0) attempts.delete(ip);
-    else attempts.set(ip, recent);
-  }
-};
 
 export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
   if (
@@ -77,31 +67,13 @@ export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
     return json({ error: 'Request is too large.', requestId }, 413, requestId);
   let payload: Record<string, unknown>;
   try {
-    const reader = request.body?.getReader();
-    if (!reader)
-      return json({ error: 'Invalid request.', requestId }, 400, requestId);
-    const chunks: Uint8Array[] = [];
-    let length = 0;
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      length += value.byteLength;
-      if (length > maxBytes) {
-        await reader.cancel();
-        return json(
-          { error: 'Request is too large.', requestId },
-          413,
-          requestId,
-        );
-      }
-      chunks.push(value);
-    }
-    const bytes = new Uint8Array(length);
-    let offset = 0;
-    for (const chunk of chunks) {
-      bytes.set(chunk, offset);
-      offset += chunk.byteLength;
-    }
+    const bytes = await readBoundedBody(request, maxBytes);
+    if (bytes === null)
+      return json(
+        { error: 'Request is too large.', requestId },
+        413,
+        requestId,
+      );
     const parsed: unknown = JSON.parse(new TextDecoder().decode(bytes));
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed))
       throw new Error('Expected an object');
@@ -111,16 +83,7 @@ export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
   }
 
   const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
-  const now = Date.now();
-  const recent = (attempts.get(ip) ?? []).filter(
-    (timestamp) => now - timestamp < RATE_WINDOW_MS,
-  );
-  if (attempts.size >= MAX_TRACKED_IPS) pruneAttempts(now);
-  // Fail closed at capacity instead of growing the isolate's map without bound.
-  if (
-    recent.length >= RATE_LIMIT ||
-    (!attempts.has(ip) && attempts.size >= MAX_TRACKED_IPS)
-  ) {
+  if (attempt(ip) !== 'allowed') {
     return json(
       {
         error: 'Too many inquiries. Please try again later.',
@@ -131,8 +94,6 @@ export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
       requestId,
     );
   }
-  recent.push(now);
-  attempts.set(ip, recent);
 
   const { env } = await import('cloudflare:workers');
   const bindings = env as unknown as {
@@ -178,7 +139,7 @@ export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
       );
     }
   }
-  const secret = bindings.TURNSTILE_SECRET;
+  const secret = bindings.TURNSTILE_SECRET?.trim();
   const expectedHostnames = new Set(
     (bindings.TURNSTILE_HOSTNAMES ?? '')
       .split(',')
@@ -223,67 +184,30 @@ export const onRequest = defineMiddleware(async ({ request, locals }, next) => {
       requestId,
     );
 
-  try {
-    const response = await fetch(SITEVERIFY_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ secret, response: token, remoteip: ip }),
-      signal: AbortSignal.timeout(10000),
-    });
-    if (!response.ok)
-      throw new Error(`Turnstile Siteverify returned ${response.status}.`);
-    const result = (await response.json()) as {
-      success?: boolean;
-      action?: string;
-      hostname?: string;
-      'error-codes'?: string[];
-    };
-    const errorCodes = Array.isArray(result['error-codes'])
-      ? result['error-codes']
-      : [];
-    if (
-      result.success !== true ||
-      result.action !== EXPECTED_ACTION ||
-      !result.hostname ||
-      !expectedHostnames.has(result.hostname)
-    ) {
-      console.warn('Turnstile validation rejected inquiry.', {
-        requestId,
-      });
-      if (
-        errorCodes.includes('timeout-or-duplicate') ||
-        errorCodes.includes('invalid-input-response')
-      ) {
-        return json(
-          {
-            error:
-              'The security check expired. Please complete it again and submit the form.',
-            code: 'turnstile-expired',
-            requestId,
-          },
-          403,
-          requestId,
-        );
-      }
-      return json(
-        {
-          error: 'Security verification failed. Please try again.',
-          code: 'turnstile-failed',
-          requestId,
-        },
-        403,
-        requestId,
-      );
-    }
-  } catch {
-    // Never log provider payloads, tokens, or transport exception messages.
-    console.error('Turnstile validation unavailable.', { requestId });
+  const verification = await verifyChallenge(
+    secret,
+    token,
+    expectedHostnames,
+    'contact',
+    ip,
+  );
+  if (verification !== 'passed') {
+    const failure = {
+      expired: [
+        'The security check expired. Please complete it again and submit the form.',
+        'turnstile-expired',
+      ],
+      failed: [
+        'Security verification failed. Please try again.',
+        'turnstile-failed',
+      ],
+      unavailable: [
+        'Security verification could not be completed.',
+        'turnstile-unavailable',
+      ],
+    }[verification];
     return json(
-      {
-        error: 'Security verification could not be completed.',
-        code: 'turnstile-unavailable',
-        requestId,
-      },
+      { error: failure[0], code: failure[1], requestId },
       403,
       requestId,
     );
