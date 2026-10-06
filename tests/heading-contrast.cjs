@@ -65,12 +65,33 @@ async function headingContrast(page) {
       return runs;
     });
     if (!runs.length) continue;
-    const png = await heading.screenshot({
-      scale: 'css',
-      animations: 'disabled',
-      style:
-        'h1,h1 *,h2,h2 *,h3,h3 *{-webkit-text-fill-color:transparent!important;text-shadow:none!important}',
-    });
+    // CSSOM property edits work under the production CSP; an injected inline
+    // stylesheet is correctly blocked there. Preserve and restore exact styles.
+    const originalStyles = await heading.evaluate((element) =>
+      [element, ...element.querySelectorAll('*')].map((node) => {
+        const original = node.getAttribute('style');
+        node.style.setProperty(
+          '-webkit-text-fill-color',
+          'transparent',
+          'important',
+        );
+        node.style.setProperty('text-shadow', 'none', 'important');
+        if (getComputedStyle(node).webkitTextFillColor !== 'rgba(0, 0, 0, 0)')
+          throw new Error('Heading text masking did not apply');
+        return original;
+      }),
+    );
+    let png;
+    try {
+      png = await heading.screenshot({ scale: 'css', animations: 'disabled' });
+    } finally {
+      await heading.evaluate((element, styles) => {
+        [element, ...element.querySelectorAll('*')].forEach((node, index) => {
+          if (styles[index] === null) node.removeAttribute('style');
+          else node.setAttribute('style', styles[index]);
+        });
+      }, originalStyles);
+    }
     const { data, info } = await sharp(png)
       .removeAlpha()
       .raw()

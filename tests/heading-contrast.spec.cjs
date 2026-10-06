@@ -11,6 +11,12 @@ test('measures child text against painted gradients rather than ancestor colors'
     h1 span, h2 { color: white; }
     h2 { font-size: 32px; }
   </style><section><h1><span>Visible child color</span></h1><h2>Gradient backdrop</h2></section>`);
+  await page.evaluate(() => {
+    const policy = document.createElement('meta');
+    policy.httpEquiv = 'Content-Security-Policy';
+    policy.content = "style-src 'self'";
+    document.head.append(policy);
+  });
   const results = await headingContrast(page);
   expect(results).toHaveLength(2);
   expect(results.filter((run) => run.ratio < run.required)).toEqual([]);
