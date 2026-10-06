@@ -1,6 +1,6 @@
 # AlienX — current state
 
-Updated October 5, 2026. This file alone owns findings and dated release
+Updated October 3, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
@@ -25,31 +25,41 @@ retries retain all attempts/stdout/stderr/assets; low scores never retry.
 GitHub-native operator alerts use trusted origin checks and no provider history.
 The form-health probe submits no verified inquiry and uses an empty security token.
 
-Local Node 22 preflight passed for the prepared migration: formatting, source/history
-scans, unit tests, build, target guard, type checks, Worker dry run and zero dependency
-vulnerabilities. The migrated-component comparison also passed. Verification is
-pending for the final paired PR heads and exact deployed mains. The earlier automatic
-approval rejection of branch publication was resolved by explicit owner publication
-authorization. AlienX #123 and Cleaning #41 are the active paired PRs. Their initial
-heads exposed test assumptions: Safari imposed a single-row header on AlienX's
-intentional two-row tablet layout; heading contrast used container colors and
-ignored painted gradients. The candidate correction measures actual child text
-against screenshot backdrops and validates the explicit navigation breakpoint,
-without lowering thresholds or removing axe checks. Browser regression fixtures
-cover both readable and unreadable child text/gradients. Acceptance still requires
-fresh exact-head CI and production evidence; publication alone is not acceptance.
-The rendered-text check also found a real light-theme status-hero defect:
-"visible." used neon green at approximately 1.34:1 contrast. The candidate uses
-the existing dark brand green for that accent in explicit/system light mode;
-dark mode retains the original accent. Browser acceptance remains pending.
-Local browser installation failed while downloading the pinned Chromium archive;
-this is not browser acceptance. Local preflight initially hit the restricted
-network-interface inspector probe; the explicit local-only disable switch is
-available without changing production defaults. No new release is claimed here.
-Remaining #39 work includes shared framework/build revision/CSP and integrity
-implementation, final migration comparison, and both production evidence chains.
-Existing account, recovery, real-device, content and incident findings below stay
-open unless independently evidenced. #32–#36 are not closed by this migration.
+The follow-up candidate also shares framework configuration, generated release
+metadata, security-header implementation, SEO/integrity checks, exact-revision
+production Smoke/Integrity, TLS probes, image decoding/generation and the scheduled
+mail retry engine. Explicit rendering/CSP inputs retain the server-rendered
+Cleaning header policy and AlienX's generated hash policy. This preserves each
+site's emitted content requirements while using the same implementation.
+The peer verifier compares these source files, normalized workflow display names,
+commands and normalized dependency locks; it does not certify private acceptance.
+
+Paired PRs: [Cleaning #41](https://github.com/Cassileigh/cleaning-by-cassi/pull/41)
+and [AlienX #123](https://github.com/AlienX420710/alienx-smarthome/pull/123).
+Latest published heads passed Quality, Responsive, Lighthouse and Safari, but
+failed Accessibility. The screenshot-based contrast checker revealed genuine
+low-contrast Cleaning hero text and AlienX's light status accent; candidate fixes
+darken the photo overlay and make the intended light-theme accent win scoped CSS
+specificity. A fixture's `endswith` typo is corrected. The screenshot checker and
+its regression fixtures are retained from the concurrent PR continuation.
+Fresh final-head verification is still required. October 6 audit newly reported
+GHSA-r4xh-jqrq-34v2 and GHSA-68fv-2mgg-jv7q in the prior lock; the candidate
+updates smol-toml to 1.9.0 and source-map-js to 1.2.2 without audit exceptions.
+
+The owner explicitly authorized publication to both named repositories after an
+earlier automatic approval rejection. The connector published both draft PRs;
+terminal Git credential access remains unavailable. Local browser installation
+failed downloading the pinned archive, so browser evidence must come from CI.
+No merge or production acceptance is claimed by this candidate record.
+
+Failed heartbeat-response cleanup is now best-effort and cannot change permanent
+versus transient retry decisions. Regression tests cover canceled, missing and
+rejecting bodies with the same bounded attempts and stable key. Cleaning field
+validation now returns safe field errors; inline descriptions, invalid state and
+focus guide correction while preserving input, retry identity and Turnstile.
+Cleaning #35/#36 require deployment evidence before closure. #32/#33 retain private
+account/mailbox and physical-device evidence requirements; #34 retains CSP and
+reporting acceptance. Existing unresolved findings below remain authoritative.
 
 ## October 5 engineering alignment — released, full parity still open
 

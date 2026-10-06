@@ -18,7 +18,7 @@ for (const configured of [false, true]) {
       exports: {},
       Response,
       crypto,
-      __ALIENX_BUILD_SHA__: 'test-revision',
+      release: { revision: 'test-revision' },
       env: configured
         ? {
             TURNSTILE_SECRET: 'test',
@@ -53,7 +53,7 @@ test('missing mandatory edge limiter degrades otherwise configured inquiry', asy
     exports: {},
     Response,
     crypto,
-    __ALIENX_BUILD_SHA__: 'test-revision',
+    release: { revision: 'test-revision' },
     env: {
       TURNSTILE_SECRET: 'test',
       TURNSTILE_HOSTNAMES: 'example.test',

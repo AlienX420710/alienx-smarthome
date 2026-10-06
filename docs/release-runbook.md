@@ -287,3 +287,12 @@ mail. Actual alert creation/owner receipt requires separate evidence.
 The optional provider-evidence validator remains operator-authorized and is not
 called by Actions. Mailbox receipt, MFA, credential scope and recovery evidence
 remain distinct from source checks; no real quote test is authorized here.
+
+The shared production Smoke workflow installs locked verification dependencies,
+waits for its exact Git SHA at `/api/release`, verifies both hosts and configured
+readiness/content markers, and sends only a deliberately unverified rejection
+probe. Integrity follows a successful same-repository main push Smoke run using
+the trusted controller revision; it checks that exact deployed SHA, headers, SEO,
+assets, redirects and TLS. Scheduled/manual runs also pin their expected revision.
+A source comparison (`npm run verify:peer -- /path/to/peer`) checks migrated shared
+implementation; it never substitutes for each site's exact-head gates or deployment.

@@ -5,7 +5,7 @@ test('measures child text against painted gradients rather than ancestor colors'
   page,
 }) => {
   await page.route('https://contrast.test/**', (route) => {
-    if (route.request().url().endswith('/fixture.css'))
+    if (route.request().url().endsWith('/fixture.css'))
       return route.fulfill({
         contentType: 'text/css',
         body: `

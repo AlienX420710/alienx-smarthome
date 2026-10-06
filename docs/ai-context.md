@@ -114,5 +114,16 @@ and release-ref identity. Release verification uses the shared Git-ref verifier
 and trusted approval publisher; the production target guard also runs at deploy.
 The shared browser runner selects committed site interaction suites without
 changing business forms or recipients. The shared form monitor uses empty-token
-rejection only. Remaining application/CSP/integrity migration and exact-revision
-release acceptance stay in the existing findings register.
+rejection only. Shared framework/CSP/integrity implementation is described below; exact-revision
+release acceptance stays in the existing findings register.
+
+## Shared release and validation implementation
+
+`engineering.config.json` supplies site identity, routes, selectors, rendering/CSP
+inputs and image transformations. `astro.config.mjs`, `src/security.ts`, release
+metadata generation, integrity/SEO verification and production smoke use the same
+implementation in both repositories. `/api/release` exposes only the generated
+40-character revision with no-store caching. Site-specific status schemas remain
+explicit inputs to verification. Shared heartbeat retries cancel failed response
+bodies best-effort; cancellation errors never convert permanent errors into retries.
+The 05:00 Chicago schedule, fixed recipients and stable daily keys are unchanged.

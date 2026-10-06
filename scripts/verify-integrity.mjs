@@ -1,144 +1,159 @@
+import { site } from './site-config.mjs';
+import { pathToFileURL } from 'node:url';
 import {
   assertCsp,
   assertSeo,
+  assertHeaders,
   assertSecurityHeaders,
 } from './integrity-contract.mjs';
 
-const candidate = process.argv.includes('--candidate');
-const origins = candidate
-  ? ['http://127.0.0.1:4321']
-  : ['https://alienxsmarthome.com', 'https://www.alienxsmarthome.com'];
-const expected = process.env.EXPECTED_REVISION;
-if (expected && !/^[a-f0-9]{40}$/.test(expected))
-  throw new Error('Invalid expected revision');
-
-const request = (url, options = {}) =>
-  fetch(url, { ...options, signal: AbortSignal.timeout(15000) });
-
-const revision = async (origin) => {
-  const status = new URL(origin + '/api/status');
-  if (!candidate)
-    status.searchParams.set(
-      '_alienx_revision',
-      `${expected ?? 'current'}-${Date.now()}`,
-    );
-  const response = await request(status, {
-    cache: 'no-store',
-    headers: candidate
-      ? undefined
-      : {
-          'Cache-Control': 'no-cache, no-store, max-age=0',
-          Pragma: 'no-cache',
-        },
-  });
-  const data = await response.json();
-  if (
-    !candidate &&
-    (!response.ok || data.ok !== true || data.status !== 'operational')
-  )
-    throw new Error(`${origin}: unhealthy production status`);
-  if (!/^[a-f0-9]{40}$/.test(data.buildRevision ?? ''))
-    throw new Error(`${origin}: invalid revision ${data.buildRevision}`);
-  return data.buildRevision;
-};
-
-const waitForExpectedRevision = async (origin) => {
-  if (candidate || !expected) return revision(origin);
-
-  const deadline = Date.now() + 2 * 60 * 1000;
-  let consecutive = 0;
-  let last = 'No response';
-  while (Date.now() < deadline) {
-    try {
-      const actual = await revision(origin);
-      last = `revision ${actual}`;
-      if (actual === expected) {
-        consecutive += 1;
-        if (consecutive >= 3) return actual;
-      } else {
+export async function verifyIntegrity({
+  expected,
+  candidate = false,
+  fetcher = fetch,
+  wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+  now = Date.now,
+  log = console.log,
+} = {}) {
+  if (!/^[a-f0-9]{40}$/.test(expected ?? ''))
+    throw Error('An exact expected revision is required');
+  const origins = candidate
+    ? ['http://127.0.0.1:4321']
+    : [site.origin, site.origin.replace('https://', 'https://www.')];
+  const routes = site.routes;
+  const request = (origin, path, options = {}) => {
+    const url = new URL(path, origin);
+    url.searchParams.set('_integrity', expected + '-' + now());
+    return fetcher(url, {
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache, no-store', Pragma: 'no-cache' },
+      signal: AbortSignal.timeout(15000),
+      redirect: 'error',
+      ...options,
+    });
+  };
+  const revision = async (origin) => {
+    const response = await request(origin, '/api/release');
+    if (!response.ok || (await response.json()).revision !== expected)
+      throw Error('Production revision differs from expected main');
+  };
+  for (const origin of origins) {
+    let consecutive = 0;
+    const required = candidate ? 1 : 3;
+    const deadline = now() + 120000;
+    while (consecutive < required && now() < deadline) {
+      try {
+        await revision(origin);
+        consecutive++;
+      } catch {
         consecutive = 0;
       }
-    } catch (error) {
-      consecutive = 0;
-      last = error.message;
+      if (candidate && consecutive === 0)
+        throw Error('Candidate revision mismatch');
+      if (consecutive < required) await wait(2000);
     }
-    console.log(
-      `Waiting for stable production revision ${expected} at ${origin}: ${last}; ${consecutive}/3 confirmations`,
-    );
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-  }
-  throw new Error(
-    `${origin}: production revision did not stabilize at ${expected}: ${last}`,
-  );
-};
-
-const productionUrl = (origin, route) => {
-  const url = new URL(route, origin);
-  if (!candidate)
-    url.searchParams.set(
-      '_alienx_integrity',
-      `${expected ?? 'current'}-${Date.now()}`,
-    );
-  return url;
-};
-
-const routes = ['/', '/status/', '/about/', '/contact/', '/contact/success/'];
-for (const origin of origins) {
-  const before = await waitForExpectedRevision(origin);
-  for (const route of routes) {
-    const response = await request(productionUrl(origin, route), {
-      cache: candidate ? undefined : 'no-store',
-      headers: candidate
-        ? undefined
-        : {
-            'Cache-Control': 'no-cache, no-store, max-age=0',
-            Pragma: 'no-cache',
-          },
-    });
-    if (
-      !response.ok ||
-      !response.headers.get('content-type')?.includes('text/html')
-    )
-      throw new Error(`${origin}${route}: expected HTML 200`);
-    const html = await response.text();
-    try {
-      assertCsp(response.headers.get('content-security-policy'), html);
+    if (consecutive < required)
+      throw Error('Production revision did not stabilize');
+    for (const route of routes) {
+      const response = await request(origin, route);
+      if (
+        !response.ok ||
+        !response.headers.get('content-type')?.includes('text/html')
+      )
+        throw Error(route + ': expected successful HTML response');
+      const html = await response.text();
+      if (site.csp.headerResources)
+        assertHeaders(response.headers, { candidate });
+      else {
+        assertSecurityHeaders(response.headers);
+        assertCsp(response.headers.get('content-security-policy'), html);
+      }
       assertSeo(html, route);
-      assertSecurityHeaders(response.headers);
-    } catch (error) {
-      throw new Error(`${origin}${route}: ${error.message}`);
+      if (!candidate && /localhost|127\.0\.0\.1|workers\.dev/i.test(html))
+        throw Error(route + ': development host leakage');
+      if (
+        route === site.form.route &&
+        site.form.widget &&
+        !html.includes(site.form.widget)
+      )
+        throw Error('Wrong Turnstile widget');
+      if (
+        site.noindexRoutes.includes(route) &&
+        !/<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex/i.test(
+          html,
+        )
+      )
+        throw Error('Receipt must not be indexed');
     }
-    if (/localhost|127\.0\.0\.1|workers\.dev/i.test(html))
-      throw new Error(`${route}: development hostname leaked`);
-  }
-  for (const path of ['/robots.txt', '/sitemap-index.xml']) {
-    const response = await request(productionUrl(origin, path));
-    if (!response.ok) throw new Error(`${origin}${path}: unavailable`);
-    assertSecurityHeaders(response.headers);
-  }
-  assertSecurityHeaders(
-    (await request(productionUrl(origin, '/api/status'))).headers,
-  );
-  if (!candidate) {
-    const response = await request(origin.replace('https:', 'http:') + '/', {
-      redirect: 'manual',
-    });
-    const location = response.headers.get('location');
+    const status = await request(origin, '/api/status');
+    if (site.privateStatus) assertHeaders(status.headers, { status: true });
+    else assertSecurityHeaders(status.headers);
+    const release = await request(origin, '/api/release');
+    if (site.csp.headerResources) assertHeaders(release.headers, { candidate });
+    else assertSecurityHeaders(release.headers);
+    // Read-only error path: never submit a quote or send mail.
+    const missing = await request(origin, '/__integrity_missing_page');
+    if (missing.status !== 404) throw Error('Missing route must return 404');
+    if (site.csp.headerResources) assertHeaders(missing.headers, { candidate });
+    else assertSecurityHeaders(missing.headers);
+    for (const path of site.assets) {
+      const asset = await request(origin, path);
+      if (!asset.ok) throw Error(path + ': asset unavailable');
+      assertSecurityHeaders(asset.headers);
+    }
+    const data = await status.json();
     if (
-      ![301, 302, 307, 308].includes(response.status) ||
-      !location ||
-      !origins.some((allowed) => location === allowed + '/')
+      !(candidate
+        ? (status.status === 503 && data.ok === false) ||
+          (status.status === 200 && data.ok === true)
+        : status.status === 200 && data.ok === true) ||
+      (site.privateStatus
+        ? data.scope !== 'configuration-readiness'
+        : !['operational', 'degraded'].includes(data.status))
     )
-      throw new Error(`${origin}: incorrect HTTPS redirect`);
-  }
-  const after = await revision(origin);
-  if (expected && after !== expected)
-    throw new Error(
-      `${origin}: revision changed during verification to ${after}`,
+      throw Error('Readiness degraded');
+    if (!candidate) {
+      const redirect = await fetcher(origin.replace('https:', 'http:') + '/', {
+        redirect: 'manual',
+        signal: AbortSignal.timeout(15000),
+      });
+      if (
+        ![301, 302, 307, 308].includes(redirect.status) ||
+        !origins.some(
+          (allowed) => redirect.headers.get('location') === allowed + '/',
+        )
+      )
+        throw Error('Invalid HTTPS redirect');
+    }
+    await revision(origin);
+    log(
+      `${candidate ? 'Candidate' : 'Production'} integrity passed: ` +
+        origin +
+        '; revision ' +
+        expected,
     );
-  if (before !== after)
-    throw new Error(`${origin}: revision changed during verification`);
-  console.log(
-    `${candidate ? 'Candidate' : 'Production'} integrity passed: ${origin}; revision ${after}; ${routes.length} routes`,
-  );
+  }
+}
+
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
+  const args = process.argv.slice(2);
+  if (args.length > 1 || args.some((arg) => arg !== '--candidate'))
+    throw Error('Only --candidate is supported; production is the default');
+  let expected = process.env.EXPECTED_REVISION;
+  if (!expected && !args.includes('--candidate')) {
+    const response = await fetch(new URL('/api/release', site.origin), {
+      cache: 'no-store',
+      redirect: 'error',
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!response.ok) throw Error('Release metadata unavailable');
+    expected = (await response.json()).revision;
+  }
+  await verifyIntegrity({
+    expected,
+    candidate: args.includes('--candidate'),
+  });
 }

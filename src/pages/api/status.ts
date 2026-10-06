@@ -1,3 +1,4 @@
+import release from '../../release.json';
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 
@@ -72,7 +73,7 @@ export const GET: APIRoute = async ({ request }) => {
   return json(
     {
       ok: !degraded,
-      buildRevision: __ALIENX_BUILD_SHA__,
+      buildRevision: release.revision,
       status: degraded ? 'degraded' : 'operational',
       generatedAt: new Date().toISOString(),
       requestId: request.headers.get('cf-ray') ?? crypto.randomUUID(),

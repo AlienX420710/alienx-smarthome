@@ -1,54 +1,46 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import { execFileSync } from 'node:child_process';
 import sitemap from '@astrojs/sitemap';
-
 import cloudflare from '@astrojs/cloudflare';
-
-// https://astro.build/config
+import { site } from './scripts/site-config.mjs';
 export default defineConfig({
-  vite: {
-    define: {
-      __ALIENX_BUILD_SHA__: JSON.stringify(
-        process.env.GITHUB_SHA ||
-          execFileSync('git', ['rev-parse', 'HEAD'], {
-            encoding: 'utf8',
-          }).trim(),
-      ),
-    },
-  },
-  site: 'https://alienxsmarthome.com',
+  site: site.origin,
+  output: site.rendering,
   session: false,
+  ...(site.csp.externalStyles ? { build: { inlineStylesheets: 'never' } } : {}),
   integrations: [
     sitemap({
       filter: (page) => {
-        const pathname = new URL(page).pathname.replace(/\/$/, '');
+        const route = new URL(page).pathname.replace(/\/$/, '');
         return (
-          !pathname.startsWith('/contact/success') &&
-          pathname !== '/404' &&
-          pathname !== '/500'
+          !site.noindexRoutes.some(
+            (/** @type {string} */ item) => route === item.replace(/\/$/, ''),
+          ) && !['/404', '/500'].includes(route)
         );
       },
     }),
   ],
-  security: {
-    csp: {
-      directives: [
-        "default-src 'self'",
-        "base-uri 'self'",
-        "object-src 'none'",
-        "form-action 'self'",
-        "img-src 'self' data: blob:",
-        "font-src 'self'",
-        "connect-src 'self' https://challenges.cloudflare.com",
-        'frame-src https://challenges.cloudflare.com',
-      ],
-      scriptDirective: {
-        resources: ["'self'", 'https://challenges.cloudflare.com'],
-      },
-    },
-  },
-  // Allow restricted local runtimes to build without an inspector port probe.
+  ...(site.csp.generatedHashes
+    ? {
+        security: {
+          csp: {
+            directives: [
+              "default-src 'self'",
+              "base-uri 'self'",
+              "object-src 'none'",
+              "form-action 'self'",
+              `img-src ${site.csp.imageSources.join(' ')}`,
+              "font-src 'self'",
+              "connect-src 'self' https://challenges.cloudflare.com",
+              'frame-src https://challenges.cloudflare.com',
+            ],
+            scriptDirective: {
+              resources: ["'self'", 'https://challenges.cloudflare.com'],
+            },
+          },
+        },
+      }
+    : {}),
   adapter: cloudflare({
     inspectorPort:
       process.env.SITE_DISABLE_INSPECTOR === '1' ||

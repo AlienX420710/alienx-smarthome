@@ -57,5 +57,45 @@
       "faxNumber": "",
       "website": ""
     }
-  }
+  },
+  "rendering": "static",
+  "csp": {
+    "imageSources": ["'self'", "data:", "blob:"],
+    "headerResources": false,
+    "generatedHashes": true,
+    "externalStyles": false
+  },
+  "privateStatus": false,
+  "revision": {
+    "path": "/api/release",
+    "key": "revision"
+  },
+  "assets": [
+    "/site-preferences.js",
+    "/favicon.svg",
+    "/robots.txt",
+    "/sitemap-index.xml"
+  ],
+  "smoke": {
+    "markers": {
+      "/": "AlienX SmartHome"
+    },
+    "statusChecks": ["worker", "inquiry", "turnstile", "resend"],
+    "rejectionCode": null
+  },
+  "images": [
+    {
+      "input": "public/alienx-social-preview.jpg",
+      "output": "public/alienx-social-preview.webp",
+      "rotate": true,
+      "resize": {
+        "width": 1600,
+        "withoutEnlargement": true
+      },
+      "format": "webp",
+      "options": {
+        "quality": 85
+      }
+    }
+  ]
 }
