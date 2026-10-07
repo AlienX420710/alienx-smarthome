@@ -1,3 +1,4 @@
+import { assertHeaders } from '../scripts/integrity-contract.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -95,6 +96,7 @@ test('actual status routes fail closed without provider calls and enforce method
           headers: response.headers,
         }),
       );
+      assertHeaders(secured.headers, { status: true });
       assert.match(secured.headers.get('cache-control'), /no-store/);
       assert.equal(secured.headers.get('referrer-policy'), 'no-referrer');
       assert.match(
