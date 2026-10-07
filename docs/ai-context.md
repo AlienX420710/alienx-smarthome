@@ -13,7 +13,8 @@ Workers remain the stack. This is a technology showcase, not a home-control syst
   adds scheduling. ASSETS, IMAGES, SESSION and mandatory INQUIRY_RATE_LIMITER
   bindings remain separate; namespace 2107100911 is reserved for this site.
 - public/site-preferences.js applies theme/motion before paint and page swaps;
-  contact-security.js owns the Turnstile widget lifecycle.
+  contact-security.js supplies site-specific Turnstile options and bootstrap to
+  the shared public/turnstile-engine.js lifecycle.
 - The homepage owns the consolidated Work, Experience, Lab and Technology customer
   journey; those former standalone routes, route classifications and exclusive
   theme selectors are retired. Requests to retired routes keep the server-declared
@@ -166,3 +167,15 @@ digests. Site routes still own their field schemas, limits, response copy and
 retry payloads. Mandatory edge bindings and independent handler validation remain.
 The peer verifier compares these engines and their shared regression tests. UI
 behavior and remaining route/schema extraction are still open parity work.
+
+## Shared challenge widget lifecycle
+
+`public/turnstile-engine.js` owns single-instance rendering, reset, cleanup before
+Astro swaps and rendering on page load. Duplicate initialization preserves the
+current challenge; callbacks from a removed widget cannot update the next page.
+Provider reset/remove exceptions do not interrupt form recovery. Failed render
+attempts retain the site's error notification and can be retried on the next load.
+Site adapters retain their action, response-field name, size, callbacks and provider
+bootstrap. The engine loads before those adapters; no challenge bypass or change
+to server verification is introduced. Unit and mocked Chromium/WebKit cases cover
+this lifecycle; they do not establish live challenge completion or mail delivery.

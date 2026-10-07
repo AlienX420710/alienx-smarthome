@@ -20,6 +20,7 @@
     "turnstileCallback": "alienxTurnstileLoad",
     "suites": {
       "responsive": [
+        "tests/turnstile-engine.spec.cjs",
         "tests/navigation-engine.spec.cjs",
         "tests/responsive.spec.cjs",
         "tests/interactions.spec.cjs",
@@ -32,6 +33,7 @@
         "tests/heading-contrast.spec.cjs"
       ],
       "webkit": [
+        "tests/turnstile-engine.spec.cjs",
         "tests/navigation-engine.spec.cjs",
         "tests/interactions.spec.cjs",
         "tests/keyboard.spec.cjs",
@@ -87,6 +89,7 @@
     "key": "revision"
   },
   "assets": [
+    "/turnstile-engine.js",
     "/navigation.js",
     "/site-preferences.js",
     "/favicon.svg",

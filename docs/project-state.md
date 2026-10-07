@@ -1,8 +1,19 @@
 # AlienX — current state
 
-Updated October 6, 2026. This file alone owns findings and dated release
+Updated October 7, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
+
+## October 7 shared challenge widget — candidate
+
+The common Turnstile lifecycle now handles duplicate loads, page-swap cleanup,
+stale callbacks and provider reset/remove errors. Site actions, response fields,
+widget presentation and security feedback remain explicit adapter inputs. Shared
+unit and browser regressions are included in the existing mandatory gates and
+peer comparison. This candidate is not yet production verified; the verified
+navigation release below remains the implementation baseline. Broader form/UI
+parity (#122 / Cleaning #39) and all owner/device/account/recovery gaps remain open.
+No live form submission, replacement heartbeat or private account operation was run.
 
 ## October 6 shared navigation release — verified
 
