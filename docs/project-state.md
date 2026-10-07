@@ -4,16 +4,30 @@ Updated October 7, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
-## October 7 shared challenge widget — candidate
+## October 7 shared challenge widget — verified
 
 The common Turnstile lifecycle now handles duplicate loads, page-swap cleanup,
 stale callbacks and provider reset/remove errors. Site actions, response fields,
 widget presentation and security feedback remain explicit adapter inputs. Shared
 unit and browser regressions are included in the existing mandatory gates and
-peer comparison. This candidate is not yet production verified; the verified
-navigation release below remains the implementation baseline. Broader form/UI
+peer comparison. PR #131 merged as `5619ef7890e10eb62fb95fb899285f34baeba975`.
+All five main gates, fresh CodeQL and zero-open-alert policy passed; the approved
+ref matched this SHA and Workers Build 112767843041 succeeded.
+[Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37613186179)
+attempt 1 saw the exact revision at 11:25:43 UTC but failed six seconds later on
+unavailable `/turnstile-engine.js`, opening #132. The unchanged release passed
+scheduled Integrity 37632472747 on both hosts at 13:56 UTC. That recovery evidence
+justified one Smoke recheck, which passed; subsequent
+[Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37634327077)
+passed. The original failure remains evidence; its precise edge/rollout cause is
+not established, and no gate or retry policy was weakened.
+This supersedes the navigation release below as the verified implementation.
+The owner-approved personalized website confirmations are still pending; pricing,
+Cloudflare changes and new confirmation emails are outside that feature scope.
+Broader form/UI
 parity (#122 / Cleaning #39) and all owner/device/account/recovery gaps remain open.
 No live form submission, replacement heartbeat or private account operation was run.
+This evidence-only documentation follow-up needs no recursive state update.
 
 ## October 6 shared navigation release — verified
 
@@ -29,7 +43,7 @@ approval ref matched this SHA and Workers Build 112626314168 succeeded.
 and [Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37570048440)
 verified this exact revision on both production hosts, including TLS protocol
 acceptance. The expanded migrated-component peer comparison also passed locally.
-This is the latest verified implementation release; broader UI/schema parity in
+This was the verified implementation release on October 6; broader UI/schema parity in
 #122 / Cleaning #39 and owner-dependent acceptance remain open. CBC/static-RSA
 cipher observations are not closed by TLS protocol success. No real inquiry,
 replacement heartbeat, private account inspection or recovery drill was performed.
