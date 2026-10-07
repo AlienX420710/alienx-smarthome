@@ -4,6 +4,15 @@ Updated October 6, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
+## Shared navigation follow-up — in progress
+
+Both sites now use the same navigation-rail and command-trigger implementation.
+It reveals the active link after layout/font/page lifecycle changes without moving
+document scroll or keyboard focus, disconnects stale observers during page swaps,
+and binds global listeners once. Unit coverage includes stale callbacks, manual
+scroll preservation and command-opener focus. Candidate CI/deployment is pending;
+broader UI/schema parity and owner-dependent acceptance remain open.
+
 ## October 6 shared application engine — in progress
 
 The paired application changes consolidate Worker/mail/heartbeat adapters, status
