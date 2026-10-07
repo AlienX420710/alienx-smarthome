@@ -86,8 +86,7 @@ export async function verifyIntegrity({
         throw Error('Receipt must not be indexed');
     }
     const status = await request(origin, '/api/status');
-    if (site.privateStatus) assertHeaders(status.headers, { status: true });
-    else assertSecurityHeaders(status.headers);
+    assertHeaders(status.headers, { status: true });
     const release = await request(origin, '/api/release');
     if (site.csp.headerResources) assertHeaders(release.headers, { candidate });
     else assertSecurityHeaders(release.headers);

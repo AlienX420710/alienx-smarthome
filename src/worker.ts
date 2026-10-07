@@ -1,6 +1,5 @@
 import { handle } from '@astrojs/cloudflare/handler';
-import { sendDailyHealth } from './lib/email-health';
-
+import { sendDailyHealth } from './email-health';
 export default {
   fetch: handle,
   async scheduled(

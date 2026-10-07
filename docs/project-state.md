@@ -4,6 +4,19 @@ Updated October 6, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
+## October 6 shared application engine — in progress
+
+The paired application changes consolidate Worker/mail/heartbeat adapters, status
+readiness and method handling, and common form stream/abuse/verification/retry
+primitives. AlienX now rejects malformed limiter bindings as unready; both status
+routes preserve restrictive API headers through middleware. Site forms, recipients,
+confirmation permissions and retry identities remain separate explicit inputs.
+This candidate has not yet completed exact-head CI or production acceptance.
+Parent #122 stays open for UI behavior, remaining route/schema extraction and
+full parity inventory beyond the migrated-component allowlist. All existing
+owner/device/account/recovery acceptance gaps remain open; no real mail test or
+private account operation was performed.
+
 ## Requested website policies — candidate
 
 The owner confirms personal operation in Wisconsin and no marketing use of

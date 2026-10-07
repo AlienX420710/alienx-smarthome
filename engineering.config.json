@@ -46,7 +46,11 @@
     "sender": "AlienX SmartHome <contact@alienxsmarthome.com>",
     "address": "contact@alienxsmarthome.com",
     "recipient": "alienx@alienxsmarthome.com",
-    "healthSubject": "AlienX SmartHome \u2014 email transport healthy \u2014 "
+    "healthSubject": "AlienX SmartHome — email transport healthy — ",
+    "customerConfirmation": false,
+    "timeoutMs": 15000,
+    "healthText": "Automated production mail-transport heartbeat for {date}.\n\nNo action is required. This message verifies that the production Worker can send through the configured AlienX mail transport to the business mailbox. Contact-form health is monitored separately.",
+    "healthKeyPrefix": "alienx-daily-email-health/"
   },
   "form": {
     "route": "/contact",
@@ -107,5 +111,38 @@
         "quality": 85
       }
     }
-  ]
+  ],
+  "status": {
+    "limiterBinding": "INQUIRY_RATE_LIMITER",
+    "checks": [
+      {
+        "key": "worker",
+        "requires": [],
+        "ready": "operational",
+        "detail": "Production Worker is responding",
+        "failure": "Production Worker is responding"
+      },
+      {
+        "key": "inquiry",
+        "requires": ["verification", "delivery", "limiter"],
+        "ready": "configured",
+        "detail": "Configuration check only; no inquiry or provider delivery test is performed",
+        "failure": "Configuration check only; no inquiry or provider delivery test is performed"
+      },
+      {
+        "key": "turnstile",
+        "requires": ["verification"],
+        "ready": "configured",
+        "detail": "Turnstile protection is configured",
+        "failure": "Turnstile protection is not configured"
+      },
+      {
+        "key": "resend",
+        "requires": ["delivery"],
+        "ready": "configured",
+        "detail": "Resend delivery integration is configured",
+        "failure": "Resend delivery integration is not configured"
+      }
+    ]
+  }
 }

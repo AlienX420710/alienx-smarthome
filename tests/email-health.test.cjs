@@ -16,6 +16,7 @@ function load(file, extra = {}) {
   ).outputText;
   const context = {
     exports: {},
+    site: require('../engineering.config.json'),
     Response,
     AbortSignal,
     console: { info() {} },
@@ -31,7 +32,7 @@ function load(file, extra = {}) {
   return context.exports;
 }
 test('daily mail is DST-safe at 05:00 Chicago including both transition days', () => {
-  const { healthDate } = load('src/lib/email-health.ts');
+  const { healthDate } = load('src/email-health.ts');
   for (const [day, hour] of [
     ['2026-01-15', 11],
     ['2026-07-15', 10],
@@ -50,7 +51,7 @@ test('daily mail is DST-safe at 05:00 Chicago including both transition days', (
 });
 test('scheduled retries use real shared fixed-recipient transport and stable key/payload', async () => {
   const sends = [];
-  const mail = load('src/lib/mail.ts', {
+  const mail = load('src/mail.ts', {
     fetch: async (url, options) => {
       sends.push({ url, ...options });
       return sends.length === 1
@@ -58,7 +59,7 @@ test('scheduled retries use real shared fixed-recipient transport and stable key
         : Response.json({ id: 'mock-id' });
     },
   });
-  const { sendDailyHealth } = load('src/lib/email-health.ts', mail);
+  const { sendDailyHealth } = load('src/email-health.ts', mail);
   const stamp = Date.parse('2026-07-15T10:00:00Z');
   await sendDailyHealth(stamp, { RESEND_API_KEY: 'fixture' }, stamp);
   assert.equal(sends.length, 2);
@@ -82,7 +83,7 @@ test('scheduled retries use real shared fixed-recipient transport and stable key
 });
 test('heartbeat copy is actionable only on failure and does not pretend to test the form', async () => {
   const sends = [];
-  const { sendDailyHealth } = load('src/lib/email-health.ts', {
+  const { sendDailyHealth } = load('src/email-health.ts', {
     sendProductionMail: async (_token, _key, message) => {
       sends.push(message);
       return Response.json({ id: 'mock-id' });
@@ -103,7 +104,7 @@ test('heartbeat copy is actionable only on failure and does not pretend to test 
 
 test('shared mail transport uses one direct fixed-recipient Resend request', async () => {
   const calls = [];
-  const { sendProductionMail } = load('src/lib/mail.ts', {
+  const { sendProductionMail } = load('src/mail.ts', {
     fetch: async (url, options) => {
       calls.push({ url: String(url), ...options });
       return Response.json({ id: 'mock-id' });
@@ -142,7 +143,7 @@ test('scheduled mail fails closed on permanent, exhausted, and malformed provide
     ],
   ]) {
     let calls = 0;
-    const { sendDailyHealth } = load('src/lib/email-health.ts', {
+    const { sendDailyHealth } = load('src/email-health.ts', {
       sendProductionMail: async () => {
         calls++;
         return reply();

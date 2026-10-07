@@ -37,7 +37,11 @@ export function secure(
       ? resourcePolicy + (localHttpPreview ? '' : '; upgrade-insecure-requests')
       : "frame-ancestors 'none'",
   );
-  if (statusRoute && site.privateStatus) {
+  if (
+    (statusRoute && site.privateStatus) ||
+    response.headers.get('Content-Security-Policy') ===
+      "default-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+  ) {
     headers.set(
       'Content-Security-Policy',
       "default-src 'none'; base-uri 'none'; frame-ancestors 'none'",
