@@ -17,6 +17,19 @@ full parity inventory beyond the migrated-component allowlist. All existing
 owner/device/account/recovery acceptance gaps remain open; no real mail test or
 private account operation was performed.
 
+## Requested website policies — candidate
+
+The owner confirms personal operation in Wisconsin and no marketing use of
+inquiries. The requested Privacy Policy and Terms of Service add contact-form
+and footer links using Cleaning's notice placement as a reference. Copy describes
+the actual form fields, Cloudflare/Turnstile, Resend, saved preferences and
+mailbox retention without inventing a deletion deadline or delivery guarantee.
+Existing inquiry consent, validation, security and recipients are unchanged.
+These are website terms, not a paid-project agreement or attorney-reviewed legal
+advice. The candidate is not yet production-verified; exact-head checks and the
+full production chain remain required. This scoped owner request does not close
+#62's broader editorial acceptance or other unresolved closeout findings.
+
 ## October 6 diagnostic parity follow-up — verified
 
 The manual WebKit runner and workflow now share one implementation, retaining

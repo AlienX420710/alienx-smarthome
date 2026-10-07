@@ -283,6 +283,19 @@ import { SITE_TITLE } from '../consts';
               aria-live="polite"
             ></p>
           </div>
+          <p class="privacy-note" id="inquiry-privacy-note">
+            Your details are used to respond to your inquiry and discuss your
+            project—not for marketing. Cloudflare protects this form, and Resend
+            emails your request to AlienX. Read our{' '}
+            <a tabindex="0" href="/privacy/">
+              Privacy Policy
+            </a>{' '}
+            and{' '}
+            <a tabindex="0" href="/terms/">
+              Terms of Service
+            </a>
+            .
+          </p>
         </form>
       </section>
     </main>
@@ -708,6 +721,18 @@ import { SITE_TITLE } from '../consts';
   }
   .actions {
     margin-top: 1.25rem;
+  }
+  .privacy-note {
+    margin: 1rem 0 0;
+    color: var(--contact-text);
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+  .privacy-note a {
+    color: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
   button {
     display: flex;

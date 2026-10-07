@@ -1,7 +1,15 @@
 {
   "repository": "AlienX420710/alienx-smarthome",
   "releaseRefPrefix": "alienx",
-  "routes": ["/", "/status/", "/about/", "/contact/", "/contact/success/"],
+  "routes": [
+    "/",
+    "/status/",
+    "/about/",
+    "/contact/",
+    "/contact/success/",
+    "/privacy/",
+    "/terms/"
+  ],
   "noindexRoutes": ["/contact/success/"],
   "browser": {
     "themeKey": "alienx-theme",
@@ -15,7 +23,8 @@
         "tests/responsive.spec.cjs",
         "tests/interactions.spec.cjs",
         "tests/keyboard.spec.cjs",
-        "tests/error-pages.spec.cjs"
+        "tests/error-pages.spec.cjs",
+        "tests/policy-pages.spec.cjs"
       ],
       "accessibility": [
         "tests/accessibility.spec.cjs",
@@ -24,7 +33,8 @@
       "webkit": [
         "tests/interactions.spec.cjs",
         "tests/keyboard.spec.cjs",
-        "tests/error-pages.spec.cjs"
+        "tests/error-pages.spec.cjs",
+        "tests/policy-pages.spec.cjs"
       ]
     },
     "logoSelector": ".site-logo",
