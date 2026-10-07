@@ -27,6 +27,14 @@ Workers remain the stack. This is a technology showcase, not a home-control syst
 
 ## Inquiry security contract
 
+`/privacy/` and `/terms/` own the public website policies, presented by
+`src/layouts/PolicyLayout.astro`. The contact form links both below its submit
+controls, and the footer links them site-wide. Policy copy reflects personal
+operation in Wisconsin and no marketing use of inquiry information. The existing
+required contact permission remains inquiry-specific, not marketing consent or a
+paid-service contract. Project terms require a separate agreement. Both routes
+are configured for the existing shared browser, accessibility and integrity gates.
+
 `POST /api/inquiry` and `/api/inquiry/` share the same middleware boundary.
 Origin (when supplied) must match; Origin is not authentication. JSON only,
 16,384 streamed bytes maximum regardless of Content-Length, object payloads,
