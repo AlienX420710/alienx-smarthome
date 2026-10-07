@@ -4,29 +4,45 @@ Updated October 6, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
-## Shared navigation follow-up — in progress
+## October 6 shared navigation release — verified
 
 Both sites now use the same navigation-rail and command-trigger implementation.
 It reveals the active link after layout/font/page lifecycle changes without moving
 document scroll or keyboard focus, disconnects stale observers during page swaps,
 and binds global listeners once. Unit coverage includes stale callbacks, manual
-scroll preservation and command-opener focus. Candidate CI/deployment is pending;
-broader UI/schema parity and owner-dependent acceptance remain open.
+scroll preservation and command-opener focus. PR #129 passed all five exact-head
+gates and merged as `9dcf7086f252eb2a2852d3f329b177a5411a1fc2`.
+All five main gates, fresh CodeQL and zero-open-alert policy passed. The release
+approval ref matched this SHA and Workers Build 112626314168 succeeded.
+[Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37569473142)
+and [Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37570048440)
+verified this exact revision on both production hosts, including TLS protocol
+acceptance. The expanded migrated-component peer comparison also passed locally.
+This is the latest verified implementation release; broader UI/schema parity in
+#122 / Cleaning #39 and owner-dependent acceptance remain open. CBC/static-RSA
+cipher observations are not closed by TLS protocol success. No real inquiry,
+replacement heartbeat, private account inspection or recovery drill was performed.
+This evidence-only documentation follow-up needs no recursive state update.
 
-## October 6 shared application engine — in progress
+## October 6 shared application engine — verified
 
 The paired application changes consolidate Worker/mail/heartbeat adapters, status
 readiness and method handling, and common form stream/abuse/verification/retry
 primitives. AlienX now rejects malformed limiter bindings as unready; both status
 routes preserve restrictive API headers through middleware. Site forms, recipients,
 confirmation permissions and retry identities remain separate explicit inputs.
-This candidate has not yet completed exact-head CI or production acceptance.
+PR #127 merged as `8797051da822f3adbcc1101341436d006d36f59c`.
+All five exact-main gates, fresh CodeQL and zero-open-alert policy passed;
+the approved-main ref matched this SHA and Workers Build 112622039338 succeeded.
+[Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37568068540)
+and [Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37568661820)
+verified this revision on both hosts, including TLS protocol acceptance.
 Parent #122 stays open for UI behavior, remaining route/schema extraction and
 full parity inventory beyond the migrated-component allowlist. All existing
 owner/device/account/recovery acceptance gaps remain open; no real mail test or
 private account operation was performed.
 
-## Requested website policies — candidate
+## Requested website policies — released
 
 The owner confirms personal operation in Wisconsin and no marketing use of
 inquiries. The requested Privacy Policy and Terms of Service add contact-form
@@ -35,9 +51,10 @@ the actual form fields, Cloudflare/Turnstile, Resend, saved preferences and
 mailbox retention without inventing a deletion deadline or delivery guarantee.
 Existing inquiry consent, validation, security and recipients are unchanged.
 These are website terms, not a paid-project agreement or attorney-reviewed legal
-advice. The candidate is not yet production-verified; exact-head checks and the
-full production chain remain required. This scoped owner request does not close
-#62's broader editorial acceptance or other unresolved closeout findings.
+advice. PR #128's policies are included in the fully verified #129 release above,
+including route, link, browser and production integrity coverage. This scoped
+owner request does not close #62's broader editorial acceptance or other
+unresolved closeout findings.
 
 ## October 6 diagnostic parity follow-up — verified
 
@@ -287,7 +304,7 @@ on September 30. The linked Cleaning PR #28 remains independently owned;
 this review does not certify the peer project's current release state.
 Branch cleanup is housekeeping after confirmed merge, not a production blocker.
 
-## Comparison with Cleaning
+## Historical comparison with Cleaning
 
 Peer baseline: Cleaning main `6b154ec319d6728c0764df9f0301c0910fbc4eba`.
 Its [local register](https://github.com/Cassileigh/cleaning-by-cassi/blob/main/docs/project-state.md)
@@ -337,7 +354,8 @@ authorization.
 
 ## Next work and coordination
 
-Production is healthy on verified main `81e219fc0e9e13dad669e77d5d2508c32eb75908`.
+The latest verified release is recorded at the top of this register; the October 3
+`81e219fc0e9e13dad669e77d5d2508c32eb75908` release is historical evidence.
 Next complete #59's genuinely isolated negative-promotion acceptance, then the
 TLS/account and physical-device evidence. Modernize components only for concrete
 semantics, responsiveness, lifecycle or measured performance. Work, Experience, Lab
