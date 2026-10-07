@@ -4,6 +4,19 @@ Updated October 7, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
+## October 7 sitewide capture repair — candidate
+
+The owner requests AlienX #134's capture fix across every URL on both sites.
+A shared opaque html/body canvas replaces route-specific transparent root gradients;
+site palettes, artwork and content remain separate. Full-page Chromium/WebKit
+coverage now includes every configured HTML route, receipts, policies and error
+pages in both themes and multiple widths. Captures are retained for seven days.
+AlienX also replaces the homepage call-to-action's radial wash with an opaque
+linear gradient and extends readable light header/footer accents across routes.
+These are candidate changes; original-device iOS Full Page results and independent
+production verification remain pending. Existing security/release gates and all
+unresolved parity, device, account, recovery and business findings remain open.
+
 ## October 7 smoke freshness repair — candidate
 
 Cleaning's documentation release d9de7bedfaba3a920beba7af06885e7a201cfa53 passed

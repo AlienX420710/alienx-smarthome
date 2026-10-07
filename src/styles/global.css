@@ -1,6 +1,7 @@
 /* Shared site foundation. Page-specific visual systems live with the page that uses them. */
 
 :root {
+  --site-canvas: var(--page-background);
   color-scheme: light dark;
   --accent: #2563eb;
   --accent-dark: #1d4ed8;
@@ -46,7 +47,7 @@ html {
     --gray: 150, 160, 180;
     --gray-light: 45, 50, 65;
     --gray-dark: 220, 224, 232;
-    --page-background: #14161e;
+    --page-background: #05070c;
     --page-text: rgb(var(--gray-dark));
     --page-heading: rgb(var(--black));
     --page-muted: rgb(var(--gray));
@@ -65,7 +66,7 @@ html {
   --gray: 150, 160, 180;
   --gray-light: 45, 50, 65;
   --gray-dark: 220, 224, 232;
-  --page-background: #14161e;
+  --page-background: #05070c;
   --page-text: rgb(var(--gray-dark));
   --page-heading: rgb(var(--black));
   --page-muted: rgb(var(--gray));
@@ -117,17 +118,6 @@ body {
   margin: 0;
   padding: 0;
   text-align: left;
-  background:
-    radial-gradient(
-      circle at var(--page-gradient-x) 8%,
-      var(--page-gradient-color),
-      transparent 34rem
-    ),
-    linear-gradient(var(--gray-gradient)) no-repeat var(--page-background);
-  background-size:
-    auto,
-    100% 600px;
-  background-attachment: scroll;
   word-wrap: break-word;
   overflow-wrap: break-word;
   color: var(--page-text);
@@ -249,13 +239,6 @@ hr {
 html[data-alienx-page='home'] body,
 html[data-alienx-page='about'] body,
 html[data-alienx-page='error'] body {
-  background:
-    radial-gradient(
-      circle at var(--page-gradient-x) 0,
-      var(--page-gradient-color),
-      transparent 34rem
-    ),
-    #05070c !important;
   color: #e8edf7;
 }
 html[data-alienx-page='home'] h1,
@@ -291,13 +274,6 @@ html[data-alienx-page='about'] article:hover {
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] body,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] body,
   html:where(:not([data-alienx-theme]))[data-alienx-page='error'] body {
-    background:
-      radial-gradient(
-        circle at var(--page-gradient-x) 0,
-        rgba(83, 101, 219, 0.07),
-        transparent 34rem
-      ),
-      #fff !important;
     color: #253047;
   }
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] h1,
@@ -344,25 +320,11 @@ html[data-alienx-theme='light'][data-alienx-page='about'] article {
 html:where([data-alienx-theme='light'])[data-alienx-page='home'] body,
 html:where([data-alienx-theme='light'])[data-alienx-page='about'] body,
 html:where([data-alienx-theme='light'])[data-alienx-page='error'] body {
-  background:
-    radial-gradient(
-      circle at var(--page-gradient-x) 0,
-      rgba(83, 101, 219, 0.07),
-      transparent 34rem
-    ),
-    #fff !important;
   color: #253047;
 }
 html[data-alienx-theme='dark'][data-alienx-page='home'] body,
 html[data-alienx-theme='dark'][data-alienx-page='about'] body,
 html[data-alienx-theme='dark'][data-alienx-page='error'] body {
-  background:
-    radial-gradient(
-      circle at var(--page-gradient-x) 0,
-      var(--page-gradient-color),
-      transparent 34rem
-    ),
-    #05070c !important;
   color: #e8edf7;
 }
 html[data-alienx-theme='dark'][data-alienx-page='home'] h1,
@@ -376,13 +338,6 @@ html[data-alienx-theme='dark'][data-alienx-page='about'] h3 {
 html[data-alienx-theme='light'][data-alienx-page='home'] body,
 html[data-alienx-theme='light'][data-alienx-page='about'] body,
 html[data-alienx-theme='light'][data-alienx-page='error'] body {
-  background:
-    radial-gradient(
-      circle at var(--page-gradient-x) 0,
-      rgba(83, 101, 219, 0.07),
-      transparent 34rem
-    ),
-    #fff !important;
   color: #253047;
 }
 html[data-alienx-theme='light'][data-alienx-page='home'] h1,

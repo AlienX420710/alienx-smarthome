@@ -440,13 +440,6 @@ const projects = [
     --page-heading: var(--home-heading);
     --page-muted: var(--home-muted);
     --page-border: var(--home-border);
-    background:
-      radial-gradient(
-        circle at 82% 8%,
-        rgba(57, 255, 90, 0.08),
-        transparent 28rem
-      ),
-      var(--home-bg);
     color: var(--home-text);
   }
 
@@ -941,13 +934,7 @@ const projects = [
     padding: clamp(3rem, 7vw, 7rem);
     border: 1px solid var(--home-border);
     border-radius: 32px;
-    background:
-      radial-gradient(
-        circle at 50% 0%,
-        rgba(57, 255, 90, 0.14),
-        transparent 55%
-      ),
-      #090d16;
+    background: linear-gradient(180deg, #102f20, #090d16);
     text-align: center;
   }
 
@@ -1084,13 +1071,6 @@ const projects = [
       --home-text: #202838;
       --home-muted: #60739f;
       --home-soft: #64738d;
-      background:
-        radial-gradient(
-          circle at 82% 8%,
-          rgba(22, 163, 74, 0.08),
-          transparent 28rem
-        ),
-        var(--home-bg);
     }
 
     :global(html:where(:not([data-alienx-theme]))) .button--ghost {
@@ -1164,13 +1144,7 @@ const projects = [
     }
 
     :global(html:where(:not([data-alienx-theme]))) .cta {
-      background:
-        radial-gradient(
-          circle at 50% 0%,
-          rgba(22, 163, 74, 0.1),
-          transparent 55%
-        ),
-        #f7f9fb;
+      background: linear-gradient(180deg, #e1f0e9, #f7f9fb);
     }
   }
 
@@ -1184,13 +1158,6 @@ const projects = [
     --home-text: #202838;
     --home-muted: #60739f;
     --home-soft: #64738d;
-    background:
-      radial-gradient(
-        circle at 82% 8%,
-        rgba(22, 163, 74, 0.08),
-        transparent 28rem
-      ),
-      var(--home-bg);
   }
 
   :global(html[data-alienx-theme='light']) .button--ghost {
@@ -1264,12 +1231,6 @@ const projects = [
   }
 
   :global(html[data-alienx-theme='light']) .cta {
-    background:
-      radial-gradient(
-        circle at 50% 0%,
-        rgba(22, 163, 74, 0.1),
-        transparent 55%
-      ),
-      #f7f9fb;
+    background: linear-gradient(180deg, #e1f0e9, #f7f9fb);
   }
 </style>

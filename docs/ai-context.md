@@ -19,8 +19,9 @@ Workers remain the stack. This is a technology showcase, not a home-control syst
   journey; those former standalone routes, route classifications and exclusive
   theme selectors are retired. Requests to retired routes keep the server-declared
   error identity, including after preference application.
-- src/styles/global.css owns the primary site shell background, including branded
-  error pages; their terminal treatment stays page-specific. src/styles/page-themes.css
+- src/styles/site-canvas.css owns the opaque root canvas on every page; global.css
+  supplies the theme palette. Branded error pages keep their terminal treatment.
+  src/styles/page-themes.css
   owns shared route theme overrides. Explicit saved themes override OS preference;
   system mode still works.
 - Scripts own audits, candidate/live verification, bounded Lighthouse and the
@@ -91,8 +92,9 @@ never print credential matches or rewrite history to hide them.
 The contact intro sits above a full-width form within the responsive content
 container. Fieldset rows own vertical spacing; grid children do not receive
 sibling margins. Text/select controls share a minimum height and grid labels
-reserve wrap space. Contact uses an opaque theme canvas to avoid transparent
-gradient artifacts in full-page capture; real iOS capture remains device evidence.
+reserve wrap space. Every route uses the shared opaque theme canvas to avoid
+transparent root-gradient artifacts in full-page capture; real iOS capture remains
+device evidence. The homepage call-to-action uses an opaque linear gradient.
 
 Prefer native HTML/CSS, semantic controls and progressive enhancement before JS
 or dependencies. Verify current browser support and licenses before adapting ideas.
@@ -190,3 +192,15 @@ Site adapters retain their action, response-field name, size, callbacks and prov
 bootstrap. The engine loads before those adapters; no challenge bypass or change
 to server verification is introduced. Unit and mocked Chromium/WebKit cases cover
 this lifecycle; they do not establish live challenge completion or mail delivery.
+
+## Shared full-page canvas
+
+`src/styles/site-canvas.css` owns opaque, matching html/body backgrounds and a
+viewport-height minimum on every HTML route. BaseHead imports it on normal,
+policy, receipt and error pages. Site foundations supply `--site-canvas` from
+their own theme palette; page styles do not override root backgrounds. Brand
+surfaces, artwork and content remain local. Shared Chromium/WebKit coverage visits
+all configured public routes and error pages at phone, tablet and desktop widths
+in light/dark mode, plus explicit saved-theme precedence where supported. It
+scrolls to load images before full-page capture and checks opacity, overflow and
+image loading. Automated capture is separate from physical iOS Full Page acceptance.

@@ -310,3 +310,9 @@ the trusted controller revision; it checks that exact deployed SHA, headers, SEO
 assets, redirects and TLS. Scheduled/manual runs also pin their expected revision.
 A source comparison (`npm run verify:peer -- /path/to/peer`) checks migrated shared
 implementation; it never substitutes for each site's exact-head gates or deployment.
+
+Responsive and Safari workflows retain `chromium-page-captures` and
+`webkit-page-captures` artifacts for seven days, including successful runs.
+Review representative homepage, form, policy and error captures in both themes
+after a canvas change. The shared suite scrolls to load images before capture;
+passing automation does not certify the original iOS Full Page screenshot path.

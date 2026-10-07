@@ -10,6 +10,8 @@ if (!peer)
 const read = (directory, file) =>
   readFileSync(resolve(directory, file), 'utf8');
 const files = [
+  'src/styles/site-canvas.css',
+  'tests/site-canvas.spec.cjs',
   'public/turnstile-engine.js',
   'tests/turnstile-engine.test.mjs',
   'tests/turnstile-engine.spec.cjs',
