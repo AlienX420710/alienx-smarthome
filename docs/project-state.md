@@ -21,6 +21,11 @@ form, row-owned spacing, aligned input/select sizes and an opaque themed canvas.
 The screenshot's oversized circle is consistent with gradient capture rendering,
 but the exact iOS cause is not proven. Chromium/WebKit layout and full-page captures
 are automated coverage; the original device's Full Page result remains unverified.
+Initial PR #134 CI found a 4.5px native WebKit control-height difference and
+insufficient light-mode header/footer brand contrast on the opaque canvas.
+The follow-up sets explicit equal control heights and uses dark green/orange
+accents on light contact backgrounds. Original failed checks remain evidence;
+acceptance requires fresh checks on the corrected head without weaker thresholds.
 
 ## October 7 shared challenge widget — verified
 
