@@ -6,6 +6,12 @@ Keep main as the production branch and verify the resulting deployed main SHA.
 
 ## Shared preflight
 
+For a Smoke revision mismatch, retain actual/expected SHAs and timestamps and
+compare Workers Build, cache-busted Integrity and final release observations.
+A successful build does not prove every request served the new revision. Smoke
+uses unique request queries plus no-cache/no-store headers; a mismatch still
+fails. Do not bypass the final assertion or retry until green without evidence.
+
 Use Node 22 and `npm ci`. After the final edit, run `npm run format` and
 `npm run preflight`. Preflight runs formatting, repository and history security
 scans, regression tests, production build, generated deployment-target validation,

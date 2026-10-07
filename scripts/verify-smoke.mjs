@@ -1,13 +1,22 @@
 import assert from 'node:assert/strict';
 import { site } from './site-config.mjs';
 import { verifyIntegrity } from './verify-integrity.mjs';
-const request = (origin, path, options = {}) =>
-  fetch(new URL(path, origin), {
+let requestId = 0;
+const request = (origin, path, options = {}) => {
+  const url = new URL(path, origin);
+  url.searchParams.set('_smoke', Date.now() + '-' + requestId++);
+  return fetch(url, {
     cache: 'no-store',
     redirect: 'error',
     signal: AbortSignal.timeout(15000),
     ...options,
+    headers: {
+      ...options.headers,
+      'Cache-Control': 'no-cache, no-store',
+      Pragma: 'no-cache',
+    },
   });
+};
 let expected = process.env.EXPECTED_REVISION;
 if (!expected) {
   const release = await request(site.origin, '/api/release');

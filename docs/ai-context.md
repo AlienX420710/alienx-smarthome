@@ -88,6 +88,12 @@ never print credential matches or rewrite history to hide them.
 
 ## Frontend and media
 
+The contact intro sits above a full-width form within the responsive content
+container. Fieldset rows own vertical spacing; grid children do not receive
+sibling margins. Text/select controls share a minimum height and grid labels
+reserve wrap space. Contact uses an opaque theme canvas to avoid transparent
+gradient artifacts in full-page capture; real iOS capture remains device evidence.
+
 Prefer native HTML/CSS, semantic controls and progressive enhancement before JS
 or dependencies. Verify current browser support and licenses before adapting ideas.
 Require keyboard/touch, both themes, reduced motion and Safari behavior; device
@@ -127,6 +133,11 @@ rejection only. Shared framework/CSP/integrity implementation is described below
 release acceptance stays in the existing findings register.
 
 ## Shared release and validation implementation
+
+Smoke requests use unique query identifiers and explicit no-cache/no-store request
+headers, matching the freshness intent of release and integrity verification.
+The final exact-revision assertion still fails on a changed or stale response;
+there is no retry that converts a mismatch into acceptance.
 
 `engineering.config.json` supplies site identity, routes, selectors, rendering/CSP
 inputs and image transformations. `astro.config.mjs`, `src/security.ts`, release

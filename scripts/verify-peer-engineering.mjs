@@ -33,6 +33,7 @@ const files = [
   'scripts/write-release.mjs',
   'scripts/verify-release.mjs',
   'scripts/verify-smoke.mjs',
+  'tests/smoke-freshness.test.mjs',
   'scripts/verify-integrity.mjs',
   'scripts/integrity-contract.mjs',
   'scripts/verify-tls-posture.sh',
