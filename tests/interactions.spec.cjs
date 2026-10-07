@@ -1,5 +1,58 @@
 const { test, expect } = require('@playwright/test');
 const base = 'http://127.0.0.1:4321';
+for (const width of [320, 768, 1280]) {
+  for (const theme of ['light', 'dark']) {
+    test(`contact form spans the content width with aligned controls: ${width} ${theme}`, async ({
+      page,
+    }, testInfo) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.addInitScript(
+        (value) => localStorage.setItem('alienx-theme', value),
+        theme,
+      );
+      await page.route('https://challenges.cloudflare.com/**', (route) =>
+        route.abort(),
+      );
+      await page.goto(base + '/contact/');
+      await page.evaluate(() => document.fonts.ready);
+      const geometry = await page.evaluate(() => {
+        const box = (element) => {
+          const { x, y, width, height, bottom } =
+            element.getBoundingClientRect();
+          return { x, y, width, height, bottom };
+        };
+        return {
+          main: box(document.querySelector('main')),
+          form: box(document.querySelector('#inquiry-form')),
+          intro: box(document.querySelector('.copy')),
+          background: getComputedStyle(document.body).backgroundImage,
+          overflow: document.documentElement.scrollWidth > innerWidth,
+          rows: [...document.querySelectorAll('.field-grid')].map((row) =>
+            [...row.querySelectorAll('input, select')].map(box),
+          ),
+        };
+      });
+      expect(geometry.overflow).toBe(false);
+      expect(geometry.background).toBe('none');
+      expect(Math.abs(geometry.form.width - geometry.main.width)).toBeLessThan(
+        2,
+      );
+      expect(geometry.form.y).toBeGreaterThan(geometry.intro.bottom);
+      if (width > 680) {
+        for (const row of geometry.rows) {
+          for (const control of row) {
+            expect(Math.abs(control.y - row[0].y)).toBeLessThan(2);
+            expect(Math.abs(control.height - row[0].height)).toBeLessThan(2);
+          }
+        }
+      }
+      await page.screenshot({
+        path: testInfo.outputPath('contact-full-page.png'),
+        fullPage: true,
+      });
+    });
+  }
+}
 test.use({ screenshot: 'only-on-failure', trace: 'retain-on-failure' });
 const status = {
   status: 'operational',

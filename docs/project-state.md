@@ -4,6 +4,24 @@ Updated October 7, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
+## October 7 smoke freshness repair — candidate
+
+Cleaning's documentation release d9de7bedfaba3a920beba7af06885e7a201cfa53 passed
+all five main gates and Workers Build 113019952521. Smoke 37686977369 passed
+cache-busted Integrity on both hosts, then its bare final release URL returned
+previous revision 8fc826f8cc60f879ddffeb5947d990786fc07355 at 21:13:03 UTC.
+Cleaning #50 retains this failure. The exact cache/edge cause is not established.
+Shared Smoke now requests fresh responses consistently; mocked regression proves
+the final mismatch still fails. This candidate requires independent PR/main and
+production verification. No gate, threshold, mail or account control is weakened.
+Remaining parity and owner/device/account/recovery findings stay open.
+
+The owner-requested contact layout repair is also a candidate: stacked full-width
+form, row-owned spacing, aligned input/select sizes and an opaque themed canvas.
+The screenshot's oversized circle is consistent with gradient capture rendering,
+but the exact iOS cause is not proven. Chromium/WebKit layout and full-page captures
+are automated coverage; the original device's Full Page result remains unverified.
+
 ## October 7 shared challenge widget — verified
 
 The common Turnstile lifecycle now handles duplicate loads, page-swap cleanup,

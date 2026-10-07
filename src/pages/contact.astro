@@ -535,8 +535,8 @@ import { SITE_TITLE } from '../consts';
   }
   .intro {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(420px, 560px);
-    gap: 6rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3rem;
     align-items: start;
   }
   .eyebrow {
@@ -562,10 +562,11 @@ import { SITE_TITLE } from '../consts';
     line-height: 1.7;
   }
   .signal {
+    max-width: 620px;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
-    margin: 4rem 0 0;
+    margin: 2rem 0 0;
     padding: 0;
     list-style: none;
     color: var(--contact-soft);
@@ -623,16 +624,23 @@ import { SITE_TITLE } from '../consts';
   }
   .field-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.1rem;
   }
   .field-grid.three {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .field + .field,
-  .field-grid + .field,
-  .field + .field-grid {
+  fieldset > .field + .field,
+  fieldset > .field-grid + .field,
+  fieldset > .field + .field-grid,
+  fieldset > .field-grid + .field-grid {
     margin-top: 1.1rem;
+  }
+  .field {
+    min-width: 0;
+  }
+  .field-grid > .field > label {
+    min-height: 2.7em;
   }
   label {
     display: block;
@@ -664,6 +672,10 @@ import { SITE_TITLE } from '../consts';
   }
   select {
     appearance: auto;
+  }
+  input:not([type='checkbox']),
+  select {
+    min-height: 3.5rem;
   }
   input:focus,
   textarea:focus,
@@ -881,6 +893,9 @@ import { SITE_TITLE } from '../consts';
     .field-grid,
     .field-grid.three {
       grid-template-columns: 1fr;
+    }
+    .field-grid > .field > label {
+      min-height: 0;
     }
     .signal {
       grid-template-columns: 1fr;

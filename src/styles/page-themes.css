@@ -209,6 +209,12 @@ html:where([data-alienx-theme='light'])[data-alienx-page='status']
 }
 
 /* The status hero accent must retain large-text contrast on a light backdrop. */
+/* Opaque contact canvas avoids transparent-gradient full-page capture artifacts. */
+html[data-alienx-page='contact'] body,
+html[data-alienx-page='contact'][data-alienx-theme] body {
+  background: var(--contact-background, #05070c) !important;
+}
+
 html[data-alienx-theme='light'][data-alienx-page='status'] .hero h1 span {
   color: var(--brand-green-dark) !important;
 }
