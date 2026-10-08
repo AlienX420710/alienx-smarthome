@@ -6,6 +6,17 @@ and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
 ## October 7 sitewide capture repair — candidate
 
+October 8 continuation: initial #135 head b1b83f8 failed accessibility job
+113056920395 on homepage/About muted text and Status disclosure/runtime text.
+The palette correction darkens light-mode labels and lightens dark runtime labels.
+WebKit job 113056919922 also observed different root/body colors on system-dark
+Contact at 820px. The shared body now inherits the root's painted background;
+the exact WebKit invalidation cause is not established. Existing full-page
+assertions and accessibility thresholds are unchanged; fresh CI remains required.
+Shared Smoke concurrency now separates event types after Cleaning's scheduled
+run 37693642363 cancelled push run 37693468744, preventing post-Smoke Integrity.
+Paired regression tests retain exact-revision and trusted-push requirements.
+
 The owner requests AlienX #134's capture fix across every URL on both sites.
 A shared opaque html/body canvas replaces route-specific transparent root gradients;
 site palettes, artwork and content remain separate. Full-page Chromium/WebKit
@@ -17,7 +28,18 @@ These are candidate changes; original-device iOS Full Page results and independe
 production verification remain pending. Existing security/release gates and all
 unresolved parity, device, account, recovery and business findings remain open.
 
-## October 7 smoke freshness repair — candidate
+## October 7 contact and smoke freshness repair — verified
+
+PR #134 merged as `5054f18e0837ec1228c928b7e273dd79847b0575`.
+All five main gates, fresh CodeQL and zero-open-alert policy passed; the
+approved-main ref matches this SHA. Workers Build 113045074910 succeeded.
+[Push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37694364013)
+verified both hosts and the final exact revision at 22:17 UTC October 7;
+[Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37695217776)
+passed both hosts and TLS protocol acceptance at 22:18 UTC. This closes the
+implementation's candidate release caveats below, not original-device acceptance
+or the separate sitewide #135 candidate. Cleaning's recovered #52 release is
+independently recorded in its register. No real mail or private account operation.
 
 Cleaning's documentation release d9de7bedfaba3a920beba7af06885e7a201cfa53 passed
 all five main gates and Workers Build 113019952521. Smoke 37686977369 passed

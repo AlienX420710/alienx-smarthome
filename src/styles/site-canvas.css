@@ -6,5 +6,6 @@ html {
 }
 body {
   min-height: 100vh;
-  background: var(--site-canvas, #ffffff);
+  /* Inherit the painted root color rather than independently resolve its palette. */
+  background: inherit;
 }

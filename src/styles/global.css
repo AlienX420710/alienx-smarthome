@@ -8,7 +8,7 @@
   --brand-green: #39ff5a;
   --brand-green-dark: #16803b;
   --black: 15, 18, 25;
-  --gray: 96, 115, 159;
+  --gray: 82, 98, 126;
   --gray-light: 229, 233, 240;
   --gray-dark: 34, 41, 57;
   --page-background: #fff;
@@ -79,7 +79,7 @@ html[data-alienx-theme='light'] {
   --accent: #2563eb;
   --accent-dark: #1d4ed8;
   --black: 15, 18, 25;
-  --gray: 96, 115, 159;
+  --gray: 82, 98, 126;
   --gray-light: 229, 233, 240;
   --gray-dark: 34, 41, 57;
   --page-background: #fff;
@@ -286,7 +286,7 @@ html[data-alienx-page='about'] article:hover {
   }
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] .eyebrow,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] .eyebrow {
-    color: #71809a;
+    color: #52627a;
   }
   html:where(:not([data-alienx-theme]))[data-alienx-page='home'] .hero__lede,
   html:where(:not([data-alienx-theme]))[data-alienx-page='about'] .lede {
@@ -307,7 +307,7 @@ html[data-alienx-theme='light'][data-alienx-page='about'] h3 {
 }
 html[data-alienx-theme='light'][data-alienx-page='home'] .eyebrow,
 html[data-alienx-theme='light'][data-alienx-page='about'] .eyebrow {
-  color: #71809a;
+  color: #52627a;
 }
 html[data-alienx-theme='light'][data-alienx-page='home'] .hero__lede,
 html[data-alienx-theme='light'][data-alienx-page='about'] .lede {

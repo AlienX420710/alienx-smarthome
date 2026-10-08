@@ -6,6 +6,10 @@ Keep main as the production branch and verify the resulting deployed main SHA.
 
 ## Shared preflight
 
+Smoke concurrency is scoped by event and revision. Scheduled/manual monitoring
+must not cancel the push run required to trigger post-deployment Integrity.
+Keep Integrity's successful, same-repository main-push restriction unchanged.
+
 For a Smoke revision mismatch, retain actual/expected SHAs and timestamps and
 compare Workers Build, cache-busted Integrity and final release observations.
 A successful build does not prove every request served the new revision. Smoke

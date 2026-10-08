@@ -97,6 +97,9 @@ html:where([data-alienx-theme='light'])[data-alienx-page='contact-success']
   html:where(:not([data-alienx-theme]))[data-alienx-page='status'] .explanation,
   html:where(:not([data-alienx-theme]))[data-alienx-page='status']
     .explanation
+    summary,
+  html:where(:not([data-alienx-theme]))[data-alienx-page='status']
+    .explanation
     p {
     color: #253047 !important;
   }
@@ -153,6 +156,7 @@ html[data-alienx-theme='light'][data-alienx-page='status'] .runtime,
 html[data-alienx-theme='light'][data-alienx-page='status'] .runtime span,
 html[data-alienx-theme='light'][data-alienx-page='status'] .runtime strong,
 html[data-alienx-theme='light'][data-alienx-page='status'] .explanation,
+html[data-alienx-theme='light'][data-alienx-page='status'] .explanation summary,
 html[data-alienx-theme='light'][data-alienx-page='status'] .explanation p {
   color: #253047 !important;
 }
