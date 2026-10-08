@@ -31,11 +31,11 @@ test('scheduled/manual smoke cannot cancel push release evidence', () => {
   assert.match(integrity, /github.event.workflow_run.event == 'push'/);
 });
 
-test('body inherits the root canvas instead of resolving a second palette', () => {
+test('root and body share explicit opaque canvas declarations', () => {
   const canvas = readFileSync('src/styles/site-canvas.css', 'utf8');
   assert.match(
     canvas,
-    /html\s*\{[^}]*background: var\(--site-canvas, #ffffff\)/,
+    /html,\s*body\s*\{[^}]*background-color: var\(--site-canvas, #ffffff\)/,
   );
-  assert.match(canvas, /body\s*\{[^}]*background: inherit/);
+  assert.match(canvas, /html,\s*body\s*\{[^}]*background-image: none/);
 });

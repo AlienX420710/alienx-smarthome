@@ -188,6 +188,10 @@ Astro swaps and rendering on page load. Duplicate initialization preserves the
 current challenge; callbacks from a removed widget cannot update the next page.
 Provider reset/remove exceptions do not interrupt form recovery. Failed render
 attempts retain the site's error notification and can be retried on the next load.
+Container resizes and root preference changes reevaluate adapter presentation;
+only a changed size class/theme replaces the challenge. Adapters choose flexible
+at 300px of available width and compact below it. AlienX uses its saved theme
+when selected, otherwise the provider's automatic theme.
 Site adapters retain their action, response-field name, size, callbacks and provider
 bootstrap. The engine loads before those adapters; no challenge bypass or change
 to server verification is introduced. Unit and mocked Chromium/WebKit cases cover

@@ -1,11 +1,13 @@
 /* Root canvas is shared across every route, including error and policy pages.
    Palette values belong to each site's foundation; decorative surfaces stay local. */
+html,
+body {
+  background-color: var(--site-canvas, #ffffff);
+  background-image: none;
+}
 html {
   min-height: 100%;
-  background: var(--site-canvas, #ffffff);
 }
 body {
   min-height: 100vh;
-  /* Inherit the painted root color rather than independently resolve its palette. */
-  background: inherit;
 }

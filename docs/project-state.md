@@ -6,6 +6,16 @@ and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
 ## October 7 sitewide capture repair — candidate
 
+October 8 Cassi continuation: #135 head 6fa4950 passed Quality, Responsive,
+Accessibility and Lighthouse but failed Safari on six system-theme Contact
+root/body comparisons. Shorthand background inheritance returned a transparent
+body; shared canvas now assigns background-color and background-image explicitly.
+The owner also requests the Turnstile presentation fix: use flexible width when
+the container has 300px available, compact only below that; follow saved AlienX
+themes and rerender only when size class or theme changes. Shared lifecycle and
+browser regression coverage are paired with Cleaning. Provider challenges and
+original-device acceptance remain unverified; no real form/mail sends.
+
 October 8 continuation: initial #135 head b1b83f8 failed accessibility job
 113056920395 on homepage/About muted text and Status disclosure/runtime text.
 The palette correction darkens light-mode labels and lightens dark runtime labels.
