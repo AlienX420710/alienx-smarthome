@@ -181,6 +181,12 @@ retry payloads. Mandatory edge bindings and independent handler validation remai
 The peer verifier compares these engines and their shared regression tests. UI
 behavior and remaining route/schema extraction are still open parity work.
 
+Scheduled mail uses the shared `sendHealthMail` transport with the explicit
+`mail.healthRecipient`, independently of business inquiry `mail.recipient`.
+AlienX retains alienx@alienxsmarthome.com for both; Cleaning's operational
+recipient is separately owner-configured. Fixed health mail cannot accept a
+runtime destination/CC/BCC override. Form notification behavior is unchanged.
+
 ## Shared challenge widget lifecycle
 
 `public/turnstile-engine.js` owns single-instance rendering, reset, cleanup before

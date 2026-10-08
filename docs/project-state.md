@@ -6,6 +6,15 @@ and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
 ## October 7 sitewide capture repair — candidate
 
+October 8 owner update: restored README live-site/contact, workflow and dynamic
+stack badges. Paired explicit healthRecipient transport leaves AlienX's recipient
+unchanged and allows Cleaning's owner-directed operational-only recipient change
+without redirecting customer/business form mail. No manual messages were sent.
+Latest WebKit failures at 77a7b49 remain unresolved evidence; Contact palette
+variables now belong to its main container instead of globally mutating body.
+Shared canvas diagnostics include effective scheme/palette in any mismatch.
+All assertions remain intact; fresh CI and exact-main deployment remain required.
+
 October 8 Cassi continuation: #135 head 6fa4950 passed Quality, Responsive,
 Accessibility and Lighthouse but failed Safari on six system-theme Contact
 root/body comparisons. Shorthand background inheritance returned a transparent

@@ -53,6 +53,7 @@
     "sender": "AlienX SmartHome <contact@alienxsmarthome.com>",
     "address": "contact@alienxsmarthome.com",
     "recipient": "alienx@alienxsmarthome.com",
+    "healthRecipient": "alienx@alienxsmarthome.com",
     "healthSubject": "AlienX SmartHome — email transport healthy — ",
     "customerConfirmation": false,
     "timeoutMs": 15000,

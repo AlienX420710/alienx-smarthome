@@ -84,7 +84,7 @@ test('scheduled retries use real shared fixed-recipient transport and stable key
 test('heartbeat copy is actionable only on failure and does not pretend to test the form', async () => {
   const sends = [];
   const { sendDailyHealth } = load('src/email-health.ts', {
-    sendProductionMail: async (_token, _key, message) => {
+    sendHealthMail: async (_token, _key, message) => {
       sends.push(message);
       return Response.json({ id: 'mock-id' });
     },
@@ -144,7 +144,7 @@ test('scheduled mail fails closed on permanent, exhausted, and malformed provide
   ]) {
     let calls = 0;
     const { sendDailyHealth } = load('src/email-health.ts', {
-      sendProductionMail: async () => {
+      sendHealthMail: async () => {
         calls++;
         return reply();
       },

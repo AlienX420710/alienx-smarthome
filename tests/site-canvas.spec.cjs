@@ -78,6 +78,11 @@ for (const width of [320, 820, 1280]) {
             bodyImage: body.backgroundImage,
             rootColor: root.backgroundColor,
             bodyColor: body.backgroundColor,
+            rootScheme: root.colorScheme,
+            bodyScheme: body.colorScheme,
+            rootPalette: root.getPropertyValue('--site-canvas'),
+            bodyPalette: body.getPropertyValue('--site-canvas'),
+            bodyParent: document.body.parentElement?.tagName,
             overflow: document.documentElement.scrollWidth > innerWidth + 1,
             bodyHeight: document.body.getBoundingClientRect().height,
             missingImages: [...document.images]
@@ -87,7 +92,7 @@ for (const width of [320, 820, 1280]) {
         });
         expect(canvas.rootImage).toBe('none');
         expect(canvas.bodyImage).toBe('none');
-        expect(canvas.rootColor).toBe(canvas.bodyColor);
+        expect(canvas.rootColor, JSON.stringify(canvas)).toBe(canvas.bodyColor);
         expect(canvas.bodyColor).toMatch(/^rgb\(/);
         expect(canvas.bodyHeight).toBeGreaterThanOrEqual(899);
         expect(canvas.overflow).toBe(false);
