@@ -3,6 +3,11 @@
 html,
 body {
   background-color: var(--site-canvas, #ffffff);
+  /* Resolve the active scheme on each painted element, not an inherited alias. */
+  background-color: light-dark(
+    var(--site-canvas-light, #ffffff),
+    var(--site-canvas-dark, #05070c)
+  );
   background-image: none;
 }
 html {

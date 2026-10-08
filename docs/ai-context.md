@@ -202,7 +202,9 @@ this lifecycle; they do not establish live challenge completion or mail delivery
 `src/styles/site-canvas.css` owns opaque, matching html/body backgrounds and a
 viewport-height minimum on every HTML route. BaseHead imports it on normal,
 policy, receipt and error pages. Site foundations supply `--site-canvas` from
-their own theme palette; page styles do not override root backgrounds. Brand
+their own theme palette as a fallback, plus constant --site-canvas-light/dark
+values selected through the effective color-scheme. Page styles do not override
+root backgrounds. Brand
 surfaces, artwork and content remain local. Shared Chromium/WebKit coverage visits
 all configured public routes and error pages at phone, tablet and desktop widths
 in light/dark mode, plus explicit saved-theme precedence where supported. It

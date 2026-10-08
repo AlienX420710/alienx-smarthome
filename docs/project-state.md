@@ -15,6 +15,12 @@ the container has 300px available, compact only below that; follow saved AlienX
 themes and rerender only when size class or theme changes. Shared lifecycle and
 browser regression coverage are paired with Cleaning. Provider challenges and
 original-device acceptance remain unverified; no real form/mail sends.
+Follow-up e88b281 passed the widget regression but WebKit still found stale white
+Contact body colors in two system-dark captures (109/111 cases passed). The canvas
+now selects from constant site palette colors with light-dark() on each element,
+using the effective color-scheme instead of the inherited dynamic palette alias.
+The original declaration remains a fallback for older browsers. All equality and
+opacity assertions remain mandatory; fresh exact-head CI is required.
 
 October 8 continuation: initial #135 head b1b83f8 failed accessibility job
 113056920395 on homepage/About muted text and Status disclosure/runtime text.

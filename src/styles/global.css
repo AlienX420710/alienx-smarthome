@@ -2,6 +2,8 @@
 
 :root {
   --site-canvas: var(--page-background);
+  --site-canvas-light: #ffffff;
+  --site-canvas-dark: #05070c;
   color-scheme: light dark;
   --accent: #2563eb;
   --accent-dark: #1d4ed8;
