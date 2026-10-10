@@ -13,8 +13,11 @@ main through the configured release gate, Workers Build, Smoke and Integrity. De
 branches only after verified merge; never delete active work or approval/rejection
 tags. Report access limits honestly, never evade tool approval rejections.
 
-Application/tooling changes: Node 22, `npm ci`, `npm run format`, then
-`npm run preflight` after the final edit. The pinned formatter writes the output;
+Application/tooling changes: Node 22 and `npm run prepare:pr` after the final
+edit (locked install, pinned formatter, then full preflight). Run
+`npm run verify:prepared` immediately before publishing. Fetch the published
+commit and run `npm run verify:prepared -- <full-sha>` to confirm identical bytes.
+Any later source, docs or lockfile edit invalidates the receipt; prepare again. The pinned formatter writes the output;
 never approximate its whitespace manually. Docs-only changes still require
 `npm run format:check`, links/anchors, finding preservation and diff review;
 mandatory CI still applies. Run affected browser suites separately. Tests

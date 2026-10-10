@@ -10,6 +10,8 @@ if (!peer)
 const read = (directory, file) =>
   readFileSync(resolve(directory, file), 'utf8');
 const files = [
+  'scripts/prepare-change.mjs',
+  'tests/prepare-change.test.mjs',
   'src/styles/site-canvas.css',
   'tests/site-canvas.spec.cjs',
   'public/turnstile-engine.js',
@@ -69,6 +71,7 @@ const files = [
   'tests/responsive.spec.cjs',
   'tests/safari.cjs',
   'AGENTS.md',
+  '.github/pull_request_template.md',
   '.github/copilot-instructions.md',
   '.prettierrc.json',
   '.prettierignore',
@@ -109,6 +112,8 @@ for (const command of [
   'format:check',
   'check',
   'preflight',
+  'prepare:pr',
+  'verify:prepared',
   'audit',
   'security:audit',
   'security:history',

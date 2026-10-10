@@ -6,6 +6,26 @@ Keep main as the production branch and verify the resulting deployed main SHA.
 
 ## Shared preflight
 
+Run `npm run prepare:pr` on Node 22 after the last edit. It performs a locked
+install, applies the pinned formatter, and runs the unchanged full preflight.
+It records a local SHA-256 fingerprint only after success and rejects source
+changes during validation. `npm run verify:prepared` rejects subsequent edits,
+including docs, lockfiles, new/deleted files and executable bits. It never stages
+or commits files. The receipt stays inside Git metadata, outside the repository.
+Before publishing, verify it; after fetching the published commit, run
+`npm run verify:prepared -- <full-sha>` to compare its actual tree. Connector/API
+publication must use these same validated bytes. A receipt is local convenience,
+not trusted CI evidence or a replacement for the mandatory browser/release gates.
+Do not publish formatter diagnostics or hand-edit guessed formatter output.
+
+Classify failures by their first failing step: formatting/install/build/test,
+browser/accessibility, security evidence, promotion, or live verification. Read
+the failed log before changing code. A missing exact-main CodeQL scan requires
+restoring that scan, then the security gate and provider build; longer waits or
+old-scan acceptance cannot repair a scan that never started. A successful old
+live revision is not proof that the new main deployed. Keep the failed evidence
+and verify the entire resulting release chain before closing the incident.
+
 Smoke concurrency is scoped by event and revision. Scheduled/manual monitoring
 must not cancel the push run required to trigger post-deployment Integrity.
 Keep Integrity's successful, same-repository main-push restriction unchanged.

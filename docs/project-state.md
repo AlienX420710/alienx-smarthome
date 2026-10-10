@@ -4,6 +4,61 @@ Updated October 7, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
+## October 9 repeated-failure audit — remediation candidate
+
+Reachable branches, tags and all PR heads contain 866 AlienX and 401 Cleaning
+commits. The API lists 104 AlienX and 46 Cleaning PRs, including closed/unmerged
+work. Paginated failed-run inventory returned 461 AlienX and 167 Cleaning runs;
+606 failed-job logs were retrieved across those runs. These are retained failed
+runs, not a count of defects or every historical push: deleted/unreachable work,
+provider-internal logs and earlier failed attempts in currently successful runs
+are outside that inventory. Intentional canaries are not product regressions.
+
+AlienX had 80 failed Source formatting steps, including deliberate diagnostic
+failures; 65 logs contained Prettier style-failure evidence. Cleaning had 11 failed
+Source formatting steps plus its October 6 combined preflight formatting failure.
+History repeatedly shows formatter-preview commits, guessed whitespace repairs,
+and follow-up removal of diagnostics. That is a final-byte execution failure;
+adding more prose instructions alone does not enforce validation. Existing pinned
+format/preflight contracts remain; the new preparation command records the checked
+source fingerprint, invalidates it on later edits, and compares a fetched published
+commit to those bytes. It is local evidence, not a substitute for trusted CI.
+
+Other repeated categories include install/dependency failures, actual browser and
+contrast defects, trace-capture failures, deployment-target/provisioning incidents,
+missing fresh security scans, and live revision waits. Earlier repairs and their
+failed evidence remain below; do not reapply old work or classify every red check
+as an application compile failure. Full non-content parity remains open in
+AlienX #122 / Cleaning #39; the shared allowlist is not a full-file inventory.
+
+Cleaning main e54c1e5b4a761cf4f5d706de820faba9177f64fa passed its five application
+gates but security job 113325172611 timed out waiting for Actions CodeQL.
+Run 37781416664 is failed while Actions job 113325175290 is listed queued with no
+steps. A targeted failed-job rerun returned HTTP 403, "This workflow run cannot
+be retried". Its Workers Build failed; provider-internal logs are unavailable
+through this connector, so its exact internal failure is not inferred. Repeated
+Smoke/Integrity checks have not observed that revision. A new legitimate candidate
+must independently produce both fresh scans, security approval, provider deployment,
+and exact-revision Smoke/Integrity. No wait, alert policy or deployment guard is
+weakened. The owner can inspect the failed CodeQL run and Cloudflare build if the
+same missing scan persists after a new push.
+
+AlienX #135 head 884d28dd failed five WebKit Contact root/body comparisons;
+its body reported transparent and no inherited palette while the root was styled.
+The candidate moves the Contact script inside its HTML body and makes shared
+capture readiness wait for load, fonts and two rendered frames before measuring.
+This is a candidate addressing document/readiness defects, not proof of a WebKit
+root cause; all existing color/opacity assertions remain unchanged. Local WebKit
+could download but could not launch due to missing host libraries; dependency
+installation failed on restricted setgroups. Native macOS CI remains required.
+PR #136's axe-core 4.14 checks found label-content-name-mismatch in the command
+button and footer wordmark. Their accessible labels now retain their visible text;
+the dependency update still needs fresh independent checks after the repair.
+
+No real form/mail test, private provider inspection or production drill was run.
+Docs: updated state and operations; release/device/account/owner acceptance stays
+open until its own evidence exists. These changes are not yet production accepted.
+
 ## October 7 sitewide capture repair — candidate
 
 October 8 owner update: restored README live-site/contact, workflow and dynamic

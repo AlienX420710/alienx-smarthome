@@ -216,3 +216,14 @@ all configured public routes and error pages at phone, tablet and desktop widths
 in light/dark mode, plus explicit saved-theme precedence where supported. It
 scrolls to load images before full-page capture and checks opacity, overflow and
 image loading. Automated capture is separate from physical iOS Full Page acceptance.
+
+## Validated publication
+
+The shared preparation script runs the locked install, pinned write formatter,
+and complete preflight before recording a source fingerprint in Git metadata.
+Fingerprinting includes new/deleted files, content, executable modes and symlink
+identities, excluding ignored generated outputs. Verification compares current
+source and optionally a fetched full commit SHA to that validated snapshot.
+Failed preparation clears older passing evidence; concurrent edits fail closed.
+This local receipt is not an attestation or a CI/deployment approval mechanism.
+Existing protected browser and exact-main release checks remain authoritative.

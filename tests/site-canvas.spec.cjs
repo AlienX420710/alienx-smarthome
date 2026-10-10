@@ -53,9 +53,14 @@ for (const width of [320, 820, 1280]) {
         await page.route('**/api/quote*', (route) => route.abort());
         await page.route('**/api/inquiry*', (route) => route.abort());
         await page.goto('http://127.0.0.1:4321' + route, {
-          waitUntil: 'domcontentloaded',
+          waitUntil: 'load',
         });
-        await page.evaluate(() => document.fonts.ready);
+        await page.evaluate(async () => {
+          await document.fonts.ready;
+          await new Promise((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(resolve)),
+          );
+        });
         // Real scrolling loads below-the-fold images before the full-page capture.
         const height = await page.evaluate(
           () => document.documentElement.scrollHeight,
