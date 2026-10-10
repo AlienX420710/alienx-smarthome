@@ -72,8 +72,24 @@ test('Turnstile loads once, survives swaps, and preserves the site contract', as
   expect(result.field).toBe(
     site.form.encoding === 'json' ? 'website' : 'cf-turnstile-response',
   );
-  expect(result.size).toBe(
-    site.form.encoding === 'json' ? 'compact' : 'flexible',
-  );
+  expect(result.size).toBe('flexible');
   expect(result.expiryVisible).toBe(true);
+  await page.setViewportSize({ width: 320, height: 900 });
+  await expect
+    .poll(() => page.evaluate(() => window.widgetCalls.at(-1).options.size))
+    .toBe('compact');
+  await page.setViewportSize({ width: 820, height: 900 });
+  await expect
+    .poll(() => page.evaluate(() => window.widgetCalls.at(-1).options.size))
+    .toBe('flexible');
+  if (site.browser.themeKey) {
+    await page.evaluate(() => window.__alienxSetTheme('dark'));
+    await expect
+      .poll(() => page.evaluate(() => window.widgetCalls.at(-1).options.theme))
+      .toBe('dark');
+    await page.evaluate(() => window.__alienxSetTheme('light'));
+    await expect
+      .poll(() => page.evaluate(() => window.widgetCalls.at(-1).options.theme))
+      .toBe('light');
+  }
 });

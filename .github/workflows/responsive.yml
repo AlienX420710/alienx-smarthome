@@ -62,6 +62,15 @@ jobs:
       - name: Run responsive compatibility matrix
         run: npm run test:browser
 
+      - name: Retain full-page canvas captures
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: chromium-page-captures
+          path: test-results/**/full-page-canvas.png
+          retention-days: 7
+          if-no-files-found: ignore
+
       - name: Upload preview log on failure
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

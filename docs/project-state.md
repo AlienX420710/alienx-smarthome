@@ -4,7 +4,157 @@ Updated October 7, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
-## October 7 smoke freshness repair — candidate
+## October 10 fresh GitHub continuation
+
+Cleaning PR #73 is production verified at
+`8ea160addc9a3bddf8dfa89f554215a42be44a39`: all five main gates, fresh
+CodeQL and zero-open-alert policy passed, release approval succeeded and
+Workers Build 114222899863 passed. [Push Smoke](https://github.com/Cassileigh/cleaning-by-cassi/actions/runs/38055038791)
+verified the exact revision at 13:22:38 UTC; [Integrity](https://github.com/Cassileigh/cleaning-by-cassi/actions/runs/38055479956)
+verified both hosts at 13:23:12 UTC. This supersedes the missing-scan/deployment
+blocker below; the original failed runs remain historical evidence. Scheduled
+Smoke 38063627078 also passed. Heartbeat inbox receipt and account/device/recovery
+acceptance are separate and remain open.
+
+AlienX #135 f15a219 passed four required gates; WebKit job 114221801365
+failed three Contact canvas comparisons (108 passed), while native Safari passed.
+The retained screenshot is styled, but the original computed body style reports
+transparent background and no inherited palette. The buffer-only JSON attachment
+was not present in the uploaded test-results directory with the line reporter.
+Both repos now write the diagnostic JSON to disk before attaching it, retaining
+the original assertions and measurements. AlienX removes the unused registered
+root-gradient property/transition and palette leftovers after the opaque-canvas
+migration; no painted surface references them. Whether this removes the WebKit
+mismatch still requires fresh CI; it is not a confirmed browser root cause.
+Paired work continues in AlienX #135 / Cleaning #74. No live mail was sent.
+
+## October 9 repeated-failure audit — remediation candidate
+
+October 10 follow-up: both full local Node 22 preparations passed and the
+published trees matched their validated fingerprints (AlienX #135 f182d1ea,
+Cleaning #73 a14cfe28). AlienX passed four required PR gates, but WebKit job
+114219507443 still failed four Contact canvas comparisons (107 passed).
+Document/load readiness was insufficient; the root retained its theme while
+the body reported transparent background, normal scheme and no inherited canvas
+variable. Do not merge or claim that cause fixed. Shared capture tests now retain
+the failing screenshot and post-capture style diagnostics before asserting the
+original measurements; neither recapture nor changed observations erase failure.
+Cleaning's remaining browser gates and both main release chains remain pending.
+
+Reachable branches, tags and all PR heads contain 866 AlienX and 401 Cleaning
+commits. The API lists 104 AlienX and 46 Cleaning PRs, including closed/unmerged
+work. Paginated failed-run inventory returned 461 AlienX and 167 Cleaning runs;
+606 failed-job logs were retrieved across those runs. These are retained failed
+runs, not a count of defects or every historical push: deleted/unreachable work,
+provider-internal logs and earlier failed attempts in currently successful runs
+are outside that inventory. Intentional canaries are not product regressions.
+
+AlienX had 80 failed Source formatting steps, including deliberate diagnostic
+failures; 65 logs contained Prettier style-failure evidence. Cleaning had 11 failed
+Source formatting steps plus its October 6 combined preflight formatting failure.
+History repeatedly shows formatter-preview commits, guessed whitespace repairs,
+and follow-up removal of diagnostics. That is a final-byte execution failure;
+adding more prose instructions alone does not enforce validation. Existing pinned
+format/preflight contracts remain; the new preparation command records the checked
+source fingerprint, invalidates it on later edits, and compares a fetched published
+commit to those bytes. It is local evidence, not a substitute for trusted CI.
+
+Other repeated categories include install/dependency failures, actual browser and
+contrast defects, trace-capture failures, deployment-target/provisioning incidents,
+missing fresh security scans, and live revision waits. Earlier repairs and their
+failed evidence remain below; do not reapply old work or classify every red check
+as an application compile failure. Full non-content parity remains open in
+AlienX #122 / Cleaning #39; the shared allowlist is not a full-file inventory.
+
+Cleaning main e54c1e5b4a761cf4f5d706de820faba9177f64fa passed its five application
+gates but security job 113325172611 timed out waiting for Actions CodeQL.
+Run 37781416664 is failed while Actions job 113325175290 is listed queued with no
+steps. A targeted failed-job rerun returned HTTP 403, "This workflow run cannot
+be retried". Its Workers Build failed; provider-internal logs are unavailable
+through this connector, so its exact internal failure is not inferred. Repeated
+Smoke/Integrity checks have not observed that revision. A new legitimate candidate
+must independently produce both fresh scans, security approval, provider deployment,
+and exact-revision Smoke/Integrity. No wait, alert policy or deployment guard is
+weakened. The owner can inspect the failed CodeQL run and Cloudflare build if the
+same missing scan persists after a new push.
+
+AlienX #135 head 884d28dd failed five WebKit Contact root/body comparisons;
+its body reported transparent and no inherited palette while the root was styled.
+The candidate moves the Contact script inside its HTML body and makes shared
+capture readiness wait for load, fonts and two rendered frames before measuring.
+This is a candidate addressing document/readiness defects, not proof of a WebKit
+root cause; all existing color/opacity assertions remain unchanged. Local WebKit
+could download but could not launch due to missing host libraries; dependency
+installation failed on restricted setgroups. Native macOS CI remains required.
+PR #136's axe-core 4.14 checks found label-content-name-mismatch in the command
+button and footer wordmark. Their accessible labels now retain their visible text;
+the dependency update still needs fresh independent checks after the repair.
+
+No real form/mail test, private provider inspection or production drill was run.
+Docs: updated state and operations; release/device/account/owner acceptance stays
+open until its own evidence exists. These changes are not yet production accepted.
+
+## October 7 sitewide capture repair — candidate
+
+October 8 owner update: restored README live-site/contact, workflow and dynamic
+stack badges. Paired explicit healthRecipient transport leaves AlienX's recipient
+unchanged and allows Cleaning's owner-directed operational-only recipient change
+without redirecting customer/business form mail. No manual messages were sent.
+Latest WebKit failures at 77a7b49 remain unresolved evidence; Contact palette
+variables now belong to its main container instead of globally mutating body.
+Shared canvas diagnostics include effective scheme/palette in any mismatch.
+All assertions remain intact; fresh CI and exact-main deployment remain required.
+
+October 8 Cassi continuation: #135 head 6fa4950 passed Quality, Responsive,
+Accessibility and Lighthouse but failed Safari on six system-theme Contact
+root/body comparisons. Shorthand background inheritance returned a transparent
+body; shared canvas now assigns background-color and background-image explicitly.
+The owner also requests the Turnstile presentation fix: use flexible width when
+the container has 300px available, compact only below that; follow saved AlienX
+themes and rerender only when size class or theme changes. Shared lifecycle and
+browser regression coverage are paired with Cleaning. Provider challenges and
+original-device acceptance remain unverified; no real form/mail sends.
+Follow-up e88b281 passed the widget regression but WebKit still found stale white
+Contact body colors in two system-dark captures (109/111 cases passed). The canvas
+now selects from constant site palette colors with light-dark() on each element,
+using the effective color-scheme instead of the inherited dynamic palette alias.
+The original declaration remains a fallback for older browsers. All equality and
+opacity assertions remain mandatory; fresh exact-head CI is required.
+
+October 8 continuation: initial #135 head b1b83f8 failed accessibility job
+113056920395 on homepage/About muted text and Status disclosure/runtime text.
+The palette correction darkens light-mode labels and lightens dark runtime labels.
+WebKit job 113056919922 also observed different root/body colors on system-dark
+Contact at 820px. The shared body now inherits the root's painted background;
+the exact WebKit invalidation cause is not established. Existing full-page
+assertions and accessibility thresholds are unchanged; fresh CI remains required.
+Shared Smoke concurrency now separates event types after Cleaning's scheduled
+run 37693642363 cancelled push run 37693468744, preventing post-Smoke Integrity.
+Paired regression tests retain exact-revision and trusted-push requirements.
+
+The owner requests AlienX #134's capture fix across every URL on both sites.
+A shared opaque html/body canvas replaces route-specific transparent root gradients;
+site palettes, artwork and content remain separate. Full-page Chromium/WebKit
+coverage now includes every configured HTML route, receipts, policies and error
+pages in both themes and multiple widths. Captures are retained for seven days.
+AlienX also replaces the homepage call-to-action's radial wash with an opaque
+linear gradient and extends readable light header/footer accents across routes.
+These are candidate changes; original-device iOS Full Page results and independent
+production verification remain pending. Existing security/release gates and all
+unresolved parity, device, account, recovery and business findings remain open.
+
+## October 7 contact and smoke freshness repair — verified
+
+PR #134 merged as `5054f18e0837ec1228c928b7e273dd79847b0575`.
+All five main gates, fresh CodeQL and zero-open-alert policy passed; the
+approved-main ref matches this SHA. Workers Build 113045074910 succeeded.
+[Push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37694364013)
+verified both hosts and the final exact revision at 22:17 UTC October 7;
+[Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/37695217776)
+passed both hosts and TLS protocol acceptance at 22:18 UTC. This closes the
+implementation's candidate release caveats below, not original-device acceptance
+or the separate sitewide #135 candidate. Cleaning's recovered #52 release is
+independently recorded in its register. No real mail or private account operation.
 
 Cleaning's documentation release d9de7bedfaba3a920beba7af06885e7a201cfa53 passed
 all five main gates and Workers Build 113019952521. Smoke 37686977369 passed

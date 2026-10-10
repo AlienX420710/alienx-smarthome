@@ -1,5 +1,5 @@
 import site from '../engineering.config.json';
-import { sendProductionMail } from './mail';
+import { sendHealthMail } from './mail';
 import { healthDate, deliverHealth } from './email-health-engine';
 export { healthDate } from './email-health-engine';
 export async function sendDailyHealth(
@@ -16,7 +16,7 @@ export async function sendDailyHealth(
     text: site.mail.healthText.replaceAll('{date}', date),
   };
   await deliverHealth(date, () =>
-    sendProductionMail(
+    sendHealthMail(
       env.RESEND_API_KEY!,
       site.mail.healthKeyPrefix + date,
       message,

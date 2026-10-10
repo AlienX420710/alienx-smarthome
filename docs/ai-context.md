@@ -19,8 +19,9 @@ Workers remain the stack. This is a technology showcase, not a home-control syst
   journey; those former standalone routes, route classifications and exclusive
   theme selectors are retired. Requests to retired routes keep the server-declared
   error identity, including after preference application.
-- src/styles/global.css owns the primary site shell background, including branded
-  error pages; their terminal treatment stays page-specific. src/styles/page-themes.css
+- src/styles/site-canvas.css owns the opaque root canvas on every page; global.css
+  supplies the theme palette. Branded error pages keep their terminal treatment.
+  src/styles/page-themes.css
   owns shared route theme overrides. Explicit saved themes override OS preference;
   system mode still works.
 - Scripts own audits, candidate/live verification, bounded Lighthouse and the
@@ -91,8 +92,9 @@ never print credential matches or rewrite history to hide them.
 The contact intro sits above a full-width form within the responsive content
 container. Fieldset rows own vertical spacing; grid children do not receive
 sibling margins. Text/select controls share a minimum height and grid labels
-reserve wrap space. Contact uses an opaque theme canvas to avoid transparent
-gradient artifacts in full-page capture; real iOS capture remains device evidence.
+reserve wrap space. Every route uses the shared opaque theme canvas to avoid
+transparent root-gradient artifacts in full-page capture; real iOS capture remains
+device evidence. The homepage call-to-action uses an opaque linear gradient.
 
 Prefer native HTML/CSS, semantic controls and progressive enhancement before JS
 or dependencies. Verify current browser support and licenses before adapting ideas.
@@ -179,6 +181,12 @@ retry payloads. Mandatory edge bindings and independent handler validation remai
 The peer verifier compares these engines and their shared regression tests. UI
 behavior and remaining route/schema extraction are still open parity work.
 
+Scheduled mail uses the shared `sendHealthMail` transport with the explicit
+`mail.healthRecipient`, independently of business inquiry `mail.recipient`.
+AlienX retains alienx@alienxsmarthome.com for both; Cleaning's operational
+recipient is separately owner-configured. Fixed health mail cannot accept a
+runtime destination/CC/BCC override. Form notification behavior is unchanged.
+
 ## Shared challenge widget lifecycle
 
 `public/turnstile-engine.js` owns single-instance rendering, reset, cleanup before
@@ -186,7 +194,36 @@ Astro swaps and rendering on page load. Duplicate initialization preserves the
 current challenge; callbacks from a removed widget cannot update the next page.
 Provider reset/remove exceptions do not interrupt form recovery. Failed render
 attempts retain the site's error notification and can be retried on the next load.
+Container resizes and root preference changes reevaluate adapter presentation;
+only a changed size class/theme replaces the challenge. Adapters choose flexible
+at 300px of available width and compact below it. AlienX uses its saved theme
+when selected, otherwise the provider's automatic theme.
 Site adapters retain their action, response-field name, size, callbacks and provider
 bootstrap. The engine loads before those adapters; no challenge bypass or change
 to server verification is introduced. Unit and mocked Chromium/WebKit cases cover
 this lifecycle; they do not establish live challenge completion or mail delivery.
+
+## Shared full-page canvas
+
+`src/styles/site-canvas.css` owns opaque, matching html/body backgrounds and a
+viewport-height minimum on every HTML route. BaseHead imports it on normal,
+policy, receipt and error pages. Site foundations supply `--site-canvas` from
+their own theme palette as a fallback, plus constant --site-canvas-light/dark
+values selected through the effective color-scheme. Page styles do not override
+root backgrounds. Brand
+surfaces, artwork and content remain local. Shared Chromium/WebKit coverage visits
+all configured public routes and error pages at phone, tablet and desktop widths
+in light/dark mode, plus explicit saved-theme precedence where supported. It
+scrolls to load images before full-page capture and checks opacity, overflow and
+image loading. Automated capture is separate from physical iOS Full Page acceptance.
+
+## Validated publication
+
+The shared preparation script runs the locked install, pinned write formatter,
+and complete preflight before recording a source fingerprint in Git metadata.
+Fingerprinting includes new/deleted files, content, executable modes and symlink
+identities, excluding ignored generated outputs. Verification compares current
+source and optionally a fetched full commit SHA to that validated snapshot.
+Failed preparation clears older passing evidence; concurrent edits fail closed.
+This local receipt is not an attestation or a CI/deployment approval mechanism.
+Existing protected browser and exact-main release checks remain authoritative.
