@@ -95,6 +95,51 @@ for (const width of [320, 820, 1280]) {
               .map((image) => image.getAttribute('src')),
           };
         });
+        // Preserve the failing paint before assertions stop the test. Diagnostics
+        // do not replace the original measurements or turn a failure into a pass.
+        await page.screenshot({
+          path: testInfo.outputPath('full-page-canvas.png'),
+          fullPage: true,
+        });
+        if (canvas.rootColor !== canvas.bodyColor) {
+          const diagnostic = await page.evaluate(() => {
+            const snapshot = (element) => {
+              const style = getComputedStyle(element);
+              return {
+                tag: element.tagName,
+                connected: element.isConnected,
+                background: style.backgroundColor,
+                scheme: style.colorScheme,
+                palette: style.getPropertyValue('--site-canvas'),
+                display: style.display,
+                visibility: style.visibility,
+                attributes: [...element.attributes].map(({ name, value }) => [
+                  name,
+                  value,
+                ]),
+              };
+            };
+            return {
+              root: snapshot(document.documentElement),
+              body: snapshot(document.body),
+              main: snapshot(document.querySelector('main')),
+              sheets: [...document.styleSheets].map((sheet) => ({
+                href: sheet.href,
+                disabled: sheet.disabled,
+              })),
+              readyState: document.readyState,
+              scrollY,
+            };
+          });
+          await testInfo.attach('canvas-mismatch.json', {
+            body: JSON.stringify(
+              { original: canvas, afterCapture: diagnostic },
+              null,
+              2,
+            ),
+            contentType: 'application/json',
+          });
+        }
         expect(canvas.rootImage).toBe('none');
         expect(canvas.bodyImage).toBe('none');
         expect(canvas.rootColor, JSON.stringify(canvas)).toBe(canvas.bodyColor);
@@ -113,10 +158,6 @@ for (const width of [320, 820, 1280]) {
             /.+/,
           );
         }
-        await page.screenshot({
-          path: testInfo.outputPath('full-page-canvas.png'),
-          fullPage: true,
-        });
       });
     }
   }

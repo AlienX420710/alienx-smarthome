@@ -6,6 +6,17 @@ and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
 ## October 9 repeated-failure audit — remediation candidate
 
+October 10 follow-up: both full local Node 22 preparations passed and the
+published trees matched their validated fingerprints (AlienX #135 f182d1ea,
+Cleaning #73 a14cfe28). AlienX passed four required PR gates, but WebKit job
+114219507443 still failed four Contact canvas comparisons (107 passed).
+Document/load readiness was insufficient; the root retained its theme while
+the body reported transparent background, normal scheme and no inherited canvas
+variable. Do not merge or claim that cause fixed. Shared capture tests now retain
+the failing screenshot and post-capture style diagnostics before asserting the
+original measurements; neither recapture nor changed observations erase failure.
+Cleaning's remaining browser gates and both main release chains remain pending.
+
 Reachable branches, tags and all PR heads contain 866 AlienX and 401 Cleaning
 commits. The API lists 104 AlienX and 46 Cleaning PRs, including closed/unmerged
 work. Paginated failed-run inventory returned 461 AlienX and 167 Cleaning runs;
