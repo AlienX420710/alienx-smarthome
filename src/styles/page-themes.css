@@ -1,18 +1,4 @@
 /* Shared cross-route theme overrides; loaded after the site foundation. */
-html[data-alienx-page='home'] {
-  --page-gradient-x: 8% !important;
-}
-html[data-alienx-page='status'] {
-  --page-gradient-x: 76% !important;
-}
-html[data-alienx-page='about'] {
-  --page-gradient-x: 92% !important;
-}
-html[data-alienx-page='contact'],
-html[data-alienx-page='contact-success'] {
-  --page-gradient-x: 8% !important;
-}
-
 html[data-alienx-page='status'] body,
 html[data-alienx-page='contact'] body,
 html[data-alienx-page='contact-success'] body {

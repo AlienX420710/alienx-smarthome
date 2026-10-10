@@ -18,26 +18,6 @@
   --page-heading: rgb(var(--black));
   --page-muted: rgb(var(--gray));
   --page-border: rgb(var(--gray-light));
-  --gray-gradient: rgba(var(--gray-light), 50%), #fff;
-  --page-gradient-x: 8%;
-  --page-gradient-color: rgba(37, 99, 235, 0.13);
-}
-@property --page-gradient-x {
-  syntax: '<percentage>';
-  inherits: true;
-  initial-value: 8%;
-}
-html[data-alienx-page='home'] {
-  --page-gradient-x: 8%;
-}
-html[data-alienx-page='about'] {
-  --page-gradient-x: 92%;
-}
-html[data-alienx-page='error'] {
-  --page-gradient-x: 8%;
-}
-html {
-  transition: --page-gradient-x 700ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 @media (prefers-color-scheme: dark) {
   :root:where(:not([data-alienx-theme])) {
@@ -54,8 +34,6 @@ html {
     --page-heading: rgb(var(--black));
     --page-muted: rgb(var(--gray));
     --page-border: rgb(var(--gray-light));
-    --gray-gradient: rgba(var(--gray-light), 50%), #14161e;
-    --page-gradient-color: rgba(111, 130, 255, 0.12);
   }
 }
 :root[data-alienx-theme='dark'] {
@@ -73,8 +51,6 @@ html {
   --page-heading: rgb(var(--black));
   --page-muted: rgb(var(--gray));
   --page-border: rgb(var(--gray-light));
-  --gray-gradient: rgba(var(--gray-light), 50%), #14161e;
-  --page-gradient-color: rgba(111, 130, 255, 0.12);
 }
 html[data-alienx-theme='light'] {
   color-scheme: light;
@@ -89,8 +65,6 @@ html[data-alienx-theme='light'] {
   --page-heading: rgb(var(--black));
   --page-muted: rgb(var(--gray));
   --page-border: rgb(var(--gray-light));
-  --gray-gradient: rgba(var(--gray-light), 50%), #fff;
-  --page-gradient-color: rgba(37, 99, 235, 0.13);
 }
 @font-face {
   font-family: 'Atkinson';

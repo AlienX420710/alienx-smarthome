@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const { writeFile } = require('node:fs/promises');
 const site = require('../engineering.config.json');
 const routes = [
   ...new Set([
@@ -131,12 +132,17 @@ for (const width of [320, 820, 1280]) {
               scrollY,
             };
           });
-          await testInfo.attach('canvas-mismatch.json', {
-            body: JSON.stringify(
+          const diagnosticPath = testInfo.outputPath('canvas-mismatch.json');
+          await writeFile(
+            diagnosticPath,
+            JSON.stringify(
               { original: canvas, afterCapture: diagnostic },
               null,
               2,
             ),
+          );
+          await testInfo.attach('canvas-mismatch.json', {
+            path: diagnosticPath,
             contentType: 'application/json',
           });
         }

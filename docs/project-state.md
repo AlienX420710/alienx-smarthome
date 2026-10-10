@@ -4,6 +4,30 @@ Updated October 7, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
+## October 10 fresh GitHub continuation
+
+Cleaning PR #73 is production verified at
+`8ea160addc9a3bddf8dfa89f554215a42be44a39`: all five main gates, fresh
+CodeQL and zero-open-alert policy passed, release approval succeeded and
+Workers Build 114222899863 passed. [Push Smoke](https://github.com/Cassileigh/cleaning-by-cassi/actions/runs/38055038791)
+verified the exact revision at 13:22:38 UTC; [Integrity](https://github.com/Cassileigh/cleaning-by-cassi/actions/runs/38055479956)
+verified both hosts at 13:23:12 UTC. This supersedes the missing-scan/deployment
+blocker below; the original failed runs remain historical evidence. Scheduled
+Smoke 38063627078 also passed. Heartbeat inbox receipt and account/device/recovery
+acceptance are separate and remain open.
+
+AlienX #135 f15a219 passed four required gates; WebKit job 114221801365
+failed three Contact canvas comparisons (108 passed), while native Safari passed.
+The retained screenshot is styled, but the original computed body style reports
+transparent background and no inherited palette. The buffer-only JSON attachment
+was not present in the uploaded test-results directory with the line reporter.
+Both repos now write the diagnostic JSON to disk before attaching it, retaining
+the original assertions and measurements. AlienX removes the unused registered
+root-gradient property/transition and palette leftovers after the opaque-canvas
+migration; no painted surface references them. Whether this removes the WebKit
+mismatch still requires fresh CI; it is not a confirmed browser root cause.
+Paired work continues in AlienX #135 / Cleaning #74. No live mail was sent.
+
 ## October 9 repeated-failure audit — remediation candidate
 
 October 10 follow-up: both full local Node 22 preparations passed and the
