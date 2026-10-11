@@ -109,9 +109,11 @@ test('failed or source-mutating checks remove old passing evidence', (t) => {
 });
 
 test('fingerprint includes modes and symlink targets without reading their contents', (t) => {
-  const { root } = fixture(t);
+  const { root, git } = fixture(t);
   const original = sourceFingerprint(root);
-  chmodSync(join(root, 'source.txt'), 0o755);
+  if (process.platform === 'win32')
+    git('update-index', '--chmod=+x', 'source.txt');
+  else chmodSync(join(root, 'source.txt'), 0o755);
   assert.notEqual(sourceFingerprint(root), original);
   symlinkSync('source.txt', join(root, 'link'));
   const linked = sourceFingerprint(root);

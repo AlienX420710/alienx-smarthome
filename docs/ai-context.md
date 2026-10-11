@@ -205,6 +205,13 @@ this lifecycle; they do not establish live challenge completion or mail delivery
 
 ## Shared full-page canvas
 
+Both headers run `public/canvas-ready.js` synchronously before form markup.
+The body-positioned script waits behind the head's stylesheets and resolves
+root/body styles before select insertion, avoiding stale ancestor styles in
+WebKit 326092. Keep this script parser-blocking; the earlier head preference
+script runs before Astro's generated CSS links and cannot provide this boundary.
+It does not change theme selection, styles, form values or network permissions.
+
 `src/styles/site-canvas.css` owns opaque, matching html/body backgrounds and a
 viewport-height minimum on every HTML route. BaseHead imports it on normal,
 policy, receipt and error pages. Site foundations supply `--site-canvas` from

@@ -4,6 +4,52 @@ Updated October 7, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
+## October 10 resumed GitHub verification
+
+PR #135 at `f3b1c12e92f8f8d17ecfab3e764e734c7153db3e` passed Quality,
+Responsive, Accessibility and Lighthouse. WebKit job 114287913749 still failed
+three Contact canvas comparisons while 108 cases and native Safari passed.
+Removing the unused root animation did not fix the problem. Retained diagnostics
+show the body/main style mismatch persists after capture with stylesheets enabled.
+The PR remains blocked. [WebKit 326092](https://bugs.webkit.org/show_bug.cgi?id=326092)
+describes stale ancestor styles around select insertion, a candidate explanation
+requiring local reproduction rather than another speculative palette change.
+
+Local pinned WebKit 2359 reproduced both the upstream select case and the real
+Contact failure. A head-only style read did not repair Contact. A parser-blocking
+body script after the CSS links corrected its root/body palette in the same
+controlled comparison. The paired candidate adds shared `canvas-ready.js` at
+both headers and includes it in peer verification; existing canvas assertions
+remain unchanged. This is local evidence, not macOS CI or production acceptance.
+October 11 local validation: both production builds and all eight unchanged
+Contact canvas cases passed on Windows WebKit 2359. Cleaning's six Quote canvas
+cases also passed. The source parity check passes. Windows `prepare:pr` cannot
+launch npm (`spawnSync npm ENOENT`); full preparation uses an isolated Linux
+checkout with Node 22 instead. These local results do not waive exact-head CI,
+native Safari or independent production verification.
+
+The Linux run passed 177 regression tests and both security scans, but AlienX
+prerendering failed with `write EPIPE`: this host's WSL 1 cannot allocate the
+Worker binary's required address space. Cleaning's full Linux preparation passed.
+The paired preparation script now launches npm through its actual Node/CLI paths
+and reads Git's executable bits from the index on Windows. Mode and symlink
+regressions remain enforced. Native Windows preparation is required for the final
+candidate; the failed Linux run is not passing release evidence.
+
+October 11 GitHub refresh found unchanged main and PR heads. Scheduled Smoke
+38141271932 and Integrity 38143502201 passed for AlienX's approved main; Cleaning
+Smoke 38141656598 and Integrity 38143547948 passed for its approved main.
+
+Production remains on approved `5054f18e0837ec1228c928b7e273dd79847b0575`;
+[Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38095594737)
+and [Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38089697226)
+passed at that revision. Cleaning PR #74 is independently production verified at
+`c19459468e5e13b03fda56b68a40bf4c33c2409c`: all five main gates, both CodeQL
+analyses, zero-alert policy, exact-SHA approved ref, Workers Build 114290853647,
+Smoke 38078152292 and Integrity 38078676194 passed. This supersedes Cleaning #73
+below. Broader parity, physical-device, inbox, account and recovery acceptance
+remain open. No live mail was sent.
+
 ## October 10 fresh GitHub continuation
 
 Cleaning PR #73 is production verified at

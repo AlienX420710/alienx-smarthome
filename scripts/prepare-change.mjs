@@ -14,6 +14,16 @@ const git = (cwd, args) => execFileSync('git', args, { cwd, encoding: 'utf8' });
 
 // Include unstaged, staged and new files, but not ignored build output. Never stage files.
 export function sourceFingerprint(cwd) {
+  // Windows does not expose Git's executable bit through filesystem stat.
+  const indexModes = new Map(
+    git(cwd, ['ls-files', '--stage', '-z'])
+      .split('\0')
+      .filter(Boolean)
+      .map((entry) => [
+        entry.slice(entry.indexOf('\t') + 1),
+        entry.slice(0, 6),
+      ]),
+  );
   const paths = [
     ...new Set(
       git(cwd, ['ls-files', '-z', '--cached', '--others', '--exclude-standard'])
@@ -35,9 +45,11 @@ export function sourceFingerprint(cwd) {
       throw Error('Unsupported source entry');
     const mode = stat.isSymbolicLink()
       ? '120000'
-      : stat.mode & 0o111
-        ? '100755'
-        : '100644';
+      : process.platform === 'win32'
+        ? indexModes.get(path) || '100644'
+        : stat.mode & 0o111
+          ? '100755'
+          : '100644';
     const bytes = stat.isSymbolicLink()
       ? Buffer.from(readlinkSync(absolute))
       : readFileSync(absolute);
@@ -102,7 +114,16 @@ export function verifyPrepared(cwd, revision) {
 
 export function prepareChange(
   cwd,
-  run = (args) => execFileSync('npm', args, { cwd, stdio: 'inherit' }),
+  run = (args) => {
+    // npm.cmd cannot be executed directly by execFile on Windows. Reuse the
+    // actual npm CLI and Node executable that launched this npm lifecycle.
+    const npmCli = process.env.npm_execpath;
+    if (!npmCli) throw Error('Run preparation through npm run prepare:pr');
+    execFileSync(process.execPath, [npmCli, ...args], {
+      cwd,
+      stdio: 'inherit',
+    });
+  },
 ) {
   const receipt = receiptPath(cwd);
   // Never leave old passing evidence after an unsuccessful preparation.

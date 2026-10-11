@@ -8,6 +8,11 @@ Keep main as the production branch and verify the resulting deployed main SHA.
 
 Run `npm run prepare:pr` on Node 22 after the last edit. It performs a locked
 install, applies the pinned formatter, and runs the unchanged full preflight.
+The launcher uses the current Node executable and npm lifecycle CLI, including
+on Windows. Windows source fingerprints use Git index executable bits because
+filesystem stat does not represent them; use Git to record intended mode changes.
+Use a native supported Worker runtime: WSL 1 cannot run the pinned Linux Worker
+binary on this host. Do not count an incomplete preparation as a pass.
 It records a local SHA-256 fingerprint only after success and rejects source
 changes during validation. `npm run verify:prepared` rejects subsequent edits,
 including docs, lockfiles, new/deleted files and executable bits. It never stages

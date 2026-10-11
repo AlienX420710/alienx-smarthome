@@ -8,7 +8,8 @@ const {
   rmSync,
 } = require('node:fs');
 const { tmpdir } = require('node:os');
-const { join } = require('node:path');
+const { join, delimiter } = require('node:path');
+const { pathToFileURL } = require('node:url');
 const site = require('../engineering.config.json');
 const { execFileSync, spawnSync } = require('node:child_process');
 
@@ -54,8 +55,10 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
       }),
     );
     writeFileSync(
-      join(root, 'wrangler'),
-      '#!/bin/sh\necho OFFLINE_WRANGLER_SENTINEL\n',
+      join(root, process.platform === 'win32' ? 'wrangler.cmd' : 'wrangler'),
+      process.platform === 'win32'
+        ? '@echo OFFLINE_WRANGLER_SENTINEL\r\n'
+        : '#!/bin/sh\necho OFFLINE_WRANGLER_SENTINEL\n',
       { mode: 0o755 },
     );
     // Only Git remote evidence is replaced. The real verifier, checkout checks,
@@ -66,7 +69,7 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
       `
       import childProcess from 'node:child_process';
       import { syncBuiltinESMExports } from 'node:module';
-      if (process.argv[1]?.endsWith('/scripts/verify-ci.mjs')) {
+      if (process.argv[1]?.replaceAll('\\\\', '/').endsWith('/scripts/verify-ci.mjs')) {
       const original = childProcess.execFileSync;
       const sha = original('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
       const scenario = process.env.REHEARSAL_CASE;
@@ -99,24 +102,32 @@ test('actual npm deploy command stops before Wrangler on rejected, missing, stal
       'wrong-worker-override',
       'approved',
     ]) {
-      const result = spawnSync('npm', ['run', 'deploy'], {
-        cwd: root,
-        encoding: 'utf8',
-        timeout: 20000,
-        env: {
-          ...process.env,
-          PATH: `${root}:${process.env.PATH}`,
-          NODE_OPTIONS: `--import=${join(root, 'evidence.mjs')}`,
-          REHEARSAL_CASE: scenario,
-          WORKERS_CI_BRANCH: scenario === 'wrong-branch' ? 'feature' : 'main',
-          WORKERS_CI_COMMIT_SHA:
-            scenario === 'wrong-sha' ? 'b'.repeat(40) : sha,
-          WRANGLER_CI_OVERRIDE_NAME:
-            scenario === 'wrong-worker-override'
-              ? 'wrong-production-target'
-              : site.repository.split('/')[1],
+      assert.ok(
+        process.env.npm_execpath,
+        'Run this rehearsal through npm test',
+      );
+      const result = spawnSync(
+        process.execPath,
+        [process.env.npm_execpath, 'run', 'deploy'],
+        {
+          cwd: root,
+          encoding: 'utf8',
+          timeout: 20000,
+          env: {
+            ...process.env,
+            PATH: `${root}${delimiter}${process.env.PATH}`,
+            NODE_OPTIONS: `--import=${pathToFileURL(join(root, 'evidence.mjs')).href}`,
+            REHEARSAL_CASE: scenario,
+            WORKERS_CI_BRANCH: scenario === 'wrong-branch' ? 'feature' : 'main',
+            WORKERS_CI_COMMIT_SHA:
+              scenario === 'wrong-sha' ? 'b'.repeat(40) : sha,
+            WRANGLER_CI_OVERRIDE_NAME:
+              scenario === 'wrong-worker-override'
+                ? 'wrong-production-target'
+                : site.repository.split('/')[1],
+          },
         },
-      });
+      );
       const output = result.stdout + result.stderr;
       assert.equal(result.error, undefined, scenario);
       if (scenario === 'approved') {
