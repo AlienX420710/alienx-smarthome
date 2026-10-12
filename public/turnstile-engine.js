@@ -6,8 +6,12 @@
     let container = null;
     let widgetId = null;
     let generation = 0;
+    let presentation = '';
+    let resizeObserver = null;
     const remove = () => {
       generation++;
+      resizeObserver?.disconnect();
+      resizeObserver = null;
       const id = widgetId;
       widgetId = null;
       container = null;
@@ -23,11 +27,14 @@
         remove();
         return;
       }
-      if (!window.turnstile || next === container) return;
+      if (!window.turnstile) return;
+      const settings = options(next);
+      const nextPresentation = JSON.stringify([settings.size, settings.theme]);
+      if (next === container && nextPresentation === presentation) return;
       remove();
       container = next;
+      presentation = nextPresentation;
       const current = generation;
-      const settings = options(next);
       for (const name of ['callback', 'expired-callback', 'error-callback']) {
         const callback = settings[name];
         if (callback)
@@ -36,6 +43,7 @@
           };
       }
       next.innerHTML = '';
+      next.dataset.state = 'loading';
       try {
         widgetId = window.turnstile.render(next, {
           sitekey: next.dataset.sitekey,
@@ -44,6 +52,10 @@
           'refresh-timeout': 'auto',
           ...settings,
         });
+        if (window.ResizeObserver) {
+          resizeObserver = new window.ResizeObserver(render);
+          resizeObserver.observe(next);
+        }
       } catch {
         settings['error-callback']?.();
         remove();
@@ -59,6 +71,11 @@
     widgets.set(selector, widget);
     document.addEventListener('astro:before-swap', remove);
     document.addEventListener('astro:page-load', render);
+    if (window.MutationObserver) {
+      new window.MutationObserver(render).observe(document.documentElement, {
+        attributes: true,
+      });
+    }
     return widget;
   };
 })();

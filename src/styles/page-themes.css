@@ -1,28 +1,7 @@
 /* Shared cross-route theme overrides; loaded after the site foundation. */
-html[data-alienx-page='home'] {
-  --page-gradient-x: 8% !important;
-}
-html[data-alienx-page='status'] {
-  --page-gradient-x: 76% !important;
-}
-html[data-alienx-page='about'] {
-  --page-gradient-x: 92% !important;
-}
-html[data-alienx-page='contact'],
-html[data-alienx-page='contact-success'] {
-  --page-gradient-x: 8% !important;
-}
-
 html[data-alienx-page='status'] body,
 html[data-alienx-page='contact'] body,
 html[data-alienx-page='contact-success'] body {
-  background:
-    radial-gradient(
-      circle at var(--page-gradient-x) 0,
-      var(--page-gradient-color),
-      transparent 34rem
-    ),
-    #05070c !important;
   color: #e8edf7;
 }
 
@@ -31,26 +10,12 @@ html[data-alienx-page='contact-success'] body {
   html:where(:not([data-alienx-theme]))[data-alienx-page='contact'] body,
   html:where(:not([data-alienx-theme]))[data-alienx-page='contact-success']
     body {
-    background:
-      radial-gradient(
-        circle at var(--page-gradient-x) 0,
-        rgba(83, 101, 219, 0.07),
-        transparent 34rem
-      ),
-      #fff !important;
     color: #253047;
   }
 }
 html[data-alienx-theme='light'][data-alienx-page='status'] body,
 html[data-alienx-theme='light'][data-alienx-page='contact'] body,
 html[data-alienx-theme='light'][data-alienx-page='contact-success'] body {
-  background:
-    radial-gradient(
-      circle at var(--page-gradient-x) 0,
-      rgba(83, 101, 219, 0.07),
-      transparent 34rem
-    ),
-    #fff !important;
   color: #253047;
 }
 
@@ -58,13 +23,6 @@ html:where([data-alienx-theme='light'])[data-alienx-page='status'] body,
 html:where([data-alienx-theme='light'])[data-alienx-page='contact'] body,
 html:where([data-alienx-theme='light'])[data-alienx-page='contact-success']
   body {
-  background:
-    radial-gradient(
-      circle at var(--page-gradient-x) 0,
-      rgba(83, 101, 219, 0.07),
-      transparent 34rem
-    ),
-    #fff !important;
   color: #253047;
 }
 
@@ -125,6 +83,9 @@ html:where([data-alienx-theme='light'])[data-alienx-page='contact-success']
   html:where(:not([data-alienx-theme]))[data-alienx-page='status'] .explanation,
   html:where(:not([data-alienx-theme]))[data-alienx-page='status']
     .explanation
+    summary,
+  html:where(:not([data-alienx-theme]))[data-alienx-page='status']
+    .explanation
     p {
     color: #253047 !important;
   }
@@ -181,6 +142,7 @@ html[data-alienx-theme='light'][data-alienx-page='status'] .runtime,
 html[data-alienx-theme='light'][data-alienx-page='status'] .runtime span,
 html[data-alienx-theme='light'][data-alienx-page='status'] .runtime strong,
 html[data-alienx-theme='light'][data-alienx-page='status'] .explanation,
+html[data-alienx-theme='light'][data-alienx-page='status'] .explanation summary,
 html[data-alienx-theme='light'][data-alienx-page='status'] .explanation p {
   color: #253047 !important;
 }
@@ -208,24 +170,18 @@ html:where([data-alienx-theme='light'])[data-alienx-page='status']
   color: #0d1420 !important;
 }
 
-/* Opaque contact canvas avoids transparent-gradient full-page capture artifacts. */
-html[data-alienx-page='contact'] body,
-html[data-alienx-page='contact'][data-alienx-theme] body {
-  background: var(--contact-background, #05070c) !important;
-}
-html[data-alienx-page='contact'][data-alienx-theme='light'] body {
+/* Keep shared header/footer accents readable on the opaque light canvas. */
+html[data-alienx-theme='light'] :is(header, footer) {
   --brand-green: var(--brand-green-dark);
 }
-html[data-alienx-page='contact'][data-alienx-theme='light']
-  .footer-tech-secondary {
+html[data-alienx-theme='light'] .footer-tech-secondary {
   color: #a04400;
 }
 @media (prefers-color-scheme: light) {
-  html[data-alienx-page='contact']:not([data-alienx-theme]) body {
+  html:not([data-alienx-theme]) :is(header, footer) {
     --brand-green: var(--brand-green-dark);
   }
-  html[data-alienx-page='contact']:not([data-alienx-theme])
-    .footer-tech-secondary {
+  html:not([data-alienx-theme]) .footer-tech-secondary {
     color: #a04400;
   }
 }

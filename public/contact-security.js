@@ -3,7 +3,8 @@
   window.__alienxContactSecurityBound = true;
   const widget = window.createSiteTurnstile('#alienx-turnstile', (next) => ({
     action: 'contact',
-    size: 'compact',
+    size: next.getBoundingClientRect().width < 300 ? 'compact' : 'flexible',
+    theme: document.documentElement.dataset.alienxTheme || 'auto',
     'response-field-name': 'website',
     callback: () => {
       next.dataset.state = 'success';

@@ -12,6 +12,7 @@
   ],
   "noindexRoutes": ["/contact/success/"],
   "browser": {
+    "errorRoutes": ["/500/"],
     "themeKey": "alienx-theme",
     "themeAttribute": "data-alienx-theme",
     "themeSetter": "__alienxSetTheme",
@@ -20,6 +21,7 @@
     "turnstileCallback": "alienxTurnstileLoad",
     "suites": {
       "responsive": [
+        "tests/site-canvas.spec.cjs",
         "tests/turnstile-engine.spec.cjs",
         "tests/navigation-engine.spec.cjs",
         "tests/responsive.spec.cjs",
@@ -33,6 +35,7 @@
         "tests/heading-contrast.spec.cjs"
       ],
       "webkit": [
+        "tests/site-canvas.spec.cjs",
         "tests/turnstile-engine.spec.cjs",
         "tests/navigation-engine.spec.cjs",
         "tests/interactions.spec.cjs",
@@ -50,6 +53,7 @@
     "sender": "AlienX SmartHome <contact@alienxsmarthome.com>",
     "address": "contact@alienxsmarthome.com",
     "recipient": "alienx@alienxsmarthome.com",
+    "healthRecipient": "alienx@alienxsmarthome.com",
     "healthSubject": "AlienX SmartHome — email transport healthy — ",
     "customerConfirmation": false,
     "timeoutMs": 15000,

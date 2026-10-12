@@ -65,7 +65,7 @@ export async function verifyEmailHealth({
         ![site.mail.address, site.mail.sender].includes(mail.from) ||
         !Array.isArray(mail.to) ||
         mail.to.length !== 1 ||
-        mail.to[0] !== site.mail.recipient ||
+        mail.to[0] !== site.mail.healthRecipient ||
         typeof mail.id !== 'string' ||
         !mail.id.trim()
       )

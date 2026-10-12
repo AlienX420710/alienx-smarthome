@@ -2,6 +2,23 @@
 
 ![AlienX SmartHome](docs/readme-banner.svg)
 
+<p align="center">
+  <a href="https://alienxsmarthome.com"><img alt="Live website: alienxsmarthome.com" src="https://img.shields.io/badge/Live_website-alienxsmarthome.com-16803b?style=for-the-badge&logo=googlechrome&logoColor=white" /></a>
+  <a href="https://alienxsmarthome.com/contact/"><img alt="Start a project" src="https://img.shields.io/badge/Get_in_touch-Start_a_project-f24bb5?style=for-the-badge&logo=maildotru&logoColor=white" /></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/quality.yml"><img alt="AlienX Quality" src="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/quality.yml/badge.svg?branch=main" /></a>
+  <a href="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-smoke.yml"><img alt="AlienX Production Smoke" src="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-smoke.yml/badge.svg?branch=main" /></a>
+  <a href="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/responsive.yml"><img alt="Responsive Compatibility" src="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/responsive.yml/badge.svg?branch=main" /></a>
+  <a href="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/accessibility.yml"><img alt="Accessibility & Theme Compatibility" src="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/accessibility.yml/badge.svg?branch=main" /></a>
+  <a href="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/safari.yml"><img alt="Safari Compatibility" src="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/safari.yml/badge.svg?branch=main" /></a>
+  <a href="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/lighthouse.yml"><img alt="Lighthouse Quality" src="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/lighthouse.yml/badge.svg?branch=main" /></a>
+  <a href="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-integrity.yml"><img alt="Production Integrity" src="https://github.com/AlienX420710/alienx-smarthome/actions/workflows/production-integrity.yml/badge.svg?branch=main" /></a>
+  <a href="https://github.com/AlienX420710/alienx-smarthome/blob/main/package.json"><img alt="Astro dependency version" src="https://img.shields.io/github/package-json/dependency-version/AlienX420710/alienx-smarthome/astro/main?label=Astro&logo=astro&logoColor=white&color=1548f5" /></a>
+  <a href="https://developers.cloudflare.com/workers/"><img alt="Cloudflare Workers" src="https://img.shields.io/badge/Cloudflare-Workers-a7df24?logo=cloudflare&logoColor=white" /></a>
+</p>
+
 [alienxsmarthome.com](https://alienxsmarthome.com) · [Current state](docs/project-state.md) ·
 [Quality](QUALITY.md) · [Security reporting](SECURITY.md)
 

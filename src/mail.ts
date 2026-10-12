@@ -14,12 +14,21 @@ export function sendMail(
   idempotencyKey: string,
   message: Message,
 ): Promise<Response> {
-  const token = apiKey.trim();
-  if (!token) throw new Error('Mail credential missing');
   const to =
     site.mail.customerConfirmation && message.to
       ? message.to
       : [site.mail.recipient];
+  return sendTo(apiKey, idempotencyKey, message, to);
+}
+
+function sendTo(
+  apiKey: string,
+  idempotencyKey: string,
+  message: Omit<Message, 'to'>,
+  to: string[],
+): Promise<Response> {
+  const token = apiKey.trim();
+  if (!token) throw new Error('Mail credential missing');
   return fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -27,12 +36,19 @@ export function sendMail(
       'Content-Type': 'application/json',
       'Idempotency-Key': idempotencyKey,
     },
-    body: JSON.stringify({ ...message, from: FROM_EMAIL, to }),
+    body: JSON.stringify({
+      subject: message.subject,
+      text: message.text,
+      html: message.html,
+      reply_to: message.reply_to,
+      from: FROM_EMAIL,
+      to,
+    }),
     signal: AbortSignal.timeout(site.mail.timeoutMs),
   });
 }
 
-// Scheduled and business-only callers always use the fixed recipient, even if a
+// Business-only callers always use the fixed recipient, even if a
 // structurally wider object unexpectedly supplies a to/from property at runtime.
 export function sendProductionMail(
   apiKey: string,
@@ -43,4 +59,15 @@ export function sendProductionMail(
     ...message,
     to: [site.mail.recipient],
   });
+}
+
+// Operational heartbeats never inherit the business/customer destination.
+export function sendHealthMail(
+  apiKey: string,
+  idempotencyKey: string,
+  message: Omit<Message, 'to'>,
+): Promise<Response> {
+  const recipient = site.mail.healthRecipient?.trim();
+  if (!recipient) throw new Error('Health recipient missing');
+  return sendTo(apiKey, idempotencyKey, message, [recipient]);
 }

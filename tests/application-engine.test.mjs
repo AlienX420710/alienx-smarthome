@@ -110,7 +110,7 @@ test('actual status routes fail closed without provider calls and enforce method
 test('mail fixes production identity, trims credentials and preserves permitted confirmation policy', async () => {
   const calls = [];
   const timeouts = [];
-  const { sendMail, sendProductionMail } = load('mail', {
+  const { sendMail, sendProductionMail, sendHealthMail } = load('mail', {
     AbortSignal: {
       timeout: (ms) => {
         timeouts.push(ms);
@@ -147,7 +147,19 @@ test('mail fixes production identity, trims credentials and preserves permitted 
   assert.equal(calls[0].headers['Idempotency-Key'], 'stable');
   assert.equal(calls[0].url, 'https://api.resend.com/emails');
   assert.equal('redirect' in calls[0], false);
-  assert.deepEqual(timeouts, [site.mail.timeoutMs, site.mail.timeoutMs]);
+  await sendHealthMail('token', 'daily-key', {
+    subject: 'Health fixture',
+    from: 'attacker@example.test',
+    to: ['attacker@example.test'],
+    cc: ['attacker@example.test'],
+    bcc: ['attacker@example.test'],
+  });
+  const health = JSON.parse(calls[2].body);
+  assert.deepEqual(health.to, [site.mail.healthRecipient]);
+  assert.equal(health.from, site.mail.sender);
+  assert.equal('cc' in health, false);
+  assert.equal('bcc' in health, false);
+  assert.deepEqual(timeouts, Array(3).fill(site.mail.timeoutMs));
 });
 
 test('bounded body releases the reader on success, oversize and stream failures', async () => {

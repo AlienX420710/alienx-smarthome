@@ -44,3 +44,14 @@ test('format check uses the write formatter scope without diagnostic side effect
   assert.match(workflow, /run: npm run audit\s/);
   assert.doesNotMatch(workflow, /prettier --|continue-on-error: true/);
 });
+
+test('publication preparation and verification use the shared implementation', () => {
+  assert.equal(
+    manifest.scripts['prepare:pr'],
+    'node scripts/prepare-change.mjs',
+  );
+  assert.equal(
+    manifest.scripts['verify:prepared'],
+    'node scripts/prepare-change.mjs --verify',
+  );
+});

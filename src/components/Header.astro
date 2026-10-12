@@ -4,6 +4,8 @@ import CommandPalette from './CommandPalette.astro';
 import { SITE_TITLE } from '../consts';
 ---
 
+<script is:inline src="/canvas-ready.js"></script>
+
 <a tabindex="0" class="skip-link" href="#main-content">
   Skip to content
 </a>
@@ -31,7 +33,7 @@ import { SITE_TITLE } from '../consts';
         class="command"
         type="button"
         data-command-trigger
-        aria-label="Open command palette"
+        aria-label="⌘K — Open command palette"
       >
         ⌘K
       </button>

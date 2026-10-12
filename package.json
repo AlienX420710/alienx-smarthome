@@ -44,7 +44,9 @@
     "security:history": "node scripts/security-history-audit.mjs",
     "verify:target": "node scripts/verify-deploy-target.mjs",
     "preflight": "npm run check && npm run audit",
-    "verify:peer": "node scripts/verify-peer-engineering.mjs"
+    "verify:peer": "node scripts/verify-peer-engineering.mjs",
+    "prepare:pr": "node scripts/prepare-change.mjs",
+    "verify:prepared": "node scripts/prepare-change.mjs --verify"
   },
   "overrides": {
     "sharp": "0.35.5",
