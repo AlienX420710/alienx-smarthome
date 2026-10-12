@@ -1,8 +1,39 @@
 # AlienX — current state
 
-Updated October 7, 2026. This file alone owns findings and dated release
+Updated October 12, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
+
+## October 12 canvas and preparation release
+
+[PR #135](https://github.com/AlienX420710/alienx-smarthome/pull/135) merged as
+`4c5468f3b2d5b9947dd2259206552ad878777972`. All five required checks and CodeQL
+passed on its up-to-date head `1e868b332428fdfa9f865fb461b11f074ad5630b`, including
+native Safari, the unchanged WebKit canvas suite and isolated load diagnostics.
+The body-positioned style boundary resolves the automated Contact blocker; the
+earlier failed attempts below remain historical evidence.
+
+Final Node 22 preparation passed natively on Windows: both security scans, all
+177 regression tests, build, target/type checks, Worker dry run and zero dependency
+vulnerabilities. The published tree matched its preparation fingerprint. The
+portable npm launcher and executable-bit handling retain the mode/symlink tests;
+all eight offline deployment approval/rejection scenarios remain enforced. WSL 1's
+Worker allocation failure remains a host limitation, not a passing validation run.
+
+All five main gates, both fresh CodeQL analyses and the zero-open-alert check
+passed. [Release approval](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38246260809)
+published the exact merged SHA to `alienx-ci-approved-main`; Workers Build
+114801195939 succeeded. [Push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38245432959)
+and [post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38246458807)
+passed at that revision. This is the verified implementation release, superseding
+the October 10 production revision and canvas blocker below.
+
+Paired [Cleaning #75](https://github.com/Cassileigh/cleaning-by-cassi/pull/75)
+merged as `be1fd8d5478608489f6c57b9e9cb155cc71862c4` after its own five PR gates.
+Its final Linux preparation passed 170 tests and the published tree fingerprint;
+shared-source comparison passed. Broader engineering parity (#122 / Cleaning #39),
+physical-device, inbox, account and recovery acceptance remain open. No live form
+submission or mail was sent during this work.
 
 ## October 10 resumed GitHub verification
 
