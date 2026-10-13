@@ -1,17 +1,27 @@
 # AlienX — current state
 
-Updated October 12, 2026. This file alone owns findings and dated release
+Updated October 13, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
-## October 12 dependency maintenance candidate
+## October 13 dependency and repeated-build release
 
-Owner-prioritized continuation of open dependency PR #137, paired with Cleaning
-#65 (which incorporates #66). Both candidates pin Astro 7.3.6, Cloudflare adapter
+[PR #137](https://github.com/AlienX420710/alienx-smarthome/pull/137) merged as
+`671209ce4b854c81ce711e88498613e47799366f` after all five required checks passed on
+the up-to-date head `37ed60693cb2406204613d26845348f9048cc2db`. Paired Cleaning
+#65 incorporates #66. Both repositories pin Astro 7.3.6, Cloudflare adapter
 14.3.4, Playwright 1.64.0, axe-core 4.14.0, Prettier Astro plugin 1.1.1 and
-Wrangler 4.149.0. Lockfiles are regenerated together; local preparation, exact-head
-CI and independent production verification remain required. Personalized website
-confirmation work is preserved separately and resumes after these PRs.
+Wrangler 4.149.0 with matching normalized lockfiles and shared engineering checks.
+Final native Node 22 preparation passed 178 tests, both security scans, formatting,
+build, target/type checks, Worker dry run and the zero-vulnerability dependency audit.
+Every uploaded file hash and the fetched published-tree fingerprint matched the
+prepared source. All five main gates, fresh Actions and JavaScript/TypeScript
+CodeQL analyses and the zero-open-alert policy passed. The exact main SHA is
+published to `alienx-ci-approved-main`; Workers Build 115259949847 succeeded.
+[Push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38385867191)
+and [post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38386655739)
+passed at that revision, including both production hosts and live TLS checks.
+Personalized website confirmation work is preserved for continuation after closeout.
 
 Local dependency validation exposed a repeat-build Windows image lock: decoding
 an existing generated image left it cached and prevented its replacement. Shared
@@ -21,8 +31,8 @@ AlienX preparation passed 177 tests but failed image generation. The initial
 local WebKit run passed 99 cases and failed 12 navigation checks under concurrent
 audit load. An isolated single-worker navigation run passed 29 cases; the Contact
 light keyboard case still exceeded the unchanged 30-second test limit. Both runs
-and traces are preserved; this is not local browser acceptance. Exact-head browser
-CI on its configured runners remains required before merge.
+and traces are preserved; this is not local browser acceptance. The unchanged
+native Safari/WebKit and other browser gates passed on the published PR head.
 
 The preceding documentation release #138 is verified at
 `8b7997a4877c70a7c37c18e7f161e5681cd05727`: five main gates, CodeQL/zero alerts,
