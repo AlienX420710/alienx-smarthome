@@ -1,6 +1,8 @@
 import { site } from './site-config.mjs';
 import sharp from 'sharp';
 import { readdir, stat } from 'node:fs/promises';
+// Decoded outputs must be released before regeneration, including on Windows.
+sharp.cache(false);
 // Decode every shipped raster before generation: metadata alone misses corruption.
 for (const file of await readdir('public', { recursive: true })) {
   if (/\.(png|jpe?g|webp|avif)$/i.test(file)) {

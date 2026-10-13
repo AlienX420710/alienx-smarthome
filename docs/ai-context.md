@@ -107,7 +107,8 @@ ordinary touch scrolling. Status has bounded requests and hidden-page pauses;
 visible and physical palette Escape controls dismiss and restore focus correctly;
 contact retries preserve request identity without reusing verification tokens.
 
-The image script decodes raster assets before build. Preserve originals and only
+The image script decodes raster assets before build, with operation caching disabled
+so generated files can be replaced on repeated Windows builds. Preserve originals and only
 generate derivatives that serve real requests. Do not lazy-load LCP/hero imagery
 by default. Use below-fold native lazy loading, intrinsic dimensions/aspect ratio,
 responsive sources where needed and video posters. Keep CSS/SVG/canvas primitives

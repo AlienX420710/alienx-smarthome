@@ -44,6 +44,7 @@ const files = [
   'scripts/integrity-contract.mjs',
   'scripts/verify-tls-posture.sh',
   'scripts/optimize-images.mjs',
+  'tests/image-generation.test.mjs',
   'tests/email-health-cleanup.test.mjs',
   'tests/application-engine.test.mjs',
   'tests/tls-posture-script.test.cjs',
