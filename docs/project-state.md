@@ -1,8 +1,69 @@
 # AlienX — current state
 
-Updated October 7, 2026. This file alone owns findings and dated release
+Updated October 12, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
+
+## October 12 dependency maintenance candidate
+
+Owner-prioritized continuation of open dependency PR #137, paired with Cleaning
+#65 (which incorporates #66). Both candidates pin Astro 7.3.6, Cloudflare adapter
+14.3.4, Playwright 1.64.0, axe-core 4.14.0, Prettier Astro plugin 1.1.1 and
+Wrangler 4.149.0. Lockfiles are regenerated together; local preparation, exact-head
+CI and independent production verification remain required. Personalized website
+confirmation work is preserved separately and resumes after these PRs.
+
+Local dependency validation exposed a repeat-build Windows image lock: decoding
+an existing generated image left it cached and prevented its replacement. Shared
+image preparation now disables the operation cache; a regression reproduces the
+failure before the fix and checks two builds with existing output. The first
+AlienX preparation passed 177 tests but failed image generation. The initial
+local WebKit run passed 99 cases and failed 12 navigation checks under concurrent
+audit load. An isolated single-worker navigation run passed 29 cases; the Contact
+light keyboard case still exceeded the unchanged 30-second test limit. Both runs
+and traces are preserved; this is not local browser acceptance. Exact-head browser
+CI on its configured runners remains required before merge.
+
+The preceding documentation release #138 is verified at
+`8b7997a4877c70a7c37c18e7f161e5681cd05727`: five main gates, CodeQL/zero alerts,
+approved tag, push Smoke 38248169402 and post-Smoke Integrity 38249126912 with TLS
+passed. Initial Workers Build 114810724573 failed with a deployment-API 504 at
+12:27:49 UTC, Ray `a496187c4ba5f085-DFW`, despite the exact revision being live.
+The owner's unchanged-main retry succeeded as Workers Build 114919879267.
+Fresh read-only revision/integrity checks passed on both hosts after the retry.
+The initial failure remains in #138. Broader parity and separate device/inbox/
+account/recovery acceptance remain open.
+
+## October 12 canvas and preparation release
+
+[PR #135](https://github.com/AlienX420710/alienx-smarthome/pull/135) merged as
+`4c5468f3b2d5b9947dd2259206552ad878777972`. All five required checks and CodeQL
+passed on its up-to-date head `1e868b332428fdfa9f865fb461b11f074ad5630b`, including
+native Safari, the unchanged WebKit canvas suite and isolated load diagnostics.
+The body-positioned style boundary resolves the automated Contact blocker; the
+earlier failed attempts below remain historical evidence.
+
+Final Node 22 preparation passed natively on Windows: both security scans, all
+177 regression tests, build, target/type checks, Worker dry run and zero dependency
+vulnerabilities. The published tree matched its preparation fingerprint. The
+portable npm launcher and executable-bit handling retain the mode/symlink tests;
+all eight offline deployment approval/rejection scenarios remain enforced. WSL 1's
+Worker allocation failure remains a host limitation, not a passing validation run.
+
+All five main gates, both fresh CodeQL analyses and the zero-open-alert check
+passed. [Release approval](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38246260809)
+published the exact merged SHA to `alienx-ci-approved-main`; Workers Build
+114801195939 succeeded. [Push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38245432959)
+and [post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38246458807)
+passed at that revision. This is the verified implementation release, superseding
+the October 10 production revision and canvas blocker below.
+
+Paired [Cleaning #75](https://github.com/Cassileigh/cleaning-by-cassi/pull/75)
+merged as `be1fd8d5478608489f6c57b9e9cb155cc71862c4` after its own five PR gates.
+Its final Linux preparation passed 170 tests and the published tree fingerprint;
+shared-source comparison passed. Broader engineering parity (#122 / Cleaning #39),
+physical-device, inbox, account and recovery acceptance remain open. No live form
+submission or mail was sent during this work.
 
 ## October 10 resumed GitHub verification
 
