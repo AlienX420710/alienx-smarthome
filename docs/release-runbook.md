@@ -192,8 +192,15 @@ restore that known-good Cloudflare version, then verify its expected revision an
 both hostnames. Revert the offending commit on `main` with a new revert commit;
 do not force-reset main. Re-run all checks before another promotion.
 
-A rollback drill has not been performed: it changes live service and requires
-the Cloudflare operator. Do not mark recovery proven without such a drill.
+The [October 3 recovery evidence](project-state.md#october-3-production-recovery-incident--resolved)
+records an authorized compatible rollback and exact-revision recovery. That evidence
+does not satisfy the still-open isolated negative-promotion acceptance in
+[issue #59](https://github.com/AlienX420710/alienx-smarthome/issues/59).
+Before any intentional failure, verify a separately named test Worker has no
+production routes/custom domains and uses only test-safe bindings. Never run the
+negative drill through the production deployment path. Retain the rejected candidate
+SHA/version, binding compatibility metadata, unchanged production approval/live
+revision, and expected alert evidence; offline rehearsal alone is insufficient.
 
 ## Incident triage
 
