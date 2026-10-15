@@ -4,6 +4,36 @@ Updated October 13, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
+## October 13 editorial and recovery documentation release
+
+[PR #141](https://github.com/AlienX420710/alienx-smarthome/pull/141) corrected
+the About page's retired Work-page reference. Its prepared and fetched published
+source matched, and all five checks passed on the up-to-date head
+`bcc39b6b29c8825e88cd24a92c6ff0fbff786947`. It merged as
+`2aec513fa9b4c5b707ade80e8a2d92468207838e`. All five resulting-main gates,
+fresh CodeQL and zero-alert policy, exact approved-main tag, Workers Build
+115543779693, [push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38468309474)
+and [post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38469368234)
+passed. Integrity checked both production hosts and live TLS protocols.
+
+[PR #140](https://github.com/AlienX420710/alienx-smarthome/pull/140) corrected the
+runbook's stale claim that recovery had never been performed. The October 3
+compatible rollback and exact-revision recovery remain proven; the isolated
+negative-promotion drill in #59 remains open. The docs-only PR passed pinned
+formatting, link/anchor validation and all five checks on refreshed head
+`4cb4570e3714e33e3b44cdf1cb2d09b3ebedff62`, then merged as
+`cb497d002e1c8b8c188f8cfa1d88412c8f4201b2`. All five resulting-main gates,
+fresh CodeQL and zero-open-alert policy, the exact approved-main tag and Workers
+Build 115548194966 passed. [Push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38469477328)
+and [post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/38470608851)
+passed at that revision. Both production hosts served the exact revision. Live TLS
+checks rejected TLS 1.0/1.1 and accepted TLS 1.2/1.3; CBC and static RSA suites
+remain observed under #61.
+
+Owner editorial acceptance (#62), account/TLS decisions (#61), physical-device
+accessibility (#60), isolated deployment drill (#59) and broader engineering
+parity (#122) remain open. No real inquiry or email was sent in these changes.
+
 ## October 13 dependency and repeated-build release
 
 [PR #137](https://github.com/AlienX420710/alienx-smarthome/pull/137) merged as
