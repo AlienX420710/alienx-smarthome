@@ -5,17 +5,27 @@ const vm = require('node:vm');
 const ts = require('typescript');
 // Load the actual handlers with provider bindings replaced; no network or email.
 function load(file, extra = {}) {
-  if (file === 'src/middleware.ts' || file === 'src/pages/api/inquiry.ts')
+  if (
+    file === 'src/form-request-engine.ts' ||
+    file === 'src/form-schema.ts' ||
+    file === 'src/pages/api/inquiry.ts'
+  )
     extra = { ...extra, ...load('src/form-engine.ts', extra) };
 
   if (file === 'src/security.ts')
     extra = { ...extra, site: require('../engineering.config.json') };
-  if (file === 'src/middleware.ts')
+  if (file === 'src/form-request-engine.ts')
     extra = { ...extra, secure: load('src/security.ts', extra).secure };
+  if (file === 'src/middleware.ts')
+    extra = { ...extra, ...load('src/form-request-engine.ts', extra) };
   if (file === 'src/pages/api/inquiry.ts') {
     extra = {
       ...extra,
       sendProductionMail: load('src/mail.ts', extra).sendProductionMail,
+      ...load('src/form-delivery.ts', extra),
+      ...load('src/form-schema.ts', extra),
+      ...load('src/form-response.ts', extra),
+      json: load('src/form-response.ts', extra).jsonFormResponse,
     };
   }
   const source = fs

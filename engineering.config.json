@@ -28,7 +28,10 @@
         "tests/interactions.spec.cjs",
         "tests/keyboard.spec.cjs",
         "tests/error-pages.spec.cjs",
-        "tests/policy-pages.spec.cjs"
+        "tests/policy-pages.spec.cjs",
+        "tests/confirmation.spec.cjs",
+        "tests/shared-ui-engines.spec.cjs",
+        "tests/document-metadata.spec.cjs"
       ],
       "accessibility": [
         "tests/accessibility.spec.cjs",
@@ -41,7 +44,10 @@
         "tests/interactions.spec.cjs",
         "tests/keyboard.spec.cjs",
         "tests/error-pages.spec.cjs",
-        "tests/policy-pages.spec.cjs"
+        "tests/policy-pages.spec.cjs",
+        "tests/confirmation.spec.cjs",
+        "tests/shared-ui-engines.spec.cjs",
+        "tests/document-metadata.spec.cjs"
       ]
     },
     "logoSelector": ".site-logo",
@@ -98,7 +104,11 @@
     "/site-preferences.js",
     "/favicon.svg",
     "/robots.txt",
-    "/sitemap-index.xml"
+    "/sitemap-index.xml",
+    "/confirmation-engine.js",
+    "/status-response.js",
+    "/status-dashboard.js",
+    "/command-palette.js"
   ],
   "smoke": {
     "markers": {

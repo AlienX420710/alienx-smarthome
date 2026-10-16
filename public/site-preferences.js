@@ -1,46 +1,58 @@
 (() => {
-  if (window.__alienxPreferencesBound) return;
-  window.__alienxPreferencesBound = true;
-  let theme = 'system';
-  let motion = '';
+  if (window.sitePreferences) return;
+  let config;
   try {
-    theme = localStorage.getItem('alienx-theme') || 'system';
-    motion = localStorage.getItem('alienx-motion') || '';
+    config = JSON.parse(document.currentScript?.dataset.preferences || 'null');
   } catch {
-    /* Keep system preferences when storage is unavailable. */
+    return;
   }
+  if (!config || !config.theme || !config.motion || !config.pageAttribute)
+    return;
+  const read = (key, fallback) => {
+    try {
+      return localStorage.getItem(key) || fallback;
+    } catch {
+      return fallback;
+    }
+  };
+  let theme = read(config.theme.key, 'system');
+  let motion = read(config.motion.key, '');
   const apply = (doc = document, url = location.href) => {
     const root = doc.documentElement;
-    if (theme === 'light' || theme === 'dark') root.dataset.alienxTheme = theme;
-    else delete root.dataset.alienxTheme;
-    if (motion === 'on' || motion === 'off') root.dataset.alienxMotion = motion;
+    if (theme === 'light' || theme === 'dark')
+      root.setAttribute(config.theme.attribute, theme);
+    else root.removeAttribute(config.theme.attribute);
+    if (motion === 'on' || motion === 'off')
+      root.setAttribute(config.motion.attribute, motion);
+    else root.removeAttribute(config.motion.attribute);
     const path = new URL(url).pathname.replace(/\/$/, '') || '/';
-    const routedPage = {
-      '/': 'home',
-      '/status': 'status',
-      '/about': 'about',
-      '/contact': 'contact',
-      '/contact/success': 'contact-success',
-    }[path];
-    root.dataset.alienxPage =
-      routedPage || (root.dataset.alienxPage === 'error' ? 'error' : 'default');
+    const page = config.routes?.[path];
+    root.setAttribute(
+      config.pageAttribute,
+      page ||
+        (root.getAttribute(config.pageAttribute) === 'error'
+          ? 'error'
+          : 'default'),
+    );
   };
-  window.__alienxSetTheme = (next) => {
-    theme = ['light', 'dark'].includes(next) ? next : 'system';
+  const set = (kind, next) => {
+    const setting = config[kind];
+    if (kind === 'theme')
+      theme = ['light', 'dark'].includes(next) ? next : 'system';
+    else motion = ['on', 'off'].includes(next) ? next : '';
     try {
-      localStorage.setItem('alienx-theme', theme);
+      localStorage.setItem(setting.key, kind === 'theme' ? theme : motion);
     } catch {}
     apply();
-    document.dispatchEvent(new Event('alienx:theme-change'));
+    document.dispatchEvent(new Event(setting.event));
   };
-  window.__alienxSetMotion = (next) => {
-    motion = next;
-    try {
-      localStorage.setItem('alienx-motion', next);
-    } catch {}
-    apply();
-    document.dispatchEvent(new Event('alienx:motion-change'));
+  window.sitePreferences = {
+    apply,
+    setTheme: (next) => set('theme', next),
+    setMotion: (next) => set('motion', next),
   };
+  window[config.theme.setter] = window.sitePreferences.setTheme;
+  window[config.motion.setter] = window.sitePreferences.setMotion;
   apply();
   document.addEventListener('astro:before-swap', (event) =>
     apply(event.newDocument, event.to.href),

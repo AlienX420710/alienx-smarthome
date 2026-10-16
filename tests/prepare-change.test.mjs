@@ -115,9 +115,32 @@ test('fingerprint includes modes and symlink targets without reading their conte
     git('update-index', '--chmod=+x', 'source.txt');
   else chmodSync(join(root, 'source.txt'), 0o755);
   assert.notEqual(sourceFingerprint(root), original);
-  symlinkSync('source.txt', join(root, 'link'));
+  const windows = process.platform === 'win32';
+  // Junctions are real links and do not require Windows symlink privilege.
+  // Ignore their targets so only the link identity enters the source tree.
+  const target = windows ? join(root, 'dist', 'target') : 'source.txt';
+  if (windows) {
+    mkdirSync(target, { recursive: true });
+    writeFileSync(join(target, 'content.txt'), 'first target content');
+    writeFileSync(join(root, '.gitignore'), 'dist/\nlink/\n');
+  }
+  symlinkSync(target, join(root, 'link'), windows ? 'junction' : 'file');
+  if (windows) {
+    // Explicitly track the link itself; Git must not traverse the junction as
+    // an untracked directory on hosts whose core.symlinks defaults to false.
+    const blob = git('rev-parse', 'HEAD:source.txt').toString().trim();
+    git('update-index', '--add', '--cacheinfo', `120000,${blob},link`);
+  }
   const linked = sourceFingerprint(root);
+  if (windows) {
+    writeFileSync(join(target, 'content.txt'), 'changed target content');
+    assert.equal(sourceFingerprint(root), linked);
+  }
   rmSync(join(root, 'link'));
-  symlinkSync('missing.txt', join(root, 'link'));
+  symlinkSync(
+    windows ? join(root, 'dist', 'missing') : 'missing.txt',
+    join(root, 'link'),
+    windows ? 'junction' : 'file',
+  );
   assert.notEqual(sourceFingerprint(root), linked);
 });

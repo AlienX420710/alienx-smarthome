@@ -315,10 +315,15 @@ header experiments do not follow redirects. No provider or form delivery is test
 
 `engineering.config.json` supplies explicit repository/release-ref identity,
 public routes, form selectors/encoding, theme capability and fixed mail identity.
-The migrated scripts and browser workflows are shared; site interaction suites
+The common scripts and browser workflows are shared; site interaction suites
 remain selected explicitly and must not be dropped. Run `npm run verify:peer --
-/path/to/peer-checkout` after final formatting. It compares migrated components
-and normalized lockfiles, not unimplemented application parity or deployments.
+/path/to/peer-checkout` after final formatting. It compares shared components
+and normalized lockfiles, then requires both complete engineering inventories.
+Every implementation file has an explicit classification; shared files require
+identical bytes, site adapters reject independent client behavior, and pending
+extractions fail completion. Classification/source equality does not prove release
+or private-account acceptance. New or deleted implementation files must update
+their existing `engineering-inventory.json` entry before publication.
 Use `SITE_DISABLE_INSPECTOR=1` only for restricted local preflight environments;
 production defaults are unchanged. Native Safari still requires macOS CI.
 
@@ -344,8 +349,9 @@ readiness/content markers, and sends only a deliberately unverified rejection
 probe. Integrity follows a successful same-repository main push Smoke run using
 the trusted controller revision; it checks that exact deployed SHA, headers, SEO,
 assets, redirects and TLS. Scheduled/manual runs also pin their expected revision.
-A source comparison (`npm run verify:peer -- /path/to/peer`) checks migrated shared
-implementation; it never substitutes for each site's exact-head gates or deployment.
+A source comparison (`npm run verify:peer -- /path/to/peer`) checks shared
+implementation and complete file inventories; it never substitutes for each site's
+current-head gates or deployment.
 
 Responsive and Safari workflows retain `chromium-page-captures` and
 `webkit-page-captures` artifacts for seven days, including successful runs.

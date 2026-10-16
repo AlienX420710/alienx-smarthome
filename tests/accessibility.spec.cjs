@@ -56,6 +56,10 @@ for (const scheme of schemes) {
           await page.waitForTimeout(500);
         }
 
+        // Expand optional service cards so every heading and its contrast is audited.
+        const serviceDisclosure = page.locator('.addons-details > summary');
+        if (await serviceDisclosure.count()) await serviceDisclosure.click();
+
         if (theme !== 'system') {
           const colors = () =>
             page.evaluate(() =>

@@ -184,6 +184,22 @@ test('Status renders degraded HTTP 503 and malformed responses honestly', async 
   await page.goto(base + '/status/');
   await expect(page.locator('#overall-label')).toHaveText('Degraded');
   await expect(page.locator('.check')).toHaveCount(4);
+  const cardText = await page
+    .locator('.check-copy')
+    .first()
+    .evaluate((card) => {
+      const name = card.querySelector('.check-name').getBoundingClientRect();
+      const state = card.querySelector('strong').getBoundingClientRect();
+      const detail = card.querySelector('small').getBoundingClientRect();
+      return {
+        nameBottom: name.bottom,
+        stateTop: state.top,
+        stateBottom: state.bottom,
+        detailTop: detail.top,
+      };
+    });
+  expect(cardText.nameBottom).toBeLessThanOrEqual(cardText.stateTop);
+  expect(cardText.stateBottom).toBeLessThanOrEqual(cardText.detailTop);
   await expect(page.locator('.check--degraded')).toContainText(
     'Email integration not configured',
   );

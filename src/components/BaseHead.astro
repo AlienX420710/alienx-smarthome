@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import DocumentMetadata from './DocumentMetadata.astro';
 import '../styles/global.css';
 import '../styles/page-themes.css';
 import '../styles/site-canvas.css';
@@ -26,6 +27,28 @@ const socialImage = new URL(image, Astro.site);
 const siteUrl =
   Astro.site?.toString().replace(/\/$/, '') ?? 'https://alienxsmarthome.com';
 const isHomePage = Astro.url.pathname === '/';
+const preferences = {
+  theme: {
+    key: 'alienx-theme',
+    attribute: 'data-alienx-theme',
+    setter: '__alienxSetTheme',
+    event: 'alienx:theme-change',
+  },
+  motion: {
+    key: 'alienx-motion',
+    attribute: 'data-alienx-motion',
+    setter: '__alienxSetMotion',
+    event: 'alienx:motion-change',
+  },
+  pageAttribute: 'data-alienx-page',
+  routes: {
+    '/': 'home',
+    '/status': 'status',
+    '/about': 'about',
+    '/contact': 'contact',
+    '/contact/success': 'contact-success',
+  },
+};
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -41,62 +64,51 @@ const structuredData = {
 };
 ---
 
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="generator" content={Astro.generator} />
-<meta name="theme-color" content="#070b14" />
-<meta name="robots" content={robots} />
-<meta name="referrer" content="strict-origin-when-cross-origin" />
-
-<ClientRouter />
-
-<script is:inline src="/site-preferences.js"></script>
-
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<link rel="manifest" href="/site.webmanifest" />
-
-<link
-  rel="preload"
-  href="/fonts/atkinson-regular.woff"
-  as="font"
-  type="font/woff"
-  crossorigin
-/>
-<link
-  rel="preload"
-  href="/fonts/atkinson-bold.woff"
-  as="font"
-  type="font/woff"
-  crossorigin
-/>
-
-{canonical && <link rel="canonical" href={canonicalURL} />}
-
-<title>{title}</title>
-<meta name="description" content={description} />
-
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="AlienX SmartHome" />
-<meta property="og:locale" content="en_US" />
-<meta property="og:url" content={canonicalURL} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={socialImage} />
-<meta property="og:image:alt" content={`${title} — AlienX SmartHome`} />
-
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={socialImage} />
-<meta name="twitter:image:alt" content={`${title} — AlienX SmartHome`} />
-
-{isHomePage && (
-  <script
-    is:inline
-    type="application/ld+json"
-    set:html={JSON.stringify(structuredData)}
-  ></script>
-)}
+<DocumentMetadata
+  title={title}
+  description={description}
+  canonicalURL={canonicalURL}
+  imageURL={socialImage}
+  imageAlt={`${title} — AlienX SmartHome`}
+  canonical={canonical}
+  robots={robots}
+  themeColor="#070b14"
+  referrer="strict-origin-when-cross-origin"
+  siteName="AlienX SmartHome"
+  locale="en_US"
+  icons={[
+    { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '32x32',
+      href: '/favicon-32x32.png',
+    },
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '16x16',
+      href: '/favicon-16x16.png',
+    },
+    {
+      rel: 'apple-touch-icon',
+      sizes: '180x180',
+      href: '/apple-touch-icon.png',
+    },
+    { rel: 'manifest', href: '/site.webmanifest' },
+  ]}
+  fonts={[
+    { href: '/fonts/atkinson-regular.woff', type: 'font/woff' },
+    { href: '/fonts/atkinson-bold.woff', type: 'font/woff' },
+  ]}
+  structuredData={isHomePage ? structuredData : undefined}
+>
+  <Fragment slot="early">
+    <ClientRouter />
+    <script
+      is:inline
+      src="/site-preferences.js"
+      data-preferences={JSON.stringify(preferences)}
+    ></script>
+  </Fragment>
+</DocumentMetadata>
