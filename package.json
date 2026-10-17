@@ -4,7 +4,7 @@
   "dependencies": {
     "@astrojs/cloudflare": "14.3.4",
     "@astrojs/sitemap": "3.7.4",
-    "astro": "7.3.6",
+    "astro": "7.3.8",
     "typescript": "6.0.3"
   },
   "devDependencies": {
@@ -13,9 +13,9 @@
     "axe-core": "4.14.0",
     "lighthouse": "13.5.0",
     "parse5": "8.0.1",
-    "prettier": "3.9.9",
+    "prettier": "3.9.10",
     "prettier-plugin-astro": "1.1.1",
-    "selenium-webdriver": "4.50.0",
+    "selenium-webdriver": "4.51.0",
     "sharp": "0.35.5",
     "wrangler": "4.149.0"
   },
