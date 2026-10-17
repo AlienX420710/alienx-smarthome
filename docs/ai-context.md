@@ -225,6 +225,50 @@ in light/dark mode, plus explicit saved-theme precedence where supported. It
 scrolls to load images before full-page capture and checks opacity, overflow and
 image loading. Automated capture is separate from physical iOS Full Page acceptance.
 
+## Shared application completion engines
+
+Shared browser confirmation is display-only. After an accepted HTTP response with
+`ok: true`, `public/confirmation-engine.js` keeps only the first name, fixed
+success route and expiry in same-tab sessionStorage for ten minutes. A new submit
+clears the previous name. Invalid, hostile, expired or unavailable storage retains
+the generic heading. Rendering uses textContent, never HTML. Names do not enter
+URLs or analytics; API contracts and email behavior are unchanged. A success-page
+visit is not evidence of provider delivery or inbox placement.
+
+`public/form-client-engine.js` owns asynchronous submission, cancellation,
+stale-response suppression, timeout recovery, safe field errors, status/button
+state and accepted confirmation hooks. Site adapters own fields, encodings,
+validation rules, retry identity inputs, copy and fixed destinations. Failed
+requests preserve entered values and require a fresh challenge. Page lifecycle
+cleanup prevents departed forms from navigating or changing confirmation storage.
+
+`src/form-request-engine.ts` owns shared edge/isolate protection orchestration
+and configurable JSON/form request policy. `src/form-schema.ts` evaluates site rules;
+`src/form-delivery.ts` requires successful provider HTTP plus a nonblank email ID.
+`src/form-response.ts` owns no-store JSON, HTML-error negotiation, method headers
+and accepted native redirects. Site schemas, message templates, recipients and
+native response copy remain local.
+Validation order and request-size, origin, honeypot, challenge, binding, abuse and
+idempotency guarantees remain enforced by the preserved route regression suites.
+
+`DocumentMetadata.astro` renders configured canonical, robots, social metadata,
+fonts/icons and optional structured data. BaseHead supplies each site's inputs;
+client routing and preference controls activate only where configured. Shared
+`site-preferences.js`, `status-response.js`, `status-dashboard.js` and
+`command-palette.js` separate behavior from site commands, labels and controls.
+Status/palette requests abort on page departure; optional engines do not add UI.
+`src/navigation-link.ts` supplies active-route semantics, and
+`src/styles/accessibility.css` owns reset, focus, skip-link and reduced-motion
+mechanics with local palette/layout tokens.
+
+The Status page's static checks container owns descendant styles for dynamically
+created cards, so Astro scoping does not leave engine-rendered labels unstyled.
+
+`scripts/reference-history.mjs` owns read-only all-ref history comparison,
+including root and first-parent digests with replacement refs and lazy fetching
+disabled. The compare-reference-history and compare-cassi-history CLI adapters
+preserve their site-specific output filenames.
+
 ## Validated publication
 
 The shared preparation script runs the locked install, pinned write formatter,

@@ -2,6 +2,28 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+const dashboard = {
+  endpoint: '/api/status',
+  checks: [
+    ['worker', 'EDGE WORKER', 'The production application edge is responding.'],
+    ['inquiry', 'INQUIRY API', 'The public inquiry route is available.'],
+    ['turnstile', 'TURNSTILE', 'Bot protection is configured for production.'],
+    ['resend', 'RESEND', 'Email delivery integration is configured.'],
+  ],
+  states: {
+    checking: 'Checking',
+    operational: 'Operational',
+    configured: 'Configured',
+    degraded: 'Degraded',
+  },
+  updatedPrefix: 'Last checked',
+  error: {
+    label: 'STATUS ENDPOINT',
+    state: 'UNAVAILABLE',
+    detail: 'The live signal could not be reached. Try again in a moment.',
+    updated: 'Live signal unavailable',
+  },
+};
 ---
 
 <!doctype html>
@@ -14,7 +36,12 @@ import Footer from '../components/Footer.astro';
   </head>
   <body>
     <Header />
-    <main id="main-content" tabindex="-1" class="status-page">
+    <main
+      id="main-content"
+      tabindex="-1"
+      class="status-page"
+      data-status-dashboard={JSON.stringify(dashboard)}
+    >
       <section class="hero" aria-labelledby="status-title">
         <div class="hero-copy">
           <p class="eyebrow">ALIENX // SYSTEM STATUS</p>
@@ -47,25 +74,31 @@ import Footer from '../components/Footer.astro';
           <div
             class="overall"
             id="overall"
+            data-status-overall
             data-state="checking"
             aria-live="polite"
           >
             <span class="pulse"></span>
-            <span id="overall-label">Checking</span>
+            <span id="overall-label" data-status-label>
+              Checking
+            </span>
           </div>
         </div>
         <div class="signal-line" aria-hidden="true">
-          <span id="signal-progress"></span>
+          <span id="signal-progress" data-status-progress></span>
         </div>
         <div
           class="checks"
           id="checks"
+          data-status-checks
           aria-live="polite"
           aria-busy="true"
         ></div>
         <div class="panel-meta">
-          <span id="updated">Establishing live signal…</span>
-          <button id="refresh" type="button">
+          <span id="updated" data-status-updated>
+            Establishing live signal…
+          </span>
+          <button id="refresh" data-status-refresh type="button">
             Refresh <kbd>R</kbd>
           </button>
         </div>
@@ -115,178 +148,9 @@ import Footer from '../components/Footer.astro';
       </section>
     </main>
     <Footer />
+    <script is:inline type="module" src="/status-dashboard.js"></script>
   </body>
 </html>
-
-<script>
-  import { parseStatus, type StatusResponse } from '../lib/status';
-  let cleanup: (() => void) | undefined;
-  function initializeStatus() {
-    cleanup?.();
-    if (!document.querySelector('.status-page')) return;
-    const lifecycle = new AbortController();
-    const { signal } = lifecycle;
-    const checks = document.querySelector<HTMLElement>('#checks');
-    const overall = document.querySelector<HTMLElement>('#overall');
-    const overallLabel = document.querySelector<HTMLElement>('#overall-label');
-    const updated = document.querySelector<HTMLElement>('#updated');
-    const refreshButton = document.querySelector<HTMLButtonElement>('#refresh');
-    const progress = document.querySelector<HTMLElement>('#signal-progress');
-    let refreshTimer: number | undefined;
-    let refreshing = false;
-
-    const labels: Array<[string, string, string]> = [
-      [
-        'worker',
-        'EDGE WORKER',
-        'The production application edge is responding.',
-      ],
-      ['inquiry', 'INQUIRY API', 'The public inquiry route is available.'],
-      [
-        'turnstile',
-        'TURNSTILE',
-        'Bot protection is configured for production.',
-      ],
-      ['resend', 'RESEND', 'Email delivery integration is configured.'],
-    ];
-
-    const setOverall = (state: 'checking' | 'operational' | 'degraded') => {
-      if (!overall || !overallLabel) return;
-      overall.dataset.state = state;
-      overallLabel.textContent =
-        state === 'checking'
-          ? 'Checking'
-          : state === 'operational'
-            ? 'Operational'
-            : 'Degraded';
-    };
-
-    const renderChecks = (data: StatusResponse) => {
-      if (!checks) return;
-      checks.innerHTML = labels
-        .map(([key, label, fallback]) => {
-          const check = data.checks[key];
-          const state = check?.status ?? 'degraded';
-          const detail = (check?.detail ?? fallback).replace(
-            /[&<>"']/g,
-            (char) =>
-              ({
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#39;',
-              })[char]!,
-          );
-          const stateLabel =
-            state === 'operational'
-              ? 'OPERATIONAL'
-              : state === 'configured'
-                ? 'CONFIGURED'
-                : 'DEGRADED';
-          return `<article class="check check--${state}">
-				<div class="check-icon" aria-hidden="true"><span></span></div>
-				<div class="check-copy"><span class="check-name">${label}</span><strong>${stateLabel}</strong><small>${detail}</small></div>
-			</article>`;
-        })
-        .join('');
-      checks.setAttribute('aria-busy', 'false');
-    };
-
-    const refresh = async () => {
-      if (refreshing || signal.aborted || document.hidden) return;
-      window.clearTimeout(refreshTimer);
-      refreshing = true;
-      setOverall('checking');
-      if (checks) checks.setAttribute('aria-busy', 'true');
-      if (refreshButton) refreshButton.disabled = true;
-      progress?.classList.add('loading');
-
-      try {
-        const response = await fetch('/api/status', {
-          cache: 'no-store',
-          signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]),
-        });
-        if (!response.ok && response.status !== 503)
-          throw new Error(`Status endpoint returned ${response.status}`);
-        const data = parseStatus(await response.json());
-        if (signal.aborted) return;
-        renderChecks(data);
-        setOverall(data.status === 'operational' ? 'operational' : 'degraded');
-        if (updated)
-          updated.textContent = `Last checked ${new Date(data.generatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}`;
-      } catch {
-        if (signal.aborted) return;
-        if (checks)
-          checks.innerHTML =
-            '<article class="check check--degraded check--error"><div class="check-icon" aria-hidden="true"><span></span></div><div class="check-copy"><span class="check-name">STATUS ENDPOINT</span><strong>UNAVAILABLE</strong><small>The live signal could not be reached. Try again in a moment.</small></div></article>';
-        if (checks) checks.setAttribute('aria-busy', 'false');
-        setOverall('degraded');
-        if (updated) updated.textContent = 'Live signal unavailable';
-      } finally {
-        progress?.classList.remove('loading');
-        if (refreshButton) refreshButton.disabled = false;
-        refreshing = false;
-        scheduleRefresh();
-      }
-    };
-
-    const scheduleRefresh = () => {
-      window.clearTimeout(refreshTimer);
-      if (signal.aborted || document.hidden) return;
-      refreshTimer = window.setTimeout(() => {
-        void refresh();
-      }, 30000);
-    };
-
-    refreshButton?.addEventListener(
-      'click',
-      () => {
-        void refresh();
-      },
-      { signal },
-    );
-    document.addEventListener(
-      'keydown',
-      (event) => {
-        if (
-          event.key.toLowerCase() === 'r' &&
-          !event.metaKey &&
-          !event.ctrlKey &&
-          !event.altKey &&
-          !(
-            event.target instanceof HTMLElement &&
-            (event.target.isContentEditable ||
-              event.target.closest('input, textarea, select, [role=dialog]'))
-          )
-        ) {
-          event.preventDefault();
-          void refresh();
-        }
-      },
-      { signal },
-    );
-    document.addEventListener(
-      'visibilitychange',
-      () => {
-        if (document.hidden) {
-          if (refreshTimer) window.clearTimeout(refreshTimer);
-        } else {
-          void refresh();
-        }
-      },
-      { signal },
-    );
-    cleanup = () => {
-      lifecycle.abort();
-      window.clearTimeout(refreshTimer);
-    };
-    void refresh();
-  }
-  document.addEventListener('astro:before-swap', () => cleanup?.());
-  document.addEventListener('astro:page-load', initializeStatus);
-  initializeStatus();
-</script>
 
 <style>
   .status-page {
@@ -484,7 +348,7 @@ import Footer from '../components/Footer.astro';
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.85rem;
   }
-  .check {
+  .checks :global(.check) {
     min-height: 8.5rem;
     display: flex;
     align-items: flex-start;
@@ -497,20 +361,20 @@ import Footer from '../components/Footer.astro';
       border-color 180ms ease,
       transform 180ms ease;
   }
-  .check:hover {
+  .checks :global(.check:hover) {
     transform: translateY(-2px);
     border-color: #2b3850;
   }
-  .check--operational {
+  .checks :global(.check--operational) {
     border-color: rgba(57, 255, 90, 0.24);
   }
-  .check--configured {
+  .checks :global(.check--configured) {
     border-color: rgba(111, 130, 255, 0.3);
   }
-  .check--degraded {
+  .checks :global(.check--degraded) {
     border-color: rgba(224, 164, 73, 0.35);
   }
-  .check-icon {
+  .checks :global(.check-icon) {
     flex: 0 0 2.3rem;
     width: 2.3rem;
     height: 2.3rem;
@@ -519,53 +383,54 @@ import Footer from '../components/Footer.astro';
     border: 1px solid #2a3650;
     border-radius: 50%;
   }
-  .check-icon span {
+  .checks :global(.check-icon span) {
     width: 0.48rem;
     height: 0.48rem;
     border-radius: 50%;
     background: #6f82ff;
     box-shadow: 0 0 10px rgba(111, 130, 255, 0.65);
   }
-  .check--operational .check-icon {
+  .checks :global(.check--operational .check-icon) {
     border-color: rgba(57, 255, 90, 0.4);
   }
-  .check--operational .check-icon span {
+  .checks :global(.check--operational .check-icon span) {
     background: #39ff5a;
     box-shadow: 0 0 10px rgba(57, 255, 90, 0.65);
   }
-  .check--configured .check-icon span {
+  .checks :global(.check--configured .check-icon span) {
     background: #6f82ff;
   }
-  .check--degraded .check-icon span {
+  .checks :global(.check--degraded .check-icon span) {
     background: #e0a449;
     box-shadow: 0 0 10px rgba(224, 164, 73, 0.55);
   }
-  .check-copy {
+  .checks :global(.check-copy) {
+    color: #7e8ba3;
     min-width: 0;
     display: grid;
     gap: 0.3rem;
   }
-  .check-name {
-    color: #7e8ba3;
+  .checks :global(.check-name) {
+    color: inherit;
     font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.16em;
   }
-  .check-copy strong {
+  .checks :global(.check-copy strong) {
     color: #e8edf7;
     font-size: 1rem;
     letter-spacing: 0.04em;
   }
-  .check--operational .check-copy strong {
+  .checks :global(.check--operational .check-copy strong) {
     color: #39ff5a;
   }
-  .check--configured .check-copy strong {
+  .checks :global(.check--configured .check-copy strong) {
     color: #8c9dff;
   }
-  .check--degraded .check-copy strong {
+  .checks :global(.check--degraded .check-copy strong) {
     color: #e0a449;
   }
-  .check-copy small {
+  .checks :global(.check-copy small) {
     color: #76839a;
     font-size: 0.83rem;
     line-height: 1.5;
@@ -695,7 +560,7 @@ import Footer from '../components/Footer.astro';
     .core-signal {
       animation: none;
     }
-    .check {
+    .checks :global(.check) {
       transition: none;
     }
   }
@@ -753,7 +618,7 @@ import Footer from '../components/Footer.astro';
     .lede {
       font-size: 1rem;
     }
-    .check {
+    .checks :global(.check) {
       min-height: 0;
     }
     .panel-meta {

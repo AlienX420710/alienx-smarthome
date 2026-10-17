@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkEngineeringInventory } from './engineering-inventory.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const peer = process.argv[2];
@@ -10,7 +11,37 @@ if (!peer)
 const read = (directory, file) =>
   readFileSync(resolve(directory, file), 'utf8');
 const files = [
+  '.gitignore',
+  'public/.assetsignore',
+  'src/styles/accessibility.css',
+  'tests/static-asset-policy.test.mjs',
+  'src/form-response.ts',
+  'public/form-client-engine.js',
+  'tests/form-client-engine.test.mjs',
+  'scripts/reference-history.mjs',
+  'tests/reference-history.test.cjs',
+  'scripts/engineering-inventory.mjs',
+  'tests/engineering-inventory.test.mjs',
+  'public/site-preferences.js',
+  'public/status-response.js',
+  'public/status-dashboard.js',
+  'public/command-palette.js',
+  'tests/status-response.test.mjs',
+  'tests/site-preferences.test.mjs',
+  'tests/shared-ui-engines.spec.cjs',
+  'tests/document-metadata.spec.cjs',
+  'src/components/DocumentMetadata.astro',
+  'src/navigation-link.ts',
+  'tests/navigation-link.test.mjs',
+  'src/form-request-engine.ts',
+  'tests/form-request-engine.test.mjs',
+  'src/form-schema.ts',
+  'src/form-delivery.ts',
+  'tests/form-schema-delivery.test.mjs',
   'public/canvas-ready.js',
+  'public/confirmation-engine.js',
+  'tests/confirmation-engine.test.mjs',
+  'tests/confirmation.spec.cjs',
   'scripts/prepare-change.mjs',
   'tests/prepare-change.test.mjs',
   'src/styles/site-canvas.css',
@@ -190,6 +221,11 @@ for (const workflow of [
     'Shared workflow drift: ' + workflow,
   );
 }
+const localInventory = checkEngineeringInventory(root, resolve(peer), true);
+const peerInventory = checkEngineeringInventory(resolve(peer), root, true);
+console.log(
+  `Complete engineering inventories: ${localInventory.files} local and ${peerInventory.files} peer files; no pending extraction.`,
+);
 console.log(
   'Shared framework, revision, security, integrity, release, monitoring, image, browser and preflight implementations match; site configuration and application-specific content are separate. This source comparison does not certify deployment or private acceptance.',
 );

@@ -100,7 +100,8 @@ One owner per subject: state owns findings/evidence, contract owns implementatio
 operations owns procedures, local issues/PRs own task coordination. Update the existing
 owner rather than adding another audit/closeout/onboarding file. Detailed history
 stays in PRs and immutable Git links. Preserve unresolved IDs, failures and decisions.
-Inventories are optional uncommitted research, not startup context. Do not repeat
+Research inventories are optional and uncommitted, not startup context. The maintained
+engineering-inventory.json is required validation configuration. Do not repeat
 volatile status/test counts in README/primers. Keep reporting policies and licenses.
 
 ## Documentation closeout — mandatory

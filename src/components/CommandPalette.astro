@@ -1,5 +1,169 @@
+---
+const commandPalette = {
+  siteName: 'AlienX SmartHome',
+  helpTitle: 'ALIENX COMMANDS',
+  sourceUrl: 'https://github.com/AlienX420710/alienx-smarthome',
+  statusRoute: '/status',
+  statusEndpoint: '/api/status',
+  statusChecks: ['worker', 'inquiry', 'turnstile', 'resend'],
+  securityChecks: [
+    ['Turnstile', 'turnstile'],
+    ['Resend', 'resend'],
+  ],
+  requestProtection: 'production inquiry endpoint',
+  themeAttribute: 'data-alienx-theme',
+  motionAttribute: 'data-alienx-motion',
+  konamiAttribute: 'data-alienx-konami',
+  themeSetter: '__alienxSetTheme',
+  motionSetter: '__alienxSetMotion',
+  toastId: 'alienx-command-toast',
+  overlayId: 'alienx-command-overlay',
+  inputId: 'palette-input',
+  resultsId: 'palette-results',
+  stack:
+    'Astro 7\nTypeScript 5.9\nCloudflare Workers\nCloudflare KV sessions\nCloudflare Images\nCloudflare Turnstile\nResend\nGitHub Actions\nCSS + browser APIs',
+  matrix:
+    'SIGNAL ACQUIRED\n\n01000001 01001100 01001001 01000101 01001110 01011000\n\nDecorative interface only. No systems are being accessed.',
+  konamiNotice: 'KONAMI // EASTER EGG ENABLED',
+  commands: [
+    {
+      name: '/help',
+      description: 'Show every available command',
+      keywords: 'help commands ?',
+      action: 'help',
+    },
+    {
+      name: '/build',
+      description: 'Inspect the current production build',
+      keywords: 'build deploy production',
+      action: 'build',
+    },
+    {
+      name: '/version',
+      description: 'Show public-safe runtime and platform information',
+      keywords: 'version runtime platform',
+      action: 'version',
+    },
+    {
+      name: '/diagnostics',
+      description: 'Run live production diagnostics',
+      keywords: 'diagnostics debug checks',
+      action: 'diagnostics',
+    },
+    {
+      name: '/security',
+      description: 'Show the public security surface',
+      keywords: 'security turnstile resend policy vulnerability',
+      action: 'security',
+    },
+    {
+      name: '/source',
+      description: 'Open the AlienX SmartHome source repository',
+      keywords: 'source github code repository repo',
+      action: 'source',
+    },
+    {
+      name: '/ping',
+      description: 'Measure browser-to-production API round trip',
+      keywords: 'ping latency rtt network',
+      action: 'ping',
+    },
+    {
+      name: '/health',
+      description: 'Alias for live system health',
+      keywords: 'health status online operational',
+      action: 'health',
+    },
+    {
+      name: '/inspect',
+      description: 'Inspect the current page and browser context',
+      keywords: 'inspect page document url title performance',
+      action: 'inspect',
+    },
+    {
+      name: '/network',
+      description: 'Inspect browser network capabilities',
+      keywords: 'network connection online downlink effective type',
+      action: 'network',
+    },
+    {
+      name: '/technology --stack',
+      description: 'Show the public technology stack',
+      keywords:
+        'technology stack astro typescript cloudflare turnstile resend github',
+      action: 'technology_stack',
+    },
+    {
+      name: '/matrix',
+      description: 'Open the AlienX matrix visual',
+      keywords: 'matrix visual terminal',
+      action: 'matrix',
+    },
+    {
+      name: '/konami',
+      description: 'Enable the AlienX easter egg',
+      keywords: 'konami easter egg up down left right',
+      action: 'konami',
+    },
+    {
+      name: '/motion',
+      description: 'Toggle site motion on or off',
+      keywords: 'motion animation reduced movement',
+      action: 'motion',
+    },
+    {
+      name: '/theme',
+      description: 'Cycle system, light, and dark theme',
+      keywords: 'theme light dark system appearance',
+      action: 'theme',
+    },
+    {
+      name: '/clear',
+      description: 'Clear the command input',
+      keywords: 'clear reset search',
+      action: 'clear',
+    },
+    {
+      name: '/refresh',
+      description: 'Reload the current page',
+      keywords: 'refresh reload',
+      action: 'refresh',
+    },
+    {
+      name: 'Home',
+      description: 'Open homepage',
+      keywords: 'home /',
+      action: 'navigate',
+      href: '/',
+    },
+    {
+      name: 'Status',
+      description: 'Open live system status',
+      keywords: 'status health /status',
+      action: 'navigate',
+      href: '/status',
+    },
+    {
+      name: 'About Me',
+      description: 'Open the about page',
+      keywords: 'about /about',
+      action: 'navigate',
+      href: '/about',
+    },
+    {
+      name: 'Start a project',
+      description: 'Open the project inquiry form',
+      keywords: 'contact inquiry project /contact',
+      action: 'navigate',
+      href: '/contact',
+    },
+  ],
+};
+---
+
 <dialog
   class="palette"
+  data-command-palette={JSON.stringify(commandPalette)}
   id="alienx-palette"
   hidden
   aria-labelledby="palette-title"
@@ -39,522 +203,7 @@
     </div>
   </section>
 </dialog>
-<script>
-  import { parseStatus } from '../lib/status';
-  type Command = {
-    name: string;
-    description: string;
-    keywords: string;
-    run: () => void | Promise<void>;
-  };
-  const go = (href: string) => {
-    window.location.href = href;
-  };
-  const pages: Command[] = [
-    {
-      name: 'Home',
-      description: 'Open homepage',
-      keywords: 'home /',
-      run: () => go('/'),
-    },
-    {
-      name: 'Status',
-      description: 'Open live system status',
-      keywords: 'status health /status',
-      run: () => go('/status'),
-    },
-    {
-      name: 'About Me',
-      description: 'Open the about page',
-      keywords: 'about /about',
-      run: () => go('/about'),
-    },
-    {
-      name: 'Start a project',
-      description: 'Open the project inquiry form',
-      keywords: 'contact inquiry project /contact',
-      run: () => go('/contact'),
-    },
-  ];
-  let overlayFocus: HTMLElement | null = null;
-  let active = 0,
-    previousFocus: Element | null = null,
-    commands: Command[] = [];
-  const root = () =>
-    document.querySelector<HTMLDialogElement>('#alienx-palette');
-  const input = () =>
-    document.querySelector<HTMLInputElement>('#palette-input');
-  const closeControl = () =>
-    document.querySelector<HTMLButtonElement>(
-      '#alienx-palette button[data-palette-close]',
-    );
-  const results = () => document.querySelector<HTMLElement>('#palette-results');
-  const links = () =>
-    results()
-      ? [
-          ...results()!.querySelectorAll<HTMLButtonElement>(
-            'button[data-command-index]',
-          ),
-        ]
-      : [];
-  const notify = (message: string) => {
-    let toast = document.querySelector<HTMLElement>('#alienx-command-toast');
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.id = 'alienx-command-toast';
-      toast.className = 'palette__toast';
-      toast.setAttribute('role', 'status');
-      document.body.appendChild(toast);
-    }
-    toast.textContent = message;
-    toast.hidden = false;
-    window.setTimeout(() => {
-      if (toast) toast.hidden = true;
-    }, 2400);
-  };
-  const overlay = (title: string, content: string) => {
-    overlayFocus =
-      document.activeElement instanceof HTMLElement
-        ? document.activeElement
-        : null;
-    let el = document.querySelector<HTMLDialogElement>(
-      '#alienx-command-overlay',
-    );
-    if (!el) {
-      el = document.createElement('dialog');
-      el.id = 'alienx-command-overlay';
-      el.setAttribute('aria-labelledby', 'command-overlay-title');
-      el.className = 'palette__overlay';
-      document.body.appendChild(el);
-    }
-    el.innerHTML =
-      '<div class="palette__overlay-backdrop" data-command-overlay-close></div><section class="palette__overlay-panel"><div class="palette__overlay-head"><strong id="command-overlay-title"></strong><button type="button" data-command-overlay-close aria-label="Close">ESC</button></div><div class="palette__overlay-content"></div></section>';
-    el.querySelector<HTMLElement>('#command-overlay-title')!.textContent =
-      title;
-    el.querySelector<HTMLElement>('.palette__overlay-content')!.textContent =
-      content;
-    el.hidden = false;
-    if (!el.open) el.showModal();
-    el.querySelector<HTMLButtonElement>(
-      'button[data-command-overlay-close]',
-    )?.focus();
-  };
-  const closeOverlay = () => {
-    const el = document.querySelector<HTMLDialogElement>(
-      '#alienx-command-overlay',
-    );
-    if (el?.open) {
-      el.close();
-      el.hidden = true;
-      overlayFocus?.focus();
-      overlayFocus = null;
-    }
-  };
-  const render = () => {
-    const i = input(),
-      r = results();
-    if (!r) return;
-    const q = i?.value.toLowerCase().trim() ?? '';
-    const filtered = commands.filter((c) =>
-      `${c.name} ${c.description} ${c.keywords}`.toLowerCase().includes(q),
-    );
-    active = Math.min(active, Math.max(0, filtered.length - 1));
-    r.innerHTML =
-      filtered
-        .map(
-          (c, n) =>
-            `<button type="button" id="palette-result-${n}" data-command-index="${commands.indexOf(c)}" class="palette__item${n === active ? ' is-active' : ''}" role="option" aria-selected="${n === active}"><span><strong>${c.name}</strong><small>${c.description}</small></span><kbd>↵</kbd></button>`,
-        )
-        .join('') ||
-      '<div class="palette__empty" role="option" aria-selected="false">No matching command.</div>';
-    i?.setAttribute(
-      'aria-activedescendant',
-      filtered.length ? `palette-result-${active}` : '',
-    );
-  };
-  const close = () => {
-    const r = root();
-    if (!r || r.hidden) return;
-    r.close();
-    r.hidden = true;
-    closeOverlay();
-    if (previousFocus instanceof HTMLElement) previousFocus.focus();
-    previousFocus = null;
-  };
-  const open = () => {
-    const r = root(),
-      i = input();
-    if (!r) return;
-    previousFocus = document.activeElement;
-    r.hidden = false;
-    if (!r.open) r.showModal();
-    active = 0;
-    render();
-    i?.focus();
-    i?.select();
-  };
-  const refreshCommands = () => {
-    const runtime: Command[] = [
-      {
-        name: '/help',
-        description: 'Show every available command',
-        keywords: 'help commands ?',
-        run: () =>
-          overlay(
-            'ALIENX COMMANDS',
-            commands.map((c) => `${c.name} — ${c.description}`).join('\n'),
-          ),
-      },
-      {
-        name: '/build',
-        description: 'Inspect the current production build',
-        keywords: 'build deploy production',
-        run: async () => {
-          try {
-            const t = performance.now(),
-              r = await fetch('/api/status', {
-                cache: 'no-store',
-                signal: AbortSignal.timeout(10000),
-              }),
-              d = parseStatus(await r.json());
-            overlay(
-              'BUILD // PRODUCTION',
-              `Site: AlienX SmartHome\nRuntime: ${d.runtime ?? 'Cloudflare Workers'}\nEndpoint: /api/status\nStatus: ${d.status ?? 'unknown'}\nChecked: ${d.generatedAt ?? 'unknown'}\nRequest ID: ${d.requestId ?? 'unknown'}\nProbe: ${Math.round(performance.now() - t)} ms`,
-            );
-          } catch {
-            overlay(
-              'BUILD // PRODUCTION',
-              'The production status endpoint could not be reached.',
-            );
-          }
-        },
-      },
-      {
-        name: '/version',
-        description: 'Show public-safe runtime and platform information',
-        keywords: 'version runtime platform',
-        run: () =>
-          overlay(
-            'VERSION // RUNTIME',
-            `AlienX SmartHome\nRuntime: Cloudflare Workers\nBrowser: ${navigator.userAgent}\nLanguage: ${navigator.language}`,
-          ),
-      },
-      {
-        name: '/diagnostics',
-        description: 'Run live production diagnostics',
-        keywords: 'diagnostics debug checks',
-        run: async () => {
-          try {
-            const t = performance.now(),
-              r = await fetch('/api/status', {
-                cache: 'no-store',
-                signal: AbortSignal.timeout(10000),
-              }),
-              d = parseStatus(await r.json()),
-              lines = Object.entries(d.checks ?? {}).map(
-                ([n, c]) =>
-                  `${n}: ${(c as { status?: string }).status ?? 'unknown'} — ${(c as { detail?: string }).detail ?? ''}`,
-              );
-            overlay(
-              'DIAGNOSTICS // LIVE',
-              [
-                `HTTP: ${r.status}`,
-                `RTT: ${Math.round(performance.now() - t)} ms`,
-                `Overall: ${d.status ?? 'unknown'}`,
-                ...lines,
-              ].join('\n'),
-            );
-          } catch {
-            overlay(
-              'DIAGNOSTICS // LIVE',
-              'Production diagnostics failed: /api/status was unreachable.',
-            );
-          }
-        },
-      },
-      {
-        name: '/security',
-        description: 'Show the public security surface',
-        keywords: 'security turnstile resend policy vulnerability',
-        run: async () => {
-          try {
-            const d = parseStatus(
-              await (
-                await fetch('/api/status', {
-                  cache: 'no-store',
-                  signal: AbortSignal.timeout(10000),
-                })
-              ).json(),
-            );
-            overlay(
-              'SECURITY // SURFACE',
-              `Turnstile: ${d.checks?.turnstile?.status ?? 'unknown'}\nResend: ${d.checks?.resend?.status ?? 'unknown'}\nRequest protection: production inquiry endpoint\nReporting: SECURITY.md\nNo secrets are exposed by this command.`,
-            );
-          } catch {
-            overlay(
-              'SECURITY // SURFACE',
-              'Security status is currently unavailable.',
-            );
-          }
-        },
-      },
-      {
-        name: '/source',
-        description: 'Open the AlienX SmartHome source repository',
-        keywords: 'source github code repository repo',
-        run: () =>
-          window.open(
-            'https://github.com/AlienX420710/alienx-smarthome',
-            '_blank',
-            'noopener,noreferrer',
-          ),
-      },
-      {
-        name: '/ping',
-        description: 'Measure browser-to-production API round trip',
-        keywords: 'ping latency rtt network',
-        run: async () => {
-          const t = performance.now();
-          try {
-            const r = await fetch('/api/status', {
-              cache: 'no-store',
-              signal: AbortSignal.timeout(10000),
-            });
-            notify(
-              `PING ${r.ok ? 'OK' : 'HTTP ' + r.status} · ${Math.round(performance.now() - t)} ms`,
-            );
-          } catch {
-            notify('PING FAILED · production endpoint unreachable');
-          }
-        },
-      },
-      {
-        name: '/health',
-        description: 'Alias for live system health',
-        keywords: 'health status online operational',
-        run: () => go('/status'),
-      },
-      {
-        name: '/inspect',
-        description: 'Inspect the current page and browser context',
-        keywords: 'inspect page document url title performance',
-        run: () => {
-          const n = performance.getEntriesByType('navigation')[0] as
-            PerformanceNavigationTiming | undefined;
-          overlay(
-            'INSPECT // PAGE',
-            `Path: ${location.pathname}\nTitle: ${document.title}\nViewport: ${innerWidth} × ${innerHeight}\nDevice pixel ratio: ${devicePixelRatio}\nNavigation: ${n ? Math.round(n.duration) + ' ms' : 'n/a'}\nOnline: ${navigator.onLine ? 'yes' : 'no'}`,
-          );
-        },
-      },
-      {
-        name: '/network',
-        description: 'Inspect browser network capabilities',
-        keywords: 'network connection online downlink effective type',
-        run: () => {
-          const c = (
-            navigator as Navigator & {
-              connection?: {
-                effectiveType?: string;
-                downlink?: number;
-                rtt?: number;
-                saveData?: boolean;
-              };
-            }
-          ).connection;
-          overlay(
-            'NETWORK // BROWSER',
-            `Online: ${navigator.onLine ? 'yes' : 'no'}\nConnection: ${c?.effectiveType ?? 'unavailable'}\nDownlink: ${c?.downlink != null ? c.downlink + ' Mbps' : 'unavailable'}\nRTT hint: ${c?.rtt != null ? c.rtt + ' ms' : 'unavailable'}\nSave-data: ${c?.saveData ? 'on' : 'off'}`,
-          );
-        },
-      },
-      {
-        name: '/technology --stack',
-        description: 'Show the public technology stack',
-        keywords:
-          'technology stack astro typescript cloudflare turnstile resend github',
-        run: () =>
-          overlay(
-            'TECHNOLOGY // STACK',
-            'Astro 7\nTypeScript 5.9\nCloudflare Workers\nCloudflare KV sessions\nCloudflare Images\nCloudflare Turnstile\nResend\nGitHub Actions\nCSS + browser APIs',
-          ),
-      },
-      {
-        name: '/matrix',
-        description: 'Open the AlienX matrix visual',
-        keywords: 'matrix visual terminal',
-        run: () =>
-          overlay(
-            'MATRIX // VISUAL',
-            'SIGNAL ACQUIRED\n\n01000001 01001100 01001001 01000101 01001110 01011000\n\nDecorative interface only. No systems are being accessed.',
-          ),
-      },
-      {
-        name: '/konami',
-        description: 'Enable the AlienX easter egg',
-        keywords: 'konami easter egg up down left right',
-        run: () => {
-          document.documentElement.dataset.alienxKonami = 'true';
-          notify('KONAMI // EASTER EGG ENABLED');
-        },
-      },
-      {
-        name: '/motion',
-        description: 'Toggle site motion on or off',
-        keywords: 'motion animation reduced movement',
-        run: () => {
-          const off = document.documentElement.dataset.alienxMotion === 'off';
-          window.__alienxSetMotion?.(off ? 'on' : 'off');
-          notify(`MOTION // ${off ? 'ON' : 'OFF'}`);
-        },
-      },
-      {
-        name: '/theme',
-        description: 'Cycle system, light, and dark theme',
-        keywords: 'theme light dark system appearance',
-        run: () => {
-          const current =
-              document.documentElement.dataset.alienxTheme ?? 'system',
-            next =
-              current === 'system'
-                ? 'light'
-                : current === 'light'
-                  ? 'dark'
-                  : 'system';
-          window.__alienxSetTheme?.(next);
-          notify(`THEME // ${next.toUpperCase()}`);
-        },
-      },
-      {
-        name: '/clear',
-        description: 'Clear the command input',
-        keywords: 'clear reset search',
-        run: () => {
-          const i = input();
-          if (i) {
-            i.value = '';
-            active = 0;
-            render();
-            i.focus();
-          }
-        },
-      },
-      {
-        name: '/refresh',
-        description: 'Reload the current page',
-        keywords: 'refresh reload',
-        run: () => location.reload(),
-      },
-    ];
-    commands = [...runtime, ...pages];
-  };
-  const trap = (e: KeyboardEvent) => {
-    const r = root();
-    if (r?.hidden || e.key !== 'Tab') return;
-    const f = [closeControl(), input(), ...links()].filter(
-      (x): x is HTMLInputElement | HTMLButtonElement => x !== null,
-    );
-    if (!f.length) {
-      e.preventDefault();
-      return;
-    }
-    const first = f[0],
-      last = f[f.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
-  };
-  const key = (e: KeyboardEvent) => {
-    const overlay = document.querySelector<HTMLDialogElement>(
-      '#alienx-command-overlay',
-    );
-    if (e.key === 'Tab' && overlay?.open) {
-      // This informational dialog has one control. Keep both tab directions
-      // inside it rather than letting focus escape to browser chrome/body.
-      e.preventDefault();
-      overlay
-        .querySelector<HTMLButtonElement>('button[data-command-overlay-close]')
-        ?.focus();
-      return;
-    }
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-      e.preventDefault();
-      open();
-      return;
-    }
-    if (e.key === 'Escape') {
-      if (!root()?.hidden) {
-        e.preventDefault();
-        close();
-      }
-      closeOverlay();
-      return;
-    }
-    if (root()?.hidden) return;
-    trap(e);
-    const l = links();
-    if (e.key === 'ArrowDown' && l.length) {
-      e.preventDefault();
-      active = Math.min(active + 1, l.length - 1);
-      render();
-      links()[active]?.scrollIntoView({ block: 'nearest' });
-    }
-    if (e.key === 'ArrowUp' && l.length) {
-      e.preventDefault();
-      active = Math.max(active - 1, 0);
-      render();
-      links()[active]?.scrollIntoView({ block: 'nearest' });
-    }
-    // Native result buttons must activate the button reached by Tab, not the
-    // search input's independently tracked arrow-key selection.
-    if (e.target !== input()) return;
-    if (e.key === 'Enter' && l[active]) {
-      e.preventDefault();
-      l[active].click();
-    }
-  };
-  const click = (e: MouseEvent) => {
-    if (!(e.target instanceof HTMLElement)) return;
-    if (e.target.closest('[data-palette-close]')) {
-      close();
-      return;
-    }
-    if (e.target.closest('[data-command-overlay-close]')) {
-      closeOverlay();
-      return;
-    }
-    const l = e.target.closest<HTMLButtonElement>('button[data-command-index]');
-    if (!l) return;
-    e.preventDefault();
-    const c = commands[Number(l.dataset.commandIndex)];
-    if (c) {
-      if (c.name !== '/clear') close();
-      void c.run();
-    }
-  };
-
-  document.addEventListener('astro:before-swap', () => {
-    close();
-    closeOverlay();
-  });
-  document.addEventListener('keydown', key);
-  document.addEventListener('input', () => {
-    active = 0;
-    render();
-  });
-  document.addEventListener('click', click);
-  document.addEventListener('astro:page-load', () => {
-    refreshCommands();
-    active = 0;
-    render();
-  });
-  refreshCommands();
-  render();
-</script>
+<script is:inline type="module" src="/command-palette.js"></script>
 <style is:global>
   .palette,
   .palette__overlay {

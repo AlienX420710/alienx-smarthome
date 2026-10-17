@@ -1,0 +1,715 @@
+{
+  "version": 1,
+  "description": "Every tracked or candidate implementation file is classified. Shared code is compared byte for byte. Site templates/adapters reject inline independent client behavior. Pending entries prevent --complete.",
+  "files": {
+    ".github/dependabot.yml": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    ".github/rulesets/main.json": {
+      "kind": "site-config",
+      "reason": "Explicit repository identity, deployment bindings or site capability inputs; dependency and workflow invariants remain separately enforced by verify:peer."
+    },
+    ".github/workflows/accessibility.yml": {
+      "kind": "shared-workflow",
+      "reason": "Only declared workflow display names/references differ; all executable workflow steps must match."
+    },
+    ".github/workflows/browser-diagnostics.yml": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    ".github/workflows/contact-form-health.yml": {
+      "kind": "shared-workflow",
+      "reason": "Only declared workflow display names/references differ; all executable workflow steps must match."
+    },
+    ".github/workflows/lighthouse.yml": {
+      "kind": "shared-workflow",
+      "reason": "Only declared workflow display names/references differ; all executable workflow steps must match."
+    },
+    ".github/workflows/operator-alert-canary.yml": {
+      "kind": "shared-workflow",
+      "reason": "Only declared workflow display names/references differ; all executable workflow steps must match."
+    },
+    ".github/workflows/operator-alert.yml": {
+      "kind": "shared-workflow",
+      "reason": "Only declared workflow display names/references differ; all executable workflow steps must match."
+    },
+    ".github/workflows/production-integrity.yml": {
+      "kind": "shared-workflow",
+      "reason": "Only declared workflow display names/references differ; all executable workflow steps must match."
+    },
+    ".github/workflows/production-smoke.yml": {
+      "kind": "shared-workflow",
+      "reason": "Only declared workflow display names/references differ; all executable workflow steps must match."
+    },
+    ".github/workflows/quality.yml": {
+      "kind": "shared-workflow",
+      "reason": "Only declared workflow display names/references differ; all executable workflow steps must match."
+    },
+    ".github/workflows/release-approval.yml": {
+      "kind": "shared-workflow",
+      "reason": "Only declared workflow display names/references differ; all executable workflow steps must match."
+    },
+    ".github/workflows/responsive.yml": {
+      "kind": "shared-workflow",
+      "reason": "Only declared workflow display names/references differ; all executable workflow steps must match."
+    },
+    ".github/workflows/safari.yml": {
+      "kind": "shared-workflow",
+      "reason": "Only declared workflow display names/references differ; all executable workflow steps must match."
+    },
+    ".gitignore": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    ".prettierignore": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    ".prettierrc.json": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "astro.config.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "engineering-inventory.json": {
+      "kind": "site-config",
+      "reason": "Explicit repository identity, deployment bindings or site capability inputs; dependency and workflow invariants remain separately enforced by verify:peer."
+    },
+    "engineering.config.json": {
+      "kind": "site-config",
+      "reason": "Explicit repository identity, deployment bindings or site capability inputs; dependency and workflow invariants remain separately enforced by verify:peer."
+    },
+    "lighthouse.config.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "package-lock.json": {
+      "kind": "site-config",
+      "reason": "Explicit repository identity, deployment bindings or site capability inputs; dependency and workflow invariants remain separately enforced by verify:peer."
+    },
+    "package.json": {
+      "kind": "site-config",
+      "reason": "Explicit repository identity, deployment bindings or site capability inputs; dependency and workflow invariants remain separately enforced by verify:peer."
+    },
+    "public/.assetsignore": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "public/_headers": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "public/alien-home.jpg": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/alienx-social-preview.jpg": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/android-chrome-192x192.png": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/android-chrome-512x512.png": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/apple-touch-icon.png": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/canvas-ready.js": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "public/command-palette.js": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "public/confirmation-engine.js": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "public/contact-form.js": {
+      "kind": "adapter",
+      "reason": "Inquiry field schema, conditional phone rule, JSON payload and response copy for shared submission lifecycle.",
+      "engines": ["createSiteFormClient"]
+    },
+    "public/contact-security.js": {
+      "kind": "adapter",
+      "reason": "Site challenge selector/action, token-field identity and provider bootstrap for shared widget lifecycle.",
+      "engines": ["createSiteTurnstile"]
+    },
+    "public/favicon-16x16.png": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/favicon-32x32.png": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/favicon-48x48.png": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/favicon.ico": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/favicon.svg": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/fonts/atkinson-bold.woff": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/fonts/atkinson-regular.woff": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/form-client-engine.js": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "public/home_morals.jpg": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/navigation.js": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "public/robots.txt": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "public/site-preferences.js": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "public/site.webmanifest": {
+      "kind": "site-config",
+      "reason": "Declarative site identity/configuration JSON, with no executable behavior."
+    },
+    "public/status-dashboard.js": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "public/status-response.js": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "public/turnstile-engine.js": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/compare-cassi-history.mjs": {
+      "kind": "adapter",
+      "reason": "Site repository, output filename and documentation links passed to common read-only history inventory/CLI.",
+      "engines": ["reference-history.mjs", "runInventoryCli"]
+    },
+    "scripts/engineering-inventory.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/integrity-contract.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/lighthouse-assessment.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/lighthouse-runner.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/lighthouse.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/optimize-images.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/prepare-change.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/publish-ci-approval.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/reference-history.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/scope-worker-types.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/security-audit.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/security-history-audit.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/site-config.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/test-browser.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/verify-ci.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/verify-code-scanning.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/verify-contact-form-health.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/verify-deploy-target.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/verify-email-health.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/verify-integrity.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/verify-peer-engineering.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/verify-release.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/verify-smoke.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/verify-tls-posture.sh": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/webkit-diagnostics.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/workflow-policy.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "scripts/write-release.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/components/BaseHead.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/components/CommandPalette.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/components/DocumentMetadata.astro": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/components/ErrorPage.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/components/Footer.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/components/Header.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/components/HeaderLink.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/components/HoneypotField.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/components/ProjectCard.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/consts.ts": {
+      "kind": "site-data",
+      "reason": "Business catalog/identity or compile-time declarations; independent runtime I/O/lifecycle functions forbidden."
+    },
+    "src/email-health-engine.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/email-health.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/env.d.ts": {
+      "kind": "site-data",
+      "reason": "Business catalog/identity or compile-time declarations; independent runtime I/O/lifecycle functions forbidden."
+    },
+    "src/form-delivery.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/form-engine.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/form-request-engine.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/form-response.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/form-schema.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/icons/social/home-assistant-logomark-color-on-light.svg": {
+      "kind": "site-asset",
+      "reason": "Site artwork, fonts/licenses or static descriptive asset; executable/config extensions are rejected."
+    },
+    "src/layouts/PolicyLayout.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/mail.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/middleware.ts": {
+      "kind": "adapter",
+      "reason": "Endpoint identity, public errors and explicit transport/binding policy passed to the shared middleware engine.",
+      "engines": ["createFormRequestMiddleware"]
+    },
+    "src/navigation-link.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/pages/404.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/pages/500.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/pages/about.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/pages/api/inquiry.ts": {
+      "kind": "adapter",
+      "reason": "Ordered inquiry schema decisions and business email templates; verified middleware locals, shared validation, delivery acceptance and response mechanics.",
+      "engines": ["validateString", "acceptMail", "jsonFormResponse"]
+    },
+    "src/pages/api/release.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/pages/api/status.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/pages/contact.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/pages/contact/success.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/pages/index.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/pages/privacy.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/pages/status.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/pages/terms.astro": {
+      "kind": "site-template",
+      "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
+    },
+    "src/security.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/status.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/styles/accessibility.css": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/styles/global.css": {
+      "kind": "site-style",
+      "reason": "Local brand palette, typography and page layout; common canvas and accessibility mechanics live in shared styles."
+    },
+    "src/styles/page-themes.css": {
+      "kind": "site-style",
+      "reason": "Local brand palette, typography and page layout; common canvas and accessibility mechanics live in shared styles."
+    },
+    "src/styles/site-canvas.css": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "src/worker.ts": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/accessibility.spec.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/application-engine.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/astro-session-config.test.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/cassi-history.test.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/code-scanning-policy.test.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/confirmation-engine.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/confirmation.spec.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/deploy-target.test.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/deployment-rehearsal.test.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/document-metadata.spec.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/email-health-cleanup.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/email-health.test.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/engineering-config.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/engineering-inventory.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/error-pages.spec.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/form-client-engine.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/form-request-engine.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/form-schema-delivery.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/heading-contrast.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/heading-contrast.spec.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/heading-contrast.test.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/image-generation.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/inquiry.test.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/integrity.test.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/interactions.spec.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/keyboard.spec.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/lighthouse-runner.test.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/lighthouse.test.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/navigation-engine.spec.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/navigation-engine.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/navigation-link.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/policy-pages.spec.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/preflight-contract.test.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/prepare-change.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/reference-history.test.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/release-canvas-contract.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/release-gate.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/release-refs.test.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/repository-policy.test.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/responsive.spec.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/safari.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/shared-ui-engines.spec.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/site-canvas.spec.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/site-preferences.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/smoke-freshness.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/static-asset-policy.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/status-api.test.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tests/status-response.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/tls-posture-script.test.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/turnstile-engine.spec.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/turnstile-engine.test.mjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/webkit-diagnostics.test.cjs": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "tests/workflow-security.test.cjs": {
+      "kind": "site-test",
+      "reason": "Independent acceptance fixtures for this site’s routes, schemas, rendered controls and identity. Shared engine suites are additionally byte checked."
+    },
+    "tsconfig.json": {
+      "kind": "shared",
+      "reason": "Identical implementation or policy; exact bytes required in the paired repository."
+    },
+    "wrangler.json": {
+      "kind": "site-config",
+      "reason": "Explicit repository identity, deployment bindings or site capability inputs; dependency and workflow invariants remain separately enforced by verify:peer."
+    }
+  }
+}

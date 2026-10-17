@@ -1,3 +1,5 @@
+@import './accessibility.css';
+
 /* Shared site foundation. Page-specific visual systems live with the page that uses them. */
 
 :root {
@@ -80,15 +82,6 @@ html[data-alienx-theme='light'] {
   font-style: normal;
   font-display: swap;
 }
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
-}
 body {
   font-family: 'Atkinson', sans-serif;
   margin: 0;
@@ -140,15 +133,6 @@ a {
 a:hover {
   color: var(--accent-dark);
 }
-[tabindex='0']:focus-visible,
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 3px solid currentColor;
-  outline-offset: 3px;
-}
 button,
 input,
 textarea,
@@ -163,10 +147,6 @@ button {
 }
 :where(button, [role='button'], a[class*='button']):active {
   transform: translateY(1px);
-}
-summary:focus-visible {
-  outline: 3px solid currentColor;
-  outline-offset: 3px;
 }
 p {
   margin-bottom: 1em;
@@ -331,16 +311,6 @@ html[data-alienx-motion='off'] *::after {
 html[data-alienx-konami='true'] body {
   text-shadow: 0 0 12px rgba(57, 255, 90, 0.14);
 }
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-    transition: none;
-  }
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 1ms;
-  }
-}
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 180ms;
@@ -394,15 +364,7 @@ html[data-alienx-konami='true'] body {
 }
 
 .skip-link {
-  position: fixed;
-  top: 8px;
-  left: 8px;
-  z-index: 2000;
   padding: 12px 18px;
   color: #fff;
   background: #172033;
-  transform: translateY(-150%);
-}
-.skip-link:focus {
-  transform: none;
 }

@@ -21,7 +21,13 @@ import { SITE_TITLE } from '../../consts';
           ✓
         </div>
         <p class="eyebrow">ALIENX / NEXT STEPS</p>
-        <h1 id="title">You’re all set.</h1>
+        <h1
+          id="title"
+          data-confirmation-heading
+          data-confirmation-generic="You’re all set."
+        >
+          You’re all set.
+        </h1>
         <p class="lede">
           If you just submitted an inquiry successfully, our email provider
           accepted it. Inbox delivery is separate. While you wait, the homepage
@@ -48,6 +54,7 @@ import { SITE_TITLE } from '../../consts';
       </section>
     </main>
     <Footer />
+    <script is:inline src="/confirmation-engine.js"></script>
   </body>
 </html>
 <style>

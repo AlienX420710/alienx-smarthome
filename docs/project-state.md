@@ -1,8 +1,42 @@
 # AlienX — current state
 
-Updated October 13, 2026. This file alone owns findings and dated release
+Updated October 17, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
+
+## October 16 continuation of shared application completion candidate
+
+The owner requested completion of remaining engineering work. Current candidates
+extract shared request-boundary, schema, provider-acceptance, form-client,
+confirmation, preferences, status, command-palette, document metadata, navigation
+and accessibility mechanics. Fields, templates, route contracts, brand presentation
+and optional controls remain explicit site adapters. Full source inventory and
+each site's independent preparation, browser gates and production chain are required;
+local work is not a deployed release.
+
+Initial PR security scanning found that the inventory's HTML-script regular
+expressions missed noncanonical closing tags. The validator now uses the existing
+pinned HTML parser; whitespace, malformed endings, quoted attributes and nested
+templates have regressions. The original CodeQL failures are retained in PR #148
+and paired Cleaning #84; fresh preparation and new-head scans are required.
+
+Visual validation also found that dynamic Status cards did not receive Astro's
+scoped styles. Descendant selectors now apply beneath the static checks container;
+a browser geometry regression protects separate card labels, states and details.
+Initial PR accessibility then found insufficient light-theme contrast on those
+labels. The muted default now belongs to the card's copy container and labels
+inherit the existing light-theme palette; mixed-state and error-response axe
+regressions cover all six theme/OS combinations. Original failed evidence remains
+in PR #148; new-head acceptance is required. The candidate also preserves the
+About story merged separately through #147 at `6dc548e`.
+
+The owner explicitly authorized this public summary on October 14:
+accessibility checks passed on iOS/Windows using Safari/Chrome, intended daily
+emails arrive, and GitHub/Cloudflare MFA is enabled. These are owner-reported
+observations, separate from assistant-run browser tests or private account inspection.
+Exact device/browser versions and tested release revisions were not provided.
+Token scope, WAF/recovery configuration, isolated negative-promotion execution and
+independent failure-alert receipt remain separate unresolved acceptance.
 
 ## October 13 editorial and recovery documentation release
 
@@ -607,25 +641,25 @@ Do not publish the first GitHub release or claim beta completion while required
 acceptance is unresolved. Do not invent a version. Local tests, CI, live revision,
 provider acceptance/delivery, inbox receipt and human/device acceptance differ.
 
-| ID     | Disposition                                           | Evidence or remaining acceptance                                                                                                                                                                                 |
-| ------ | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AX-001 | Verified at d8bf0d3                                   | Parsed frame/resource CSP checks reject missing and weakened policy.                                                                                                                                             |
-| AX-002 | Verified at d8bf0d3 / 4a51a7e                         | Candidate and exact-revision post-Smoke Integrity remain separate.                                                                                                                                               |
-| AX-003 | Verified; PR #53 repair deployed                      | Three fixed Lighthouse samples, median performance, minimum other scores; no retry-until-green.                                                                                                                  |
-| AX-004 | Verified at e69c280                                   | Three obsolete manual CSP hashes removed after emitted-byte mapping.                                                                                                                                             |
-| AX-005 | Recovery drill failed isolation; acceptance open      | PR #99 replaced the production response with drill JSON. Incident #102 is resolved, but a genuinely isolated negative-promotion test with retained rejection evidence is still required.                         |
-| AX-006 | Compatible recovery proven; #59 still open            | Authorized rollback restored production; PR #119 then deployed exact main `81e219fc` with successful Cloudflare build, exact-revision Smoke and Integrity.                                                       |
-| AX-007 | Verified at e69c280                                   | Required sanitized reachable-history scan; heuristic, not exhaustive certification.                                                                                                                              |
-| AX-008 | Physical-device evidence open                         | Actual screen reader, keyboard, touch, zoom and theme outcomes; resolve discovered defects.                                                                                                                      |
-| AX-009 | Scoped cleanup verified in PR #91                     | PR #77 consolidated routes; PR #91 removed 76 exclusive retired-route selectors and obsolete mappings. Active/dynamic theme and component behavior remains covered.                                              |
-| AX-010 | Owner editorial acceptance open; last                 | Factual consolidated homepage/About copy is deployed; explicit owner editorial/public-contact acceptance remains intentionally last.                                                                             |
-| AX-011 | Verified and closed October 2                         | Ruleset 23059349 requires PR/five Actions checks, strict freshness, no bypass. Required review-thread resolution is enabled; owner save at 18:26:41 America/Chicago subsequently verified through the connector. |
-| AX-012 | Repository controls verified; account acceptance open | Security/quality policies, all-severity audit, workflow/history gates remain verified; #61 is reopened for private MFA/recovery, credential scope, WAF/security controls and private alert receipt.              |
-| AX-013 | Verified at e3b8e89                                   | Exact-main fresh Actions/JS/TS analyses and zero open code-scanning alerts; private Dependabot/secret inventory is separate.                                                                                     |
-| AX-014 | Repository tranche verified in PR #47                 | Headers/static checks, sanitized analysis errors/warnings and offline deployment rehearsal; account scope remains open.                                                                                          |
-| AX-015 | Verified at f67c91c                                   | Mandatory edge limiter, strict honeypot/Turnstile success and safe logs; live email evidence is recorded separately.                                                                                             |
-| AX-016 | Live TLS verified; account acceptance open            | PR #98 continuously verifies TLS 1.0/1.1 rejection and TLS 1.2/1.3 acceptance. CBC/static-RSA compatibility remains observational; #61 retains the private account-security work.                                |
-| AX-017 | Verified and closed October 3                         | Natural heartbeat and authorized inquiry delivery/receipt are proven; the GitHub-native controlled canary proved independent operator-alert creation without mailbox/provider-history access.                    |
+| ID     | Disposition                                              | Evidence or remaining acceptance                                                                                                                                                                                 |
+| ------ | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AX-001 | Verified at d8bf0d3                                      | Parsed frame/resource CSP checks reject missing and weakened policy.                                                                                                                                             |
+| AX-002 | Verified at d8bf0d3 / 4a51a7e                            | Candidate and exact-revision post-Smoke Integrity remain separate.                                                                                                                                               |
+| AX-003 | Verified; PR #53 repair deployed                         | Three fixed Lighthouse samples, median performance, minimum other scores; no retry-until-green.                                                                                                                  |
+| AX-004 | Verified at e69c280                                      | Three obsolete manual CSP hashes removed after emitted-byte mapping.                                                                                                                                             |
+| AX-005 | Recovery drill failed isolation; acceptance open         | PR #99 replaced the production response with drill JSON. Incident #102 is resolved, but a genuinely isolated negative-promotion test with retained rejection evidence is still required.                         |
+| AX-006 | Compatible recovery proven; #59 still open               | Authorized rollback restored production; PR #119 then deployed exact main `81e219fc` with successful Cloudflare build, exact-revision Smoke and Integrity.                                                       |
+| AX-007 | Verified at e69c280                                      | Required sanitized reachable-history scan; heuristic, not exhaustive certification.                                                                                                                              |
+| AX-008 | Owner device results reported; version record incomplete | Owner reports accessibility checks passed on iOS/Windows using Safari/Chrome. Exact device/browser versions and tested release revisions were not supplied; no new-candidate acceptance is inferred.             |
+| AX-009 | Scoped cleanup verified in PR #91                        | PR #77 consolidated routes; PR #91 removed 76 exclusive retired-route selectors and obsolete mappings. Active/dynamic theme and component behavior remains covered.                                              |
+| AX-010 | Owner editorial acceptance open; last                    | Factual consolidated homepage/About copy is deployed; explicit owner editorial/public-contact acceptance remains intentionally last.                                                                             |
+| AX-011 | Verified and closed October 2                            | Ruleset 23059349 requires PR/five Actions checks, strict freshness, no bypass. Required review-thread resolution is enabled; owner save at 18:26:41 America/Chicago subsequently verified through the connector. |
+| AX-012 | Repository controls verified; account acceptance open    | Security/quality policies, all-severity audit, workflow/history gates remain verified; #61 is reopened for private MFA/recovery, credential scope, WAF/security controls and private alert receipt.              |
+| AX-013 | Verified at e3b8e89                                      | Exact-main fresh Actions/JS/TS analyses and zero open code-scanning alerts; private Dependabot/secret inventory is separate.                                                                                     |
+| AX-014 | Repository tranche verified in PR #47                    | Headers/static checks, sanitized analysis errors/warnings and offline deployment rehearsal; account scope remains open.                                                                                          |
+| AX-015 | Verified at f67c91c                                      | Mandatory edge limiter, strict honeypot/Turnstile success and safe logs; live email evidence is recorded separately.                                                                                             |
+| AX-016 | Live TLS verified; account acceptance open               | PR #98 continuously verifies TLS 1.0/1.1 rejection and TLS 1.2/1.3 acceptance. CBC/static-RSA compatibility remains observational; #61 retains the private account-security work.                                |
+| AX-017 | Verified and closed October 3                            | Natural heartbeat and authorized inquiry delivery/receipt are proven; the GitHub-native controlled canary proved independent operator-alert creation without mailbox/provider-history access.                    |
 
 Branch cleanup is unverified. Re-enumerate remotes, confirm each temporary head is
 merged before deleting it, and retain active PRs and alienx-ci-approved-main /

@@ -1,7 +1,17 @@
+import { jsonFormResponse as json } from '../../form-response';
 import { escapeHtml, contentDigest, isValidEmail } from '../../form-engine';
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { sendProductionMail } from '../../mail';
+import { acceptMail } from '../../form-delivery';
+import {
+  validateString,
+  trimmedText,
+  singleLineText,
+  multilineText,
+  validPhone,
+  validHttpUrl,
+} from '../../form-schema';
 export const prerender = false;
 const MAX_NAME_LENGTH = 100,
   MIN_NAME_LENGTH = 2,
@@ -12,6 +22,13 @@ const MAX_NAME_LENGTH = 100,
   MAX_TIMEZONE_LENGTH = 80,
   MAX_MESSAGE_LENGTH = 4000,
   MIN_MESSAGE_LENGTH = 10;
+const STRING_SCHEMA = {
+  name: { min: MIN_NAME_LENGTH, max: MAX_NAME_LENGTH },
+  email: { min: 1, max: MAX_EMAIL_LENGTH, validate: isValidEmail },
+  company: { max: MAX_COMPANY_LENGTH },
+  timezone: { max: MAX_TIMEZONE_LENGTH },
+  message: { min: MIN_MESSAGE_LENGTH, max: MAX_MESSAGE_LENGTH },
+};
 const CONTACT_METHODS = new Set(['email', 'phone', 'text', 'either']),
   CONTACT_TIMES = new Set(['morning', 'afternoon', 'evening', 'anytime']),
   PROJECT_TYPES = new Set([
@@ -60,26 +77,11 @@ interface InquiryPayload {
   website?: unknown;
   turnstileToken?: unknown;
 }
-const json = (
-  body: Record<string, unknown>,
-  status = 200,
-  requestId?: string,
-) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'no-store',
-      ...(requestId ? { 'X-Request-ID': requestId } : {}),
-    },
-  });
-const text = (value: unknown) =>
-    typeof value === 'string' ? value.trim() : '',
-  allowed = (value: string, values: Set<string>) => values.has(value),
-  cleanSingleLine = (value: string) =>
-    value.replace(/[\u0000-\u001F\u007F]/g, '').trim(),
-  cleanMessage = (value: string) =>
-    value.replace(/[\u0000\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').trim();
+const text = trimmedText,
+  allowed = (value: string, values: Set<string>) =>
+    validateString(value, { allowed: values }),
+  cleanSingleLine = singleLineText,
+  cleanMessage = multilineText;
 const label = (value: string) =>
   value.replaceAll('-', ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 export const POST: APIRoute = async ({ locals }) => {
@@ -126,53 +128,36 @@ export const POST: APIRoute = async ({ locals }) => {
     source = text(payload.source),
     message =
       typeof payload.message === 'string' ? cleanMessage(payload.message) : '';
-  if (name.length < MIN_NAME_LENGTH || name.length > MAX_NAME_LENGTH)
+  if (!validateString(name, STRING_SCHEMA.name))
     return json(
       { error: 'Please provide a valid name.', requestId },
       400,
       requestId,
     );
-  if (!email || email.length > MAX_EMAIL_LENGTH || !isValidEmail(email))
+  if (!validateString(email, STRING_SCHEMA.email))
     return json(
       { error: 'Please provide a valid email address.', requestId },
       400,
       requestId,
     );
-  if (
-    phone &&
-    (phone.length > MAX_PHONE_LENGTH ||
-      !/^[+()\d\s.-]+$/.test(phone) ||
-      phone.replace(/\D/g, '').length < 7 ||
-      phone.replace(/\D/g, '').length > 15)
-  )
+  if (phone && !validPhone(phone, MAX_PHONE_LENGTH, /^[+()\d\s.-]+$/))
     return json(
       { error: 'Please provide a valid phone number.', requestId },
       400,
       requestId,
     );
-  if (company.length > MAX_COMPANY_LENGTH)
+  if (!validateString(company, STRING_SCHEMA.company))
     return json(
       { error: 'Please provide a valid company name.', requestId },
       400,
       requestId,
     );
-  if (websiteUrl) {
-    if (websiteUrl.length > MAX_URL_LENGTH)
-      return json(
-        { error: 'Please provide a valid website URL.', requestId },
-        400,
-        requestId,
-      );
-    try {
-      const url = new URL(websiteUrl);
-      if (!['http:', 'https:'].includes(url.protocol)) throw new Error();
-    } catch {
-      return json(
-        { error: 'Please provide a valid website URL.', requestId },
-        400,
-        requestId,
-      );
-    }
+  if (websiteUrl && !validHttpUrl(websiteUrl, MAX_URL_LENGTH)) {
+    return json(
+      { error: 'Please provide a valid website URL.', requestId },
+      400,
+      requestId,
+    );
   }
   if (!allowed(contactMethod, CONTACT_METHODS))
     return json(
@@ -195,7 +180,7 @@ export const POST: APIRoute = async ({ locals }) => {
       400,
       requestId,
     );
-  if (timezone.length > MAX_TIMEZONE_LENGTH)
+  if (!validateString(timezone, STRING_SCHEMA.timezone))
     return json(
       { error: 'Please provide a valid time zone.', requestId },
       400,
@@ -231,10 +216,7 @@ export const POST: APIRoute = async ({ locals }) => {
       400,
       requestId,
     );
-  if (
-    message.length < MIN_MESSAGE_LENGTH ||
-    message.length > MAX_MESSAGE_LENGTH
-  )
+  if (!validateString(message, STRING_SCHEMA.message))
     return json(
       {
         error: 'Please provide a little more detail about your inquiry.',
@@ -290,46 +272,31 @@ export const POST: APIRoute = async ({ locals }) => {
     safeWebsite = websiteUrl ? escapeHtml(websiteUrl) : '';
   const idempotencyKey =
     'alienx-' + (await contentDigest([requestId, details, message]));
-  let response: Response;
-  try {
-    response = await sendProductionMail(resendApiKey, idempotencyKey, {
+  const acceptance = await acceptMail(() =>
+    sendProductionMail(resendApiKey, idempotencyKey, {
       reply_to: email,
       subject: `New AlienX inquiry — ${name}${company ? ` / ${company}` : ''}`,
       html: `<!doctype html><html><body style="margin:0;background:#f4f6fa;font-family:Arial,Helvetica,sans-serif;color:#172033;"><div style="max-width:700px;margin:32px auto;padding:0 16px;"><div style="overflow:hidden;border:1px solid #dfe4ec;border-radius:18px;background:#fff;box-shadow:0 8px 30px rgba(16,24,40,.08);"><div style="padding:24px 28px;background:#080d18;color:#fff;"><div style="font-size:12px;letter-spacing:2px;font-weight:700;color:#9eabc4;">ALIENX / INQUIRY</div><h1 style="margin:10px 0 0;font-size:26px;line-height:1.2;color:#fff;">New conversation started</h1></div><div style="padding:26px 28px;"><table role="presentation" style="width:100%;border-collapse:collapse;">${htmlDetails}</table><div style="margin:18px 0 22px;border-top:1px solid #e7eaf0;"></div><div style="font-size:12px;letter-spacing:1.5px;font-weight:700;color:#667085;margin-bottom:10px;">PROJECT DETAILS</div><div style="font-size:16px;line-height:1.7;color:#344054;">${safeMessage}</div>${safeWebsite ? `<div style="margin-top:20px;font-size:13px;"><a href="${safeWebsite}" style="color:#315bdc;text-decoration:none;">Open submitted website →</a></div>` : ''}</div></div><p style="margin:16px 0;text-align:center;font-size:12px;color:#98a2b3;">Submitted through alienxsmarthome.com · ${escapeHtml(requestId)}</p></div></body></html>`,
       text: plainText,
-    });
-  } catch {
-    console.error('Resend email request failed.', {
-      requestId,
-    });
-    return json(
-      { error: 'We could not send your message. Please try again.', requestId },
-      502,
-      requestId,
-    );
-  }
-  if (!response.ok) {
-    console.error('Resend email request failed.', {
-      requestId,
-      status: response.status,
-    });
-    return json(
-      { error: 'We could not send your message. Please try again.', requestId },
-      502,
-      requestId,
-    );
-  }
-  let resendResult: { id?: unknown };
-  try {
-    resendResult = (await response.json()) as { id?: unknown };
-  } catch {
-    resendResult = {};
-  }
+    }),
+  );
   if (
-    !resendResult ||
-    typeof resendResult.id !== 'string' ||
-    !resendResult.id.trim()
+    acceptance.outcome === 'request-failed' ||
+    acceptance.outcome === 'rejected'
   ) {
+    console.error('Resend email request failed.', {
+      requestId,
+      ...(acceptance.outcome === 'rejected'
+        ? { status: acceptance.status }
+        : {}),
+    });
+    return json(
+      { error: 'We could not send your message. Please try again.', requestId },
+      502,
+      requestId,
+    );
+  }
+  if (acceptance.outcome === 'unconfirmed') {
     console.error('Resend returned success without an email ID.', {
       requestId,
     });
@@ -345,7 +312,7 @@ export const POST: APIRoute = async ({ locals }) => {
   }
   console.info('Inquiry email accepted by Resend.', {
     requestId,
-    emailId: resendResult.id,
+    emailId: acceptance.id,
   });
   return json({ ok: true, requestId }, 200, requestId);
 };

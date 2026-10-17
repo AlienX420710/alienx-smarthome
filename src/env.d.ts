@@ -8,6 +8,11 @@ declare namespace App {
 }
 
 interface Window {
+  siteConfirmation?: {
+    rememberAccepted: (name: string, destination: string) => void;
+    clear: () => void;
+    render: () => void;
+  };
   __alienxSetTheme?: (theme: string) => void;
   __alienxSetMotion?: (motion: string) => void;
   __alienxTurnstileWidgetId?: string | null;
