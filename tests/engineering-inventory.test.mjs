@@ -119,3 +119,76 @@ test('executable files cannot be relabeled as assets', () =>
       /Executable\/config file marked asset/,
     );
   }));
+
+for (const closing of [
+  '</script >',
+  '</script\n>',
+  '</script\t>',
+  '</script/>',
+  '</script data-ignored>',
+  '</ScRiPt >',
+  '',
+]) {
+  for (const kind of ['site-template', 'adapter']) {
+    test(`${kind} rejects inline script with browser-parsed closing ${JSON.stringify(closing)}`, () =>
+      fixture(({ local, peer, put }) => {
+        put(
+          local,
+          'page.astro',
+          `<script data-label="quoted > character">window.independent = true;${closing}`,
+        );
+        const result = validateInventory(
+          local,
+          peer,
+          manifest({
+            'page.astro': {
+              kind,
+              reason: 'site view',
+              ...(kind === 'adapter' ? { engines: ['independent'] } : {}),
+            },
+          }),
+          ['page.astro'],
+        );
+        assert.match(result.problems.join('\n'), /Inline behavior remains/);
+      }));
+  }
+}
+
+test('HTML parsing permits inert JSON data and external scripts without mistaking comments for behavior', () =>
+  fixture(({ local, peer, put }) => {
+    put(
+      local,
+      'page.astro',
+      '<!-- <script>window.fake = true;</script > --><script src="/shared-engine.js"></script ><script type="application/ld+json">{"name":"Site"}</script >',
+    );
+    const result = validateInventory(
+      local,
+      peer,
+      manifest({
+        'page.astro': {
+          kind: 'site-template',
+          reason: 'site data and common engine imports',
+        },
+      }),
+      ['page.astro'],
+    );
+    assert.deepEqual(result.problems, []);
+  }));
+
+test('nested template content is inspected for independent script behavior', () =>
+  fixture(({ local, peer, put }) => {
+    put(
+      local,
+      'page.astro',
+      '<template><script>window.independent = true;</script ></template>',
+    );
+    const result = validateInventory(
+      local,
+      peer,
+      manifest({
+        'page.astro': { kind: 'site-template', reason: 'site template' },
+      }),
+      ['page.astro'],
+    );
+    assert.match(result.problems.join('\n'), /Inline behavior remains/);
+  }));

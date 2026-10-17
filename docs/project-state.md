@@ -1,6 +1,6 @@
 # AlienX — current state
 
-Updated October 16, 2026. This file alone owns findings and dated release
+Updated October 17, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
@@ -14,9 +14,21 @@ and optional controls remain explicit site adapters. Full source inventory and
 each site's independent preparation, browser gates and production chain are required;
 local work is not a deployed release.
 
+Initial PR security scanning found that the inventory's HTML-script regular
+expressions missed noncanonical closing tags. The validator now uses the existing
+pinned HTML parser; whitespace, malformed endings, quoted attributes and nested
+templates have regressions. The original CodeQL failures are retained in PR #148
+and paired Cleaning #84; fresh preparation and new-head scans are required.
+
 Visual validation also found that dynamic Status cards did not receive Astro's
 scoped styles. Descendant selectors now apply beneath the static checks container;
 a browser geometry regression protects separate card labels, states and details.
+Initial PR accessibility then found insufficient light-theme contrast on those
+labels. The muted default now belongs to the card's copy container and labels
+inherit the existing light-theme palette; mixed-state and error-response axe
+regressions cover all six theme/OS combinations. Original failed evidence remains
+in PR #148; new-head acceptance is required. The candidate also preserves the
+About story merged separately through #147 at `6dc548e`.
 
 The owner explicitly authorized this public summary on October 14:
 accessibility checks passed on iOS/Windows using Safari/Chrome, intended daily

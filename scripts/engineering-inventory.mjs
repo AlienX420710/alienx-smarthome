@@ -2,6 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { parseFragment } from 'parse5';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const kinds = new Set([
@@ -51,6 +52,27 @@ export function implementationFiles(directory) {
     .sort();
 }
 const read = (directory, file) => readFileSync(resolve(directory, file));
+function hasInlineBehavior(source) {
+  const visit = (node) => {
+    if (
+      node.tagName === 'script' &&
+      !node.attrs.some(
+        ({ name, value }) =>
+          name === 'type' &&
+          value.trim().toLowerCase() === 'application/ld+json',
+      ) &&
+      node.childNodes.some(
+        (child) => child.nodeName === '#text' && child.value.trim(),
+      )
+    )
+      return true;
+    return (
+      (node.childNodes || []).some(visit) ||
+      (node.content ? visit(node.content) : false)
+    );
+  };
+  return visit(parseFragment(source));
+}
 export function validateInventory(
   directory,
   peer,
@@ -126,15 +148,7 @@ export function validateInventory(
     }
     const source = read(directory, file).toString('utf8');
     if (entry.kind === 'site-template') {
-      const scripts = [
-        ...source.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi),
-      ];
-      if (
-        scripts.some(
-          ([, attrs, body]) =>
-            body.trim() && !/type=["']application\/ld\+json["']/.test(attrs),
-        )
-      )
+      if (hasInlineBehavior(source))
         problems.push(`Inline behavior remains in template: ${file}`);
       if (
         /\b(?:addEventListener|fetch|AbortController|localStorage|sessionStorage)\b/.test(
@@ -165,13 +179,7 @@ export function validateInventory(
         )
       )
         problems.push(`Unextracted runtime behavior in adapter: ${file}`);
-      if (
-        file.endsWith('.astro') &&
-        [...source.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].some(
-          ([, attrs, body]) =>
-            body.trim() && !/type=["']application\/ld\+json["']/.test(attrs),
-        )
-      )
+      if (file.endsWith('.astro') && hasInlineBehavior(source))
         problems.push(`Inline behavior remains in adapter: ${file}`);
     }
     if (entry.kind === 'site-config') {

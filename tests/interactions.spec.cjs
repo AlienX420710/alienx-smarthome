@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const axe = require('axe-core');
 const base = 'http://127.0.0.1:4321';
 for (const width of [320, 768, 1280]) {
   for (const theme of ['light', 'dark']) {
@@ -211,6 +212,96 @@ test('Status renders degraded HTTP 503 and malformed responses honestly', async 
   await expect(page.locator('.check--error')).toContainText('UNAVAILABLE');
 });
 
+for (const scheme of ['light', 'dark']) {
+  for (const theme of ['light', 'dark', 'system']) {
+    test(`Status card palette and layout: ${theme} theme on ${scheme} OS`, async ({
+      page,
+    }) => {
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
+      await page.addInitScript(
+        (value) => localStorage.setItem('alienx-theme', value),
+        theme,
+      );
+      await page.addInitScript({ content: axe.source });
+      let malformed = false;
+      await page.route('**/api/status', (route) =>
+        malformed
+          ? route.fulfill({ status: 503, body: 'unavailable' })
+          : route.fulfill({
+              status: 503,
+              json: {
+                ...status,
+                status: 'degraded',
+                checks: {
+                  worker: {
+                    status: 'operational',
+                    detail: 'The local mock Worker is responding.',
+                  },
+                  inquiry: {
+                    status: 'configured',
+                    detail: 'Inquiry configuration is present.',
+                  },
+                  turnstile: {
+                    status: 'degraded',
+                    detail: 'Verification configuration is incomplete.',
+                  },
+                  resend: {
+                    status: 'degraded',
+                    detail: 'Delivery configuration is incomplete.',
+                  },
+                },
+              },
+            }),
+      );
+      await page.goto(base + '/status/');
+      await expect(page.locator('#checks')).toHaveAttribute(
+        'aria-busy',
+        'false',
+      );
+      await expect(page.locator('.check')).toHaveCount(4);
+      const light =
+        theme === 'light' || (theme === 'system' && scheme === 'light');
+      const labelColor = light ? 'rgb(37, 48, 71)' : 'rgb(126, 139, 163)';
+      for (const card of await page.locator('.check').all()) {
+        await expect(card.locator('.check-name')).toHaveCSS(
+          'color',
+          labelColor,
+        );
+        const geometry = await card.evaluate((element) => {
+          const name = element
+            .querySelector('.check-name')
+            .getBoundingClientRect();
+          const state = element.querySelector('strong').getBoundingClientRect();
+          const detail = element.querySelector('small').getBoundingClientRect();
+          return {
+            nameBottom: name.bottom,
+            stateTop: state.top,
+            stateBottom: state.bottom,
+            detailTop: detail.top,
+          };
+        });
+        expect(geometry.nameBottom).toBeLessThanOrEqual(geometry.stateTop);
+        expect(geometry.stateBottom).toBeLessThanOrEqual(geometry.detailTop);
+      }
+      const audit = () =>
+        page.evaluate(() =>
+          window.axe.run(document, {
+            runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'],
+          }),
+        );
+      expect((await audit()).violations).toEqual([]);
+      malformed = true;
+      await page.locator('#refresh').click();
+      await expect(page.locator('.check--error')).toBeVisible();
+      await expect(page.locator('.check--error .check-name')).toHaveCSS(
+        'color',
+        labelColor,
+      );
+      expect((await audit()).violations).toEqual([]);
+    });
+  }
+}
+
 test('Contact retries preserve input and submit the honeypot after navigation', async ({
   page,
 }) => {
@@ -237,7 +328,7 @@ test('Contact retries preserve input and submit the honeypot after navigation', 
     .click();
   await expect(page).toHaveURL(/\/about\/?$/);
   await expect(page.locator('main h1')).toHaveText(
-    'From smart home to smart technology.',
+    'From emulators and gaming to smart home and smart technology.',
   );
   await page
     .getByRole('navigation', { name: 'Primary navigation' })
