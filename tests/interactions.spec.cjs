@@ -221,7 +221,7 @@ test('Contact retries preserve input and submit the honeypot after navigation', 
     .click();
   await expect(page).toHaveURL(/\/about\/?$/);
   await expect(page.locator('main h1')).toHaveText(
-    'From smart home to smart technology.',
+    'From emulators and gaming to smart home and smart technology.',
   );
   await page
     .getByRole('navigation', { name: 'Primary navigation' })
