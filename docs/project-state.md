@@ -4,21 +4,34 @@ Updated October 17, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
-## October 16 continuation of shared application completion candidate
+## October 17 shared application release
 
-The owner requested completion of remaining engineering work. Current candidates
-extract shared request-boundary, schema, provider-acceptance, form-client,
-confirmation, preferences, status, command-palette, document metadata, navigation
-and accessibility mechanics. Fields, templates, route contracts, brand presentation
-and optional controls remain explicit site adapters. Full source inventory and
-each site's independent preparation, browser gates and production chain are required;
-local work is not a deployed release.
+[PR #148](https://github.com/AlienX420710/alienx-smarthome/pull/148) completed the
+remaining shared application engines and the full engineering inventory, preserving
+site fields, templates, identity and optional controls as explicit adapters. The
+paired Cleaning #84 candidate has not yet been released, so parent #122 / Cleaning
+#39 remains open pending independent acceptance of both sites.
+
+Final Node 22 preparation passed 227 unit tests, source/history scans, formatting,
+build/type checks, Worker dry run and zero-vulnerability dependency audit. The
+fetched head `b5395387a6b976ee7f4f1b7507702c09e1a3d6f1` and merged main
+`5b799129795d4faab02d04eac1fa8c4fcc8c5257` both matched the prepared source.
+All five checks passed on the up-to-date PR head and resulting main; fresh Actions
+and JavaScript CodeQL analyses and the zero-open-alert policy passed. The exact
+`alienx-ci-approved-main` tag was verified. Workers Build
+`81bd06b5-3228-4f47-b88f-8974d65fb000` succeeded (check 117434261606).
+[Push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39045328734)
+and [post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39045854941)
+passed at that exact revision on both production hosts. TLS checks rejected
+TLS 1.0/1.1 and accepted TLS 1.2/1.3; CBC and static-RSA negotiation remains
+observed under #61. No real inquiry or replacement email was sent.
 
 Initial PR security scanning found that the inventory's HTML-script regular
 expressions missed noncanonical closing tags. The validator now uses the existing
 pinned HTML parser; whitespace, malformed endings, quoted attributes and nested
 templates have regressions. The original CodeQL failures are retained in PR #148
-and paired Cleaning #84; fresh preparation and new-head scans are required.
+and paired Cleaning #84; the corrected AlienX head passed fresh preparation and
+CodeQL without dismissing alerts.
 
 Visual validation also found that dynamic Status cards did not receive Astro's
 scoped styles. Descendant selectors now apply beneath the static checks container;
@@ -27,7 +40,7 @@ Initial PR accessibility then found insufficient light-theme contrast on those
 labels. The muted default now belongs to the card's copy container and labels
 inherit the existing light-theme palette; mixed-state and error-response axe
 regressions cover all six theme/OS combinations. Original failed evidence remains
-in PR #148; new-head acceptance is required. The candidate also preserves the
+in PR #148; the corrected head passed all five gates. The release also preserves the
 About story merged separately through #147 at `6dc548e`.
 
 The owner explicitly authorized this public summary on October 14:
