@@ -26,7 +26,30 @@ async function headingContrast(page) {
   const results = [];
   for (let index = 0; index < (await headings.count()); index++) {
     const heading = headings.nth(index);
-    await heading.scrollIntoViewIfNeeded();
+    // Element screenshots round fractional clips to pixels. Keep the heading
+    // inside the viewport so the rounded crop cannot include canvas padding.
+    await heading.evaluate((element) => {
+      element.scrollIntoView({
+        block: 'center',
+        inline: 'nearest',
+        behavior: 'instant',
+      });
+      const banner = document.querySelector('header, [role="banner"]');
+      if (
+        !banner ||
+        !['sticky', 'fixed'].includes(getComputedStyle(banner).position)
+      )
+        return;
+      const safeTop = Math.max(
+        0,
+        Math.min(innerHeight, banner.getBoundingClientRect().bottom),
+      );
+      const box = element.getBoundingClientRect();
+      scrollBy({
+        top: box.top + box.height / 2 - (safeTop + innerHeight) / 2,
+        behavior: 'instant',
+      });
+    });
     const runs = await heading.evaluate((element) => {
       const box = element.getBoundingClientRect();
       const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
