@@ -11,6 +11,48 @@ const themes = site.browser.themeKey ? ['light', 'dark', 'system'] : ['system'];
 const schemes = ['light', 'dark'];
 test.use({ screenshot: 'only-on-failure', trace: 'retain-on-failure' });
 
+const colors = (page) =>
+  page.evaluate(() =>
+    [
+      ...document.querySelectorAll(
+        // Provider response inputs can appear asynchronously and have no visual theme.
+        'body,header a,main h1,main h2,main h3,main p,main article,main input:not([type="hidden"]),main select,main button,main label',
+      ),
+    ].map((el) => {
+      const style = getComputedStyle(el);
+      return [
+        style.color,
+        style.backgroundColor,
+        style.backgroundImage,
+        style.borderColor,
+      ];
+    }),
+  );
+
+test('visual theme snapshot ignores late hidden controls but detects visible color changes', async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.setContent(`<style>
+    input { color: rgb(20, 30, 40); }
+    @media (prefers-color-scheme: dark) { input { color: rgb(220, 230, 240); } }
+  </style><main><input aria-label="Visible control"></main>`);
+  const before = await colors(page);
+  await page.evaluate(() => {
+    const response = document.createElement('input');
+    response.type = 'hidden';
+    response.name = 'website';
+    document.querySelector('main').prepend(response);
+  });
+  expect(await colors(page)).toEqual(before);
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await expect(page.locator('input:not([type="hidden"])')).toHaveCSS(
+    'color',
+    'rgb(220, 230, 240)',
+  );
+  expect(await colors(page)).not.toEqual(before);
+});
+
 for (const scheme of schemes) {
   for (const theme of themes) {
     for (const route of routes) {
@@ -66,30 +108,14 @@ for (const scheme of schemes) {
         }
 
         if (theme !== 'system') {
-          const colors = () =>
-            page.evaluate(() =>
-              [
-                ...document.querySelectorAll(
-                  'body,header a,main h1,main h2,main h3,main p,main article,main input,main select,main button,main label',
-                ),
-              ].map((el) => {
-                const style = getComputedStyle(el);
-                return [
-                  style.color,
-                  style.backgroundColor,
-                  style.backgroundImage,
-                  style.borderColor,
-                ];
-              }),
-            );
-          const before = await colors();
+          const before = await colors(page);
           await page.emulateMedia({
             colorScheme: scheme === 'light' ? 'dark' : 'light',
             reducedMotion: 'reduce',
           });
           await page.waitForTimeout(50);
           expect(
-            await colors(),
+            await colors(page),
             'Explicit theme must be independent of the OS preference',
           ).toEqual(before);
           await page.emulateMedia({
