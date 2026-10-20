@@ -194,8 +194,10 @@ do not force-reset main. Re-run all checks before another promotion.
 
 The [October 3 recovery evidence](project-state.md#october-3-production-recovery-incident--resolved)
 records an authorized compatible rollback and exact-revision recovery. That evidence
-does not satisfy the still-open isolated negative-promotion acceptance in
+does not constitute the isolated negative-promotion evidence formerly requested in
 [issue #59](https://github.com/AlienX420710/alienx-smarthome/issues/59).
+The owner retired that additional beta exercise as not planned on October 18;
+the isolation requirements below still apply if an operator schedules a future drill.
 Before any intentional failure, verify a separately named test Worker has no
 production routes/custom domains and uses only test-safe bindings. Never run the
 negative drill through the production deployment path. Retain the rejected candidate
@@ -358,3 +360,12 @@ Responsive and Safari workflows retain `chromium-page-captures` and
 Review representative homepage, form, policy and error captures in both themes
 after a canvas change. The shared suite scrolls to load images before capture;
 passing automation does not certify the original iOS Full Page screenshot path.
+
+## Unreferenced deployment-test Worker
+
+The repository audit found no production reference to
+`alienx-smarthome-deployment-test`; it is distinct from the older recovery-drill
+Worker. Its Cloudflare routes, traffic and bindings have not been verified.
+Before deciding whether to delete it, inspect those provider-side dependencies
+and establish its owner and purpose. Absence of a repository reference alone
+is not evidence that deletion is safe.
