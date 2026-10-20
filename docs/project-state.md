@@ -1,8 +1,102 @@
 # AlienX — current state
 
-Updated October 17, 2026. This file alone owns findings and dated release
+Updated October 19, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
+
+The current owner disposition supersedes historical prohibitions on a first GitHub
+release tied to the retired beta acceptance checklist. Versioned releases remain
+subject to the unchanged exact-revision CI and production gates. Unperformed
+private-account, device, inbox and isolated-recovery acceptance is not certified
+by issue closure or a release label.
+
+## October 19 hidden-input regression release
+
+[PR #151](https://github.com/AlienX420710/alienx-smarthome/pull/151) merged as
+`028e2b85ad07bec4c1319337f0a2fcc963481b51`. The theme snapshot now excludes
+nonvisual hidden inputs, including late Turnstile response inputs, while retaining
+visible controls, axe checks and Services disclosure expansion. The deterministic
+regression ignores hidden insertion and still detects a real visible color change.
+The original #143 failure remains evidence of the test defect; this correction
+does not weaken accessibility or contrast thresholds.
+
+All five resulting-main checks, fresh CodeQL and the zero-open-alert policy passed.
+The release approval tag matched the exact revision. Workers Build 118255847099
+(build `a115d56e-6187-4533-adf1-64ebdd493325`) succeeded.
+[Push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39308806479)
+and [post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39309773928)
+passed at the exact revision on both production hosts. TLS 1.0/1.1 were rejected;
+TLS 1.2/1.3 were accepted. Local focused tests, complete-source preparation and
+fetched-commit verification are recorded in the PR separately from production
+acceptance.
+
+The identical counterpart, [Cleaning #85](https://github.com/Cassileigh/cleaning-by-cassi/pull/85),
+merged as `39e185a8996857e37a43c9731e4b6403eec821ae` and was independently
+verified. All five main checks, fresh CodeQL/zero-alert policy, the exact
+`cleaning-ci-approved-main` tag and Workers Build 118266811835 passed.
+[Cleaning push Smoke](https://github.com/Cassileigh/cleaning-by-cassi/actions/runs/39311739541)
+and [post-Smoke Integrity](https://github.com/Cassileigh/cleaning-by-cassi/actions/runs/39312939098)
+passed at that revision on both production hosts, rejecting TLS 1.0/1.1 and
+accepting TLS 1.2/1.3.
+
+Reciprocal peer verification passed across the complete 176 AlienX / 181 Cleaning
+implementation-file inventories with no pending or unclassified entries. Shared
+engineering and normalized dependency locks match; explicit site identity,
+content, routes, fields and optional controls remain separate. The audited parity
+work is complete; #122 and Cleaning #39 are closed as completed.
+This does not convert the retired private-account, device, inbox or isolated-drill
+acceptance into independently verified results.
+
+## October 18 beta scope disposition and source audit
+
+The owner requested closure of irrelevant or non-actionable beta/parity work.
+Issues #59, #60, #61 and #62 are closed as **not planned**. This retires the
+remaining formal acceptance checklist; it does not claim that missing checks
+were performed. Compatible recovery is proven, but the isolated negative drill
+was not. The October 14 device and MFA results remain owner-reported; detailed
+device records and private recovery/token/WAF/alert review were not independently
+verified. The About story and policies are deployed; a separate blanket editorial
+sign-off is not invented. Reopen a task for a concrete defect or a newly scheduled
+operator exercise, rather than treating missing assurance as an application bug.
+
+CBC/static-RSA negotiation is a real compatibility observation, not evidence of
+successful exploitation. No private account certification or comprehensive
+accessibility certification follows from closing these issues. Existing security,
+release, monitoring and accessibility checks remain enforced.
+
+Fresh source audit compared AlienX `1f99c079427e6da6ae58f1b723fa755fac872a21`
+with Cleaning `ebe2f6f93f581585bca6ca7b5a5cfebf542fa075`. The shared application
+engines and confirmations are implemented in #148 / Cleaning #84. Complete
+inventories classify 176 / 181 implementation files with no pending or unclassified
+entries. Package scripts/pins and normalized locks match; remaining application
+adapters preserve declared site inputs, routes, messages and optional controls.
+The shared drift found was Cleaning's two heading-contrast test files. A review
+of the earlier PR #143 failure also found an unpublished correction: late hidden
+Turnstile inputs could enter the visual theme snapshot and falsely change its
+element list. The paired test correction excludes only nonvisual hidden inputs
+and retains a regression that still rejects a real visible theme change. The
+heading correction keeps fractional screenshot crops inside the viewport and
+below sticky banners without changing contrast thresholds. Final test release
+verification is the remaining #122 / Cleaning #39 work; the old application
+extraction/confirmation/canvas checklist is superseded.
+
+The first parity correction, [PR #150](https://github.com/AlienX420710/alienx-smarthome/pull/150),
+merged as `74eb418c787cf30ebd5c954b2704a6c5577e61cd`. It aligns the
+heading-contrast helper and regressions with Cleaning. All five resulting-main
+checks, CodeQL and zero-open-alert policy, and Workers Build 117841328952
+passed. [Push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39183004274)
+and [post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39183618999)
+passed on both production hosts at the exact revision with live TLS protocol
+checks. The hidden-input test correction remained unpublished at this revision.
+
+At the initial audit, main `1f99c079427e6da6ae58f1b723fa755fac872a21` passed
+all five required checks, fresh CodeQL, zero-open-alert policy, approved release
+evidence and Workers Build 117438320286.
+[Push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39046695695)
+and [post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39047262086)
+passed at that exact revision on both hosts. TLS 1.0/1.1 were rejected and TLS
+1.2/1.3 accepted. Older dated sections below retain the evidence available at
+their date; their pending/open wording does not reinstate retired scope.
 
 ## October 17 shared application release
 
@@ -643,16 +737,17 @@ physical-device, owner-content or rollback/recovery acceptance. #58 and #63 are
 closed; Beta Closeout issues #59, #60, #61 and #62 remain open. #62 remains
 intentionally last.
 
-## Beta acceptance — incomplete
+## Historical beta acceptance register
 
 September 30 local comparison (historical baseline): npm ci, all-severity npm audit (zero findings),
 88 unit tests and repository/reachable-history scans passed locally. fast-uri
 3.1.8 remains in the lockfile; its previous advisory is remediated, not open work.
 Build/browser evidence above is exact-main CI, not a new local browser run.
 
-Do not publish the first GitHub release or claim beta completion while required
-acceptance is unresolved. Do not invent a version. Local tests, CI, live revision,
-provider acceptance/delivery, inbox receipt and human/device acceptance differ.
+The October 18 disposition above supersedes this register's open acceptance
+requirements. These rows preserve the historical evidence, not active release
+blockers. Local tests, CI, live revision, provider acceptance/delivery, inbox receipt
+and human/device acceptance remain distinct. Do not invent a release version.
 
 | ID     | Disposition                                              | Evidence or remaining acceptance                                                                                                                                                                                 |
 | ------ | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -681,8 +776,11 @@ and exact-main approval/build/Smoke/Integrity chain.
 
 ## Production-readiness priorities
 
-This is a source/CI comparison, not an account-security certification. Finish the
-following acceptance before calling beta closed; no generic rewrite is required.
+The formal beta acceptance scope is retired by the October 18 owner decision.
+The table below is a historical operator checklist, not an active release gate.
+Only schedule these exercises when there is a concrete operational need; no
+production outage, new mail send or private-account inspection is required to
+close this repository tracker. No account-security certification is claimed.
 
 | Priority / finding  | Next action and completion evidence                                                                                                                                                            | Responsible role                  |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
@@ -748,13 +846,13 @@ authorization.
 
 The latest verified release is recorded at the top of this register; the October 3
 `81e219fc0e9e13dad669e77d5d2508c32eb75908` release is historical evidence.
-Next complete #59's genuinely isolated negative-promotion acceptance, then the
-TLS/account and physical-device evidence. Modernize components only for concrete
+The former #59–#62 acceptance sequence is retired as not planned. Modernize
+components only for concrete
 semantics, responsiveness, lifecycle or measured performance. Work, Experience, Lab
 and Technology are consolidated into the homepage; do not recreate standalone
 destinations without a concrete customer/navigation need. AlienX is a showcase and
-possible future business, not an established LLC. #62's owner editorial/public-contact
-acceptance remains the final Beta Closeout step.
+possible future business, not an established LLC. Editorial corrections should
+identify specific inaccurate copy rather than reopen a blanket sign-off task.
 
 Both owners' chat sessions can work on either repo under the local
 [coordination agreement](../AGENTS.md#cross-project-coordination). Each project
@@ -767,10 +865,10 @@ covered by local email rules. AX-20260930-cassi-review-received-01 records recei
 of Cleaning PR #26's review, not a fabricated reply; CBC-20260929-handoff-01
 remains historically unsent (write 403).
 
-AX-20260929-lighthouse-stderr-01 is reproduced offline as CBC-12; repair and
-independent verification remain pending
-in [Cleaning's register](https://github.com/Cassileigh/cleaning-by-cassi/blob/main/docs/project-state.md#cross-project-coordination).
-AlienX's repair does not prove Cleaning needs or has adopted it. The September 30
+AX-20260929-lighthouse-stderr-01 was reproduced as CBC-12 and subsequently repaired
+and verified in Cleaning #28/#31, as recorded in
+[Cleaning's register](https://github.com/Cassileigh/cleaning-by-cassi/blob/main/docs/project-state.md#cross-project-coordination).
+The earlier pending handoff is historical. The September 30
 Cleaning homepage score failure is separate from the stderr investigation.
 Consolidation does not close external, runtime or device acceptance.
 
