@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://alienxsmarthome.com"><img alt="Live website: alienxsmarthome.com" src="https://img.shields.io/badge/Live_website-alienxsmarthome.com-16803b?style=for-the-badge&logo=googlechrome&logoColor=white" /></a>
-  <a href="https://alienxsmarthome.com/contact/"><img alt="Start a project" src="https://img.shields.io/badge/Get_in_touch-Start_a_project-16803b?style=for-the-badge&logo=maildotru&logoColor=white" /></a>
+  <a href="https://alienxsmarthome.com/contact/"><img alt="Start a project" src="https://img.shields.io/badge/Get_in_touch-Start_a_project-2563eb?style=for-the-badge&logo=maildotru&logoColor=white" /></a>
 </p>
 
 <p align="center">
