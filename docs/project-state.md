@@ -20,17 +20,22 @@ index. The separate Home Assistant article uses the previously unused tracked SV
 as cover artwork, with additional personal details explicitly left for the owner
 to fill in. A nearby repository scan corrected the command palette's stale
 TypeScript 5.9/KV-session claim and the architecture note that still described an
-unused SESSION binding; Astro sessions remain disabled. The candidate remains
-unmerged and unverified in production.
+unused SESSION binding; Astro sessions remain disabled. Safari's PR-head
+keyboard check exposed chapter links skipped by Tab; the candidate explicitly
+includes them in sequential focus order. The same scan aligned the two repos'
+Dependabot configuration: AlienX's `dependencies` label exists, but Cleaning
+removed that optional setting after its label was missing. The candidate has
+not yet been verified in production.
 
 The #155 main revision passed all five checks, CodeQL/zero-open-alert policy and
 exact-revision approval, but its
 [push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39628203601)
 timed out while production still served `8557236d22de045ae1b2d039b3baf7de2255a067`.
-Workers Build outcome was not independently verified; post-Smoke Integrity did not
-run. [Operator alert #156](https://github.com/AlienX420710/alienx-smarthome/issues/156)
-tracks this deployment failure. Neither #155 nor the current candidate is a
-verified production release.
+The unchanged revision's Workers Build finished later. The justified
+[Smoke rerun](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39628203601/attempts/2)
+and [Production Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39636998715)
+then passed on both production hosts, and [operator alert #156](https://github.com/AlienX420710/alienx-smarthome/issues/156)
+was closed. That sequence does not verify the current candidate in production.
 
 ## October 19 hidden-input regression release
 

@@ -32,27 +32,31 @@ import homeAssistantMark from '../icons/social/home-assistant-logomark-color-on-
         <p class="eyebrow">CHOOSE A CHAPTER</p>
         <h2>Go deeper into the story.</h2>
         <div class="story-index__grid">
-          <a href="#chapter-emulators">
+          <a href="#chapter-emulators" tabindex="0">
             <span>01 / ORIGINS</span>
             <strong>Emulators and Windows 98</strong>
             <small>Where curiosity began →</small>
           </a>
-          <a href="#chapter-handheld">
+          <a href="#chapter-handheld" tabindex="0">
             <span>02 / HANDHELD</span>
             <strong>A Game Boy of my own</strong>
             <small>The first personal device →</small>
           </a>
-          <a href="#chapter-homebrew">
+          <a href="#chapter-homebrew" tabindex="0">
             <span>03 / HOMEBREW</span>
             <strong>Wii and Nintendo DS</strong>
             <small>Exploring files and systems →</small>
           </a>
-          <a href="#chapter-connections">
+          <a href="#chapter-connections" tabindex="0">
             <span>04 / CONNECTIONS</span>
             <strong>Consoles and networks</strong>
             <small>Learning what connects them →</small>
           </a>
-          <a class="story-index__featured" href="/about/home-assistant/">
+          <a
+            class="story-index__featured"
+            href="/about/home-assistant/"
+            tabindex="0"
+          >
             <span class="story-index__cover">
               <img src={homeAssistantMark} width="240" height="240" alt="" />
             </span>
@@ -60,7 +64,7 @@ import homeAssistantMark from '../icons/social/home-assistant-logomark-color-on-
             <strong>Home Assistant, Docker and Unraid</strong>
             <small>Read the Home Assistant story →</small>
           </a>
-          <a href="#chapter-websites">
+          <a href="#chapter-websites" tabindex="0">
             <span>06 / BUILDING</span>
             <strong>VLANs and live websites</strong>
             <small>From home network to deployment →</small>
@@ -125,7 +129,11 @@ import homeAssistantMark from '../icons/social/home-assistant-logomark-color-on-
                 run as services. Unraid gave me a place to bring those services
                 together and keep learning how they worked.
               </p>
-              <a class="chapter-link" href="/about/home-assistant/">
+              <a
+                class="chapter-link"
+                href="/about/home-assistant/"
+                tabindex="0"
+              >
                 Read the independent Home Assistant journey →
               </a>
             </div>
