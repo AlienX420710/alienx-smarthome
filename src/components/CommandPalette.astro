@@ -22,9 +22,17 @@ const commandPalette = {
   resultsId: 'palette-results',
   stack:
     'Astro 7\nTypeScript 5.9\nCloudflare Workers\nCloudflare KV sessions\nCloudflare Images\nCloudflare Turnstile\nResend\nGitHub Actions\nCSS + browser APIs',
-  matrix:
-    'SIGNAL ACQUIRED\n\n01000001 01001100 01001001 01000101 01001110 01011000\n\nDecorative interface only. No systems are being accessed.',
-  konamiNotice: 'KONAMI // EASTER EGG ENABLED',
+  matrixLinks: [
+    { label: 'Live system status', href: '/status' },
+    { label: 'The origin story', href: '/about' },
+    { label: 'Start a project', href: '/contact' },
+  ],
+  konamiStory:
+    'LEVEL 01 · Windows 98 emulators and Super Mario 64\nLEVEL 02 · Game Boy, Wii and DS homebrew\nLEVEL 03 · Routers, DNS and wireless networks\nLEVEL 04 · Home Assistant, Docker and Unraid\nLEVEL 05 · VLANs and live websites\n\nRetro mode is on. Run /konami again to switch it off.',
+  konamiLinks: [
+    { label: 'Read the full journey', href: '/about' },
+    { label: 'See what is live', href: '/status' },
+  ],
   commands: [
     {
       name: '/help',
@@ -95,13 +103,13 @@ const commandPalette = {
     },
     {
       name: '/matrix',
-      description: 'Open the AlienX matrix visual',
-      keywords: 'matrix visual terminal',
+      description: 'Explore the live site map and production status',
+      keywords: 'matrix map live status pages',
       action: 'matrix',
     },
     {
       name: '/konami',
-      description: 'Enable the AlienX easter egg',
+      description: 'Toggle retro mode and open the origin story',
       keywords: 'konami easter egg up down left right',
       action: 'konami',
     },
@@ -363,6 +371,28 @@ const commandPalette = {
       SFMono-Regular,
       Menlo,
       monospace;
+  }
+  .palette__overlay-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding: 0 1.1rem 1.2rem;
+  }
+  .palette__overlay-links a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid #3e8e58;
+    border-radius: 8px;
+    color: #dfffe5;
+    text-decoration: none;
+  }
+  .palette__overlay-links a:hover,
+  .palette__overlay-links a:focus-visible {
+    background: #153321;
+    outline: 2px solid #9fffb7;
+    outline-offset: 2px;
   }
   .palette__toast {
     right: 1rem;

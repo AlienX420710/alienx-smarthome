@@ -107,6 +107,14 @@ ordinary touch scrolling. Status has bounded requests and hidden-page pauses;
 visible and physical palette Escape controls dismiss and restore focus correctly;
 contact retries preserve request identity without reusing verification tokens.
 
+The command palette's Matrix command reports the public status endpoint's live
+result and response time, then offers internal status, About and contact links.
+The Konami command and Up Up Down Down Left Right Left Right B A keyboard sequence
+toggle a retro presentation for the current tab, with a short origin-story
+dialog and internal links. The preference survives page navigation in that tab;
+running the command again turns it off. Both dialogs keep keyboard focus inside
+their controls and respect reduced-motion preferences.
+
 The image script decodes raster assets before build, with operation caching disabled
 so generated files can be replaced on repeated Windows builds. Preserve originals and only
 generate derivatives that serve real requests. Do not lazy-load LCP/hero imagery

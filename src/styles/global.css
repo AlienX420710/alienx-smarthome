@@ -309,7 +309,13 @@ html[data-alienx-motion='off'] *::after {
   scroll-behavior: auto !important;
 }
 html[data-alienx-konami='true'] body {
-  text-shadow: 0 0 12px rgba(57, 255, 90, 0.14);
+  text-shadow: 0 0 12px rgba(57, 255, 90, 0.2);
+}
+html[data-alienx-konami='true'] :is(h1, h2, h3, nav) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+html[data-alienx-konami='true'] header {
+  box-shadow: inset 0 -2px 0 #39ff5a;
 }
 ::view-transition-old(root),
 ::view-transition-new(root) {
