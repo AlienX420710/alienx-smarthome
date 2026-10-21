@@ -115,10 +115,43 @@ const createHandlers = (overlay, notify, signal) => ({
     );
   },
   technology_stack: () => overlay('TECHNOLOGY // STACK', config.stack),
-  matrix: () => overlay('MATRIX // VISUAL', config.matrix),
+  matrix: async () => {
+    let health = 'Live status unavailable';
+    try {
+      const started = performance.now();
+      const response = await fetch(config.statusEndpoint, {
+        cache: 'no-store',
+        signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]),
+      });
+      const status = parseStatus(await response.json(), config.statusChecks);
+      health = `Production: ${status.status ?? 'unknown'} · ${Math.round(performance.now() - started)} ms`;
+    } catch {
+      health = 'Production: unreachable from this browser';
+    }
+    overlay(
+      'MATRIX // SITE MAP',
+      `${health}\n\nChoose a destination to explore the live site.`,
+      config.matrixLinks,
+    );
+  },
   konami: () => {
-    document.documentElement.setAttribute(config.konamiAttribute, 'true');
-    notify(config.konamiNotice);
+    const enabled =
+      document.documentElement.getAttribute(config.konamiAttribute) !== 'true';
+    if (enabled) {
+      document.documentElement.setAttribute(config.konamiAttribute, 'true');
+      overlay('KONAMI // ORIGINS', config.konamiStory, config.konamiLinks);
+    } else {
+      document.documentElement.removeAttribute(config.konamiAttribute);
+      notify('KONAMI // RETRO MODE OFF');
+    }
+    try {
+      sessionStorage.setItem(
+        config.konamiAttribute,
+        enabled ? 'true' : 'false',
+      );
+    } catch {
+      // The effect still works for this page when storage is unavailable.
+    }
   },
   motion: () => {
     const off =
@@ -154,6 +187,7 @@ const go = (href) => {
   window.location.href = href;
 };
 let overlayFocus = null;
+let konamiProgress = 0;
 let active = 0,
   previousFocus = null,
   commands = [];
@@ -181,7 +215,7 @@ const notify = (message) => {
     if (toast) toast.hidden = true;
   }, 2400);
 };
-const overlay = (title, content) => {
+const overlay = (title, content, destinations = []) => {
   overlayFocus =
     document.activeElement instanceof HTMLElement
       ? document.activeElement
@@ -198,6 +232,25 @@ const overlay = (title, content) => {
     '<div class="palette__overlay-backdrop" data-command-overlay-close></div><section class="palette__overlay-panel"><div class="palette__overlay-head"><strong id="command-overlay-title"></strong><button type="button" data-command-overlay-close aria-label="Close">ESC</button></div><div class="palette__overlay-content"></div></section>';
   el.querySelector('#command-overlay-title').textContent = title;
   el.querySelector('.palette__overlay-content').textContent = content;
+  if (Array.isArray(destinations) && destinations.length) {
+    const nav = document.createElement('nav');
+    nav.className = 'palette__overlay-links';
+    nav.setAttribute('aria-label', 'Explore pages');
+    for (const destination of destinations) {
+      if (
+        typeof destination?.label !== 'string' ||
+        typeof destination?.href !== 'string' ||
+        !/^\/[a-z0-9/-]*$/i.test(destination.href) ||
+        destination.href.includes('//')
+      )
+        continue;
+      const link = document.createElement('a');
+      link.href = destination.href;
+      link.textContent = destination.label;
+      nav.append(link);
+    }
+    el.querySelector('.palette__overlay-panel').append(nav);
+  }
   el.hidden = false;
   if (!el.open) el.showModal();
   el.querySelector('button[data-command-overlay-close]')?.focus();
@@ -295,6 +348,14 @@ const refreshCommands = () => {
     commands = [];
     return;
   }
+  if (config.konamiAttribute) {
+    try {
+      if (sessionStorage.getItem(config.konamiAttribute) === 'true')
+        document.documentElement.setAttribute(config.konamiAttribute, 'true');
+    } catch {
+      // Session storage is optional.
+    }
+  }
   requests = new AbortController();
   commands = config.commands.map((command) => ({
     ...command,
@@ -337,11 +398,55 @@ const trap = (e) => {
 const key = (e) => {
   if (!root()) return;
   const overlay = document.querySelector(`#${config.overlayId}`);
+  const sequence = [
+    'arrowup',
+    'arrowup',
+    'arrowdown',
+    'arrowdown',
+    'arrowleft',
+    'arrowright',
+    'arrowleft',
+    'arrowright',
+    'b',
+    'a',
+  ];
+  if (
+    root().hidden &&
+    !overlay?.open &&
+    !e.altKey &&
+    !e.ctrlKey &&
+    !e.metaKey &&
+    !(
+      e.target instanceof Element &&
+      e.target.closest('input, textarea, select, [contenteditable]')
+    )
+  ) {
+    const pressed = e.key.toLowerCase();
+    konamiProgress =
+      pressed === sequence[konamiProgress]
+        ? konamiProgress + 1
+        : pressed === sequence[0]
+          ? 1
+          : 0;
+    if (konamiProgress === sequence.length) {
+      konamiProgress = 0;
+      e.preventDefault();
+      commands.find((command) => command.action === 'konami')?.run();
+      return;
+    }
+  }
   if (e.key === 'Tab' && overlay?.open) {
-    // This informational dialog has one control. Keep both tab directions
-    // inside it rather than letting focus escape to browser chrome/body.
+    const controls = [...overlay.querySelectorAll('button, a[href]')];
+    const current = controls.indexOf(document.activeElement);
+    const step = e.shiftKey ? -1 : 1;
     e.preventDefault();
-    overlay.querySelector('button[data-command-overlay-close]')?.focus();
+    const next =
+      current < 0
+        ? e.shiftKey
+          ? controls.length - 1
+          : 0
+        : (current + step + controls.length) % controls.length;
+    controls[next]?.focus();
     return;
   }
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {

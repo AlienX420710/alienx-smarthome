@@ -87,6 +87,8 @@ export async function verifyIntegrity({
     }
     const status = await request(origin, '/api/status');
     assertHeaders(status.headers, { status: true });
+    // Consume the response before later probes can outlive its request timeout.
+    const data = await status.json();
     const release = await request(origin, '/api/release');
     if (site.csp.headerResources) assertHeaders(release.headers, { candidate });
     else assertSecurityHeaders(release.headers);
@@ -100,7 +102,6 @@ export async function verifyIntegrity({
       if (!asset.ok) throw Error(path + ': asset unavailable');
       assertSecurityHeaders(asset.headers);
     }
-    const data = await status.json();
     if (
       !(candidate
         ? (status.status === 503 && data.ok === false) ||

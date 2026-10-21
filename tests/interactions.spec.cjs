@@ -129,6 +129,62 @@ test('command palette Escape control closes by touch', async ({ browser }) => {
   await expect(page.locator('#alienx-palette')).toBeHidden();
   await context.close();
 });
+test('Matrix shows live health and navigates to a real page', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.route('**/api/status', (route) => route.fulfill({ json: status }));
+  await page.goto(base);
+  await page.getByRole('button', { name: 'Open command palette' }).click();
+  const input = page.getByRole('searchbox', { name: 'Search AlienX commands' });
+  await input.fill('/matrix');
+  await input.press('Enter');
+  const dialog = page.locator('#alienx-command-overlay');
+  await expect(dialog).toContainText('Production: operational');
+  const about = dialog.getByRole('link', { name: 'The origin story' });
+  await expect(dialog.getByRole('button', { name: 'Close' })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  await expect(about).toBeFocused();
+  await about.click();
+  await expect(page).toHaveURL(/\/about\/?$/);
+});
+
+test('Konami code opens the origin story and toggles retro mode', async ({
+  page,
+}) => {
+  await page.goto(base);
+  const code = [
+    'ArrowUp',
+    'ArrowUp',
+    'ArrowDown',
+    'ArrowDown',
+    'ArrowLeft',
+    'ArrowRight',
+    'ArrowLeft',
+    'ArrowRight',
+    'b',
+    'a',
+  ];
+  for (const key of code) await page.keyboard.press(key);
+  const dialog = page.locator('#alienx-command-overlay');
+  await expect(dialog).toContainText('Windows 98 emulators');
+  await expect(
+    dialog.getByRole('link', { name: 'Read the full journey' }),
+  ).toHaveAttribute('href', '/about');
+  await expect(page.locator('html')).toHaveAttribute(
+    'data-alienx-konami',
+    'true',
+  );
+  await dialog.getByRole('link', { name: 'Read the full journey' }).click();
+  await expect(page).toHaveURL(/\/about\/?$/);
+  await expect(page.locator('html')).toHaveAttribute(
+    'data-alienx-konami',
+    'true',
+  );
+  for (const key of code) await page.keyboard.press(key);
+  await expect(page.locator('html')).not.toHaveAttribute('data-alienx-konami');
+});
 
 test('Status refresh repeats and stops after navigation', async ({ page }) => {
   let requests = 0;
