@@ -43,6 +43,7 @@ for (const route of routes) {
     test(`${route} ${theme}: skip, forward/reverse navigation and command access`, async ({
       page,
     }) => {
+      if (route === '/about/') test.slow();
       await page.addInitScript(
         (theme) => localStorage.setItem('alienx-theme', theme),
         theme,

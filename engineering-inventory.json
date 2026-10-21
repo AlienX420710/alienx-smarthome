@@ -426,6 +426,10 @@
       "kind": "site-template",
       "reason": "Local content, component composition, metadata and styles; behavioral script bodies and independent browser lifecycle calls are forbidden."
     },
+    "src/pages/about/home-assistant.astro": {
+      "kind": "site-template",
+      "reason": "Local personal story, cover artwork, metadata and styles."
+    },
     "src/pages/api/inquiry.ts": {
       "kind": "adapter",
       "reason": "Ordered inquiry schema decisions and business email templates; verified middleware locals, shared validation, delivery acceptance and response mechanics.",

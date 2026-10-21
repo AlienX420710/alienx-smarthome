@@ -21,12 +21,7 @@ const commandPalette = {
   inputId: 'palette-input',
   resultsId: 'palette-results',
   stack:
-    'Astro 7\nTypeScript 5.9\nCloudflare Workers\nCloudflare KV sessions\nCloudflare Images\nCloudflare Turnstile\nResend\nGitHub Actions\nCSS + browser APIs',
-  matrixLinks: [
-    { label: 'Live system status', href: '/status' },
-    { label: 'The origin story', href: '/about' },
-    { label: 'Start a project', href: '/contact' },
-  ],
+    'Astro 7\nTypeScript 6\nCloudflare Workers\nCloudflare Images\nCloudflare Turnstile\nResend\nGitHub Actions\nCSS + browser APIs',
   konamiStory:
     'LEVEL 01 · Windows 98 emulators and Super Mario 64\nLEVEL 02 · Game Boy, Wii and DS homebrew\nLEVEL 03 · Routers, DNS and wireless networks\nLEVEL 04 · Home Assistant, Docker and Unraid\nLEVEL 05 · VLANs and live websites\n\nRetro mode is on. Run /konami again to switch it off.',
   konamiLinks: [
@@ -103,8 +98,8 @@ const commandPalette = {
     },
     {
       name: '/matrix',
-      description: 'Explore the live site map and production status',
-      keywords: 'matrix map live status pages',
+      description: 'Watch ten seconds of green code rain',
+      keywords: 'matrix movie code rain easter egg',
       action: 'matrix',
     },
     {
@@ -371,6 +366,21 @@ const commandPalette = {
       SFMono-Regular,
       Menlo,
       monospace;
+  }
+  .palette__overlay--matrix .palette__overlay-panel {
+    width: min(900px, 100%);
+    border-color: #1b7138;
+    background: #000b03;
+  }
+  .palette__overlay--matrix .palette__overlay-content {
+    color: #abffc0;
+  }
+  .palette__matrix-rain {
+    display: block;
+    width: 100%;
+    height: min(55vh, 440px);
+    margin-bottom: 1rem;
+    background: #000500;
   }
   .palette__overlay-links {
     display: flex;

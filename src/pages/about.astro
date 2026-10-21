@@ -3,6 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE } from '../consts';
+import homeAssistantMark from '../icons/social/home-assistant-logomark-color-on-light.svg?url';
 ---
 
 <!doctype html>
@@ -27,11 +28,54 @@ import { SITE_TITLE } from '../consts';
           Assistant, Unraid, and eventually websites, software, and automation.
         </p>
       </section>
+      <nav class="story-index" aria-label="Explore my story">
+        <p class="eyebrow">CHOOSE A CHAPTER</p>
+        <h2>Go deeper into the story.</h2>
+        <div class="story-index__grid">
+          <a href="#chapter-emulators" tabindex="0">
+            <span>01 / ORIGINS</span>
+            <strong>Emulators and Windows 98</strong>
+            <small>Where curiosity began →</small>
+          </a>
+          <a href="#chapter-handheld" tabindex="0">
+            <span>02 / HANDHELD</span>
+            <strong>A Game Boy of my own</strong>
+            <small>The first personal device →</small>
+          </a>
+          <a href="#chapter-homebrew" tabindex="0">
+            <span>03 / HOMEBREW</span>
+            <strong>Wii and Nintendo DS</strong>
+            <small>Exploring files and systems →</small>
+          </a>
+          <a href="#chapter-connections" tabindex="0">
+            <span>04 / CONNECTIONS</span>
+            <strong>Consoles and networks</strong>
+            <small>Learning what connects them →</small>
+          </a>
+          <a
+            class="story-index__featured"
+            href="/about/home-assistant/"
+            tabindex="0"
+          >
+            <span class="story-index__cover">
+              <img src={homeAssistantMark} width="240" height="240" alt="" />
+            </span>
+            <span>05 / INDEPENDENT JOURNEY</span>
+            <strong>Home Assistant, Docker and Unraid</strong>
+            <small>Read the Home Assistant story →</small>
+          </a>
+          <a href="#chapter-websites" tabindex="0">
+            <span>06 / BUILDING</span>
+            <strong>VLANs and live websites</strong>
+            <small>From home network to deployment →</small>
+          </a>
+        </div>
+      </nav>
       <section class="journey" aria-labelledby="journey-title">
         <p class="eyebrow">THE JOURNEY</p>
         <h2 id="journey-title">One chapter led to the next.</h2>
         <ol class="timeline">
-          <li class="timeline-item">
+          <li class="timeline-item" id="chapter-emulators">
             <span class="number">01</span>
             <div>
               <h3>Windows 98 and emulators</h3>
@@ -41,7 +85,7 @@ import { SITE_TITLE } from '../consts';
               </p>
             </div>
           </li>
-          <li class="timeline-item">
+          <li class="timeline-item" id="chapter-handheld">
             <span class="number">02</span>
             <div>
               <h3>Game Boy and iPod Nano</h3>
@@ -51,7 +95,7 @@ import { SITE_TITLE } from '../consts';
               </p>
             </div>
           </li>
-          <li class="timeline-item">
+          <li class="timeline-item" id="chapter-homebrew">
             <span class="number">03</span>
             <div>
               <h3>Homebrew on the Wii and DS</h3>
@@ -63,7 +107,7 @@ import { SITE_TITLE } from '../consts';
               </p>
             </div>
           </li>
-          <li class="timeline-item">
+          <li class="timeline-item" id="chapter-connections">
             <span class="number">04</span>
             <div>
               <h3>Consoles, phones, and connections</h3>
@@ -75,7 +119,7 @@ import { SITE_TITLE } from '../consts';
               </p>
             </div>
           </li>
-          <li class="timeline-item">
+          <li class="timeline-item" id="chapter-home-assistant">
             <span class="number">05</span>
             <div>
               <h3>Home Assistant, Docker, and Unraid</h3>
@@ -85,9 +129,16 @@ import { SITE_TITLE } from '../consts';
                 run as services. Unraid gave me a place to bring those services
                 together and keep learning how they worked.
               </p>
+              <a
+                class="chapter-link"
+                href="/about/home-assistant/"
+                tabindex="0"
+              >
+                Read the independent Home Assistant journey →
+              </a>
             </div>
           </li>
-          <li class="timeline-item">
+          <li class="timeline-item" id="chapter-websites">
             <span class="number">06</span>
             <div>
               <h3>VLANs and live websites</h3>
@@ -163,17 +214,75 @@ import { SITE_TITLE } from '../consts';
     max-width: 900px;
     font-size: clamp(3.2rem, 7vw, 6.8rem);
   }
-  h1 {
-    color: var(--about-heading);
-  }
-  h1::first-line {
-  }
   .lede {
     max-width: 760px;
     margin-top: 2rem;
     color: var(--about-muted);
     font-size: 1.2rem;
     line-height: 1.7;
+  }
+  .story-index {
+    margin-top: 6rem;
+  }
+  .story-index__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+  .story-index__grid a {
+    display: flex;
+    flex-direction: column;
+    min-height: 180px;
+    padding: 1.5rem;
+    border: 1px solid var(--about-card-border);
+    border-radius: 20px;
+    background: var(--about-surface);
+    color: var(--about-heading);
+    text-decoration: none;
+  }
+  .story-index__grid a:hover,
+  .story-index__grid a:focus-visible,
+  .chapter-link:focus-visible {
+    border-color: var(--about-accent);
+    outline: 2px solid var(--about-accent);
+    outline-offset: 3px;
+  }
+  .story-index__grid span:not(.story-index__cover) {
+    color: var(--about-eyebrow);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+  }
+  .story-index__grid strong {
+    margin-top: 1rem;
+    font-size: clamp(1.3rem, 2vw, 1.8rem);
+    line-height: 1.15;
+  }
+  .story-index__grid small {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    color: var(--about-accent);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  .story-index__cover {
+    display: grid;
+    place-items: center;
+    min-height: 210px;
+    margin: -1.5rem -1.5rem 1.5rem;
+    border-radius: 19px 19px 0 0;
+    background: linear-gradient(135deg, #eafaff, #c0edf9);
+  }
+  .story-index__cover img {
+    width: 118px;
+    height: 118px;
+  }
+  .chapter-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--about-accent);
+    font-weight: 700;
   }
   .journey {
     margin-top: 8rem;
@@ -193,6 +302,7 @@ import { SITE_TITLE } from '../consts';
   }
   .timeline-item {
     container-type: inline-size;
+    scroll-margin-top: 6rem;
     display: grid;
     grid-template-columns: 72px 1fr;
     gap: 1.5rem;
@@ -315,6 +425,9 @@ import { SITE_TITLE } from '../consts';
     .timeline .timeline-item {
       grid-template-columns: 1fr;
       gap: 0.5rem;
+    }
+    .story-index__grid {
+      grid-template-columns: 1fr;
     }
   }
   @media (prefers-reduced-motion: reduce) {

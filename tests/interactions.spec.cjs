@@ -129,25 +129,46 @@ test('command palette Escape control closes by touch', async ({ browser }) => {
   await expect(page.locator('#alienx-palette')).toBeHidden();
   await context.close();
 });
-test('Matrix shows live health and navigates to a real page', async ({
+test('Matrix plays green code rain and stops after ten seconds', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.route('**/api/status', (route) => route.fulfill({ json: status }));
+  await page.clock.install();
   await page.goto(base);
   await page.getByRole('button', { name: 'Open command palette' }).click();
   const input = page.getByRole('searchbox', { name: 'Search AlienX commands' });
   await input.fill('/matrix');
   await input.press('Enter');
   const dialog = page.locator('#alienx-command-overlay');
-  await expect(dialog).toContainText('Production: operational');
-  const about = dialog.getByRole('link', { name: 'The origin story' });
+  await expect(dialog.locator('canvas.palette__matrix-rain')).toBeVisible();
+  await expect(dialog).toContainText('10 seconds');
   await expect(dialog.getByRole('button', { name: 'Close' })).toBeFocused();
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
-  await expect(about).toBeFocused();
-  await about.click();
+  await page.clock.fastForward(10001);
+  await expect(dialog).toBeHidden();
+  await expect(
+    page.getByRole('button', { name: 'Open command palette' }),
+  ).toBeFocused();
+  await expect(page).toHaveURL(/\/$/);
+});
+
+test('About chapter menu opens the Home Assistant story', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base + '/about/');
+  const index = page.getByRole('navigation', { name: 'Explore my story' });
+  await index
+    .getByRole('link', { name: /Home Assistant, Docker and Unraid/ })
+    .click();
+  await expect(page).toHaveURL(/\/about\/home-assistant\/?$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    'My Home Assistant journey',
+  );
+  await expect(
+    page.getByRole('img', { name: 'Home Assistant logo' }),
+  ).toHaveAttribute('src', /^data:image\/svg\+xml/);
+  await page.getByRole('link', { name: 'All chapters' }).first().click();
   await expect(page).toHaveURL(/\/about\/?$/);
+  await index.getByRole('link', { name: /Emulators and Windows 98/ }).click();
+  await expect(page).toHaveURL(/#chapter-emulators$/);
 });
 
 test('Konami code opens the origin story and toggles retro mode', async ({
