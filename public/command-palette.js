@@ -115,25 +115,7 @@ const createHandlers = (overlay, notify, signal) => ({
     );
   },
   technology_stack: () => overlay('TECHNOLOGY // STACK', config.stack),
-  matrix: async () => {
-    let health = 'Live status unavailable';
-    try {
-      const started = performance.now();
-      const response = await fetch(config.statusEndpoint, {
-        cache: 'no-store',
-        signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]),
-      });
-      const status = parseStatus(await response.json(), config.statusChecks);
-      health = `Production: ${status.status ?? 'unknown'} · ${Math.round(performance.now() - started)} ms`;
-    } catch {
-      health = 'Production: unreachable from this browser';
-    }
-    overlay(
-      'MATRIX // SITE MAP',
-      `${health}\n\nChoose a destination to explore the live site.`,
-      config.matrixLinks,
-    );
-  },
+  matrix: () => startMatrix(),
   konami: () => {
     const enabled =
       document.documentElement.getAttribute(config.konamiAttribute) !== 'true';
@@ -187,6 +169,7 @@ const go = (href) => {
   window.location.href = href;
 };
 let overlayFocus = null;
+let matrix = null;
 let konamiProgress = 0;
 let active = 0,
   previousFocus = null,
@@ -216,6 +199,7 @@ const notify = (message) => {
   }, 2400);
 };
 const overlay = (title, content, destinations = []) => {
+  stopMatrix();
   overlayFocus =
     document.activeElement instanceof HTMLElement
       ? document.activeElement
@@ -228,6 +212,7 @@ const overlay = (title, content, destinations = []) => {
     el.className = 'palette__overlay';
     document.body.appendChild(el);
   }
+  el.classList.remove('palette__overlay--matrix');
   el.innerHTML =
     '<div class="palette__overlay-backdrop" data-command-overlay-close></div><section class="palette__overlay-panel"><div class="palette__overlay-head"><strong id="command-overlay-title"></strong><button type="button" data-command-overlay-close aria-label="Close">ESC</button></div><div class="palette__overlay-content"></div></section>';
   el.querySelector('#command-overlay-title').textContent = title;
@@ -255,10 +240,77 @@ const overlay = (title, content, destinations = []) => {
   if (!el.open) el.showModal();
   el.querySelector('button[data-command-overlay-close]')?.focus();
 };
+const stopMatrix = () => {
+  if (!matrix) return;
+  window.clearTimeout(matrix.timeout);
+  window.cancelAnimationFrame(matrix.frame);
+  window.removeEventListener('resize', matrix.resize);
+  matrix = null;
+};
+const startMatrix = () => {
+  overlay(
+    'MATRIX',
+    'Follow the white rabbit. The code rain ends in 10 seconds.',
+  );
+  const dialog = document.querySelector(`#${config.overlayId}`);
+  const content = dialog?.querySelector('.palette__overlay-content');
+  if (!dialog || !content) return;
+  dialog.classList.add('palette__overlay--matrix');
+  const canvas = document.createElement('canvas');
+  canvas.className = 'palette__matrix-rain';
+  canvas.setAttribute('aria-hidden', 'true');
+  content.prepend(canvas);
+  const context = canvas.getContext('2d');
+  const reduced =
+    matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    document.documentElement.getAttribute(config.motionAttribute) === 'off';
+  let columns = [];
+  const glyphs = 'アイウエオカキクケコサシスセソ012345789';
+  const resize = () => {
+    const width = Math.max(1, Math.round(canvas.clientWidth));
+    const height = Math.max(1, Math.round(canvas.clientHeight));
+    const ratio = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = Math.round(width * ratio);
+    canvas.height = Math.round(height * ratio);
+    context?.setTransform(ratio, 0, 0, ratio, 0, 0);
+    columns = Array.from({ length: Math.ceil(width / 18) }, () =>
+      Math.floor(Math.random() * (height / 18)),
+    );
+  };
+  resize();
+  window.addEventListener('resize', resize);
+  const draw = () => {
+    if (!context || !matrix || !dialog.open) return;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    context.fillStyle = 'rgba(0, 5, 1, 0.14)';
+    context.fillRect(0, 0, width, height);
+    context.font = '16px monospace';
+    context.fillStyle = '#58ff7a';
+    columns.forEach((position, index) => {
+      context.fillText(
+        glyphs[Math.floor(Math.random() * glyphs.length)],
+        index * 18,
+        position * 18,
+      );
+      columns[index] =
+        position * 18 > height && Math.random() > 0.975 ? 0 : position + 1;
+    });
+    matrix.frame = window.requestAnimationFrame(draw);
+  };
+  matrix = {
+    frame: 0,
+    timeout: window.setTimeout(closeOverlay, 10000),
+    resize,
+  };
+  if (!reduced) matrix.frame = window.requestAnimationFrame(draw);
+};
 const closeOverlay = () => {
   if (!config) return;
   const el = document.querySelector(`#${config.overlayId}`);
   if (el?.open) {
+    stopMatrix();
+    el.classList.remove('palette__overlay--matrix');
     el.close();
     el.hidden = true;
     overlayFocus?.focus();

@@ -10,8 +10,9 @@ Workers remain the stack. This is a technology showcase, not a home-control syst
   prevention; api/inquiry.ts independently revalidates fields. Defense in depth
   is intentional, not duplicate code to remove.
 - src/mail.ts owns shared mail transport; src/worker.ts preserves HTTP and
-  adds scheduling. ASSETS, IMAGES, SESSION and mandatory INQUIRY_RATE_LIMITER
-  bindings remain separate; namespace 2107100911 is reserved for this site.
+  adds scheduling. ASSETS, IMAGES and mandatory INQUIRY_RATE_LIMITER bindings
+  remain separate; namespace 2107100911 is reserved for this site. Astro sessions
+  are disabled, so the build must not provision an unused SESSION KV namespace.
 - public/site-preferences.js applies theme/motion before paint and page swaps;
   contact-security.js supplies site-specific Turnstile options and bootstrap to
   the shared public/turnstile-engine.js lifecycle.
@@ -107,8 +108,12 @@ ordinary touch scrolling. Status has bounded requests and hidden-page pauses;
 visible and physical palette Escape controls dismiss and restore focus correctly;
 contact retries preserve request identity without reusing verification tokens.
 
-The command palette's Matrix command reports the public status endpoint's live
-result and response time, then offers internal status, About and contact links.
+The command palette's Matrix command opens ten seconds of animated green code
+rain with a visible close control; it automatically closes and restores focus.
+Reduced-motion or disabled site motion leaves the static, timed dialog available.
+The About page uses a linked story index leading to its chapter summaries and a
+separate `/about/home-assistant/` article. The tracked Home Assistant SVG is the
+article's cover artwork and appears on its story-index card.
 The Konami command and Up Up Down Down Left Right Left Right B A keyboard sequence
 toggle a retro presentation for the current tab, with a short origin-story
 dialog and internal links. The preference survives page navigation in that tab;

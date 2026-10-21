@@ -1,6 +1,6 @@
 # AlienX — current state
 
-Updated October 19, 2026. This file alone owns findings and dated release
+Updated October 21, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
@@ -9,6 +9,28 @@ release tied to the retired beta acceptance checklist. Versioned releases remain
 subject to the unchanged exact-revision CI and production gates. Unperformed
 private-account, device, inbox and isolated-recovery acceptance is not certified
 by issue closure or a release label.
+
+## October 21 Matrix and About follow-up
+
+[PR #155](https://github.com/AlienX420710/alienx-smarthome/pull/155) merged as
+`ea336c924e134b10899eba8eb30638719282b02c`, but its Matrix status/site-map
+behavior did not match the owner's intended movie reference. The current candidate
+replaces it with ten seconds of green code rain and restores a linked About story
+index. The separate Home Assistant article uses the previously unused tracked SVG
+as cover artwork, with additional personal details explicitly left for the owner
+to fill in. A nearby repository scan corrected the command palette's stale
+TypeScript 5.9/KV-session claim and the architecture note that still described an
+unused SESSION binding; Astro sessions remain disabled. The candidate remains
+unmerged and unverified in production.
+
+The #155 main revision passed all five checks, CodeQL/zero-open-alert policy and
+exact-revision approval, but its
+[push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39628203601)
+timed out while production still served `8557236d22de045ae1b2d039b3baf7de2255a067`.
+Workers Build outcome was not independently verified; post-Smoke Integrity did not
+run. [Operator alert #156](https://github.com/AlienX420710/alienx-smarthome/issues/156)
+tracks this deployment failure. Neither #155 nor the current candidate is a
+verified production release.
 
 ## October 19 hidden-input regression release
 

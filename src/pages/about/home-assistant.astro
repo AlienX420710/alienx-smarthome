@@ -1,0 +1,178 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE } from '../../consts';
+import homeAssistantMark from '../../icons/social/home-assistant-logomark-color-on-light.svg?url';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title={`My Home Assistant journey — ${SITE_TITLE}`}
+      description="The independent Home Assistant chapter of my story, from apps and containers to Unraid and networking."
+    />
+  </head>
+  <body>
+    <Header />
+    <main id="main-content" tabindex="-1">
+      <a class="back" href="/about/">
+        ← All chapters
+      </a>
+      <article>
+        <header>
+          <p class="eyebrow">ABOUT ME / INDEPENDENT JOURNEY</p>
+          <h1>My Home Assistant journey</h1>
+          <p class="lede">
+            Home Assistant was where my interest in connected devices turned
+            into an interest in the systems behind them.
+          </p>
+          <div class="cover">
+            <img
+              src={homeAssistantMark}
+              width="240"
+              height="240"
+              alt="Home Assistant logo"
+            />
+          </div>
+        </header>
+        <nav aria-label="In this chapter">
+          <strong>In this chapter</strong>
+          <a href="#starting-point">Starting point</a>
+          <a href="#apps-and-services">Apps and services</a>
+          <a href="#unraid-and-networking">Unraid and networking</a>
+          <a href="#story-notes">Story notes</a>
+        </nav>
+        <section id="starting-point">
+          <h2>Starting with the home</h2>
+          <p>
+            After years of exploring games, devices, and homebrew, I wanted to
+            understand how the devices around me worked together. Home Assistant
+            gave me a place to try that for myself. It moved my curiosity from
+            individual devices to the connections and services that make a home
+            feel responsive.
+          </p>
+        </section>
+        <section id="apps-and-services">
+          <h2>From “apps” to services</h2>
+          <p>
+            Docker helped me see that the tools I called apps could be services
+            running in containers. That distinction changed how I thought about
+            installing, updating, and connecting software. I was no longer only
+            using an interface; I was learning what kept it running.
+          </p>
+        </section>
+        <section id="unraid-and-networking">
+          <h2>The systems underneath</h2>
+          <p>
+            Unraid gave me a place to bring services together. Routers, IP
+            addresses, DNS, Wi-Fi, MAC addresses, and eventually VLANs became
+            part of the same story: understanding why things could—or could
+            not—talk to one another. That path led naturally toward deploying
+            live websites.
+          </p>
+        </section>
+        <section id="story-notes" class="story-notes">
+          <h2>Details to add to this chapter</h2>
+          <p>
+            This is the beginning of the story. I still want to add the first
+            device or automation that made Home Assistant click, the Docker
+            setup that taught me the most, and the Unraid or network problem I
+            remember solving. Those details belong here when I can tell them
+            accurately.
+          </p>
+        </section>
+      </article>
+      <a class="back" href="/about/">
+        ← Back to all chapters
+      </a>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  main {
+    width: min(920px, calc(100% - 32px));
+    max-width: none;
+    padding: 4rem 0 7rem;
+  }
+  article {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .back {
+    display: inline-block;
+    margin-bottom: 2.5rem;
+    color: light-dark(var(--brand-green-dark), var(--brand-green));
+    font-weight: 700;
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+  }
+  h1 {
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    line-height: 1.05;
+  }
+  h2 {
+    margin-top: 0;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+  }
+  .lede {
+    font-size: 1.25rem;
+    line-height: 1.65;
+  }
+  .cover {
+    display: grid;
+    place-items: center;
+    min-height: 320px;
+    margin: 2.5rem 0;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #eafaff, #bde9fa);
+  }
+  .cover img {
+    width: min(190px, 40vw);
+    height: auto;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    padding: 1.3rem;
+    border: 1px solid currentColor;
+    border-radius: 16px;
+  }
+  nav strong {
+    width: 100%;
+  }
+  nav a {
+    color: light-dark(var(--brand-green-dark), var(--brand-green));
+  }
+  section {
+    padding: 3rem 0;
+    border-bottom: 1px solid #3c4659;
+    scroll-margin-top: 5rem;
+  }
+  section p {
+    font-size: 1.08rem;
+    line-height: 1.8;
+  }
+  .story-notes {
+    margin-bottom: 2rem;
+  }
+  a:focus-visible {
+    outline: 2px solid light-dark(var(--brand-green-dark), var(--brand-green));
+    outline-offset: 4px;
+  }
+  @media (max-width: 600px) {
+    main {
+      padding-top: 2.5rem;
+    }
+    .cover {
+      min-height: 240px;
+    }
+  }
+</style>
