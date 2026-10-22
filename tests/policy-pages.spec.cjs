@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const base = 'http://127.0.0.1:4321';
 
-test('contact notice links policies without changing inquiry consent', async ({
+test('contact notice links policies without requiring a permission checkbox', async ({
   page,
 }) => {
   await page.route('https://challenges.cloudflare.com/**', (route) =>
@@ -11,8 +11,7 @@ test('contact notice links policies without changing inquiry consent', async ({
   const notice = page.locator('#inquiry-privacy-note');
   await expect(notice).toBeVisible();
   await expect(notice).toContainText('not for marketing');
-  await expect(page.locator('#consent')).toHaveAttribute('required', '');
-  await expect(page.locator('#consent')).not.toBeChecked();
+  await expect(page.locator('#consent')).toHaveCount(0);
   expect(
     await page
       .locator('#submit-button')

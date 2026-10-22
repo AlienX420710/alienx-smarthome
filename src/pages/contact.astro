@@ -254,21 +254,6 @@ import { SITE_TITLE } from '../consts';
           </fieldset>
 
           <HoneypotField />
-          <div class="consent">
-            <label class="checkbox-label">
-              <input
-                id="consent"
-                name="consent"
-                type="checkbox"
-                value="yes"
-                required
-              />
-              <span>
-                I agree that AlienX may contact me about this inquiry.
-              </span>
-            </label>
-            <p class="error" data-error="consent" role="alert"></p>
-          </div>
           <div class="actions">
             <button type="submit" id="submit-button">
               <span data-button-label>Start the conversation</span>
@@ -322,7 +307,7 @@ import { SITE_TITLE } from '../consts';
     --contact-input-border: #263149;
     --contact-divider: #1a2232;
     --contact-placeholder: #7f8ba2;
-    --contact-checkbox: #eef2ff;
+    --contact-button: #eef2ff;
     --contact-error: #f2a7b0;
     color: var(--contact-text);
   }
@@ -507,29 +492,6 @@ import { SITE_TITLE } from '../consts';
     color: var(--contact-error);
     font-size: 0.75rem;
   }
-  .consent {
-    margin-top: 1.5rem;
-  }
-  .checkbox-label {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.7rem;
-    margin: 0;
-    color: #b8c2d5;
-    font-size: 0.8rem;
-    font-weight: 400;
-    line-height: 1.5;
-    letter-spacing: 0;
-    cursor: pointer;
-  }
-  .checkbox-label input {
-    width: 1rem;
-    height: 1rem;
-    flex: 0 0 auto;
-    margin: 0.15rem 0 0;
-    padding: 0;
-    accent-color: var(--contact-checkbox);
-  }
   .actions {
     margin-top: 1.25rem;
   }
@@ -554,7 +516,7 @@ import { SITE_TITLE } from '../consts';
     border: 1px solid #68789f;
     border-radius: 15px;
     padding: 1rem 1.1rem;
-    background: var(--contact-checkbox);
+    background: var(--contact-button);
     color: #080b12;
     font: inherit;
     font-weight: 700;
@@ -603,7 +565,7 @@ import { SITE_TITLE } from '../consts';
       --contact-input-border: #cfd6e3;
       --contact-divider: #d7deea;
       --contact-placeholder: #626f87;
-      --contact-checkbox: #0f1219;
+      --contact-button: #0f1219;
       --contact-error: #a3263c;
     }
     :global(html:where(:not([data-alienx-theme]))) .signal b {
@@ -611,9 +573,6 @@ import { SITE_TITLE } from '../consts';
     }
     :global(html:where(:not([data-alienx-theme]))) .hint {
       color: #687797;
-    }
-    :global(html:where(:not([data-alienx-theme]))) .checkbox-label {
-      color: #596780;
     }
     :global(html:where(:not([data-alienx-theme]))) button {
       color: #fff;
@@ -636,7 +595,7 @@ import { SITE_TITLE } from '../consts';
     --contact-input-border: #cfd6e3;
     --contact-divider: #d7deea;
     --contact-placeholder: #626f87;
-    --contact-checkbox: #0f1219;
+    --contact-button: #0f1219;
     --contact-error: #a3263c;
   }
   :global(html[data-alienx-theme='light']) .signal b {
@@ -644,9 +603,6 @@ import { SITE_TITLE } from '../consts';
   }
   :global(html[data-alienx-theme='light']) .hint {
     color: #687797;
-  }
-  :global(html[data-alienx-theme='light']) .checkbox-label {
-    color: #596780;
   }
   :global(html[data-alienx-theme='light']) button {
     color: #fff;
@@ -668,7 +624,7 @@ import { SITE_TITLE } from '../consts';
     --contact-input-border: #cfd6e3;
     --contact-divider: #d7deea;
     --contact-placeholder: #626f87;
-    --contact-checkbox: #0f1219;
+    --contact-button: #0f1219;
     --contact-error: #a3263c;
   }
   @media (max-width: 900px) {

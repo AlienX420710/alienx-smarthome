@@ -38,7 +38,6 @@ async function prepare(page, blocked = false) {
     await page
       .locator('[name="message"]')
       .fill('A synthetic project inquiry for a mocked test.');
-    await page.locator('[name="consent"]').check();
   }
   const token =
     site.form.encoding === 'form' ? 'cf-turnstile-response' : 'website';

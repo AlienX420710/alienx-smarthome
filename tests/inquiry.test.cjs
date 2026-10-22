@@ -59,7 +59,6 @@ function load(file, extra = {}) {
   return context.exports;
 }
 const valid = {
-  consent: true,
   name: 'Test Person',
   email: 'test@example.test',
   contactMethod: 'email',
@@ -217,6 +216,11 @@ for (const faxNumber of [' ', '\t', null, false, 0, [], {}]) {
 }
 test('empty honeypot permits otherwise verified inquiries', async () => {
   assert.equal((await harness().send({ ...valid, faxNumber: '' })).status, 200);
+});
+test('verified inquiry without a contact-permission checkbox reaches mail', async () => {
+  const h = harness();
+  assert.equal((await h.send(valid)).status, 200);
+  assert.equal(h.counts().emails, 1);
 });
 for (const success of ['true', 1, {}, false, null]) {
   test(`non-boolean verification ${JSON.stringify(success)} never sends email`, async () => {

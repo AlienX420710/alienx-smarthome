@@ -33,9 +33,9 @@ Workers remain the stack. This is a technology showcase, not a home-control syst
 `/privacy/` and `/terms/` own the public website policies, presented by
 `src/layouts/PolicyLayout.astro`. The contact form links both below its submit
 controls, and the footer links them site-wide. Policy copy reflects personal
-operation in Wisconsin and no marketing use of inquiry information. The existing
-required contact permission remains inquiry-specific, not marketing consent or a
-paid-service contract. Project terms require a separate agreement. Both routes
+operation in Wisconsin and no marketing use of inquiry information. Sending an
+inquiry permits a response about that inquiry; there is no separate permission
+checkbox or marketing opt-in. Project terms require a separate agreement. Both routes
 are configured for the existing shared browser, accessibility and integrity gates.
 
 `POST /api/inquiry` and `/api/inquiry/` share the same middleware boundary.
@@ -52,8 +52,8 @@ The honeypot must be absent or exactly an empty string. Turnstile requires
 configured secrets/hostnames, a bounded token, boolean success, an allowed
 hostname and action `contact`. A ten-second verification timeout fails closed.
 Only server-owned locals pass verified data to the handler; client headers
-cannot substitute for verification. The handler independently validates fields,
-allowlists and consent and escapes submitted HTML content.
+cannot substitute for verification. The handler independently validates fields
+and allowlists and escapes submitted HTML content.
 
 Mail goes from the fixed configured sender to the fixed business recipient;
 the submitted email is a reply-to, not a caller-selected business destination.

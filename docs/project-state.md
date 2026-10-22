@@ -10,6 +10,16 @@ subject to the unchanged exact-revision CI and production gates. Unperformed
 private-account, device, inbox and isolated-recovery acceptance is not certified
 by issue closure or a release label.
 
+## October 21 contact keyboard submission correction — candidate
+
+The owner requested removal of the required inquiry contact checkbox because it
+blocked keyboard-only submission. The candidate removes that control and its
+client/API requirement, updates policy copy, and retains the privacy notice,
+required field validation, Turnstile and rate limiting. The form destination
+also now matches the configured trailing-slash success route. Browser and API
+checks must confirm keyboard submission without the removed field. Production
+evidence will be recorded after merge and deployment.
+
 ## October 21 Matrix and About follow-up
 
 [PR #157](https://github.com/AlienX420710/alienx-smarthome/pull/157) merged as
