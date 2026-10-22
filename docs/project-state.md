@@ -10,15 +10,26 @@ subject to the unchanged exact-revision CI and production gates. Unperformed
 private-account, device, inbox and isolated-recovery acceptance is not certified
 by issue closure or a release label.
 
-## October 21 contact keyboard submission correction — candidate
+## October 21 contact keyboard submission correction — verified
 
 The owner requested removal of the required inquiry contact checkbox because it
-blocked keyboard-only submission. The candidate removes that control and its
-client/API requirement, updates policy copy, and retains the privacy notice,
-required field validation, Turnstile and rate limiting. The form destination
-also now matches the configured trailing-slash success route. Browser and API
-checks must confirm keyboard submission without the removed field. Production
-evidence will be recorded after merge and deployment.
+blocked keyboard-only submission. [PR #161](https://github.com/AlienX420710/alienx-smarthome/pull/161)
+merged as `af0d5f92eb25e26d5eae51a415c5a1c20c5a8b4c`. The page, client
+payload and API no longer require the field. The privacy notice, required
+project fields, Turnstile, honeypot, rate limits and idempotency remain. The
+success destination now matches the configured trailing-slash route.
+
+The published PR head `326b423a63534e96ea43119e2a3f334bb3d4f2e9`
+matched the Node 22 prepared-source fingerprint and passed all five exact-head
+checks. Local mocked API and Chromium/WebKit keyboard tests submitted without
+the removed field; confirmation, policy-link and retry checks passed. Main passed
+[exact-revision release approval](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39707814541),
+Workers Build `29d56ee5-92d0-44be-8d90-0be2f6e21b3c`,
+[production Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39707684580)
+and [post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39708491657).
+Both production hostnames served the exact merged revision, and the live
+`/contact/` page returned 200 without the checkbox and with its privacy notice.
+No real inquiry or inbox receipt was tested.
 
 ## October 21 Matrix and About follow-up
 
