@@ -293,7 +293,7 @@ case pass/fail/not-tested and attach sanitized evidence; not-tested is not pass.
 4. Exercise command palette, theme/motion controls, homepage section navigation
    and form controls without a pointer. Repeat navigation to detect stale handlers
    or lost focus.
-5. On Contact, verify labels, grouped choices, errors, consent and status
+5. On Contact, verify labels, grouped choices, errors, privacy notice and status
    announcements. Submit only an empty form for required-field validation;
    do not send a populated real inquiry without authorization. Leave the hidden
    honeypot untouched. CI mocks provider success/retry cases.

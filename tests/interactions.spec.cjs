@@ -429,7 +429,6 @@ test('Contact retries preserve input and submit the honeypot after navigation', 
   await page.locator('#contact-method').selectOption('email');
   await page.locator('#project-type').selectOption('other');
   await page.locator('#message').fill('This is a mocked inquiry test.');
-  await page.locator('#consent').check();
   await expect(page.locator('[name=website]')).toHaveValue('mock-token');
   await expect(page.locator('#name')).toHaveValue('Test Person');
   await page.locator('#submit-button').click();
@@ -439,6 +438,7 @@ test('Contact retries preserve input and submit the honeypot after navigation', 
   await expect(page.locator('[name=website]')).toHaveValue('reset-token');
   await page.locator('#submit-button').click();
   await expect.poll(() => submissions.length).toBe(2);
+  expect(submissions[0]).not.toHaveProperty('consent');
   expect(submissions[0].faxNumber).toBe('');
   expect(submissions[0].phone).toBe('+44 20 7946 0958');
   expect(submissions[1].website).toBe('reset-token');

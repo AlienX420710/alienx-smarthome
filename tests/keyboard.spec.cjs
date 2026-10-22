@@ -144,7 +144,7 @@ test('Tab-focused command activates itself with Enter and Space; dialogs contain
   await expect(trigger).toBeFocused();
 });
 
-test('Contact fields, consent, validation and retry are keyboard operable', async ({
+test('Contact fields, validation and retry are keyboard operable', async ({
   page,
 }) => {
   await page.route(
@@ -195,13 +195,10 @@ test('Contact fields, consent, validation and retry are keyboard operable', asyn
   await page.keyboard.type(
     'This is a mocked keyboard inquiry regression test.',
   );
-  const consent = page.locator('#consent');
-  await tabTo(page, consent);
-  await page.keyboard.press('Space');
-  await expect(consent).toBeChecked();
   const submit = page.locator('#submit-button');
   await tabTo(page, submit);
   await page.keyboard.press('Enter');
+  await expect.poll(() => submissions).toBe(1);
   await expect(page.locator('#form-status')).toHaveText(
     'Mock provider unavailable',
   );

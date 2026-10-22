@@ -73,7 +73,6 @@ interface InquiryPayload {
   budget?: unknown;
   source?: unknown;
   message?: unknown;
-  consent?: unknown;
   website?: unknown;
   turnstileToken?: unknown;
 }
@@ -90,15 +89,6 @@ export const POST: APIRoute = async ({ locals }) => {
     return json({ error: 'Security verification is required.' }, 403);
   const { requestId } = verified;
   const payload: InquiryPayload = verified.payload;
-  if (payload.consent !== true)
-    return json(
-      {
-        error: 'Please confirm that we may contact you about this inquiry.',
-        requestId,
-      },
-      400,
-      requestId,
-    );
   const name =
       typeof payload.name === 'string' ? cleanSingleLine(payload.name) : '',
     email =

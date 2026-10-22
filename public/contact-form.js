@@ -7,7 +7,6 @@
     if (!form || !status || !button || !label || form.dataset.bound) return;
     const phoneInput = form.elements.namedItem('phone');
     const contactMethod = form.querySelector('[name=contactMethod]');
-    const consent = form.elements.namedItem('consent');
     const updatePhoneRequirement = () => {
       const needsPhone =
         contactMethod.value === 'phone' || contactMethod.value === 'text';
@@ -35,9 +34,8 @@
         'budget',
         'source',
         'message',
-        'consent',
       ],
-      destination: '/contact/success',
+      destination: '/contact/success/',
       timeoutMs: 30000,
       onChange: (event) => {
         if (event.target.name === 'contactMethod') updatePhoneRequirement();
@@ -120,13 +118,6 @@
           );
           firstInvalid ??= form.elements.namedItem('message');
         }
-        if (!consent.checked) {
-          fieldError(
-            'consent',
-            'Please confirm that we may contact you about this inquiry.',
-          );
-          firstInvalid ??= consent;
-        }
         if (firstInvalid) {
           firstInvalid.focus();
           return;
@@ -154,7 +145,6 @@
             source: value('source'),
             message,
             faxNumber: value('inquiryReference'),
-            consent: consent.checked,
             website: String(formData.get('website') ?? ''),
           }),
         };
