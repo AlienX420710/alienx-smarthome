@@ -12,20 +12,28 @@ by issue closure or a release label.
 
 ## October 21 Matrix and About follow-up
 
-[PR #155](https://github.com/AlienX420710/alienx-smarthome/pull/155) merged as
-`ea336c924e134b10899eba8eb30638719282b02c`, but its Matrix status/site-map
-behavior did not match the owner's intended movie reference. The current candidate
-replaces it with ten seconds of green code rain and restores a linked About story
-index. The separate Home Assistant article uses the previously unused tracked SVG
-as cover artwork, with additional personal details explicitly left for the owner
-to fill in. A nearby repository scan corrected the command palette's stale
-TypeScript 5.9/KV-session claim and the architecture note that still described an
-unused SESSION binding; Astro sessions remain disabled. Safari's PR-head
-keyboard check exposed chapter links skipped by Tab; the candidate explicitly
-includes them in sequential focus order. The same scan aligned the two repos'
-Dependabot configuration: AlienX's `dependencies` label exists, but Cleaning
-removed that optional setting after its label was missing. The candidate has
-not yet been verified in production.
+[PR #157](https://github.com/AlienX420710/alienx-smarthome/pull/157) merged as
+`88996978e00997676346cd59dfa756564890df98`. `/matrix` now shows ten seconds
+of green code rain and closes; the linked About story index leads to chapter
+summaries and a separate Home Assistant article. The previously unused tracked
+SVG is cover artwork; additional personal details remain explicitly open for the
+owner to fill in. The first PR-head Safari check found that WebKit skipped the new
+links with Tab. The corrected head `a667508434347180b1e117e52580c5ec7da6c305`
+passed all five checks, including Safari. The scan also corrected stale TypeScript
+5.9/KV-session text, removed dead About CSS and aligned optional Dependabot label
+settings with Cleaning. AlienX's `dependencies` label existed; this was a parity
+correction. Astro sessions remain disabled.
+
+[Exact-revision release approval](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39670788931),
+[push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39670604964)
+and [post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39671874334)
+passed. Workers Build `05277d3c-47d8-4a68-973d-992e713d1fc0` was recorded
+for that main commit; both production hosts subsequently served its exact
+revision. The shared command palette
+counterpart [Cleaning #96](https://github.com/Cassileigh/cleaning-by-cassi/pull/96)
+also merged and passed its own production Smoke and Integrity at
+`ec7f24fc07129b204d637b96a8bdd184ca5f3af4`. Neither deployment certifies
+unperformed private or owner acceptance, and no v1.0 GitHub release was published.
 
 The #155 main revision passed all five checks, CodeQL/zero-open-alert policy and
 exact-revision approval, but its
@@ -35,7 +43,8 @@ The unchanged revision's Workers Build finished later. The justified
 [Smoke rerun](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39628203601/attempts/2)
 and [Production Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/39636998715)
 then passed on both production hosts, and [operator alert #156](https://github.com/AlienX420710/alienx-smarthome/issues/156)
-was closed. That sequence does not verify the current candidate in production.
+was closed. That original timeout remains historical evidence, separate from the
+successful #157 deployment.
 
 ## October 19 hidden-input regression release
 
