@@ -1,6 +1,6 @@
 # AlienX — current state
 
-Updated October 21, 2026. This file alone owns findings and dated release
+Updated November 5, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
@@ -9,6 +9,25 @@ release tied to the retired beta acceptance checklist. Versioned releases remain
 subject to the unchanged exact-revision CI and production gates. Unperformed
 private-account, device, inbox and isolated-recovery acceptance is not certified
 by issue closure or a release label.
+
+## November 5 shared dependency audit repair — candidate
+
+The unchanged shared lockfile's all-severity audit reported eight existing
+findings: four moderate and four high. The candidate in
+[PR #170](https://github.com/AlienX420710/alienx-smarthome/pull/170), paired with
+[Cleaning #115](https://github.com/Cassileigh/cleaning-by-cassi/pull/115), resolves
+fast-uri 3.1.9, Zod 4.6.7 and Undici 7.30.1 / 8.12.2. The scoped unifont
+override preserves its Undici 8 dependency rather than downgrading it to 7.
+Puppeteer Core 25.13.0 is the first compatible parent beyond the advisory's
+affected range through 25.12.0; its declared BiDi/Zod graph replaces the
+vulnerable Zod 3 dependency. This keeps the correction smaller than the original
+25.16.0 dependency proposal, while retaining the existing direct package pins,
+unrelated lock resolutions and site-specific inputs.
+
+The isolated lock-resolution audit passed with zero vulnerabilities. Full local
+preparation, exact-head browser CI and the independent resulting-main release
+chain remain required; this candidate is not yet a deployed repair. Earlier
+failures and private acceptance limits remain recorded below.
 
 ## October 21 contact keyboard submission correction — verified
 
