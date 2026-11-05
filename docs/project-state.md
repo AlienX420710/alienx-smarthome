@@ -10,12 +10,14 @@ subject to the unchanged exact-revision CI and production gates. Unperformed
 private-account, device, inbox and isolated-recovery acceptance is not certified
 by issue closure or a release label.
 
-## November 5 shared dependency audit repair — candidate
+## November 5 shared dependency audit repair — verified
 
 The unchanged shared lockfile's all-severity audit reported eight existing
-findings: four moderate and four high. The candidate in
-[PR #170](https://github.com/AlienX420710/alienx-smarthome/pull/170), paired with
-[Cleaning #115](https://github.com/Cassileigh/cleaning-by-cassi/pull/115), resolves
+findings: four moderate and four high.
+[PR #170](https://github.com/AlienX420710/alienx-smarthome/pull/170) merged as
+`bcd5ddb8546586517e3d6cc9242a9ec90fe0ee78`. The counterpart is
+[Cleaning #117](https://github.com/Cassileigh/cleaning-by-cassi/pull/117), following
+the dependency investigation initially coordinated in Cleaning #115. The repair resolves
 fast-uri 3.1.9, Zod 4.6.7 and Undici 7.30.1 / 8.12.2. The scoped unifont
 override preserves its Undici 8 dependency rather than downgrading it to 7.
 Puppeteer Core 25.13.0 is the first compatible parent beyond the advisory's
@@ -24,10 +26,31 @@ vulnerable Zod 3 dependency. This keeps the correction smaller than the original
 25.16.0 dependency proposal, while retaining the existing direct package pins,
 unrelated lock resolutions and site-specific inputs.
 
-The isolated lock-resolution audit passed with zero vulnerabilities. Full local
-preparation, exact-head browser CI and the independent resulting-main release
-chain remain required; this candidate is not yet a deployed repair. Earlier
-failures and private acceptance limits remain recorded below.
+Final Node 22 preparation passed 228 unit tests, the full reachable-history scan,
+build/type checks, Worker dry run and the all-severity audit with zero
+vulnerabilities. The fetched PR head
+`517b08987e564297ec2cb75e661c42f3cea0f1c3` matched the prepared source.
+All five exact-head PR checks and all five resulting-main push checks passed on
+their first attempts. Fresh Actions and JavaScript CodeQL and the resulting-main
+zero-open-alert policy passed. The actual `alienx-ci-approved-main` tag matched
+the exact merged revision; publisher-job success alone was not used as approval.
+
+Workers Build 127334714542 (build `994f5c8c-dda1-4c8e-abbd-69c20f8bd9b9`)
+succeeded. The older in-progress provider check refers to that same build UUID.
+[Initial push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/42051819501)
+passed for the exact revision at 15:16:24 UTC, followed by automatic
+[post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/42053296178)
+at 15:17:09 UTC on November 5. Both production hosts served the exact revision.
+TLS 1.0/1.1 were rejected and TLS 1.2/1.3 accepted; CBC and static-RSA negotiation
+remain observed. No release-check rerun or gate weakening was needed.
+
+The complete source comparison passed across 177 AlienX and 183 Cleaning
+implementation files after Cleaning adopted the published AlienX confirmation
+test's removal of the retired contact-checkbox step. Site identity, form fields
+and content remain local. This source comparison does not certify the
+counterpart's independent production release. Earlier failures and private
+account, device, inbox and isolated-recovery acceptance limits remain recorded
+below; no real inquiry or email was sent for this repair.
 
 ## October 21 contact keyboard submission correction — verified
 
