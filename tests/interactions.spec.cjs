@@ -1,6 +1,56 @@
 const { test, expect } = require('@playwright/test');
 const axe = require('axe-core');
 const base = 'http://127.0.0.1:4321';
+
+test('Why AlienX cards link to real sections and respect reduced motion', async ({
+  page,
+}) => {
+  await page.goto(base);
+  const cards = page.locator('.motion-card');
+  await expect(cards).toHaveCount(4);
+  await expect(cards.first()).toHaveAttribute('href', '#outcomes-title');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await cards.first().hover();
+  expect(
+    await cards
+      .first()
+      .evaluate((card) => getComputedStyle(card, '::after').animationName),
+  ).toBe('none');
+  await cards.first().focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/#outcomes-title$/);
+});
+
+test('Why AlienX cards activate while scrolling on touch screens', async ({
+  browser,
+}) => {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    isMobile: true,
+    reducedMotion: 'no-preference',
+  });
+  const page = await context.newPage();
+  await page.goto(base);
+  const first = page.locator('.motion-card').first();
+  await first.evaluate((card) => {
+    document.documentElement.style.scrollBehavior = 'auto';
+    const box = card.getBoundingClientRect();
+    window.scrollTo(
+      0,
+      window.scrollY + box.top + box.height / 2 - window.innerHeight / 2,
+    );
+  });
+  await expect(first).toHaveClass(/is-active/);
+  await page.evaluate(() => window.__alienxSetMotion('off'));
+  await expect(first).not.toHaveClass(/is-active/);
+  await page.evaluate(() => window.__alienxSetMotion('on'));
+  await expect(first).toHaveClass(/is-active/);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(first).not.toHaveClass(/is-active/);
+  await context.close();
+});
+
 for (const width of [320, 768, 1280]) {
   for (const theme of ['light', 'dark']) {
     test(`contact form spans the content width with aligned controls: ${width} ${theme}`, async ({

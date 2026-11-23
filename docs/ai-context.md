@@ -20,6 +20,11 @@ Workers remain the stack. This is a technology showcase, not a home-control syst
   journey; those former standalone routes, route classifications and exclusive
   theme selectors are retired. Requests to retired routes keep the server-declared
   error identity, including after preference application.
+- `AnimatedReasonCard.astro` owns the homepage's four linked Why AlienX cards.
+  Their original line icons and border sweep respond to pointer hover, keyboard
+  focus, or the viewport center on touch devices. OS and saved reduced-motion
+  preferences keep the cards usable without animation, including after Astro
+  page swaps; each link has a real destination.
 - src/styles/site-canvas.css owns the opaque root canvas on every page; global.css
   supplies the theme palette. Branded error pages keep their terminal treatment.
   src/styles/page-themes.css
