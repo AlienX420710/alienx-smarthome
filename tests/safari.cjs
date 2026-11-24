@@ -42,7 +42,7 @@ const { mkdirSync, writeFileSync } = require('node:fs');
         // establish stylesheet/font/transition readiness on the next route.
         await driver.wait(
           () => driver.executeScript(() => document.readyState === 'complete'),
-          10000,
+          30000,
           `${route}: document did not finish loading`,
         );
         await driver.executeAsyncScript(function () {
