@@ -38,12 +38,19 @@ const { mkdirSync, writeFileSync } = require('node:fs');
             ),
           10000,
         );
-        // Eager navigation ends at DOMContentLoaded; cached images alone do not
-        // establish stylesheet/font/transition readiness on the next route.
+        // Eager navigation ends at DOMContentLoaded. Check stylesheet readiness
+        // directly; unrelated resources can hold readyState at "interactive".
         await driver.wait(
-          () => driver.executeScript(() => document.readyState === 'complete'),
-          30000,
-          `${route}: document did not finish loading`,
+          () =>
+            driver.executeScript(
+              () =>
+                document.readyState !== 'loading' &&
+                Array.from(
+                  document.querySelectorAll('link[rel="stylesheet"]'),
+                ).every((link) => Boolean(link.sheet)),
+            ),
+          10000,
+          `${route}: stylesheets did not finish loading`,
         );
         await driver.executeAsyncScript(function () {
           const done = arguments[arguments.length - 1];
