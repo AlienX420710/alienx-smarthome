@@ -1,6 +1,6 @@
 # AlienX — current state
 
-Updated November 5, 2026. This file alone owns findings and dated release
+Updated November 25, 2026. This file alone owns findings and dated release
 evidence. AGENTS.md owns working rules, [architecture](ai-context.md) owns contracts,
 and [operations](release-runbook.md) owns procedures. Do not duplicate status.
 
@@ -9,6 +9,29 @@ release tied to the retired beta acceptance checklist. Versioned releases remain
 subject to the unchanged exact-revision CI and production gates. Unperformed
 private-account, device, inbox and isolated-recovery acceptance is not certified
 by issue closure or a release label.
+
+## November 25 homepage motion and Safari release — verified
+
+[PR #176](https://github.com/AlienX420710/alienx-smarthome/pull/176)
+updated the shared production dependencies. [PR #178](https://github.com/AlienX420710/alienx-smarthome/pull/178)
+shipped the homepage feature-card motion. [PR #179](https://github.com/AlienX420710/alienx-smarthome/pull/179)
+made native Safari wait for DOM and stylesheet readiness directly. Its Cleaning
+counterpart exposed a separate WebDriver timeout after stylesheet readiness;
+[PR #180](https://github.com/AlienX420710/alienx-smarthome/pull/180)
+therefore separated font readiness from animation-frame settling and added a
+bounded frame fallback. The equivalent Cleaning fix is
+[PR #129](https://github.com/Cassileigh/cleaning-by-cassi/pull/129).
+
+The final #180 head matched the Node 22 prepared-source receipt, passed the
+all-severity audit with zero vulnerabilities and all five exact-head checks.
+Merged main `b722f8a1a4bf830021fd98d9dae2435af606e2ff` passed all five push
+checks; `alienx-ci-approved-main` pointed to that exact commit. Cloudflare
+Workers Build `dfd371d1-f5bf-43be-8241-069ecf15f772` succeeded, followed by
+[push Smoke](https://github.com/AlienX420710/alienx-smarthome/actions/runs/45540203574)
+and [post-Smoke Integrity](https://github.com/AlienX420710/alienx-smarthome/actions/runs/45540999549),
+both successful. Three cache-busted reads from each production hostname returned
+HTTP 200 and that exact revision. This verifies deployment, not a real inquiry,
+inbox receipt or new physical-device acceptance.
 
 ## November 5 shared dependency audit repair — verified
 
