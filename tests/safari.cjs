@@ -52,12 +52,25 @@ const { mkdirSync, writeFileSync } = require('node:fs');
           10000,
           `${route}: stylesheets did not finish loading`,
         );
+        await driver.wait(
+          () => driver.executeScript(() => document.fonts.status === 'loaded'),
+          10000,
+          `${route}: fonts did not finish loading`,
+        );
         await driver.executeAsyncScript(function () {
           const done = arguments[arguments.length - 1];
           const transition = document.activeViewTransition?.finished;
-          Promise.all([document.fonts.ready, transition?.catch(() => {})]).then(
-            () => requestAnimationFrame(() => requestAnimationFrame(done)),
-          );
+          Promise.resolve(transition?.catch(() => {})).then(() => {
+            let completed = false;
+            const finish = () => {
+              if (completed) return;
+              completed = true;
+              done();
+            };
+            // Background Safari tabs can pause animation frames in WebDriver.
+            setTimeout(finish, 500);
+            requestAnimationFrame(() => requestAnimationFrame(finish));
+          });
         });
         if (route === site.browser.statusRoute) {
           await driver.wait(
