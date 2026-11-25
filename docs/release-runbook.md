@@ -87,8 +87,10 @@ Reference: [GitHub native auto-merge](https://docs.github.com/en/repositories/co
 Run `npm ci`, `npm run format`, and `npm run preflight` on Node 22.
 For browser checks, start the built Cloudflare preview on port 4321, install the
 Playwright Chromium browser, and run `npm run test:browser` and `npm run test:a11y`.
-`node tests/safari.cjs` requires macOS Safari WebDriver. Lighthouse configuration
-is committed in `lighthouse.config.cjs`; `scripts/lighthouse.mjs` runs the locked
+`node tests/safari.cjs` requires macOS Safari WebDriver. Safari readiness checks
+DOM, stylesheets, fonts and transitions directly because unrelated subresources
+can hold the document at `interactive`. Lighthouse configuration is committed in
+`lighthouse.config.cjs`; `scripts/lighthouse.mjs` runs the locked
 Lighthouse CLI, with `--accessibility` for the accessibility-only job. Keep both
 Lighthouse workflows green when changing tooling. Do not use `npm audit fix --force`.
 

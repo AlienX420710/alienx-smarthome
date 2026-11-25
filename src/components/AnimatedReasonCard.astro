@@ -1,0 +1,298 @@
+---
+interface Props {
+  number: string;
+  title: string;
+  description: string;
+  href: string;
+  icon: 'message' | 'custom' | 'quality' | 'system';
+  lead?: boolean;
+}
+
+const { number, title, description, href, icon, lead = false } = Astro.props;
+---
+
+<a
+  class:list={['motion-card', { 'motion-card--lead': lead }]}
+  href={href}
+  tabindex="0"
+>
+  <span class="motion-card__topline">
+    <span class="motion-card__icon" aria-hidden="true">
+      <svg viewBox="0 0 32 32" fill="none">
+        {icon === 'message' && (
+          <>
+            <path d="M7 7h18v14H13l-6 5V7Z" />
+            <path class="motion-card__moving" d="M11 12h10m-10 4h7" />
+          </>
+        )}
+        {icon === 'custom' && (
+          <>
+            <path d="M8 7v18m8-18v18m8-18v18" />
+            <path class="motion-card__moving" d="M5 13h6m2 7h6m2-9h6" />
+          </>
+        )}
+        {icon === 'quality' && (
+          <>
+            <circle cx="16" cy="16" r="11" />
+            <path class="motion-card__moving" d="m10.5 16 3.5 3.5 7.5-8" />
+          </>
+        )}
+        {icon === 'system' && (
+          <>
+            <path d="M10 10.5 20.5 16 10 21.5" />
+            <circle cx="8" cy="9.5" r="2.5" />
+            <circle cx="23" cy="16" r="2.5" />
+            <circle cx="8" cy="22.5" r="2.5" />
+            <circle class="motion-card__moving" cx="16" cy="16" r="2" />
+          </>
+        )}
+      </svg>
+    </span>
+    <span class="motion-card__number">{number}</span>
+  </span>
+  <h3>{title}</h3>
+  <p>{description}</p>
+  <span class="motion-card__cue" aria-hidden="true">
+    Explore <span>↗</span>
+  </span>
+</a>
+
+<script>
+  const motionWindow = window as Window & {
+    __alienxReasonMotionBound?: boolean;
+  };
+  if (!motionWindow.__alienxReasonMotionBound) {
+    motionWindow.__alienxReasonMotionBound = true;
+    const touchMotion = window.matchMedia(
+      '(hover: none) and (prefers-reduced-motion: no-preference)',
+    );
+    let observer: IntersectionObserver | undefined;
+
+    const observe = () => {
+      observer?.disconnect();
+      const cards = document.querySelectorAll<HTMLElement>('.motion-card');
+      cards.forEach((card) => card.classList.remove('is-active'));
+      if (
+        !touchMotion.matches ||
+        document.documentElement.dataset.alienxMotion === 'off'
+      )
+        return;
+      const margin = Math.round(window.innerHeight * 0.4);
+      observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            entry.target.classList.toggle('is-active', entry.isIntersecting);
+          }
+        },
+        { rootMargin: `-${margin}px 0px -${margin}px 0px` },
+      );
+      cards.forEach((card) => observer?.observe(card));
+    };
+
+    observe();
+    touchMotion.addEventListener('change', observe);
+    document.addEventListener('alienx:motion-change', observe);
+    document.addEventListener('astro:page-load', observe);
+    document.addEventListener('astro:before-swap', () =>
+      observer?.disconnect(),
+    );
+    window.addEventListener('resize', observe);
+  }
+</script>
+
+<style>
+  .motion-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    min-width: 0;
+    min-height: 260px;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 2rem;
+    border: 1px solid var(--home-border);
+    border-radius: 24px;
+    background: linear-gradient(145deg, var(--home-surface), var(--home-bg));
+    color: var(--home-heading);
+    text-decoration: none;
+    transition:
+      border-color 250ms ease,
+      transform 250ms ease,
+      box-shadow 250ms ease;
+  }
+
+  .motion-card--lead {
+    background:
+      radial-gradient(circle at 10% 0, rgb(57 255 90 / 0.1), transparent 55%),
+      linear-gradient(145deg, var(--home-surface-soft), var(--home-bg));
+  }
+
+  .motion-card::after {
+    position: absolute;
+    z-index: 1;
+    border: 2px solid transparent;
+    border-radius: inherit;
+    background: linear-gradient(
+        110deg,
+        transparent 28%,
+        var(--home-accent) 48%,
+        #f6fff8 52%,
+        transparent 72%
+      )
+      border-box;
+    background-position: 100% 0;
+    background-size: 300% 100%;
+    content: '';
+    inset: 0;
+    pointer-events: none;
+    -webkit-mask:
+      linear-gradient(#000 0 0) padding-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) padding-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+
+  .motion-card:is(:hover, :focus-visible, .is-active) {
+    border-color: color-mix(
+      in srgb,
+      var(--home-accent) 55%,
+      var(--home-border)
+    );
+    box-shadow: 0 18px 45px rgb(0 0 0 / 0.14);
+    transform: translateY(-3px);
+  }
+
+  .motion-card:focus-visible {
+    outline: 3px solid var(--home-accent);
+    outline-offset: 4px;
+  }
+
+  .motion-card:is(:hover, :focus-visible, .is-active)::after {
+    animation: motion-card-sweep 900ms ease-out both;
+  }
+
+  .motion-card__topline {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .motion-card__icon {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    flex: none;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--home-accent) 65%, transparent);
+    border-radius: 50%;
+    color: var(--home-accent);
+  }
+
+  .motion-card__icon svg {
+    width: 27px;
+    height: 27px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+  }
+
+  .motion-card__moving {
+    transform-origin: 50% 50%;
+  }
+
+  .motion-card:is(:hover, :focus-visible, .is-active) .motion-card__moving {
+    animation: motion-card-icon 650ms ease-in-out 2 alternate;
+  }
+
+  .motion-card__number {
+    color: var(--home-soft);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+  }
+
+  h3 {
+    margin: 2rem 0 0.75rem;
+    color: var(--home-heading);
+    font-size: 1.45rem;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--home-muted);
+    line-height: 1.65;
+  }
+
+  .motion-card__cue {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 1.25rem;
+    color: var(--home-accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .motion-card__cue span {
+    transition: transform 250ms ease;
+  }
+
+  .motion-card:is(:hover, :focus-visible, .is-active) .motion-card__cue span {
+    transform: translate(2px, -2px);
+  }
+
+  @keyframes motion-card-sweep {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: 0 0;
+    }
+  }
+
+  @keyframes motion-card-icon {
+    to {
+      transform: translateY(-2px) scale(1.08);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .motion-card,
+    .motion-card__cue span {
+      transition: none;
+    }
+
+    .motion-card:is(:hover, :focus-visible, .is-active) {
+      transform: none;
+    }
+
+    .motion-card:is(:hover, :focus-visible, .is-active)::after,
+    .motion-card:is(:hover, :focus-visible, .is-active) .motion-card__moving {
+      animation: none;
+    }
+  }
+
+  :global(html[data-alienx-motion='off']) .motion-card,
+  :global(html[data-alienx-motion='off']) .motion-card__cue span {
+    transition: none;
+  }
+
+  :global(html[data-alienx-motion='off'])
+    .motion-card:is(:hover, :focus-visible, .is-active) {
+    transform: none;
+  }
+
+  :global(html[data-alienx-motion='off'])
+    .motion-card:is(:hover, :focus-visible, .is-active)::after,
+  :global(html[data-alienx-motion='off'])
+    .motion-card:is(:hover, :focus-visible, .is-active)
+    .motion-card__moving {
+    animation: none;
+  }
+</style>

@@ -3,10 +3,47 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import AnimatedReasonCard from '../components/AnimatedReasonCard.astro';
 import { SITE_TITLE } from '../consts';
 
 const description =
   'AlienX designs and engineers websites that communicate clearly, work across devices, and connect the interface to the systems behind it.';
+
+const reasons = [
+  {
+    number: '01',
+    title: 'The message comes first.',
+    description:
+      'Visitors should understand what you do, why it matters, and what to do next without hunting through the site.',
+    href: '#outcomes-title',
+    icon: 'message',
+    lead: true,
+  },
+  {
+    number: '02',
+    title: 'Custom where it matters.',
+    description:
+      'Structure, responsive behavior, interaction, and content hierarchy are built around the job the site needs to do—not around a generic demo.',
+    href: '#proof-title',
+    icon: 'custom',
+  },
+  {
+    number: '03',
+    title: 'Quality is part of the build.',
+    description:
+      'Semantic HTML, keyboard behavior, reduced motion, responsive layouts, performance checks, and accessibility are engineering constraints from the start.',
+    href: '#engineering-title',
+    icon: 'quality',
+  },
+  {
+    number: '04',
+    title: 'The system behind the page matters.',
+    description:
+      'Forms, APIs, automation, deployment, security boundaries, and observability are treated as part of the product instead of invisible afterthoughts.',
+    href: '/status',
+    icon: 'system',
+  },
+] as const;
 
 const projects = [
   {
@@ -132,41 +169,9 @@ const projects = [
         </div>
 
         <div class="reason-grid">
-          <article class="reason-card reason-card--lead">
-            <span class="reason-number">01</span>
-            <h3>The message comes first.</h3>
-            <p>
-              Visitors should understand what you do, why it matters, and what
-              to do next without hunting through the site.
-            </p>
-          </article>
-          <article class="reason-card">
-            <span class="reason-number">02</span>
-            <h3>Custom where it matters.</h3>
-            <p>
-              Structure, responsive behavior, interaction, and content hierarchy
-              are built around the job the site needs to do—not around a generic
-              demo.
-            </p>
-          </article>
-          <article class="reason-card">
-            <span class="reason-number">03</span>
-            <h3>Quality is part of the build.</h3>
-            <p>
-              Semantic HTML, keyboard behavior, reduced motion, responsive
-              layouts, performance checks, and accessibility are engineering
-              constraints from the start.
-            </p>
-          </article>
-          <article class="reason-card">
-            <span class="reason-number">04</span>
-            <h3>The system behind the page matters.</h3>
-            <p>
-              Forms, APIs, automation, deployment, security boundaries, and
-              observability are treated as part of the product instead of
-              invisible afterthoughts.
-            </p>
-          </article>
+          {reasons.map((reason) => (
+            <AnimatedReasonCard {...reason} />
+          ))}
         </div>
       </section>
 
@@ -731,6 +736,7 @@ const projects = [
   .section-heading h2,
   .proof__heading h2,
   .cta h2 {
+    scroll-margin-top: 6rem;
     margin-bottom: 1.1rem;
     font-size: clamp(2.55rem, 5vw, 4.8rem);
     letter-spacing: -0.048em;
@@ -798,7 +804,6 @@ const projects = [
     line-height: 1.65;
   }
 
-  .reason-card,
   .proof-grid article,
   .outcome-grid article,
   .process-grid li {
@@ -811,24 +816,6 @@ const projects = [
     );
   }
 
-  .reason-card {
-    min-height: 260px;
-    padding: 2rem;
-  }
-
-  .reason-card--lead {
-    background:
-      radial-gradient(circle at 10% 0, rgba(57, 255, 90, 0.1), transparent 55%),
-      linear-gradient(145deg, rgba(20, 31, 25, 0.96), rgba(8, 11, 18, 0.94));
-  }
-
-  .reason-number {
-    color: var(--home-soft);
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-  }
-
-  .reason-card h3,
   .proof-grid h3,
   .outcome-grid h3,
   .process-grid h3 {
@@ -837,7 +824,6 @@ const projects = [
     letter-spacing: -0.02em;
   }
 
-  .reason-card p,
   .proof-grid p,
   .outcome-grid p,
   .process-grid p {
@@ -1033,7 +1019,6 @@ const projects = [
       grid-template-columns: 1fr;
     }
 
-    .reason-card,
     .outcome-grid article,
     .process-grid li {
       min-height: auto;
@@ -1124,23 +1109,12 @@ const projects = [
       color: #213126;
     }
 
-    :global(html:where(:not([data-alienx-theme]))) .reason-card,
     :global(html:where(:not([data-alienx-theme]))) .proof-grid article,
     :global(html:where(:not([data-alienx-theme]))) .outcome-grid article,
     :global(html:where(:not([data-alienx-theme]))) .engineering-grid article,
     :global(html:where(:not([data-alienx-theme]))) .process-grid li {
       background: linear-gradient(145deg, #f8fafc, #f1f4f8);
       box-shadow: 0 12px 35px rgba(42, 55, 80, 0.05);
-    }
-
-    :global(html:where(:not([data-alienx-theme]))) .reason-card--lead {
-      background:
-        radial-gradient(
-          circle at 10% 0,
-          rgba(22, 163, 74, 0.08),
-          transparent 55%
-        ),
-        linear-gradient(145deg, #f5faf6, #eef5f0);
     }
 
     :global(html:where(:not([data-alienx-theme]))) .cta {
@@ -1211,23 +1185,12 @@ const projects = [
     color: #213126;
   }
 
-  :global(html[data-alienx-theme='light']) .reason-card,
   :global(html[data-alienx-theme='light']) .proof-grid article,
   :global(html[data-alienx-theme='light']) .outcome-grid article,
   :global(html[data-alienx-theme='light']) .engineering-grid article,
   :global(html[data-alienx-theme='light']) .process-grid li {
     background: linear-gradient(145deg, #f8fafc, #f1f4f8);
     box-shadow: 0 12px 35px rgba(42, 55, 80, 0.05);
-  }
-
-  :global(html[data-alienx-theme='light']) .reason-card--lead {
-    background:
-      radial-gradient(
-        circle at 10% 0,
-        rgba(22, 163, 74, 0.08),
-        transparent 55%
-      ),
-      linear-gradient(145deg, #f5faf6, #eef5f0);
   }
 
   :global(html[data-alienx-theme='light']) .cta {
